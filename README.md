@@ -17,7 +17,7 @@ nvplay-bridge/
   tools/                 monitors and global-CC setup helper
   docs/                  regression and effort analysis reports
   logs/                  runtime logs (not committed)
-  start-bridge.ps1       one-command launcher: deps, browser, bridge
+  start-bridge.ps1       one-command launcher: deps, browser (auto-download), bridge
   requirements.txt       pinned dependencies
 ```
 
@@ -43,24 +43,25 @@ $PY   = "C:\path\to\python312\python.exe"
 ## Quick start
 
 ```powershell
-.\start-bridge.ps1 -Venv
+.\start-bridge.ps1
 ```
 
-The script creates `.venv` (optional), runs `pip install -r requirements.txt`, starts
-Brave with CDP on port 9225, then runs the bridge on `127.0.0.1:8083` in the foreground.
+All settings live in the config block at the top of the script: `$Proxy` (empty
+string = direct connection), `$Python`, `$CdpPort`, `$BridgePort`, `$PoolSize`,
+`$BravePath`, `$BrowserDir`.
 
-| Switch | Meaning |
-|---|---|
-| `-Venv` | create and use `.venv` in the repository root |
-| `-BravePath <path>` | braves/chrome executable; auto-detected when omitted |
-| `-CdpPort <port>` | CDP port (default 9225) |
-| `-BridgePort <port>` | bridge port (default 8083) |
-| `-PoolSize <n>` | number of Playground tabs (default 3) |
-| `-SkipPip` | do not install dependencies |
-| `-SkipBrave` | do not start the browser |
+What it does:
 
-Run `Get-Help .\start-bridge.ps1 -Detailed` for the full description. If pip needs a
-proxy, set `HTTPS_PROXY`/`HTTP_PROXY` before invoking the script.
+1. checks the Python version (3.12 is required by the pinned wheels) and creates `logs/`
+2. runs `pip install -r requirements.txt` (skipped when an offline `vendor/`
+   bundle is present); `$Proxy` is passed to pip and to the Brave download only,
+   it is not exported to the bridge process
+3. reuses a browser already listening on the CDP port; otherwise finds an
+   installed Brave, and if there is none, downloads the official portable build
+   for the current OS/architecture into `.browser/` and extracts it
+4. runs the bridge on `127.0.0.1:8083` in the foreground (`Ctrl+C` to stop)
+
+The first run on a machine without Brave downloads ~200–300 MB.
 
 ## 1. Start Brave
 

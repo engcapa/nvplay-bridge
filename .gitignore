@@ -12,3 +12,6 @@ logs/*
 
 # Optional offline dependency bundle (use `pip install -r requirements.txt`)
 vendor/
+
+# Portable browser downloaded by start-bridge.ps1
+.browser/
