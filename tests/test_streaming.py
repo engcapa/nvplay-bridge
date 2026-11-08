@@ -303,8 +303,8 @@ class CDPStreamTests(unittest.TestCase):
 
         browser.page_text_len = text_len
         self.assertEqual(pool.generate({}, timeout=1), "ok")
-        self.assertEqual(pool._queue.qsize(), 1)
-        self.assertIn(browser.hint, pool._refresh)
+        self.assertEqual(pool._queue.qsize(), 0)
+        self.assertEqual(pool.status()["tabs"][browser.hint], "pending")
 
     def test_cancel_while_waiting_for_pool(self):
         pool = bu.BrowserPool(size=1)

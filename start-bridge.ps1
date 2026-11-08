@@ -7,7 +7,7 @@ $Proxy      = "http://192.168.0.110:31028"   # "" = direct connection
 $Python     = "python"                       # Python 3.12 interpreter
 $CdpPort    = 9225
 $BridgePort = 8083
-$PoolSize   = 3
+$PoolSize   = 5
 $RequestTimeout = 3600                     # total request seconds; includes queue/prepare/retry
 $BravePath  = ""                             # explicit brave.exe; "" = detect/download
 $BraveDir   = Join-Path $PSScriptRoot ".brave"
@@ -73,8 +73,26 @@ if (Test-Path -LiteralPath $vendor) {
 $env:PYTHONPATH = if (Test-Path -LiteralPath $vendor) { "$PSScriptRoot;$vendor" } else { $PSScriptRoot }
 
 Write-Host "==> browser (CDP $CdpPort)"
+$backgroundFlags = @(
+    "--disable-background-timer-throttling",
+    "--disable-renderer-backgrounding",
+    "--disable-backgrounding-occluded-windows"
+)
 if (Test-Cdp) {
     Write-Host "reusing browser already listening on $CdpPort"
+    $browserCommand = Get-CimInstance Win32_Process -Filter "Name = 'brave.exe'" -ErrorAction SilentlyContinue |
+        Where-Object { $_.CommandLine -match "--remote-debugging-port=$CdpPort(?:\s|$)" -and $_.CommandLine -notmatch "--type=" } |
+        Select-Object -First 1 -ExpandProperty CommandLine
+    if ($browserCommand) {
+        $missingFlags = @($backgroundFlags | Where-Object { $browserCommand -notmatch [regex]::Escape($_) })
+        if ($missingFlags.Count) {
+            Write-Host "background flags missing: $($missingFlags -join ' '); applied only on the next browser launch"
+        } else {
+            Write-Host "browser background flags are present"
+        }
+    } else {
+        Write-Host "could not inspect browser arguments; background flags are applied only on new browser launches"
+    }
 } else {
     $brave = Find-Brave
     if (-not $brave) {
@@ -82,13 +100,14 @@ if (Test-Cdp) {
         $brave = Install-Brave
     }
     Write-Host "starting $brave"
-    Start-Process -FilePath $brave -ArgumentList @(
+    Start-Process -FilePath $brave -ArgumentList (@(
         "--user-data-dir=$profileDir",
         "--remote-debugging-port=$CdpPort",
         "--remote-allow-origins=*",
-        "--no-first-run", "--no-default-browser-check", "--disable-extensions",
+        "--no-first-run", "--no-default-browser-check", "--disable-extensions"
+    ) + $backgroundFlags + @(
         "--window-size=1280,900", $Playground
-    ) | Out-Null
+    )) | Out-Null
     for ($i = 0; $i -lt 60 -and -not (Test-Cdp); $i++) { Start-Sleep -Milliseconds 500 }
     if (-not (Test-Cdp)) { throw "CDP did not start on port $CdpPort" }
 }

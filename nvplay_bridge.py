@@ -82,7 +82,7 @@ BROWSER_TARGET_HINT = os.getenv("BROWSER_TARGET_HINT", "kimi-k3_1-pro/playground
 BROWSER_MAX_TOKENS = int(os.getenv("BROWSER_MAX_TOKENS", "131072"))
 BROWSER_TIMEOUT = int(os.getenv("BROWSER_TIMEOUT", "3600"))
 BROWSER_HEARTBEAT_SEC = float(os.getenv("BROWSER_HEARTBEAT_SEC", "10"))
-BROWSER_POOL_SIZE = int(os.getenv("BROWSER_POOL_SIZE", "3"))
+BROWSER_POOL_SIZE = int(os.getenv("BROWSER_POOL_SIZE", "5"))
 BROWSER_DEBUG_LOG = os.getenv("BROWSER_DEBUG_LOG", "")
 PLACEHOLDER_RETRY = int(os.getenv("PLACEHOLDER_RETRY", "1"))
 LOOP_BREAKER = int(os.getenv("LOOP_BREAKER", "1"))
@@ -710,7 +710,7 @@ def _get_browser():
         from browser_upstream import BrowserPool, BrowserUpstream
 
         if BROWSER_POOL_SIZE > 1:
-            _browser = BrowserPool(port=BROWSER_CDP_PORT, size=BROWSER_POOL_SIZE)
+            _browser = BrowserPool(port=BROWSER_CDP_PORT, size=BROWSER_POOL_SIZE, trace=_dbg)
         else:
             _browser = BrowserUpstream(port=BROWSER_CDP_PORT, target_hint=BROWSER_TARGET_HINT)
     return _browser
@@ -1106,7 +1106,7 @@ async def aggregate(payload: dict[str, Any], headers: dict[str, str], model: str
 
 @app.get("/health")
 async def health() -> dict[str, Any]:
-    return {
+    result = {
         "status": "ok",
         "upstream_kind": UPSTREAM_KIND,
         "upstream_url": _upstream_url() if UPSTREAM_KIND == "nvcf" or UPSTREAM_BASE else "",
@@ -1114,6 +1114,9 @@ async def health() -> dict[str, Any]:
         "cookie_present": bool(load_cookie()),
         "captcha_present": bool(load_captcha()),
     }
+    if UPSTREAM_KIND == "browser" and _browser is not None and hasattr(_browser, "status"):
+        result["browser_pool"] = _browser.status()
+    return result
 
 
 @app.get("/v1/models")

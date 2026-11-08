@@ -11,7 +11,7 @@ This project started as a local research shim and was cleaned up for publishing.
 ```text
 nvplay-bridge/
   nvplay_bridge.py       FastAPI app: Anthropic /v1/messages translation, SSE, retries, loop breaker
-  browser_upstream.py    CDP browser controller and 3-tab pool
+  browser_upstream.py    CDP browser controller and 5-tab pool
   browser_events.py      bounded thread-to-async stream and cancellation
   stream_support.py      incremental SSE parser and Anthropic content blocks
   configs/               Claude Code settings and empty MCP config
@@ -68,11 +68,17 @@ What it does:
    it is not exported to the bridge process
 3. reuses a browser already listening on the CDP port; otherwise finds an
    installed Brave, and if there is none, downloads the official portable build
-   for the current OS/architecture into `.brave/` and extracts it
+   for the current OS/architecture into `.brave/` and extracts it; new browser
+   processes disable background timer, renderer and occluded-window throttling
 4. runs the bridge on `127.0.0.1:8083` in the foreground (`Ctrl+C` to stop)
 
 The first run on a machine without Brave downloads ~200–300 MB into `.brave/`
 (git-ignored). Later runs reuse it.
+
+The pool defaults to five tabs. It warms tabs on the first request and serves
+each healthy tab as soon as it is ready. Reusing an existing Brave process
+does not change its launch arguments; the launcher reports missing background
+flags. Apply those flags on the next planned browser restart.
 
 ## 1. Start Brave
 
@@ -85,6 +91,8 @@ each OS). To run it by hand on Windows:
   --remote-debugging-port=9225 `
   --remote-allow-origins=* `
   --no-first-run --no-default-browser-check --disable-extensions `
+  --disable-background-timer-throttling --disable-renderer-backgrounding `
+  --disable-backgrounding-occluded-windows `
   --window-size=1280,900 `
   "https://build.nvidia.com/moonshotai/kimi-k3_1-pro/playground"
 ```
@@ -103,7 +111,7 @@ Invoke-RestMethod http://127.0.0.1:9225/json/version
 $env:PYTHONPATH = $REPO     # add ";$REPO\vendor" only if you have an offline bundle
 $env:UPSTREAM_KIND = "browser"      # required — defaults to "openai" and the bridge will not work without it
 $env:BROWSER_CDP_PORT = "9225"
-$env:BROWSER_POOL_SIZE = "3"
+$env:BROWSER_POOL_SIZE = "5"
 $env:BROWSER_HEARTBEAT_SEC = "10"
 $env:BROWSER_DEBUG_LOG = "$REPO\logs\bridge-debug.jsonl"
 
@@ -149,7 +157,7 @@ The bridge accepts only Kimi model aliases; other model IDs return `404 not_foun
 | `NVCF_MAX_TOKENS` | `131072` | Max output tokens (128K) in NVCF mode |
 | `MAX_OUTPUT_TOKENS` | `131072` | Max output tokens (128K) in openai mode |
 | `BROWSER_CDP_PORT` | `9222` | CDP port |
-| `BROWSER_POOL_SIZE` | `3` | Number of Playground tabs |
+| `BROWSER_POOL_SIZE` | `5` | Number of Playground tabs |
 | `BROWSER_TIMEOUT` | `3600` | Total request seconds, including queue, preparation and retries |
 | `BROWSER_FIRST_BYTE_TIMEOUT` | `120` | Seconds from send to first upstream data |
 | `BROWSER_IDLE_TIMEOUT` | `90` | Max seconds without upstream data after generation starts |
@@ -158,6 +166,9 @@ The bridge accepts only Kimi model aliases; other model IDs return `404 not_foun
 | `BROWSER_QUEUE_TIMEOUT` | `120` | Max wait for a pool tab |
 | `BROWSER_TAB_MAX_TURNS` | `50` | Refresh a tab after N requests |
 | `BROWSER_TAB_MAX_TEXT_LEN` | `500000` | Refresh a tab when DOM text exceeds this |
+| `BROWSER_TAB_READY_TIMEOUT` | `30` | Seconds per tab recovery attempt and request preparation |
+| `BROWSER_TAB_RECOVERY_ATTEMPTS` | `2` | Recovery attempts before isolating a failed tab |
+| `BROWSER_TAB_RECOVERY_BACKOFF` | `5` | Initial seconds before retrying an isolated tab; doubles to 60s |
 | `PLACEHOLDER_RETRY` | `1` | Retry placeholder/empty upstream responses |
 | `LOOP_BREAKER` | `1` | Stop repeated identical tool calls |
 | `BROWSER_DEBUG_LOG` | empty | JSONL metadata log path |
@@ -175,9 +186,14 @@ The bridge accepts only Kimi model aliases; other model IDs return `404 not_foun
 - Browser mode forwards thinking, text and the first tool's arguments as they arrive; interleaved additional tools are buffered and emitted as consecutive content blocks.
 - Browser mode sends `event: ping` every 10s without downstream data, including while queuing and retrying.
 - Placeholder/empty responses may retry once before streaming content is delivered. After thinking/text/tool content has been delivered, errors end the stream without replacing the answer. Non-streaming requests retain the empty-response retry.
-- Client disconnects abort the matching browser fetch. A tab is returned to the pool after cleanup; interrupted tabs are refreshed before reuse.
+- Client disconnects abort the matching browser fetch. Interrupted/failed tabs leave the available queue and recover in a dedicated worker before reuse.
+- A preparation failure before arming/sending can switch to another healthy tab inside the original SSE connection, with heartbeats while waiting. Failures after triggering a send are not transparently replayed, even if no first byte has arrived.
 - Regular data prevents idle timeouts, but the 3600-second total limit still applies. The included Claude Code settings use `API_TIMEOUT_MS=3900000` (65 minutes) to allow time for cleanup; restart CC to load changed settings.
-- 3-tab pool; repeated tool calls are broken after a session-level repeat threshold
+- 5-tab pool; recovery never navigates a busy tab, and healthy tabs remain usable while other tabs recover. `/health` includes pool states and recent recovery errors after pool initialization.
+- Repeated tool calls are broken after a session-level repeat threshold
+
+Readiness, recovery limits and offline regression coverage are described in
+[browser pool recovery](docs/browser-pool-recovery.md).
 
 ## Tests
 
@@ -186,6 +202,7 @@ $env:PYTHONPATH = $REPO     # add ";$REPO\vendor" only if you have an offline bu
 & $PY tests\test_nvplay_bridge.py
 & $PY tests\test_pool.py
 & $PY tests\test_streaming.py
+& $PY tests\test_pool_recovery.py
 ```
 
 Live regression (needs Brave/CDP and a running bridge):

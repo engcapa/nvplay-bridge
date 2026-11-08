@@ -30,6 +30,10 @@ TAB_MAX_TEXT_LEN = int(os.getenv("BROWSER_TAB_MAX_TEXT_LEN", "500000"))
 POLL_INTERVAL = float(os.getenv("BROWSER_POLL_INTERVAL", "0.1"))
 FIRST_BYTE_TIMEOUT = float(os.getenv("BROWSER_FIRST_BYTE_TIMEOUT", "120"))
 IDLE_TIMEOUT = float(os.getenv("BROWSER_IDLE_TIMEOUT", "90"))
+TAB_READY_TIMEOUT = max(0.1, float(os.getenv("BROWSER_TAB_READY_TIMEOUT", "30")))
+TAB_RECOVERY_ATTEMPTS = max(1, int(os.getenv("BROWSER_TAB_RECOVERY_ATTEMPTS", "2")))
+TAB_RECOVERY_BACKOFF = max(0.1, float(os.getenv("BROWSER_TAB_RECOVERY_BACKOFF", "5")))
+TAB_REACTIVATE_INTERVAL = 3.0
 PAGE_BUFFER_BYTES = 4 * 1024 * 1024
 DRAIN_BYTES = 64 * 1024
 LOCAL_HTTP = urllib.request.build_opener(urllib.request.ProxyHandler({}))
@@ -145,6 +149,32 @@ DISMISS_JS = r"""
 })()
 """
 
+PAGE_STATE_JS = r"""
+(() => {
+  const ta = document.querySelector('textarea[aria-label="chat prompt"]');
+  const send = document.querySelector('button[aria-label="Send"]');
+  const b = window.__bridge;
+  return {
+    ready: document.readyState,
+    ta: !!ta, editable: !!ta && !ta.disabled && !ta.readOnly,
+    send: !!send, hc: typeof window.hcaptcha,
+    captcha_ready: !!window.hcaptcha && typeof window.hcaptcha.execute === 'function',
+    visibility: document.visibilityState, focus: document.hasFocus(),
+    was_discarded: document.wasDiscarded === true,
+    body_chars: document.body ? document.body.innerText.length : 0,
+    request_active: !!b && !b.done,
+    patch_upgrade_required: !!window.__bridgeInstalled && !window.__bridgeOriginalFetch
+  };
+})()
+"""
+
+
+def _page_ready(state: dict) -> bool:
+    # Text length varies with rendering/visibility and is diagnostic only.
+    return bool(state.get("ready") == "complete" and state.get("ta")
+                and state.get("editable") and state.get("send") and state.get("captcha_ready"))
+
+
 WAIT_JS = r"""
 (async () => {
   const sleep = ms => new Promise(r => setTimeout(r, ms));
@@ -187,6 +217,10 @@ class BrowserCancelled(BrowserError):
     pass
 
 
+class BrowserPreparationError(BrowserError):
+    """Preparation failed before arming/clicking; another tab may safely be tried."""
+
+
 def _check(cancel: threading.Event, deadline: float) -> None:
     if cancel.is_set():
         raise BrowserCancelled("客户端已取消请求")
@@ -215,6 +249,7 @@ class BrowserUpstream:
         self.ws = None
         self.seq = 0
         self._lock = threading.Lock()
+        self._pool_managed = False
         self.needs_refresh = False
         self.peak_buffer_bytes = 0
 
@@ -274,6 +309,7 @@ class BrowserUpstream:
         必须在重载完成后再注入 fetch 补丁，否则补丁会随旧上下文一起丢失。
         """
         for _ in range(4):
+            self._eval(DISMISS_JS)
             self._wait_ready(cancel, deadline)
             try:
                 res = self._eval(DISMISS_JS) or {}
@@ -296,14 +332,18 @@ class BrowserUpstream:
 
     def _wait_ready(self, cancel: threading.Event, deadline: float) -> None:
         ready_deadline = min(deadline, time.monotonic() + 120)
+        state = {}
         while time.monotonic() < ready_deadline:
             _check(cancel, deadline)
-            if self._eval("document.readyState==='complete' && !!document.querySelector("
-                          "'textarea[aria-label=\"chat prompt\"]') && !!document.querySelector("
-                          "'button[aria-label=\"Send\"]')"):
+            try:
+                state = self._eval(PAGE_STATE_JS) or {}
+            except BrowserError as exc:
+                state = {"context_error": str(exc)[:300]}
+            if _page_ready(state):
                 return
-            _pause(cancel, deadline, 0.2)
-        raise BrowserError("页面未就绪（找不到 chat prompt）")
+            cancel.wait(min(0.2, max(0, ready_deadline - time.monotonic())))
+        _check(cancel, float("inf"))
+        raise BrowserError("页面未就绪: " + json.dumps(state, ensure_ascii=False))
 
     def page_text_len(self) -> int:
         try:
@@ -330,8 +370,7 @@ class BrowserUpstream:
         finally:
             self._lock.release()
 
-    def _stream_locked(self, body: dict, cancel: threading.Event,
-                       deadline: float, trace: Callable | None) -> Iterator[str]:
+    def _prepare_for_send(self, cancel: threading.Event, deadline: float) -> None:
         self._connect()
         if self.needs_refresh:
             self._call("Page.reload")
@@ -347,6 +386,24 @@ class BrowserUpstream:
             self.needs_refresh = True
             raise BrowserError("页面补丁需要重载后升级")
         self.needs_refresh = False
+
+    def _stream_locked(self, body: dict, cancel: threading.Event,
+                       deadline: float, trace: Callable | None) -> Iterator[str]:
+        try:
+            if self._pool_managed:
+                # A previously ready tab may have been discarded or navigated.
+                # Quarantine it immediately instead of waiting in this lease.
+                self._connect()
+                state = self._eval(PAGE_STATE_JS) or {}
+                if (not _page_ready(state) or state.get("request_active")
+                        or state.get("patch_upgrade_required")):
+                    raise BrowserPreparationError("借用的标签页已失效: " + json.dumps(state, ensure_ascii=False))
+            self._prepare_for_send(cancel, min(deadline, time.monotonic() + TAB_READY_TIMEOUT))
+        except BrowserCancelled:
+            raise
+        except Exception as exc:
+            self.needs_refresh = True
+            raise BrowserPreparationError(str(exc)) from exc
         request_id = uuid.uuid4().hex
         if trace:
             trace("browser_tab", tab_id=self.hint, page_request_id=request_id)
@@ -425,14 +482,15 @@ class BrowserUpstream:
 
 
 class BrowserPool:
-    """多个 Playground 标签页，每个标签一个 BrowserUpstream，支持并发。"""
+    """Lease only healthy tabs; one maintenance thread recovers idle tabs."""
 
     def __init__(
         self,
         port: int = 9222,
-        size: int = 3,
+        size: int = 5,
         base_url: str = DEFAULT_BASE_URL,
         prefix: str = "kpool",
+        trace: Callable | None = None,
     ) -> None:
         self.port = port
         self.size = max(1, size)
@@ -441,9 +499,27 @@ class BrowserPool:
         self._ups: list[BrowserUpstream] = []
         self._queue: queue.Queue[BrowserUpstream] = queue.Queue()
         self._turns: dict[str, int] = {}
-        self._refresh: set[str] = set()
+        self._states: dict[str, str] = {}
+        self._failures: dict[str, int] = {}
+        self._retry_at: dict[str, float] = {}
+        self._errors: dict[str, str] = {}
+        self._targets: dict[str, str] = {}
+        self._cancels: dict[str, threading.Event] = {}
         self._ready = False
         self._lock = threading.Lock()
+        self._activation_lock = threading.Lock()
+        self._stop = threading.Event()
+        self._wake = threading.Event()
+        self._worker: threading.Thread | None = None
+        self._trace = trace
+
+    def _log(self, event: str, **data) -> None:
+        if self._trace is not None:
+            self._trace(event, **data)
+
+    def status(self) -> dict:
+        with self._lock:
+            return {"size": self.size, "tabs": dict(self._states), "errors": dict(self._errors)}
 
     def _list_pages(self) -> list[dict]:
         try:
@@ -464,54 +540,105 @@ class BrowserPool:
             return json.load(resp)
 
     @staticmethod
-    def _call(ws, mid: int, method: str, params: dict | None = None):
+    def _call(ws, mid: int, method: str, params: dict | None = None, timeout: float = 5):
         ws.send(json.dumps({"id": mid, "method": method, "params": params or {}}))
-        while True:
+        deadline = time.monotonic() + timeout
+        while time.monotonic() < deadline:
+            ws.settimeout(max(0.01, deadline - time.monotonic()))
             msg = json.loads(ws.recv())
             if msg.get("id") == mid:
                 if "error" in msg:
                     raise BrowserError(str(msg["error"]))
                 return msg.get("result", {})
+        raise BrowserError(f"CDP timeout: {method}")
 
-    def _navigate(self, ws_url: str, url: str) -> None:
+    def _inspect_page(self, ws_url: str) -> dict:
+        ws = websocket.create_connection(ws_url, timeout=5)
+        try:
+            result = self._call(ws, 1, "Runtime.evaluate",
+                                {"expression": PAGE_STATE_JS, "returnByValue": True})
+            return result.get("result", {}).get("value") or {}
+        finally:
+            ws.close()
+
+    def _navigate(self, ws_url: str, url: str) -> dict:
         ws = websocket.create_connection(ws_url, timeout=5)
         try:
             self._call(ws, 1, "Page.enable")
-            self._call(ws, 2, "Page.navigate", {"url": url})
+            result = self._call(ws, 2, "Page.navigate", {"url": url})
+            if result.get("errorText"):
+                raise BrowserError("页面导航失败: " + result["errorText"])
+            return result
         finally:
             ws.close()
 
     def _activate_wait(self, ws_url: str, cancel: threading.Event,
-                       deadline: float) -> None:
+                       deadline: float, trace: Callable | None = None,
+                       navigation: dict | None = None) -> None:
+        _check(cancel, deadline)
         ws = websocket.create_connection(ws_url, timeout=5)
         try:
-            self._call(ws, 1, "Page.bringToFront")
+            _check(cancel, deadline)
+            self._call(ws, 1, "Page.enable")
+            _check(cancel, deadline)
             self._call(ws, 2, "Runtime.enable")
-            expr = r"""
-(() => ({
-  ready: document.readyState,
-  ta: !!document.querySelector('textarea[aria-label="chat prompt"]'),
-  send: !!document.querySelector('button[aria-label="Send"]'),
-  hc: typeof hcaptcha,
-  body: document.body ? document.body.innerText.length : 0
-}))()
-"""
-            ready_deadline = min(deadline, time.monotonic() + 60)
+            # These help background tabs without fabricating visibility/captcha state.
+            for mid, method, params in (
+                (3, "Page.setWebLifecycleState", {"state": "active"}),
+                (4, "Emulation.setFocusEmulationEnabled", {"enabled": True}),
+            ):
+                _check(cancel, deadline)
+                try:
+                    self._call(ws, mid, method, params)
+                except BrowserError as exc:
+                    if trace:
+                        trace("pool_activation_unsupported", method=method, error=str(exc)[:300])
+            ready_deadline = min(deadline, time.monotonic() + TAB_READY_TIMEOUT)
+            next_activation = 0.0
+            loader_id = (navigation or {}).get("loaderId")
+            navigation_committed = not loader_id
+            value: dict = {}
             while time.monotonic() < ready_deadline:
                 _check(cancel, deadline)
-                res = self._call(ws, 3, "Runtime.evaluate", {"expression": expr, "returnByValue": True})
-                value = res.get("result", {}).get("value") or {}
-                if (
-                    value.get("ready") == "complete"
-                    and value.get("ta")
-                    and value.get("send")
-                    and value.get("hc") == "object"
-                    and value.get("body", 0) > 500
-                ):
-                    _pause(cancel, deadline, 0.5)
+                activate = time.monotonic() >= next_activation
+                if activate:
+                    self._call(ws, 5, "Page.bringToFront")
+                    next_activation = time.monotonic() + TAB_REACTIVATE_INTERVAL
+                    if trace:
+                        trace("pool_activation", state=value)
+                try:
+                    if not navigation_committed:
+                        tree = self._call(ws, 8, "Page.getFrameTree")
+                        frame = tree.get("frameTree", {}).get("frame", {})
+                        if frame.get("loaderId") != loader_id:
+                            value = {"navigation_pending": True, "loader_id": frame.get("loaderId"),
+                                     "expected_loader_id": loader_id}
+                            cancel.wait(min(0.2, max(0, ready_deadline - time.monotonic())))
+                            continue
+                        navigation_committed = True
+                    # Consent can block captcha initialization and may itself
+                    # navigate again. Only act after the requested reload commits.
+                    if activate:
+                        dismissed = self._call(ws, 7, "Runtime.evaluate",
+                                               {"expression": DISMISS_JS, "returnByValue": True})
+                        action = dismissed.get("result", {}).get("value") or {}
+                        if action.get("ack") or action.get("consent"):
+                            cancel.wait(min(2.5, max(0, ready_deadline - time.monotonic())))
+                            continue
+                    res = self._call(ws, 6, "Runtime.evaluate",
+                                     {"expression": PAGE_STATE_JS, "returnByValue": True})
+                    value = res.get("result", {}).get("value") or {}
+                    if not value:
+                        value = {"context_error": str(res.get("exceptionDetails", "no context"))[:300]}
+                except BrowserError as exc:
+                    value = {"context_error": str(exc)[:300]}
+                if _page_ready(value) and not value.get("request_active"):
+                    if trace:
+                        trace("pool_page_ready", state=value)
                     return
-                _pause(cancel, deadline, 0.2)
-            raise BrowserError("池标签页未就绪（textarea/Send/hcaptcha 未出现）")
+                cancel.wait(min(0.2, max(0, ready_deadline - time.monotonic())))
+            _check(cancel, float("inf"))
+            raise BrowserError("池标签页未就绪: " + json.dumps(value, ensure_ascii=False))
         finally:
             ws.close()
 
@@ -521,38 +648,129 @@ class BrowserPool:
         while not self._lock.acquire(timeout=0.05):
             _check(cancel, deadline)
         try:
+            _check(cancel, deadline)
+            if self._stop.is_set():
+                raise BrowserError("浏览器池已关闭")
             if self._ready:
                 return
-            pages = self._list_pages()
-            upstreams = []
             for n in range(1, self.size + 1):
-                _check(cancel, deadline)
                 hint = f"{self.prefix}={n}"
-                page = next((p for p in pages if _matches_hint(p.get("url") or "", hint)), None)
-                if page is None:
-                    tab = self._new_blank()
-                    self._navigate(tab["webSocketDebuggerUrl"], f"{self.base_url}?{hint}")
-                    page = tab
-                self._activate_wait(page["webSocketDebuggerUrl"], cancel, deadline)
                 upstream = BrowserUpstream(port=self.port, target_hint=hint)
-                upstreams.append(upstream)
-            self._ups = upstreams
-            for upstream in upstreams:
-                self._queue.put(upstream)
+                upstream._pool_managed = True
+                upstream.needs_refresh = True
+                self._ups.append(upstream)
+                self._states[hint] = "pending"
             self._ready = True
+            self._worker = threading.Thread(target=self._maintain, name="browser-pool-recovery", daemon=True)
+            self._worker.start()
         finally:
             self._lock.release()
 
+    def _publish_ready(self, upstream: BrowserUpstream) -> None:
+        with self._lock:
+            if self._stop.is_set():
+                upstream.close()
+                self._states[upstream.hint] = "closed"
+                return
+            upstream.needs_refresh = False
+            self._states[upstream.hint] = "ready"
+            self._failures.pop(upstream.hint, None)
+            self._retry_at.pop(upstream.hint, None)
+            self._errors.pop(upstream.hint, None)
+            self._queue.put(upstream)
+        self._log("pool_ready", tab_id=upstream.hint)
+
+    def _maintain(self) -> None:
+        # Inspect all existing tabs before spending a recovery deadline on any one.
+        try:
+            pages = self._list_pages()
+        except Exception as exc:
+            pages = []
+            self._log("pool_discovery_error", error=str(exc)[:500])
+        for upstream in self._ups:
+            if self._stop.is_set():
+                return
+            page = next((p for p in pages if _matches_hint(p.get("url") or "", upstream.hint)), None)
+            if page is not None:
+                try:
+                    state = self._inspect_page(page["webSocketDebuggerUrl"])
+                    self._log("pool_probe", tab_id=upstream.hint, state=state)
+                    if (_page_ready(state) and not state.get("request_active")
+                            and not state.get("patch_upgrade_required")):
+                        self._publish_ready(upstream)
+                except Exception as exc:
+                    self._log("pool_probe_error", tab_id=upstream.hint, error=str(exc)[:500])
+        while not self._stop.is_set():
+            self._wake.clear()
+            upstream = None
+            with self._lock:
+                candidates = [candidate for candidate in self._ups
+                              if self._states[candidate.hint] == "pending" or (
+                                  self._states[candidate.hint] == "failed" and
+                                  time.monotonic() >= self._retry_at[candidate.hint])]
+                if candidates:
+                    upstream = min(candidates, key=lambda candidate: (
+                        self._states[candidate.hint] != "pending",
+                        self._retry_at.get(candidate.hint, 0)))
+                    self._states[upstream.hint] = "recovering"
+            if upstream is None:
+                self._wake.wait(0.2)
+                continue
+            hint = upstream.hint
+            try:
+                for attempt in range(1, TAB_RECOVERY_ATTEMPTS + 1):
+                    _check(self._stop, float("inf"))
+                    self._log("pool_recovery_start", tab_id=hint, recovery_attempt=attempt)
+                    try:
+                        self._refresh_tab(upstream, self._stop, time.monotonic() + TAB_READY_TIMEOUT)
+                        break
+                    except BrowserCancelled:
+                        raise
+                    except Exception as exc:
+                        self._log("pool_recovery_error", tab_id=hint, recovery_attempt=attempt, error=str(exc)[:1500])
+                        if attempt == TAB_RECOVERY_ATTEMPTS:
+                            raise
+                self._turns[hint] = 0
+                self._publish_ready(upstream)
+            except BrowserCancelled:
+                upstream.close()
+                with self._lock:
+                    self._states[hint] = "closed"
+                return
+            except Exception as exc:
+                upstream.close()
+                with self._lock:
+                    failures = self._failures.get(hint, 0) + 1
+                    self._failures[hint] = failures
+                    self._retry_at[hint] = time.monotonic() + min(60, TAB_RECOVERY_BACKOFF * 2 ** min(failures - 1, 4))
+                    self._errors[hint] = str(exc)[:1500]
+                    self._states[hint] = "failed"
+
     def _refresh_tab(self, upstream: BrowserUpstream, cancel: threading.Event,
                      deadline: float) -> None:
-        pages = self._list_pages()
-        page = next((p for p in pages if _matches_hint(p.get("url") or "", upstream.hint)), None)
-        if page is None:
-            raise BrowserError(f"找不到标签页 {upstream.hint}")
-        upstream.close()
-        self._navigate(page["webSocketDebuggerUrl"], f"{self.base_url}?{upstream.hint}")
-        self._activate_wait(page["webSocketDebuggerUrl"], cancel, deadline)
-        upstream.needs_refresh = False
+        # Activation and navigation are serialized, never held during generation.
+        with self._activation_lock:
+            _check(cancel, deadline)
+            pages = self._list_pages()
+            _check(cancel, deadline)
+            page = next((p for p in pages if _matches_hint(p.get("url") or "", upstream.hint)), None)
+            if page is None:
+                page = next((p for p in pages
+                             if p.get("webSocketDebuggerUrl") == self._targets.get(upstream.hint)), None)
+            if page is None:
+                page = self._new_blank()
+            self._targets[upstream.hint] = page["webSocketDebuggerUrl"]
+            _check(cancel, deadline)
+            upstream.close()
+            navigation = self._navigate(page["webSocketDebuggerUrl"], f"{self.base_url}?{upstream.hint}")
+
+            def trace(event, **data):
+                self._log(event, tab_id=upstream.hint, **data)
+
+            self._activate_wait(page["webSocketDebuggerUrl"], cancel, deadline, trace, navigation)
+            _check(cancel, deadline)
+            upstream.needs_refresh = False
+            upstream._prepare_for_send(cancel, deadline)
 
     def generate(self, body: dict, timeout: float = 3600.0) -> str:
         return "".join(self.stream(body, timeout))
@@ -565,45 +783,83 @@ class BrowserPool:
         queued_until = min(deadline, time.monotonic() + QUEUE_TIMEOUT)
         while True:
             _check(cancel, deadline)
+            if self._stop.is_set():
+                raise BrowserError("浏览器池已关闭")
             try:
                 upstream = self._queue.get(timeout=0.05)
-                break
             except queue.Empty:
                 if time.monotonic() >= queued_until:
-                    raise BrowserError(f"浏览器池排队超时（>{QUEUE_TIMEOUT:.0f}s），所有标签页都在忙")
-        hint = upstream.hint
-        try:
-            if hint in self._refresh or upstream.needs_refresh:
-                upstream.needs_refresh = True
-                print(f"[pool] refresh tab={hint} before next request", flush=True)
-                self._refresh_tab(upstream, cancel, deadline)
-                self._refresh.discard(hint)
-                self._turns[hint] = 0
-            yield from upstream.stream(body, max(0, deadline - time.monotonic()), cancel, trace)
-        except BaseException:
-            upstream.needs_refresh = True
-            raise
-        finally:
-            # 所有 CDP 操作/计数必须在归还标签页之前完成。
+                    raise BrowserError(f"浏览器池排队超时（>{QUEUE_TIMEOUT:.0f}s），无可用标签页: "
+                                       + json.dumps(self.status(), ensure_ascii=False))
+                continue
+            hint = upstream.hint
+            with self._lock:
+                if self._stop.is_set():
+                    self._states[hint] = "closed"
+                    upstream.close()
+                    raise BrowserError("浏览器池已关闭")
+                try:
+                    _check(cancel, deadline)
+                except BrowserError:
+                    self._queue.put(upstream)
+                    raise
+                self._states[hint] = "busy"
+                self._cancels[hint] = cancel
+            retry = False
             try:
-                turns = self._turns.get(hint, 0) + 1
-                self._turns[hint] = turns
-                if not cancel.is_set() and not upstream.needs_refresh:
-                    text_len = upstream.page_text_len()
-                    if turns >= TAB_MAX_TURNS or text_len >= TAB_MAX_TEXT_LEN:
-                        self._refresh.add(hint)
-                        print(f"[pool] mark refresh tab={hint} turns={turns} text_len={text_len}", flush=True)
-            except Exception:
+                # Stale/dirty entries must never delay a healthy queued tab.
+                if upstream.needs_refresh:
+                    retry = True
+                else:
+                    yield from upstream.stream(body, max(0, deadline - time.monotonic()), cancel, trace)
+            except BrowserPreparationError as exc:
+                retry = True
                 upstream.needs_refresh = True
-            if trace:
-                trace("browser_pool_release", tab_id=hint, needs_refresh=upstream.needs_refresh)
-            self._queue.put(upstream)
+                if trace:
+                    trace("browser_prepare_retry", tab_id=hint, error=str(exc)[:1500])
+            except BaseException:
+                upstream.needs_refresh = True
+                raise
+            finally:
+                # Complete every CDP operation before changing ownership.
+                try:
+                    turns = self._turns.get(hint, 0) + 1
+                    self._turns[hint] = turns
+                    if not cancel.is_set() and not upstream.needs_refresh:
+                        text_len = upstream.page_text_len()
+                        if turns >= TAB_MAX_TURNS or text_len >= TAB_MAX_TEXT_LEN:
+                            upstream.needs_refresh = True
+                except Exception:
+                    upstream.needs_refresh = True
+                if trace:
+                    trace("browser_pool_release", tab_id=hint, needs_refresh=upstream.needs_refresh)
+                with self._lock:
+                    self._cancels.pop(hint, None)
+                    if self._stop.is_set():
+                        self._states[hint] = "closed"
+                        upstream.close()
+                    elif upstream.needs_refresh or cancel.is_set():
+                        upstream.needs_refresh = True
+                        self._states[hint] = "pending"
+                        self._wake.set()
+                    else:
+                        self._states[hint] = "ready"
+                        self._queue.put(upstream)
+            if not retry:
+                return
+            if time.monotonic() >= queued_until:
+                raise BrowserError("浏览器页面准备失败，等待健康标签页的时限已到")
 
     def close(self) -> None:
-        for upstream in self._ups:
-            upstream.close()
-        self._ups.clear()
-        self._queue = queue.Queue()
-        self._turns.clear()
-        self._refresh.clear()
-        self._ready = False
+        self._stop.set()
+        self._wake.set()
+        with self._lock:
+            for cancel in self._cancels.values():
+                cancel.set()
+        if self._worker is not None:
+            self._worker.join(timeout=10)
+        with self._lock:
+            for upstream in self._ups:
+                if self._states.get(upstream.hint) not in ("busy", "recovering"):
+                    upstream.close()
+                    self._states[upstream.hint] = "closed"

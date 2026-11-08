@@ -8,7 +8,7 @@ PROXY="http://192.168.0.110:31028"   # "" = direct connection
 PYTHON="python3"                     # Python 3.12 interpreter
 CDP_PORT=9225
 BRIDGE_PORT=8083
-POOL_SIZE=3
+POOL_SIZE=5
 REQUEST_TIMEOUT=3600                 # total seconds, including queue/prepare/retry
 BRAVE_PATH=""                        # explicit brave binary; "" = detect/download
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -120,8 +120,20 @@ else
 fi
 
 echo "==> browser (CDP $CDP_PORT)"
+background_flags=(--disable-background-timer-throttling --disable-renderer-backgrounding --disable-backgrounding-occluded-windows)
 if cdp_up; then
     echo "reusing browser already listening on $CDP_PORT"
+    browser_args="$(ps -ax -o command= | "$PYTHON" -c 'import re,sys; pattern=r"--remote-debugging-port="+re.escape(sys.argv[1])+r"(?:\s|$)"; print(next((line.strip() for line in sys.stdin if re.search(pattern,line) and "--type=" not in line), ""))' "$CDP_PORT")" || browser_args=""
+    if [ -n "$browser_args" ]; then
+        for flag in "${background_flags[@]}"; do
+            case "$browser_args" in
+                *"$flag"*) ;;
+                *) echo "background flag missing: $flag; applied only on the next browser launch" ;;
+            esac
+        done
+    else
+        echo "could not inspect browser arguments; background flags are applied only on new browser launches"
+    fi
 else
     brave="$(find_brave || true)"
     if [ -z "$brave" ]; then
@@ -130,7 +142,8 @@ else
     fi
     echo "starting $brave"
     args=(--user-data-dir="$PROFILE_DIR" --remote-debugging-port="$CDP_PORT" --remote-allow-origins='*'
-          --no-first-run --no-default-browser-check --disable-extensions --window-size=1280,900 "$PLAYGROUND")
+          --no-first-run --no-default-browser-check --disable-extensions
+          "${background_flags[@]}" --window-size=1280,900 "$PLAYGROUND")
     if [ "$(id -u)" = "0" ]; then args=(--no-sandbox "${args[@]}"); fi
     "$brave" "${args[@]}" >/dev/null 2>&1 &
     for _ in $(seq 1 60); do cdp_up && break; sleep 0.5; done
