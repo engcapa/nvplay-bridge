@@ -9,6 +9,7 @@ PYTHON="python3"                     # Python 3.12 interpreter
 CDP_PORT=9225
 BRIDGE_PORT=8083
 POOL_SIZE=3
+REQUEST_TIMEOUT=3600                 # total seconds, including queue/prepare/retry
 BRAVE_PATH=""                        # explicit brave binary; "" = detect/download
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BRAVE_DIR="$REPO_DIR/.brave"
@@ -141,6 +142,7 @@ export UPSTREAM_KIND=browser
 export BROWSER_CDP_PORT="$CDP_PORT"
 export BROWSER_POOL_SIZE="$POOL_SIZE"
 export BROWSER_HEARTBEAT_SEC=10
+export BROWSER_TIMEOUT="$REQUEST_TIMEOUT"
 export BROWSER_DEBUG_LOG="$REPO_DIR/logs/bridge-debug.jsonl"
 
 exec "$PYTHON" -m uvicorn nvplay_bridge:app --app-dir "$REPO_DIR" --host 127.0.0.1 --port "$BRIDGE_PORT"

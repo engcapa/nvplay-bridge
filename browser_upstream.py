@@ -3,7 +3,7 @@
 原理：
   1. 页面自己点一次“发送”，由页面 JS 现场签发 nv-captcha-token；
   2. 我们在 fetch 层把请求体替换成目标 body（可含 tools）；
-  3. 克隆响应流，读完整 SSE 文本返回。
+  3. 克隆响应流，通过 CDP 取走新增 SSE；取消时中止页面 fetch。
 
 前提：Brave 以 --remote-debugging-port=9222 启动，并打开 Playground 页面。
 """
@@ -16,6 +16,9 @@ import queue
 import threading
 import time
 import urllib.request
+from urllib.parse import parse_qs, urlparse
+import uuid
+from collections.abc import Callable, Iterator
 
 import websocket
 
@@ -24,55 +27,104 @@ DEFAULT_BASE_URL = "https://build.nvidia.com/moonshotai/kimi-k3_1-pro/playground
 QUEUE_TIMEOUT = float(os.getenv("BROWSER_QUEUE_TIMEOUT", "120"))
 TAB_MAX_TURNS = int(os.getenv("BROWSER_TAB_MAX_TURNS", "50"))
 TAB_MAX_TEXT_LEN = int(os.getenv("BROWSER_TAB_MAX_TEXT_LEN", "500000"))
+POLL_INTERVAL = float(os.getenv("BROWSER_POLL_INTERVAL", "0.1"))
+FIRST_BYTE_TIMEOUT = float(os.getenv("BROWSER_FIRST_BYTE_TIMEOUT", "120"))
+IDLE_TIMEOUT = float(os.getenv("BROWSER_IDLE_TIMEOUT", "90"))
+PAGE_BUFFER_BYTES = 4 * 1024 * 1024
+DRAIN_BYTES = 64 * 1024
+LOCAL_HTTP = urllib.request.build_opener(urllib.request.ProxyHandler({}))
+
+
+def _matches_hint(url: str, hint: str) -> bool:
+    if "=" in hint and "/" not in hint:
+        key, _, value = hint.partition("=")
+        return parse_qs(urlparse(url).query).get(key) == [value]
+    return hint in url
 
 PATCH_JS = r"""
 (() => {
-  if (window.__bridgeInstalled) return 'already';
+  if (window.__bridgeVersion === 2) return 'already';
+  if (window.__bridgeInstalled && !window.__bridgeOriginalFetch) return 'reload-required';
+  const prev = window.__bridgeOriginalFetch || window.fetch.bind(window);
+  window.__bridgeOriginalFetch = prev;
+  window.__bridgeVersion = 2;
   window.__bridgeInstalled = true;
-  window.__bridge = { body: null, text: '', status: 0, done: false, error: null, ct: null };
-  const prev = window.fetch.bind(window);
+  const encoder = new TextEncoder();
+  window.__bridgeArm = (id, body, limit) => {
+    if (window.__bridge && !window.__bridge.done) throw new Error('previous request still active');
+    window.__bridge = { id, body, armed: true, chunks: [], pending: 0, peak: 0,
+      limit, status: 0, done: false, error: null, ct: null, controller: null, reader: null };
+  };
+  window.__bridgeDrain = (id, limit) => {
+    const b = window.__bridge;
+    if (!b || b.id !== id) throw new Error('bridge request id mismatch');
+    let data = '', size = 0;
+    while (b.chunks.length && size + b.chunks[0].bytes <= limit) {
+      const c = b.chunks.shift(); data += c.text; size += c.bytes; b.pending -= c.bytes;
+    }
+    return { data, status: b.status, ct: b.ct, done: b.done && !b.chunks.length,
+      error: b.error, peak: b.peak };
+  };
+  window.__bridgeAbort = async id => {
+    const b = window.__bridge;
+    if (!b || b.id !== id) return false;
+    b.armed = false; b.body = null;
+    if (b.controller) b.controller.abort(); else b.done = true;
+    if (b.reader) b.reader.cancel().catch(() => {});
+    for (let i = 0; i < 40 && !b.done; i++) await new Promise(r => setTimeout(r, 50));
+    b.chunks = []; b.pending = 0;
+    return b.done;
+  };
   window.fetch = function (input, init) {
     let url = typeof input === 'string' ? input
       : (input instanceof Request ? input.url : String(input));
     const b = window.__bridge;
-    if (!url.includes('/v2/predict/models/') || !b || !b.body) return prev(input, init);
-
-    b.text = ''; b.done = false; b.status = 0; b.error = null;
-    let req;
+    if (!url.includes('/v2/predict/models/') || !b || !b.armed) return prev(input, init);
+    b.armed = false;
+    const body = b.body; b.body = null;
+    const controller = new AbortController(); b.controller = controller;
+    let req, originalSignal, relay;
     try {
-      if (input instanceof Request) {
-        const h = new Headers(input.headers);
-        h.delete('host'); h.delete('content-length');
-        req = new Request(input.url, {
-          method: input.method, headers: h, body: b.body,
-          credentials: 'include', mode: 'cors'
-        });
-      } else {
-        const h = new Headers((init && init.headers) || {});
-        h.delete('host'); h.delete('content-length');
-        req = new Request(url, {
-          method: (init && init.method) || 'POST', headers: h, body: b.body,
-          credentials: 'include', mode: 'cors'
-        });
+      const original = new Request(input, init);
+      originalSignal = original.signal;
+      relay = () => controller.abort();
+      if (originalSignal.aborted) relay();
+      else originalSignal.addEventListener('abort', relay, { once: true });
+      const h = new Headers(original.headers);
+      h.delete('host'); h.delete('content-length');
+      req = new Request(original, { headers: h, body, credentials: 'include',
+        signal: controller.signal });
+    } catch (e) { b.error = String(e); b.done = true; return Promise.reject(e); }
+    const append = text => {
+      for (let start = 0; start < text.length;) {
+        let end = Math.min(start + 8192, text.length);
+        if (end < text.length && /[\uD800-\uDBFF]/.test(text[end - 1])) end--;
+        const part = text.slice(start, end), bytes = encoder.encode(part).length;
+        if (b.pending + bytes > b.limit) throw new Error('bridge page buffer exceeded');
+        b.chunks.push({ text: part, bytes }); b.pending += bytes;
+        b.peak = Math.max(b.peak, b.pending); start = end;
       }
-    } catch (e) { b.error = String(e); return prev(input, init); }
-
+    };
     const p = prev(req);
     p.then(async r => {
       b.status = r.status;
       b.ct = r.headers.get('content-type');
       try {
         const reader = r.clone().body.getReader();
+        b.reader = reader;
         const dec = new TextDecoder();
         for (;;) {
           const { value, done } = await reader.read();
           if (done) break;
-          b.text += dec.decode(value, { stream: true });
+          append(dec.decode(value, { stream: true }));
         }
-        b.text += dec.decode();
-      } catch (e) { b.error = String(e); }
-      b.done = true;
-    }).catch(e => { b.status = -1; b.error = String(e); b.done = true; });
+        append(dec.decode());
+      } catch (e) { b.error = String(e); controller.abort(); }
+      finally { b.done = true; originalSignal.removeEventListener('abort', relay); }
+    }).catch(e => {
+      b.status = -1; b.error = String(e); b.done = true;
+      if (originalSignal) originalSignal.removeEventListener('abort', relay);
+    });
     return p;
   };
   return 'installed';
@@ -131,6 +183,23 @@ class BrowserError(RuntimeError):
     pass
 
 
+class BrowserCancelled(BrowserError):
+    pass
+
+
+def _check(cancel: threading.Event, deadline: float) -> None:
+    if cancel.is_set():
+        raise BrowserCancelled("客户端已取消请求")
+    if time.monotonic() >= deadline:
+        raise BrowserError("浏览器请求总时限已到")
+
+
+def _pause(cancel: threading.Event, deadline: float, seconds: float) -> None:
+    _check(cancel, deadline)
+    cancel.wait(max(0, min(seconds, deadline - time.monotonic())))
+    _check(cancel, deadline)
+
+
 class BrowserHTTPError(BrowserError):
     """上游返回非 200 时携带真实 HTTP 状态码。"""
 
@@ -146,11 +215,13 @@ class BrowserUpstream:
         self.ws = None
         self.seq = 0
         self._lock = threading.Lock()
+        self.needs_refresh = False
+        self.peak_buffer_bytes = 0
 
     # ---------------- CDP 基础 ----------------
     def _target(self) -> dict:
         try:
-            with urllib.request.urlopen(f"{self.base}/json/list", timeout=5) as resp:
+            with LOCAL_HTTP.open(f"{self.base}/json/list", timeout=5) as resp:
                 targets = json.load(resp)
         except OSError as exc:
             raise BrowserError(
@@ -158,28 +229,26 @@ class BrowserUpstream:
             ) from exc
         pages = [t for t in targets if t.get("type") == "page" and t.get("webSocketDebuggerUrl")]
         for t in pages:
-            if self.hint in (t.get("url") or ""):
+            if _matches_hint(t.get("url") or "", self.hint):
                 return t
-        if pages:
-            return pages[0]
-        raise BrowserError("没有可用的页面 target，请先在 Brave 打开 Playground")
+        raise BrowserError(f"找不到页面 target: {self.hint}，请先在 Brave 打开 Playground")
 
     def _connect(self) -> None:
         if self.ws is not None:
             return
         target = self._target()
-        self.ws = websocket.create_connection(target["webSocketDebuggerUrl"], timeout=20)
+        self.ws = websocket.create_connection(target["webSocketDebuggerUrl"], timeout=5)
         self._call("Runtime.enable")
 
-    def _call(self, method: str, params: dict | None = None, timeout: float = 60.0):
+    def _call(self, method: str, params: dict | None = None, timeout: float = 5.0):
         if self.ws is None:
             self._connect()
         self.seq += 1
         mid = self.seq
         self.ws.send(json.dumps({"id": mid, "method": method, "params": params or {}}))
-        deadline = time.time() + timeout
-        while time.time() < deadline:
-            self.ws.settimeout(max(0.3, deadline - time.time()))
+        deadline = time.monotonic() + timeout
+        while time.monotonic() < deadline:
+            self.ws.settimeout(max(0.1, deadline - time.monotonic()))
             msg = json.loads(self.ws.recv())
             if msg.get("id") == mid:
                 if "error" in msg:
@@ -187,7 +256,7 @@ class BrowserUpstream:
                 return msg.get("result", {})
         raise BrowserError(f"CDP timeout: {method}")
 
-    def _eval(self, expr: str, timeout: float = 60.0):
+    def _eval(self, expr: str, timeout: float = 5.0):
         res = self._call(
             "Runtime.evaluate",
             {"expression": expr, "awaitPromise": True, "returnByValue": True},
@@ -198,20 +267,20 @@ class BrowserUpstream:
         return res.get("result", {}).get("value")
 
     # ---------------- 公开接口 ----------------
-    def _prepare_page(self) -> None:
+    def _prepare_page(self, cancel: threading.Event, deadline: float) -> None:
         """关闭 cookie/免责声明弹窗，并等待页面重载稳定。
 
         首次使用全新 profile 时，点击 “Acknowledge & Continue” 可能触发整页重载；
         必须在重载完成后再注入 fetch 补丁，否则补丁会随旧上下文一起丢失。
         """
         for _ in range(4):
-            self._wait_ready()
+            self._wait_ready(cancel, deadline)
             try:
-                res = self._eval(DISMISS_JS, timeout=20) or {}
+                res = self._eval(DISMISS_JS) or {}
             except BrowserError:
                 res = {}
             if res.get("ack") or res.get("consent"):
-                time.sleep(2.5)
+                _pause(cancel, deadline, 2.5)
                 continue
             try:
                 has_modal = self._eval(
@@ -222,17 +291,18 @@ class BrowserUpstream:
                 has_modal = True
             if not has_modal:
                 return
-            time.sleep(1.5)
+            _pause(cancel, deadline, 1.5)
         raise BrowserError("免责声明弹窗未关闭")
 
-    def _wait_ready(self) -> None:
-        for _ in range(3):
-            try:
-                if self._eval(WAIT_JS, timeout=60) == "ready":
-                    return
-            except BrowserError:
-                pass
-            time.sleep(2)
+    def _wait_ready(self, cancel: threading.Event, deadline: float) -> None:
+        ready_deadline = min(deadline, time.monotonic() + 120)
+        while time.monotonic() < ready_deadline:
+            _check(cancel, deadline)
+            if self._eval("document.readyState==='complete' && !!document.querySelector("
+                          "'textarea[aria-label=\"chat prompt\"]') && !!document.querySelector("
+                          "'button[aria-label=\"Send\"]')"):
+                return
+            _pause(cancel, deadline, 0.2)
         raise BrowserError("页面未就绪（找不到 chat prompt）")
 
     def page_text_len(self) -> int:
@@ -242,56 +312,108 @@ class BrowserUpstream:
         except Exception:  # noqa: BLE001
             return 0
 
-    def generate(self, body: dict, timeout: float = 180.0) -> str:
-        if not self._lock.acquire(timeout=QUEUE_TIMEOUT):
-            raise BrowserError(
-                f"浏览器桥排队超时（>{QUEUE_TIMEOUT:.0f}s），前一个请求可能卡住；请检查页面或重启 bridge"
-            )
+    def generate(self, body: dict, timeout: float = 3600.0) -> str:
+        return "".join(self.stream(body, timeout))
+
+    def stream(self, body: dict, timeout: float = 3600.0,
+               cancel: threading.Event | None = None, trace: Callable | None = None) -> Iterator[str]:
+        cancel = cancel if cancel is not None else threading.Event()
+        deadline = time.monotonic() + timeout
+        queued_until = min(deadline, time.monotonic() + QUEUE_TIMEOUT)
+        while not self._lock.acquire(timeout=0.05):
+            _check(cancel, deadline)
+            if time.monotonic() >= queued_until:
+                raise BrowserError(f"浏览器桥排队超时（>{QUEUE_TIMEOUT:.0f}s）")
         try:
-            return self._generate_locked(body, timeout)
+            _check(cancel, deadline)
+            yield from self._stream_locked(body, cancel, deadline, trace)
         finally:
             self._lock.release()
 
-    def _generate_locked(self, body: dict, timeout: float = 180.0) -> str:
+    def _stream_locked(self, body: dict, cancel: threading.Event,
+                       deadline: float, trace: Callable | None) -> Iterator[str]:
         self._connect()
-        self._prepare_page()
-        if self._eval(PATCH_JS) is None:
-            raise BrowserError("注入 fetch 补丁失败")
-        self._eval(
-            "window.__bridge.body = " + json.dumps(json.dumps(body, ensure_ascii=False))
-        )
-        self._eval("window.__bridge.text=''; window.__bridge.done=false; window.__bridge.status=0; window.__bridge.error=null;")
+        if self.needs_refresh:
+            self._call("Page.reload")
+            _pause(cancel, deadline, 0.5)
+        self._prepare_page(cancel, deadline)
+        installed = self._eval(PATCH_JS)
+        if installed == "reload-required":
+            self._call("Page.reload")
+            _pause(cancel, deadline, 0.5)
+            self._prepare_page(cancel, deadline)
+            installed = self._eval(PATCH_JS)
+        if installed not in ("installed", "already"):
+            self.needs_refresh = True
+            raise BrowserError("页面补丁需要重载后升级")
+        self.needs_refresh = False
+        request_id = uuid.uuid4().hex
+        if trace:
+            trace("browser_tab", tab_id=self.hint, page_request_id=request_id)
+        quoted_id = json.dumps(request_id)
+        self._eval(f"window.__bridgeArm({quoted_id},"
+                   f"{json.dumps(json.dumps(body, ensure_ascii=False))},{PAGE_BUFFER_BYTES})")
+        completed = False
+        self.peak_buffer_bytes = 0
+        try:
+            trigger = None
+            trigger_deadline = min(deadline, time.monotonic() + 30)
+            while time.monotonic() < trigger_deadline:
+                _check(cancel, deadline)
+                trigger = self._eval(TRIGGER_JS)
+                if trigger != "send disabled":
+                    break
+                _pause(cancel, deadline, 0.2)
+            if trigger != "clicked":
+                raise BrowserError(f"触发发送失败: {trigger}")
 
-        # 页面在每次发送后会清空输入并把 Send 置灰；不要死等按钮，
-        # 直接 trigger（它会重新填入文字并触发 input），disabled 时重试。
-        trigger = None
-        deadline = time.time() + 30
-        while time.time() < deadline:
-            trigger = self._eval(TRIGGER_JS, timeout=30)
-            if trigger != "send disabled":
-                break
-            time.sleep(1)
-        if trigger != "clicked":
-            raise BrowserError(f"触发发送失败: {trigger}")
-
-        deadline = time.time() + timeout
-        while time.time() < deadline:
-            state = self._eval(
-                "({done:!!(window.__bridge&&window.__bridge.done),"
-                "status:window.__bridge&&window.__bridge.status,"
-                "err:window.__bridge&&window.__bridge.error})"
-            )
-            if state.get("done"):
-                if state.get("status") != 200:
-                    text = self._eval("window.__bridge.text") or ""
-                    status = int(state.get("status") or 502)
-                    raise BrowserHTTPError(status, f"上游 {status}: {text[:500]}")
-                text = self._eval("window.__bridge.text") or ""
-                self._eval("window.__bridge.body = null")
-                return text
-            time.sleep(0.4)
-
-        raise BrowserError("等待模型响应超时")
+            first_deadline = time.monotonic() + FIRST_BYTE_TIMEOUT
+            last_data: float | None = None
+            while True:
+                _check(cancel, deadline)
+                state = self._eval(f"window.__bridgeDrain({quoted_id},{DRAIN_BYTES})")
+                self.peak_buffer_bytes = max(self.peak_buffer_bytes, state.get("peak", 0))
+                status = int(state.get("status") or 0)
+                data = state.get("data") or ""
+                if status and status != 200:
+                    raise BrowserHTTPError(status if status > 0 else 502,
+                                           f"上游 {status}: {data[:500] or state.get('error')}")
+                if state.get("error"):
+                    raise BrowserError(f"上游响应读取失败: {state['error']}")
+                if data:
+                    if status != 200:
+                        raise BrowserError("上游数据缺少成功响应状态")
+                    last_data = time.monotonic()
+                    yield data
+                if state.get("done"):
+                    if status != 200:
+                        raise BrowserError("上游响应未成功建立")
+                    completed = True
+                    return
+                now = time.monotonic()
+                if last_data is None and now >= first_deadline:
+                    raise BrowserError("等待上游首个数据超时")
+                if last_data is not None and now - last_data >= IDLE_TIMEOUT:
+                    raise BrowserError("上游响应空闲超时")
+                _pause(cancel, deadline, POLL_INTERVAL)
+        finally:
+            try:
+                if not completed:
+                    aborted = self._eval(f"window.__bridgeAbort({quoted_id})", timeout=3)
+                    if trace:
+                        trace("browser_abort", tab_id=self.hint, confirmed=bool(aborted))
+                    if not aborted:
+                        raise BrowserError("页面未确认中止请求")
+                self._eval(f"(()=>{{const b=window.__bridge;if(b&&b.id==={quoted_id})"
+                           "{b.body=null;b.armed=false;b.chunks=[];b.pending=0;}})()")
+            except Exception as exc:
+                # 池在下一次借出前必须重载；不能复用仍有旧流的页面。
+                self.needs_refresh = True
+                self.close()
+                if trace:
+                    trace("browser_cleanup_error", tab_id=self.hint, error=str(exc))
+            if trace:
+                trace("browser_buffer", tab_id=self.hint, peak_bytes=self.peak_buffer_bytes)
 
     def close(self) -> None:
         if self.ws is not None:
@@ -325,7 +447,7 @@ class BrowserPool:
 
     def _list_pages(self) -> list[dict]:
         try:
-            with urllib.request.urlopen(f"http://127.0.0.1:{self.port}/json/list", timeout=5) as resp:
+            with LOCAL_HTTP.open(f"http://127.0.0.1:{self.port}/json/list", timeout=5) as resp:
                 return [
                     t
                     for t in json.load(resp)
@@ -338,7 +460,7 @@ class BrowserPool:
         req = urllib.request.Request(
             f"http://127.0.0.1:{self.port}/json/new?url=about:blank", method="PUT"
         )
-        with urllib.request.urlopen(req, timeout=10) as resp:
+        with LOCAL_HTTP.open(req, timeout=10) as resp:
             return json.load(resp)
 
     @staticmethod
@@ -352,15 +474,16 @@ class BrowserPool:
                 return msg.get("result", {})
 
     def _navigate(self, ws_url: str, url: str) -> None:
-        ws = websocket.create_connection(ws_url, timeout=15)
+        ws = websocket.create_connection(ws_url, timeout=5)
         try:
             self._call(ws, 1, "Page.enable")
             self._call(ws, 2, "Page.navigate", {"url": url})
         finally:
             ws.close()
 
-    def _activate_wait(self, ws_url: str) -> None:
-        ws = websocket.create_connection(ws_url, timeout=15)
+    def _activate_wait(self, ws_url: str, cancel: threading.Event,
+                       deadline: float) -> None:
+        ws = websocket.create_connection(ws_url, timeout=5)
         try:
             self._call(ws, 1, "Page.bringToFront")
             self._call(ws, 2, "Runtime.enable")
@@ -373,8 +496,9 @@ class BrowserPool:
   body: document.body ? document.body.innerText.length : 0
 }))()
 """
-            deadline = time.time() + 60
-            while time.time() < deadline:
+            ready_deadline = min(deadline, time.monotonic() + 60)
+            while time.monotonic() < ready_deadline:
+                _check(cancel, deadline)
                 res = self._call(ws, 3, "Runtime.evaluate", {"expression": expr, "returnByValue": True})
                 value = res.get("result", {}).get("value") or {}
                 if (
@@ -384,84 +508,102 @@ class BrowserPool:
                     and value.get("hc") == "object"
                     and value.get("body", 0) > 500
                 ):
-                    time.sleep(1)
+                    _pause(cancel, deadline, 0.5)
                     return
-                time.sleep(0.5)
+                _pause(cancel, deadline, 0.2)
             raise BrowserError("池标签页未就绪（textarea/Send/hcaptcha 未出现）")
         finally:
             ws.close()
 
-    def _ensure(self) -> None:
+    def _ensure(self, cancel: threading.Event, deadline: float) -> None:
         if self._ready:
             return
-        with self._lock:
+        while not self._lock.acquire(timeout=0.05):
+            _check(cancel, deadline)
+        try:
             if self._ready:
                 return
             pages = self._list_pages()
+            upstreams = []
             for n in range(1, self.size + 1):
+                _check(cancel, deadline)
                 hint = f"{self.prefix}={n}"
-                page = next((p for p in pages if hint in (p.get("url") or "")), None)
+                page = next((p for p in pages if _matches_hint(p.get("url") or "", hint)), None)
                 if page is None:
                     tab = self._new_blank()
                     self._navigate(tab["webSocketDebuggerUrl"], f"{self.base_url}?{hint}")
                     page = tab
-                self._activate_wait(page["webSocketDebuggerUrl"])
+                self._activate_wait(page["webSocketDebuggerUrl"], cancel, deadline)
                 upstream = BrowserUpstream(port=self.port, target_hint=hint)
-                self._ups.append(upstream)
+                upstreams.append(upstream)
+            self._ups = upstreams
+            for upstream in upstreams:
                 self._queue.put(upstream)
             self._ready = True
+        finally:
+            self._lock.release()
 
-    def _refresh_tab(self, upstream: BrowserUpstream) -> None:
+    def _refresh_tab(self, upstream: BrowserUpstream, cancel: threading.Event,
+                     deadline: float) -> None:
         pages = self._list_pages()
-        page = next((p for p in pages if upstream.hint in (p.get("url") or "")), None)
+        page = next((p for p in pages if _matches_hint(p.get("url") or "", upstream.hint)), None)
         if page is None:
             raise BrowserError(f"找不到标签页 {upstream.hint}")
-        self._navigate(page["webSocketDebuggerUrl"], f"{self.base_url}?{upstream.hint}")
-        self._activate_wait(page["webSocketDebuggerUrl"])
         upstream.close()
+        self._navigate(page["webSocketDebuggerUrl"], f"{self.base_url}?{upstream.hint}")
+        self._activate_wait(page["webSocketDebuggerUrl"], cancel, deadline)
+        upstream.needs_refresh = False
 
-    def generate(self, body: dict, timeout: float = 180.0) -> str:
-        self._ensure()
-        try:
-            upstream = self._queue.get(timeout=QUEUE_TIMEOUT)
-        except queue.Empty as exc:
-            raise BrowserError(
-                f"浏览器池排队超时（>{QUEUE_TIMEOUT:.0f}s），所有标签页都在忙"
-            ) from exc
+    def generate(self, body: dict, timeout: float = 3600.0) -> str:
+        return "".join(self.stream(body, timeout))
 
-        hint = upstream.hint
-        if hint in self._refresh:
-            self._refresh.discard(hint)
-            self._turns[hint] = 0
-            print(f"[pool] refresh tab={hint} before next request", flush=True)
+    def stream(self, body: dict, timeout: float = 3600.0,
+               cancel: threading.Event | None = None, trace: Callable | None = None) -> Iterator[str]:
+        cancel = cancel if cancel is not None else threading.Event()
+        deadline = time.monotonic() + timeout
+        self._ensure(cancel, deadline)
+        queued_until = min(deadline, time.monotonic() + QUEUE_TIMEOUT)
+        while True:
+            _check(cancel, deadline)
             try:
-                self._refresh_tab(upstream)
-            except Exception as exc:  # noqa: BLE001
-                print(f"[pool] refresh tab={hint} failed: {exc}", flush=True)
-
+                upstream = self._queue.get(timeout=0.05)
+                break
+            except queue.Empty:
+                if time.monotonic() >= queued_until:
+                    raise BrowserError(f"浏览器池排队超时（>{QUEUE_TIMEOUT:.0f}s），所有标签页都在忙")
+        hint = upstream.hint
         try:
-            text = upstream.generate(body, timeout)
+            if hint in self._refresh or upstream.needs_refresh:
+                upstream.needs_refresh = True
+                print(f"[pool] refresh tab={hint} before next request", flush=True)
+                self._refresh_tab(upstream, cancel, deadline)
+                self._refresh.discard(hint)
+                self._turns[hint] = 0
+            yield from upstream.stream(body, max(0, deadline - time.monotonic()), cancel, trace)
+        except BaseException:
+            upstream.needs_refresh = True
+            raise
         finally:
+            # 所有 CDP 操作/计数必须在归还标签页之前完成。
+            try:
+                turns = self._turns.get(hint, 0) + 1
+                self._turns[hint] = turns
+                if not cancel.is_set() and not upstream.needs_refresh:
+                    text_len = upstream.page_text_len()
+                    if turns >= TAB_MAX_TURNS or text_len >= TAB_MAX_TEXT_LEN:
+                        self._refresh.add(hint)
+                        print(f"[pool] mark refresh tab={hint} turns={turns} text_len={text_len}", flush=True)
+            except Exception:
+                upstream.needs_refresh = True
+            if trace:
+                trace("browser_pool_release", tab_id=hint, needs_refresh=upstream.needs_refresh)
             self._queue.put(upstream)
-
-        try:
-            turns = self._turns.get(hint, 0) + 1
-            self._turns[hint] = turns
-            text_len = upstream.page_text_len()
-            if turns >= TAB_MAX_TURNS or text_len >= TAB_MAX_TEXT_LEN:
-                self._refresh.add(hint)
-                reason = []
-                if turns >= TAB_MAX_TURNS:
-                    reason.append(f"turns={turns}>={TAB_MAX_TURNS}")
-                if text_len >= TAB_MAX_TEXT_LEN:
-                    reason.append(f"text_len={text_len}>={TAB_MAX_TEXT_LEN}")
-                print(f"[pool] mark refresh tab={hint} {', '.join(reason)}", flush=True)
-        except Exception:  # noqa: BLE001
-            pass
-        return text
 
     def close(self) -> None:
         for upstream in self._ups:
             upstream.close()
         self._ups.clear()
+        self._queue = queue.Queue()
+        self._turns.clear()
+        self._refresh.clear()
         self._ready = False

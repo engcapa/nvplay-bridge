@@ -8,6 +8,7 @@ $Python     = "python"                       # Python 3.12 interpreter
 $CdpPort    = 9225
 $BridgePort = 8083
 $PoolSize   = 3
+$RequestTimeout = 3600                     # total request seconds; includes queue/prepare/retry
 $BravePath  = ""                             # explicit brave.exe; "" = detect/download
 $BraveDir   = Join-Path $PSScriptRoot ".brave"
 $Playground = "https://build.nvidia.com/moonshotai/kimi-k3_1-pro/playground"
@@ -97,6 +98,7 @@ $env:UPSTREAM_KIND = "browser"
 $env:BROWSER_CDP_PORT = "$CdpPort"
 $env:BROWSER_POOL_SIZE = "$PoolSize"
 $env:BROWSER_HEARTBEAT_SEC = "10"
+$env:BROWSER_TIMEOUT = "$RequestTimeout"
 $env:BROWSER_DEBUG_LOG = Join-Path (Join-Path $PSScriptRoot "logs") "bridge-debug.jsonl"
 
 & $Python -m uvicorn nvplay_bridge:app --app-dir $PSScriptRoot --host 127.0.0.1 --port $BridgePort

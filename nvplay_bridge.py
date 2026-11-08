@@ -45,12 +45,13 @@ nvplay_bridge.py — Anthropic Messages API 适配层
 仍未覆盖的部分：
     - 没有客户端鉴权（默认只监听 127.0.0.1）
     - count_tokens 是字符数估算，不是真 tokenizer
-    - 工具参数在 Anthropic 流里整段下发，不是逐字符 input_json_delta
-    - browser 模式整段缓冲，没有真正的增量输出，只靠 ping 保活
     - 没有限流、断线重连；NVCF 会话是单账号单进程
 """
 
 from __future__ import annotations
+
+from contextlib import aclosing
+from stream_support import AnthropicBlocks
 
 import asyncio
 import json
@@ -79,7 +80,7 @@ BROWSER_CDP_PORT = int(os.getenv("BROWSER_CDP_PORT", "9222"))
 BROWSER_TARGET_HINT = os.getenv("BROWSER_TARGET_HINT", "kimi-k3_1-pro/playground")
 # Kimi K3.1 Pro 官方最大输出 128K tokens。
 BROWSER_MAX_TOKENS = int(os.getenv("BROWSER_MAX_TOKENS", "131072"))
-BROWSER_TIMEOUT = int(os.getenv("BROWSER_TIMEOUT", "600"))
+BROWSER_TIMEOUT = int(os.getenv("BROWSER_TIMEOUT", "3600"))
 BROWSER_HEARTBEAT_SEC = float(os.getenv("BROWSER_HEARTBEAT_SEC", "10"))
 BROWSER_POOL_SIZE = int(os.getenv("BROWSER_POOL_SIZE", "3"))
 BROWSER_DEBUG_LOG = os.getenv("BROWSER_DEBUG_LOG", "")
@@ -147,6 +148,33 @@ app = FastAPI(
     version="0.3.0",
     description="Anthropic-compatible bridge for Kimi K3.1 Pro via NVIDIA Build Playground",
 )
+
+
+class DisconnectStreamingResponse(StreamingResponse):
+    """Always observe disconnects, including ASGI 2.4 while upstream is idle."""
+    async def __call__(self, scope, receive, send) -> None:
+        sending = asyncio.create_task(self.stream_response(send))
+        disconnected = asyncio.create_task(self.listen_for_disconnect(receive))
+        try:
+            completed, _ = await asyncio.wait((sending, disconnected), return_when=asyncio.FIRST_COMPLETED)
+            if sending in completed:
+                await sending
+            else:
+                await disconnected
+        except OSError:
+            pass
+        finally:
+            sending.cancel()
+            disconnected.cancel()
+            await asyncio.gather(sending, disconnected, return_exceptions=True)
+            await self.body_iterator.aclose()
+        if self.background is not None:
+            await self.background()
+
+
+async def _disconnected(request: Request) -> None:
+    while not await request.is_disconnected():
+        await asyncio.sleep(0.1)
 
 
 class ConfigError(RuntimeError):
@@ -811,126 +839,130 @@ def _sse_summary(text: str) -> tuple[str, bool, str | None, int]:
     return "".join(parts).strip(), has_tool, finish, thinking_chars
 
 
-async def iter_events(payload: dict[str, Any], headers: dict[str, str]) -> AsyncIterator[dict[str, Any]]:
-    """把上游 SSE 归一化成事件：thinking / text / tool / finish / usage / error。"""
-    if UPSTREAM_KIND == "browser":
-        req_id = uuid.uuid4().hex[:8]
-        started = time.time()
-        _dbg(
-            "browser_start",
-            id=req_id,
-            max_tokens=payload.get("max_tokens"),
-            thinking=payload.get("thinking"),
-            reasoning_effort=payload.get("reasoning_effort"),
-            messages=len(payload.get("messages") or []),
-            tools=len(payload.get("tools") or []),
-        )
+async def _browser_events_with_retry(payload: dict[str, Any], *, buffered: bool) -> AsyncIterator[dict[str, Any]]:
+    from browser_events import browser_events
+
+    req_id = uuid.uuid4().hex[:8]
+    started = time.monotonic()
+    deadline = started + BROWSER_TIMEOUT
+    current = payload
+    for attempt in range(1, 3):
+        committed = False
+        has_text = has_tool = False
+        marker = "[Tool use interrupted]"
+        pending_text = ""
+        buffered_events: list[dict[str, Any]] = []
+        finish = None
+        usage: dict[str, Any] = {}
+        counts = {"thinking_chars": 0, "text_chars": 0, "tool_calls": 0}
+        last_progress = started
+
+        def log(event: str, **data: Any) -> None:
+            _dbg(event, id=req_id, attempt=attempt, sec=round(time.monotonic() - started, 3), **data)
+
+        log("browser_start", max_tokens=current.get("max_tokens"),
+            reasoning_effort=current.get("reasoning_effort"),
+            messages=len(current.get("messages") or []), tools=len(current.get("tools") or []))
         try:
-            if BROWSER_HEARTBEAT_SEC > 0:
-                task = asyncio.create_task(
-                    asyncio.to_thread(_get_browser().generate, payload, BROWSER_TIMEOUT)
-                )
-                while True:
-                    try:
-                        text = await asyncio.wait_for(
-                            asyncio.shield(task), timeout=BROWSER_HEARTBEAT_SEC
-                        )
-                        break
-                    except asyncio.TimeoutError:
-                        # 浏览器生成期间没有 SSE 字节；发 ping 让 CC 的流空闲计时器复位。
-                        yield {"type": "ping"}
-            else:
-                text = await asyncio.to_thread(_get_browser().generate, payload, BROWSER_TIMEOUT)
-        except Exception as exc:  # noqa: BLE001
-            _dbg("browser_error", id=req_id, sec=round(time.time() - started, 1), error=str(exc)[:400])
-            status = int(getattr(exc, "status", 502) or 502)
-            yield {"type": "error", "status": status, "message": f"浏览器桥失败：{exc}"}
+            async with aclosing(browser_events(
+                _get_browser(), current, max(0, deadline - time.monotonic()),
+                BROWSER_HEARTBEAT_SEC, _chunk_events, log,
+            )) as source:
+                async for event in source:
+                    kind = event["type"]
+                    if kind == "error":
+                        log("browser_error", error=event["message"])
+                        yield event
+                        return
+                    if kind == "ping":
+                        yield event
+                        continue
+                    if kind == "usage":
+                        usage = event["usage"]
+                    if kind == "finish":
+                        finish = event["reason"]
+                    if kind == "thinking":
+                        counts["thinking_chars"] += len(event["text"])
+                    if kind == "text":
+                        counts["text_chars"] += len(event["text"])
+                    if kind == "tool":
+                        counts["tool_calls"] += 1
+                    if time.monotonic() - last_progress >= 5:
+                        log("browser_progress", counts=dict(counts), usage=usage)
+                        last_progress = time.monotonic()
+
+                    batch = [event]
+                    if kind == "text" and not has_text and not has_tool:
+                        pending_text += event["text"]
+                        candidate = pending_text.strip()
+                        if len(pending_text) <= 256 and (not candidate or marker.startswith(candidate)):
+                            continue
+                        has_text = bool(candidate)
+                        batch = [{"type": "text", "text": pending_text}]
+                        pending_text = ""
+                    elif kind == "tool":
+                        has_tool = True
+                        if pending_text:
+                            batch.insert(0, {"type": "text", "text": pending_text})
+                            pending_text = ""
+                    for item in batch:
+                        if buffered and not has_text and not has_tool:
+                            buffered_events.append(item)
+                            continue
+                        if buffered_events:
+                            for saved in buffered_events:
+                                yield saved
+                            buffered_events.clear()
+                        if item["type"] in ("thinking", "text", "tool"):
+                            if not committed:
+                                log("browser_first_content")
+                            committed = True
+                        yield item
+
+            if pending_text.strip() and pending_text.strip() != marker:
+                has_text = True
+                for saved in buffered_events:
+                    yield saved
+                buffered_events.clear()
+                committed = True
+                yield {"type": "text", "text": pending_text}
+
+            bad = not has_text and not has_tool
+            # A streamed partial thinking block at its token limit is a valid truncation.
+            if bad and not (not buffered and committed and finish == "length"):
+                kind = "placeholder" if pending_text.strip() == marker else "empty"
+                log(f"{kind}_detected", counts=counts, finish=finish)
+                if PLACEHOLDER_RETRY and attempt == 1 and (buffered or not committed):
+                    current = dict(payload)
+                    current["max_tokens"] = min(BROWSER_MAX_TOKENS, max(int(payload.get("max_tokens") or 0), 2048))
+                    current["messages"] = list(payload.get("messages") or []) + [{
+                        "role": "user", "content": "[系统纠正] 上一轮没有有效正文或工具调用。请继续任务，给出真实答案或调用工具，不要输出 [Tool use interrupted]。",
+                    }]
+                    log(f"{kind}_retry_start")
+                    continue
+                log("browser_error", error="上游没有有效正文或工具调用")
+                yield {"type": "error", "status": 502, "message": "上游没有有效正文或工具调用；已交付内容的流不能静默重试"}
+                return
+            for saved in buffered_events:
+                yield saved
+            log("browser_done", counts=counts, finish=finish, usage=usage)
+            return
+        except (asyncio.CancelledError, GeneratorExit):
+            log("browser_cancelled")
+            raise
+        except Exception as exc:
+            log("browser_error", error=str(exc))
+            yield {"type": "error", "status": int(getattr(exc, "status", 502)), "message": str(exc)}
             return
 
-        # 模型偶尔只输出 "[Tool use interrupted]"，或只输出 thinking 而没有正文/工具调用。
-        # 这两种空回合都会污染 CC 上下文；追加纠正消息重生成一次，仍失败则返回错误。
-        if PLACEHOLDER_RETRY:
-            content, has_tool, finish_reason, thinking_chars = _sse_summary(text)
-            placeholder_bad = content == "[Tool use interrupted]" and not has_tool
-            empty_bad = not content and not has_tool
-            if placeholder_bad or empty_bad:
-                kind = "placeholder" if placeholder_bad else "empty"
-                _dbg(
-                    f"{kind}_detected",
-                    id=req_id,
-                    sec=round(time.time() - started, 1),
-                    thinking_chars=thinking_chars,
-                    finish=finish_reason,
-                )
-                correction = (
-                    "[系统纠正] 上一轮只输出了占位文本 [Tool use interrupted]，没有调用工具。"
-                    "请立即继续任务：调用合适的工具或给出真实答案，不要输出 [Tool use interrupted]。"
-                    if placeholder_bad
-                    else "[系统纠正] 上一轮只有思考，没有正文或工具调用。"
-                    "请立即继续任务：给出正文，或调用合适的工具。"
-                )
-                retry_payload = dict(payload)
-                # CC 的 /model 校验可能只给 max_tokens=1；重试时给它足够的正文预算。
-                retry_payload["max_tokens"] = max(int(payload.get("max_tokens") or 0), 2048)
-                retry_payload["messages"] = list(payload.get("messages") or []) + [
-                    {"role": "user", "content": correction}
-                ]
-                try:
-                    _dbg(f"{kind}_retry_start", id=req_id)
-                    text2 = await asyncio.to_thread(_get_browser().generate, retry_payload, BROWSER_TIMEOUT)
-                    content2, has_tool2, _finish2, _thinking2 = _sse_summary(text2)
-                    bad2 = (content2 == "[Tool use interrupted]" and not has_tool2) or (
-                        not content2 and not has_tool2
-                    )
-                    if not bad2:
-                        text = text2
-                        _dbg(f"{kind}_retry_ok", id=req_id, sec=round(time.time() - started, 1))
-                    else:
-                        _dbg(f"{kind}_retry_failed", id=req_id)
-                        yield {
-                            "type": "error",
-                            "status": 502,
-                            "message": "上游只返回 thinking/占位文本，没有正文或工具调用",
-                        }
-                        return
-                except Exception as exc:  # noqa: BLE001
-                    _dbg(f"{kind}_retry_error", id=req_id, error=str(exc)[:300])
-                    yield {"type": "error", "status": 502, "message": f"上游空响应重试失败：{exc}"}
-                    return
 
-        counts = {"thinking_chunks": 0, "thinking_chars": 0, "text_chunks": 0, "text_chars": 0, "tool_calls": 0}
-        finish = None
-        for line in text.splitlines():
-            if not line.startswith("data: "):
-                continue
-            try:
-                chunk = json.loads(line[6:])
-            except json.JSONDecodeError:
-                continue
-            for choice in chunk.get("choices") or []:
-                delta = choice.get("delta") or {}
-                thinking = delta.get("reasoning_content") or delta.get("reasoning")
-                if thinking:
-                    counts["thinking_chunks"] += 1
-                    counts["thinking_chars"] += len(thinking)
-                content = delta.get("content")
-                if content:
-                    counts["text_chunks"] += 1
-                    counts["text_chars"] += len(content)
-                if delta.get("tool_calls"):
-                    counts["tool_calls"] += len(delta["tool_calls"])
-                if choice.get("finish_reason"):
-                    finish = choice["finish_reason"]
-        _dbg(
-            "browser_done",
-            id=req_id,
-            sec=round(time.time() - started, 1),
-            bytes=len(text),
-            counts=counts,
-            finish=finish,
-        )
-        async for ev in _events_from_text(text):
-            yield ev
+async def iter_events(payload: dict[str, Any], headers: dict[str, str], *,
+                      buffered: bool = True) -> AsyncIterator[dict[str, Any]]:
+    """归一化上游增量；仅非流式聚合允许撤回尚未交付的思考后重试。"""
+    if UPSTREAM_KIND == "browser":
+        async with aclosing(_browser_events_with_retry(payload, buffered=buffered)) as source:
+            async for event in source:
+                yield event
         return
 
     timeout = httpx.Timeout(None, connect=20.0)
@@ -977,151 +1009,33 @@ async def iter_events(payload: dict[str, Any], headers: dict[str, str]) -> Async
 async def stream_anthropic(
     payload: dict[str, Any], headers: dict[str, str], model: str
 ) -> AsyncIterator[str]:
-    message_id = f"msg_{uuid.uuid4().hex[:24]}"
-    yield sse(
-        "message_start",
-        {
-            "type": "message_start",
-            "message": {
-                "id": message_id,
-                "type": "message",
-                "role": "assistant",
-                "model": model,
-                "content": [],
-                "stop_reason": None,
-                "stop_sequence": None,
-                "usage": {"input_tokens": 0, "output_tokens": 0},
-            },
+    blocks = AnthropicBlocks()
+    yield sse("message_start", {
+        "type": "message_start", "message": {
+            "id": f"msg_{uuid.uuid4().hex[:24]}", "type": "message", "role": "assistant",
+            "model": model, "content": [], "stop_reason": None, "stop_sequence": None,
+            "usage": {"input_tokens": 0, "output_tokens": 0},
         },
-    )
-
-    index = 0
-    open_block: str | None = None
-    tool_buf: dict[int, dict[str, Any]] = {}
-    finish: str | None = None
-    usage: dict[str, Any] = {}
-    sent_any = False
-
-    async for ev in iter_events(payload, headers):
-        kind = ev["type"]
-        if kind == "ping":
-            yield sse("ping", {"type": "ping"})
-            continue
-        if kind == "error":
-            yield sse("error", error_body(ev["message"]))
-            return
-        if kind == "usage":
-            usage = ev["usage"]
-            continue
-        if kind == "finish":
-            finish = ev["reason"]
-            continue
-
-        if kind == "thinking":
-            if open_block != "thinking":
-                if open_block:
-                    yield sse("content_block_stop", {"type": "content_block_stop", "index": index})
-                    index += 1
-                yield sse(
-                    "content_block_start",
-                    {
-                        "type": "content_block_start",
-                        "index": index,
-                        "content_block": {"type": "thinking", "thinking": "", "signature": ""},
-                    },
-                )
-                open_block = "thinking"
-            sent_any = True
-            yield sse(
-                "content_block_delta",
-                {
-                    "type": "content_block_delta",
-                    "index": index,
-                    "delta": {"type": "thinking_delta", "thinking": ev["text"]},
-                },
-            )
-
-        elif kind == "text":
-            if open_block != "text":
-                if open_block:
-                    yield sse("content_block_stop", {"type": "content_block_stop", "index": index})
-                    index += 1
-                yield sse(
-                    "content_block_start",
-                    {
-                        "type": "content_block_start",
-                        "index": index,
-                        "content_block": {"type": "text", "text": ""},
-                    },
-                )
-                open_block = "text"
-            sent_any = True
-            yield sse(
-                "content_block_delta",
-                {
-                    "type": "content_block_delta",
-                    "index": index,
-                    "delta": {"type": "text_delta", "text": ev["text"]},
-                },
-            )
-
-        elif kind == "tool":
-            slot = tool_buf.setdefault(ev["index"], {"id": None, "name": None, "args": ""})
-            if ev["id"]:
-                slot["id"] = ev["id"]
-            if ev["name"]:
-                slot["name"] = ev["name"]
-            if ev["args"]:
-                slot["args"] += ev["args"]
-
-    if open_block:
-        yield sse("content_block_stop", {"type": "content_block_stop", "index": index})
-        index += 1
-
-    if not sent_any and not tool_buf:
-        yield sse(
-            "content_block_start",
-            {"type": "content_block_start", "index": index, "content_block": {"type": "text", "text": ""}},
-        )
-        yield sse("content_block_stop", {"type": "content_block_stop", "index": index})
-        index += 1
-
-    for _, slot in sorted(tool_buf.items()):
-        yield sse(
-            "content_block_start",
-            {
-                "type": "content_block_start",
-                "index": index,
-                "content_block": {
-                    "type": "tool_use",
-                    "id": slot["id"] or f"toolu_{uuid.uuid4().hex[:24]}",
-                    "name": slot["name"] or "unknown",
-                    "input": {},
-                },
-            },
-        )
-        yield sse(
-            "content_block_delta",
-            {
-                "type": "content_block_delta",
-                "index": index,
-                "delta": {"type": "input_json_delta", "partial_json": slot["args"] or "{}"},
-            },
-        )
-        yield sse("content_block_stop", {"type": "content_block_stop", "index": index})
-        index += 1
-
-    yield sse(
-        "message_delta",
-        {
-            "type": "message_delta",
-            "delta": {"stop_reason": _stop_reason(finish, bool(tool_buf)), "stop_sequence": None},
-            "usage": {
-                "input_tokens": usage.get("prompt_tokens", 0),
-                "output_tokens": usage.get("completion_tokens", 0),
-            },
-        },
-    )
+    })
+    try:
+        async with aclosing(iter_events(payload, headers, buffered=False)) as source:
+            async for event in source:
+                if event["type"] == "error":
+                    yield sse("error", error_body(event["message"]))
+                    return
+                for kind, data in blocks.feed(event):
+                    yield sse(kind, data)
+        for kind, data in blocks.finish():
+            yield sse(kind, data)
+    except (ValueError, httpx.HTTPError) as exc:
+        yield sse("error", error_body(f"upstream stream error: {exc}"))
+        return
+    yield sse("message_delta", {
+        "type": "message_delta",
+        "delta": {"stop_reason": _stop_reason(blocks.reason, bool(blocks.tools)), "stop_sequence": None},
+        "usage": {"input_tokens": blocks.usage.get("prompt_tokens", 0),
+                  "output_tokens": blocks.usage.get("completion_tokens", 0)},
+    })
     yield sse("message_stop", {"type": "message_stop"})
 
 
@@ -1132,26 +1046,27 @@ async def aggregate(payload: dict[str, Any], headers: dict[str, str], model: str
     usage: dict[str, Any] = {}
     finish: str | None = None
 
-    async for ev in iter_events(payload, headers):
-        kind = ev["type"]
-        if kind == "error":
-            raise UpstreamError(int(ev.get("status") or 502), ev["message"])
-        if kind == "usage":
-            usage = ev["usage"]
-        elif kind == "finish":
-            finish = ev["reason"]
-        elif kind == "thinking":
-            thinking_parts.append(ev["text"])
-        elif kind == "text":
-            text_parts.append(ev["text"])
-        elif kind == "tool":
-            slot = tools.setdefault(ev["index"], {"id": None, "name": None, "args": ""})
-            if ev["id"]:
-                slot["id"] = ev["id"]
-            if ev["name"]:
-                slot["name"] = ev["name"]
-            if ev["args"]:
-                slot["args"] += ev["args"]
+    async with aclosing(iter_events(payload, headers)) as source:
+        async for ev in source:
+            kind = ev["type"]
+            if kind == "error":
+                raise UpstreamError(int(ev.get("status") or 502), ev["message"])
+            if kind == "usage":
+                usage = ev["usage"]
+            elif kind == "finish":
+                finish = ev["reason"]
+            elif kind == "thinking":
+                thinking_parts.append(ev["text"])
+            elif kind == "text":
+                text_parts.append(ev["text"])
+            elif kind == "tool":
+                slot = tools.setdefault(ev["index"], {"id": None, "name": None, "args": ""})
+                if ev["id"]:
+                    slot["id"] = ev["id"]
+                if ev["name"]:
+                    slot["name"] = ev["name"]
+                if ev["args"]:
+                    slot["args"] += ev["args"]
 
     content: list[dict[str, Any]] = []
     if thinking_parts:
@@ -1266,18 +1181,27 @@ async def create_message(request: Request):
     model = body.get("model") or UPSTREAM_MODEL
 
     if body.get("stream"):
-        return StreamingResponse(
+        return DisconnectStreamingResponse(
             stream_anthropic(payload, headers, model),
             media_type="text/event-stream",
             headers={"Cache-Control": "no-cache", "Connection": "keep-alive", "X-Accel-Buffering": "no"},
         )
 
+    generation = asyncio.create_task(aggregate(payload, headers, model))
+    disconnected = asyncio.create_task(_disconnected(request))
     try:
-        message = await aggregate(payload, headers, model)
+        completed, _ = await asyncio.wait((generation, disconnected), return_when=asyncio.FIRST_COMPLETED)
+        if generation not in completed:
+            return JSONResponse(status_code=499, content=error_body("client disconnected"))
+        message = await generation
     except UpstreamError as exc:
         status = 502 if exc.status >= 500 else exc.status
         return JSONResponse(status_code=status, content=error_body(exc.message))
     except httpx.HTTPError as exc:
         return JSONResponse(status_code=502, content=error_body(f"upstream error: {exc}"))
+    finally:
+        generation.cancel()
+        disconnected.cancel()
+        await asyncio.gather(generation, disconnected, return_exceptions=True)
 
     return JSONResponse(content=message)

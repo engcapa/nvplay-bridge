@@ -12,6 +12,8 @@ This project started as a local research shim and was cleaned up for publishing.
 nvplay-bridge/
   nvplay_bridge.py       FastAPI app: Anthropic /v1/messages translation, SSE, retries, loop breaker
   browser_upstream.py    CDP browser controller and 3-tab pool
+  browser_events.py      bounded thread-to-async stream and cancellation
+  stream_support.py      incremental SSE parser and Anthropic content blocks
   configs/               Claude Code settings and empty MCP config
   tests/                 unit, pool, tab-refresh and live regression scripts
   tools/                 monitors and global-CC setup helper
@@ -55,7 +57,8 @@ chmod +x start-bridge.sh    # Linux / macOS, once
 
 All settings live in the config block at the top of the script: `$Proxy` (empty
 string = direct connection), `$Python`, `$CdpPort`, `$BridgePort`, `$PoolSize`,
-`$BravePath`, `$BraveDir`.
+`$BravePath`, `$BraveDir`, `$RequestTimeout` (3600 seconds). The shell launcher
+uses the equivalent uppercase variables.
 
 What it does:
 
@@ -147,7 +150,10 @@ The bridge accepts only Kimi model aliases; other model IDs return `404 not_foun
 | `MAX_OUTPUT_TOKENS` | `131072` | Max output tokens (128K) in openai mode |
 | `BROWSER_CDP_PORT` | `9222` | CDP port |
 | `BROWSER_POOL_SIZE` | `3` | Number of Playground tabs |
-| `BROWSER_TIMEOUT` | `600` | Per-request upstream timeout |
+| `BROWSER_TIMEOUT` | `3600` | Total request seconds, including queue, preparation and retries |
+| `BROWSER_FIRST_BYTE_TIMEOUT` | `120` | Seconds from send to first upstream data |
+| `BROWSER_IDLE_TIMEOUT` | `90` | Max seconds without upstream data after generation starts |
+| `BROWSER_POLL_INTERVAL` | `0.1` | CDP incremental drain interval in seconds |
 | `BROWSER_HEARTBEAT_SEC` | `10` | SSE ping interval while generating; `0` disables |
 | `BROWSER_QUEUE_TIMEOUT` | `120` | Max wait for a pool tab |
 | `BROWSER_TAB_MAX_TURNS` | `50` | Refresh a tab after N requests |
@@ -166,7 +172,11 @@ The bridge accepts only Kimi model aliases; other model IDs return `404 not_foun
 - If CC sends no thinking/effort, the bridge sets no `reasoning_effort`
 - Missing `max_tokens` → `131072` (128K); larger values are capped
 - Assistant `thinking` blocks are passed back as `reasoning_content`
-- Browser mode sends `event: ping` every 10s while waiting, so CC's stream idle timer does not fire
+- Browser mode forwards thinking, text and the first tool's arguments as they arrive; interleaved additional tools are buffered and emitted as consecutive content blocks.
+- Browser mode sends `event: ping` every 10s without downstream data, including while queuing and retrying.
+- Placeholder/empty responses may retry once before streaming content is delivered. After thinking/text/tool content has been delivered, errors end the stream without replacing the answer. Non-streaming requests retain the empty-response retry.
+- Client disconnects abort the matching browser fetch. A tab is returned to the pool after cleanup; interrupted tabs are refreshed before reuse.
+- Regular data prevents idle timeouts, but the 3600-second total limit still applies. The included Claude Code settings use `API_TIMEOUT_MS=3900000` (65 minutes) to allow time for cleanup; restart CC to load changed settings.
 - 3-tab pool; repeated tool calls are broken after a session-level repeat threshold
 
 ## Tests
@@ -175,6 +185,7 @@ The bridge accepts only Kimi model aliases; other model IDs return `404 not_foun
 $env:PYTHONPATH = $REPO     # add ";$REPO\vendor" only if you have an offline bundle
 & $PY tests\test_nvplay_bridge.py
 & $PY tests\test_pool.py
+& $PY tests\test_streaming.py
 ```
 
 Live regression (needs Brave/CDP and a running bridge):
@@ -182,6 +193,9 @@ Live regression (needs Brave/CDP and a running bridge):
 ```powershell
 & $PY tests\live_regression.py
 ```
+
+Streaming-specific live checks start and stop their own temporary HTTP server
+and require only Brave/CDP: `python tests/live_streaming.py`.
 
 Tab refresh integration test (uses a temporary `?ktest=1` tab):
 
@@ -192,10 +206,14 @@ Tab refresh integration test (uses a temporary `?ktest=1` tab):
 ## Known limitations
 
 - Browser bridge depends on the Playground page, hCaptcha/WAF warm state, and a live Brave window.
-- The bridge buffers upstream generation; heartbeats keep the client stream alive but do not stream partial model output.
+- CLI rendering of streamed thinking depends on the client. When upstream sends only thinking, receiving progress does not mean a final answer is ready.
+- The first tool can stream arguments immediately. Additional interleaved tools wait until the active tool can close. Unexpected text/thinking interleaved after tools returns a protocol error.
 - Claude Code background subagents can loop on `SubagentHandback` when the subagent session is not in auto permission mode. Prefer main-thread work or auto-mode subagents.
 - Not an official API; upstream HTML/API changes can break it.
 
 ## Logs
 
-`logs/bridge-debug.jsonl` records request/payload/browser events. See `docs/regression-report.md` for the latest test results.
+`logs/bridge-debug.jsonl` records request/payload/browser events. See
+[`docs/streaming-regression-report.md`](docs/streaming-regression-report.md) for
+streaming validation and [`docs/regression-report.md`](docs/regression-report.md)
+for the earlier regression results.

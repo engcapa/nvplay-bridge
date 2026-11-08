@@ -275,6 +275,9 @@ class FakeBrowser:
     def __init__(self) -> None:
         self.calls: list[dict] = []
 
+    def stream(self, body, timeout=3600, cancel=None, trace=None):
+        yield self.generate(body, timeout)
+
     def generate(self, body: dict, timeout: float = 180.0) -> str:
         self.calls.append(body)
         if len(self.calls) == 1:
@@ -311,6 +314,9 @@ class EmptyFakeBrowser:
     def __init__(self) -> None:
         self.calls: list[dict] = []
 
+    def stream(self, body, timeout=3600, cancel=None, trace=None):
+        yield self.generate(body, timeout)
+
     def generate(self, body: dict, timeout: float = 180.0) -> str:
         self.calls.append(body)
         if len(self.calls) == 1:
@@ -342,6 +348,9 @@ class EmptyRetryTests(unittest.TestCase):
 
 
 class SlowFakeBrowser:
+    def stream(self, body, timeout=3600, cancel=None, trace=None):
+        yield self.generate(body, timeout)
+
     def generate(self, body: dict, timeout: float = 180.0) -> str:
         time.sleep(0.3)
         return 'data: {"choices":[{"delta":{"content":"OK"},"finish_reason":"stop"}]}\n\n'

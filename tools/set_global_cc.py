@@ -34,7 +34,7 @@ def main() -> int:
             "ANTHROPIC_DEFAULT_OPUS_MODEL": "kimi-k3.1-pro",
             "CLAUDE_CODE_ALLOW_OTHER_MODELS": "1",
             "CLAUDE_CODE_EXTRA_BODY": json.dumps({"output_config": {"effort": "max"}}),
-            "API_TIMEOUT_MS": "600000",
+            "API_TIMEOUT_MS": "3900000",
             "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC": "1",
         }
     )
