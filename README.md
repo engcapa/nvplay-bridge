@@ -17,14 +17,14 @@ nvplay-bridge/
   tools/                 monitors and global-CC setup helper
   docs/                  regression and effort analysis reports
   logs/                  runtime logs (not committed)
-  start-bridge.ps1       one-command launcher: deps, browser (auto-download), bridge
+  start-bridge.ps1       Windows launcher: deps, Brave (auto-download), bridge
+  start-bridge.sh        Linux / macOS launcher with the same steps
   requirements.txt       pinned dependencies
 ```
 
 ## Requirements
 
-- Windows 11, Linux or macOS
-- PowerShell 7 (`pwsh`) on Linux and macOS
+- Windows 11 (PowerShell 7), or Linux / macOS (bash)
 - **Python 3.12** — the pinned `pydantic-core` build is CPython 3.12 only
   (`_pydantic_core.cp312-win_amd64.pyd`). A 3.13 interpreter fails at import
   time with `ImportError: cannot import name 'ArgsKwargs' from 'pydantic_core._pydantic_core'`.
@@ -46,7 +46,11 @@ $PY   = "C:\path\to\python312\python.exe"
 
 ```powershell
 .\start-bridge.ps1          # Windows
-pwsh ./start-bridge.ps1     # Linux / macOS
+```
+
+```bash
+chmod +x start-bridge.sh    # Linux / macOS, once
+./start-bridge.sh
 ```
 
 All settings live in the config block at the top of the script: `$Proxy` (empty
