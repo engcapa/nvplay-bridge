@@ -89,7 +89,6 @@ model_context_window = 262144
 model_auto_compact_token_limit = 240000
 approval_policy = "never"
 default_permissions = ":workspace"
-web_search = "disabled"
 [features]
 multi_agent = false
 shell_snapshot = false
@@ -123,8 +122,26 @@ stream_idle_timeout_ms = 180000
             probe_out, probe_err = await asyncio.wait_for(probe.communicate(), timeout=45)
             assert probe.returncode == 0 and b"CODEX_SANDBOX_OK" in probe_out, (
                 "Restricted MXC sandbox is unavailable: " + probe_err.decode("utf-8", "replace"))
-        args = [codex, "exec", "--ephemeral", "--skip-git-repo-check", "--json",
-                "-C", str(workspace), "-o", str(task_root / "final.txt"), prompt]
+        prefix = [codex, "exec", "--ephemeral", "--skip-git-repo-check", "--json", "-C", str(workspace)]
+        hello_started = time.monotonic()
+        hello = await asyncio.create_subprocess_exec(
+            *prefix, "Reply exactly CODEX_DEFAULT_HELLO without using any tools or spawning agents.",
+            env=env, stdin=asyncio.subprocess.DEVNULL, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
+        try:
+            hello_out, hello_err = await asyncio.wait_for(hello.communicate(), timeout=120)
+        except asyncio.TimeoutError:
+            hello.kill()
+            await hello.communicate()
+            raise AssertionError("Default-tools Codex greeting exceeded 120 seconds") from None
+        (run_root / "codex-responses-default-hello.stdout.jsonl").write_bytes(hello_out)
+        (run_root / "codex-responses-default-hello.stderr.log").write_bytes(hello_err)
+        assert hello.returncode == 0, hello_err.decode("utf-8", "replace")[-3000:]
+        hello_events = [json.loads(line) for line in hello_out.decode("utf-8", "replace").splitlines() if line.startswith("{")]
+        assert any(event.get("item", {}).get("type") == "agent_message"
+                   and event["item"].get("text", "").strip() == "CODEX_DEFAULT_HELLO" for event in hello_events), hello_events
+        record("local_codex_default_tools_greeting", seconds=round(time.monotonic() - hello_started, 3),
+               web_search_configuration="default", final="CODEX_DEFAULT_HELLO")
+        args = prefix + ["-o", str(task_root / "final.txt"), prompt]
         started = time.monotonic()
         process = await asyncio.create_subprocess_exec(*args, env=env, stdin=asyncio.subprocess.DEVNULL,
                                                        stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
@@ -149,7 +166,7 @@ stream_idle_timeout_ms = 180000
         assert current == fingerprints, "Existing Codex configuration/auth changed during isolated test"
         record("local_codex_tools_and_file_verification", seconds=round(time.monotonic() - started, 3),
                command_events=len(tool_events), successful_commands=len(completed_tools),
-               final=final.strip(), original_config_unchanged=True)
+               final=final.strip(), original_config_unchanged=True, web_search_configuration="default")
 
 
 async def extended_checks(base):

@@ -15,6 +15,7 @@ Implementation references, fetched on 2026-11-08:
 - [Responses streaming events](https://developers.openai.com/api/reference/resources/responses/streaming-events)
 - [Streaming responses](https://developers.openai.com/api/docs/guides/streaming-responses)
 - [Codex advanced configuration](https://developers.openai.com/codex/config-advanced)
+- [Codex web search defaults](https://learn.chatgpt.com/docs/web-search)
 
 The installed Codex 0.167.0 request was also captured using a local fixture
 server and an isolated home. It sends `stream=true`, `store=false`, reasoning
@@ -107,7 +108,21 @@ explicit input history and use client-executed function/custom tools. Unsupporte
 input/tool types return a validation error rather than being silently dropped.
 Input images are translated but vision capability has not been validated.
 
-The Codex example disables WebSocket transport and hosted web search. Its
+Codex includes an optional nameless `web_search` declaration by default, even
+for a greeting. Top-level `web_search` and the known dated/preview variants
+are accepted as optional capability advertisements so they do not block text
+or client tools. They are omitted from upstream tools and the response's
+effective `tools` list. The model receives an explicit note that built-in
+search is unavailable, and diagnostics record `responses_capability_unavailable`.
+An explicit named search choice, or `required` with no available client tools,
+returns an error. This does not provide hosted search results or citations.
+Other unsupported tools still fail with their `.type` parameter; malformed
+function/custom tools still fail with their `.name` parameter. Validation
+diagnostics record tool types and name presence without prompts or arguments.
+
+The Codex example explicitly disables WebSocket transport and hosted web search.
+The live CLI regression also tests the default search advertisement without
+setting `web_search="disabled"`. Its
 large context threshold avoids using a server compaction route. Unknown model
 aliases can cause Codex to use fallback model metadata; this is reported by
 Codex and does not rename Kimi as an OpenAI model.

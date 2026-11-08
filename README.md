@@ -220,6 +220,10 @@ with client.responses.stream(
 separate Codex configuration directory. It selects `wire_api="responses"`,
 disables WebSocket transport and hosted web search, and points at the local
 bridge. Existing user configuration is never edited by the supplied tests.
+Default Codex requests can advertise hosted web search without blocking
+ordinary messages or client tools. The bridge reports that capability as
+unavailable and omits it from effective tools; explicitly requiring hosted
+search returns an error. The example disables that unsupported capability.
 
 Supported paths include developer instructions, explicit conversation history,
 reasoning/text deltas, function and custom tools, namespaces, interleaved tool

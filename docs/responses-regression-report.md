@@ -122,6 +122,49 @@ explicit history. Unknown Kimi aliases cause a Codex fallback-metadata warning;
 the bridge keeps the actual Kimi identity. Browser idle/total timeouts remain
 in effect; a heartbeat does not remove a client's own deadline.
 
+## Follow-up: default Codex tool declarations
+
+A user's ordinary CLI greeting returned `Expected a string that is not empty`
+at `tools[12].name`. The initial live CLI tests had explicitly disabled hosted
+web search, so they omitted a tool declaration sent by the normal CLI.
+An isolated request capture with local Codex 0.167.0 reproduced the nameless
+`{"type":"web_search","external_web_access":false}` advertisement. A real
+HTTP regression with twelve named tools followed by that advertisement
+reproduced the exact reported parameter and message before the fix.
+
+The adapter now branches on tool type before validating names. Optional
+top-level hosted-search advertisements do not block text or client tools;
+unsupported search is omitted from effective tools and explicitly described
+as unavailable to the model. Explicitly requiring hosted search still fails.
+The bridge does not synthesize search results. Rejected request diagnostics
+include tool types and name presence, excluding prompts, arguments and auth.
+
+Validation after the fix:
+
+- 92 offline tests passed, including JSON/SSE coverage of the reported thirteenth
+  tool, search-only advertisements, known search variants, explicit search
+  rejection, unknown built-in types and malformed named tools.
+- Local Codex with its default search advertisement returned
+  CODEX_DEFAULT_HELLO in 18.969 seconds through the real Playground backend.
+- The same default configuration completed actual file read/write/readback
+  through two successful shell commands and returned CODEX_RESPONSES_OK 42
+  in 54.843 seconds. Existing user config/auth fingerprints were unchanged.
+- These checks use a temporary home and workspace; the user's provider,
+  permissions, plugins and saved configuration are not edited.
+- After deployment, a real SSE request with twelve named tools and the
+  thirteenth nameless search declaration returned DEFAULT_CODEX_TOOLS_OK;
+  first delta 2.625 seconds, completion 3.313 seconds. A JSON request using
+  the captured native CLI inventory returned DEFAULT_CODEX_HELLO. Explicit
+  hosted-search selection returned a clear HTTP 400 for tool_choice.
+- The deployed Anthropic smoke returned BRIDGE_READY with message_stop and
+  no error in 3.328 seconds. The five-tab pool and HTTP/CDP monitoring were
+  healthy after restart. Continuous active traffic required a brief bridge
+  restart after waiting over three minutes for an idle window.
+
+The fixed live CLI runner retains the default search setting for future runs.
+Original validation timings above describe the initial run; these additional
+checks cover the default configuration that exposed this compatibility gap.
+
 ## Reproduction
 
 Configure PYTHONPATH for the repository and optional vendor directory, then

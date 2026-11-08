@@ -18,6 +18,9 @@ from typing import Any
 
 MAX_RESPONSE_BYTES = 16 * 1024 * 1024
 MAX_TOOL_BYTES = 1024 * 1024
+# Codex advertises these optional hosted capabilities even for a greeting.
+# The Chat Completions upstream cannot execute them; keep client tools usable.
+OPTIONAL_HOSTED_SEARCH = ("web_search", "web_search_preview", "web_search_preview_2025_03_11", "web_search_2025_08_26")
 
 
 class RequestError(ValueError):
@@ -69,7 +72,11 @@ def convert_tools(value: Any) -> tuple[list[dict], dict[str, Tool]]:
 
     def add(tool, param, namespace=None):
         tool = _object(tool, param)
-        kind = tool.get("type")
+        kind = _string(tool.get("type"), param + ".type", empty=False)
+        if kind in OPTIONAL_HOSTED_SEARCH and namespace is None:
+            return
+        if kind not in ("namespace", "function", "custom"):
+            raise RequestError(f"Tool type '{kind}' is not supported by this upstream", param + ".type")
         name = _string(tool.get("name"), param + ".name", empty=False)
         if kind == "namespace":
             if namespace:
@@ -80,8 +87,6 @@ def convert_tools(value: Any) -> tuple[list[dict], dict[str, Tool]]:
             for i, child in enumerate(children):
                 add(child, f"{param}.tools[{i}]", name)
             return
-        if kind not in ("function", "custom"):
-            raise RequestError(f"Tool type '{kind}' is not supported by this upstream", param + ".type")
         spec = Tool(name, namespace, kind)
         if spec.wire_name in registry:
             raise RequestError("Duplicate or colliding tool name", param + ".name")
@@ -238,10 +243,16 @@ def prepare_request(body: dict, backend, prior: dict | None = None) -> tuple[dic
         for name, tool in prior["registry"].items():
             registry.setdefault(name, tool)
     payload["messages"] = convert_input(items, instructions, registry)
+    if any(tool["type"] in OPTIONAL_HOSTED_SEARCH for tool in body.get("tools") or []):
+        payload["messages"].insert(0, {"role": "system", "content": (
+            "Built-in web search is unavailable on this provider. Do not claim to have used it. "
+            "For current information, use an available client tool if it supports lookup, or explain the limitation.")})
     if tools:
         payload["tools"] = tools
     choice = body.get("tool_choice", "auto")
     if isinstance(choice, dict):
+        if choice.get("type") in OPTIONAL_HOSTED_SEARCH:
+            raise RequestError("Hosted web search is unavailable on this provider; use client-executed tools", "tool_choice")
         if choice.get("type") not in ("function", "custom"):
             raise RequestError("Unsupported tool choice", "tool_choice")
         name = _wire_name(_string(choice.get("name"), "tool_choice.name", empty=False), choice.get("namespace"))
@@ -399,7 +410,8 @@ class ResponseEvents:
             "previous_response_id": body.get("previous_response_id"), "reasoning": body.get("reasoning"),
             "store": body.get("store", True), "background": False, "temperature": None, "top_p": None,
             "text": body.get("text") or {"format": {"type": "text"}}, "tool_choice": body.get("tool_choice", "auto"),
-            "tools": body.get("tools") or [], "truncation": "disabled", "usage": None,
+            "tools": [tool for tool in body.get("tools") or [] if tool["type"] not in OPTIONAL_HOSTED_SEARCH],
+            "truncation": "disabled", "usage": None,
         }
 
     def event(self, kind, **values):

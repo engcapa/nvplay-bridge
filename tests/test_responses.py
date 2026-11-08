@@ -26,6 +26,7 @@ def frame(delta=None, finish=None, usage=None):
 FUNCTION = {"type": "function", "name": "weather", "parameters": {"type": "object", "properties": {
     "city": {"type": "string"}}, "required": ["city"]}}
 CUSTOM = {"type": "custom", "name": "apply_patch", "description": "Apply a patch", "format": {"type": "text"}}
+WEB_SEARCH = {"type": "web_search", "external_web_access": False}
 
 
 class ConversionTests(unittest.TestCase):
@@ -73,6 +74,38 @@ class ConversionTests(unittest.TestCase):
         self.assertEqual(payload["response_format"]["json_schema"]["name"], "result")
         self.assertNotIn("reasoning_effort", payload)
 
+    def test_codex_optional_nameless_search_does_not_block_client_tools(self):
+        # Default Codex adds this built-in advertisement after its client tools.
+        tools = [dict(FUNCTION, name=f"tool_{index}") for index in range(12)] + [WEB_SEARCH]
+        payload, _, registry = self.prepare({"input": "hello", "tools": tools})
+        self.assertEqual(len(payload["tools"]), 12)
+        self.assertEqual(len(registry), 12)
+        self.assertTrue(all(tool["function"]["name"].startswith("tool_") for tool in payload["tools"]))
+        self.assertIn("web search is unavailable", payload["messages"][0]["content"])
+        state = rs.ResponseEvents({"model": "kimi-k3.1-pro", "tools": tools}, registry)
+        self.assertEqual(len(state.response["tools"]), 12)
+
+    def test_search_only_advertisement_allows_text_but_explicit_search_fails(self):
+        for kind in ("web_search", "web_search_preview", "web_search_preview_2025_03_11", "web_search_2025_08_26"):
+            with self.subTest(kind=kind):
+                payload, _, registry = self.prepare({"input": "hello", "tools": [{"type": kind}]})
+                self.assertNotIn("tools", payload)
+                self.assertFalse(registry)
+                with self.assertRaises(rs.RequestError) as caught:
+                    self.prepare({"input": "Search now", "tools": [{"type": kind}], "tool_choice": {"type": kind}})
+                self.assertEqual(caught.exception.param, "tool_choice")
+        with self.assertRaises(rs.RequestError):
+            self.prepare({"input": "Search now", "tools": [WEB_SEARCH], "tool_choice": "required"})
+
+    def test_unknown_builtins_and_malformed_named_tools_keep_precise_errors(self):
+        for tool, param in (({"type": "tool_search"}, "tools[0].type"),
+                            ({"type": "function"}, "tools[0].name"),
+                            ({"type": "custom", "name": ""}, "tools[0].name"),
+                            ({"type": "namespace", "name": "n", "tools": [WEB_SEARCH]}, "tools[0].tools[0].type")):
+            with self.subTest(tool=tool), self.assertRaises(rs.RequestError) as caught:
+                self.prepare({"input": "hello", "tools": [tool]})
+            self.assertEqual(caught.exception.param, param)
+
     def test_prior_instructions_are_replaced_and_history_is_immutable(self):
         prior = {"items": rs.input_items("Original") + [{"type": "message", "role": "assistant", "content": "Answer"}], "registry": {}}
         before = deepcopy(prior)
@@ -85,7 +118,7 @@ class ConversionTests(unittest.TestCase):
         for body in ({"input": 1}, {"input": [1]}, {"input": "x", "max_output_tokens": True},
                      {"input": "x", "reasoning": "high"}, {"input": "x", "tools": [{}]},
                      {"input": "x", "text": {"format": {}}}, {"input": "x", "background": True},
-                     {"input": "x", "tools": [{"type": "web_search"}]},
+                     {"input": "x", "tools": [{"type": "file_search"}]},
                      {"input": [{"type": "compaction", "encrypted_content": "x"}]},
                      {"input": "x", "stream": "true"}):
             with self.subTest(body=body), self.assertRaises(rs.RequestError):
@@ -243,6 +276,30 @@ class HTTPTests(unittest.IsolatedAsyncioTestCase):
     def tearDownClass(cls):
         cls.server.should_exit = True
         cls.thread.join(5)
+
+    async def test_default_codex_search_advertisement_in_json_and_sse(self):
+        browser = ScriptBrowser([[frame({"content": "hello"}, "stop")]])
+        tools = [dict(FUNCTION, name=f"tool_{index}") for index in range(12)] + [WEB_SEARCH]
+        async with httpx.AsyncClient(trust_env=False, timeout=3) as client:
+            with patch.object(bridge, "_browser", browser):
+                for stream in (False, True):
+                    result = await client.post(self.base + "/v1/responses", json={
+                        "model": "kimi-k3.1-pro", "input": "hello", "stream": stream, "store": False, "tools": tools})
+                    self.assertEqual(result.status_code, 200, result.text)
+                    if stream:
+                        events = [json.loads(line[6:]) for line in result.text.splitlines() if line.startswith("data: ")]
+                        self.assertEqual(events[-1]["type"], "response.completed")
+                        response = events[-1]["response"]
+                    else:
+                        response = result.json()
+                    self.assertEqual(len(response["tools"]), 12)
+                    self.assertEqual(response["output"][0]["content"][0]["text"], "hello")
+                result = await client.post(self.base + "/v1/responses", json={"input": "Search now", "tools": [WEB_SEARCH],
+                    "tool_choice": {"type": "web_search"}, "stream": True})
+                self.assertEqual(result.status_code, 400)
+                self.assertEqual(result.json()["error"]["param"], "tool_choice")
+                self.assertIn("Hosted web search is unavailable", result.json()["error"]["message"])
+        self.assertEqual(len(browser.calls), 2)
 
     async def test_nonstream_and_previous_response_tools_retrieval_delete(self):
         browser = ScriptBrowser([[frame({"tool_calls": [{"index": 0, "id": "call_1", "function": {

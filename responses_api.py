@@ -9,7 +9,7 @@ import httpx
 from fastapi import APIRouter, Request
 from fastapi.responses import JSONResponse
 
-from responses_support import MAX_RESPONSE_BYTES, RequestError, ResponseEvents, ResponseStore, error_body, prepare_request
+from responses_support import OPTIONAL_HOSTED_SEARCH, MAX_RESPONSE_BYTES, RequestError, ResponseEvents, ResponseStore, error_body, prepare_request
 
 
 def create_router(backend):
@@ -36,6 +36,7 @@ def create_router(backend):
 
     @router.post("/v1/responses")
     async def create(request: Request):
+        body = None
         try:
             raw = await request.body()
             if len(raw) > MAX_RESPONSE_BYTES:
@@ -59,10 +60,18 @@ def create_router(backend):
             payload, items, registry = prepare_request(body, backend, prior)
             headers = backend.build_headers()
         except RequestError as exc:
+            raw_tools = body.get("tools") if isinstance(body, dict) else None
+            shapes = [{"index": index, "type": str(tool.get("type"))[:80],
+                       "has_name": isinstance(tool.get("name"), str) and bool(tool["name"])}
+                      for index, tool in enumerate(raw_tools[:128]) if isinstance(tool, dict)] if isinstance(raw_tools, list) else []
+            backend._dbg("responses_rejected", param=exc.param, error=str(exc), tool_shapes=shapes)
             return error(exc)
         except backend.ConfigError as exc:
             return JSONResponse(status_code=503, content=error_body(str(exc), kind="server_error"))
         state = ResponseEvents(body, registry)
+        unavailable = sorted({tool["type"] for tool in body.get("tools") or [] if tool["type"] in OPTIONAL_HOSTED_SEARCH})
+        if unavailable:
+            backend._dbg("responses_capability_unavailable", response_id=state.response["id"], tool_types=unavailable)
         backend._dbg("responses_start", response_id=state.response["id"], stream=body.get("stream", False),
                      reasoning_effort=payload.get("reasoning_effort"), tools=len(payload.get("tools") or []),
                      messages=len(payload["messages"]), previous_response_id=prior_id, store=body.get("store", True))
