@@ -4,7 +4,7 @@
 
 # ------------------------------ config ------------------------------
 $Proxy      = "http://192.168.0.110:31028"   # "" = direct connection
-$Python     = "python"                       # Python 3.12 interpreter
+$Python     = "python"                       # Python 3.11+ interpreter
 $CdpPort    = 9225
 $BridgePort = 8083
 $PoolSize   = 5
@@ -57,7 +57,8 @@ function Install-Brave {
 
 try { $pyver = (& $Python -c "import sys; print('%d.%d' % sys.version_info[:2])").Trim() }
 catch { throw "cannot run '$Python'; set `$Python at the top of this script" }
-if ($pyver -ne "3.12") { throw "Python 3.12 required (found $pyver); set `$Python at the top of this script" }
+if ($LASTEXITCODE -ne 0) { throw "cannot run '$Python'; set `$Python at the top of this script" }
+if ([version]$pyver -lt [version]"3.11") { throw "Python 3.11 or newer required (found $pyver); set `$Python at the top of this script" }
 Write-Host "==> Windows / Python $pyver"
 
 Write-Host "==> dependencies"

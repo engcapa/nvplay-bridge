@@ -29,15 +29,14 @@ nvplay-bridge/
 ## Requirements
 
 - Windows 11 (PowerShell 7), or Linux / macOS (bash)
-- **Python 3.12** — the pinned `pydantic-core` build is CPython 3.12 only
-  (`_pydantic_core.cp312-win_amd64.pyd`). A 3.13 interpreter fails at import
-  time with `ImportError: cannot import name 'ArgsKwargs' from 'pydantic_core._pydantic_core'`.
+- **Python 3.11 or newer**. Any offline `vendor/` bundle must match the Python
+  version, OS and architecture in use; rebuild it when switching interpreters.
 - Dependencies: `python -m pip install -r requirements.txt`
 - Brave. The launcher detects an installed Brave and otherwise downloads the
   official portable build for the current OS/architecture into `.brave/`
 - A Brave profile that has already passed the Playground hCaptcha once
 
-Throughout this README, `$REPO` is your checkout and `$PY` is a Python 3.12
+Throughout this README, `$REPO` is your checkout and `$PY` is a Python 3.11+
 interpreter:
 
 ```powershell
@@ -64,7 +63,7 @@ uses the equivalent uppercase variables.
 
 What it does:
 
-1. checks the Python version (3.12 is required by the pinned wheels) and creates `logs/`
+1. checks the Python version (3.11 or newer) and creates `logs/`
 2. runs `pip install -r requirements.txt` (skipped when an offline `vendor/`
    bundle is present); `$Proxy` is passed to pip and to the Brave download only,
    it is not exported to the bridge process
@@ -76,6 +75,11 @@ What it does:
 
 The first run on a machine without Brave downloads ~200–300 MB into `.brave/`
 (git-ignored). Later runs reuse it.
+
+On Linux, if Brave exits with a sandbox initialization error, the shell launcher
+retries with `--no-sandbox` and prints a warning. This supports containers that
+block user namespaces and portable builds whose SUID helper is not configured.
+Browser output is saved to `logs/brave.log`; startup failures show its last lines.
 
 The pool defaults to five tabs. It warms tabs on the first request and serves
 each healthy tab as soon as it is ready. Reusing an existing Brave process

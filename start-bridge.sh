@@ -4,8 +4,8 @@
 set -euo pipefail
 
 # ------------------------------ config ------------------------------
-PROXY="http://192.168.0.110:31028"   # "" = direct connection
-PYTHON="python3"                     # Python 3.12 interpreter
+PROXY="http://127.0.0.1:31128"   # "" = direct connection
+PYTHON="python3"                     # Python 3.11+ interpreter
 CDP_PORT=9225
 BRIDGE_PORT=8083
 POOL_SIZE=5
@@ -45,6 +45,21 @@ fetch() { if [ -n "$PROXY" ]; then curl -fsSL -x "$PROXY" "$@"; else curl -fsSL 
 download() { if [ -n "$PROXY" ]; then curl -fL -x "$PROXY" -o "$2" "$1"; else curl -fL -o "$2" "$1"; fi; }
 
 cdp_up() { curl -fsS --max-time 2 --noproxy '*' "http://127.0.0.1:$CDP_PORT/json/version" >/dev/null 2>&1; }
+
+start_brave() {
+    local i
+    "$brave" "${args[@]}" >>"$browser_log" 2>&1 &
+    browser_pid=$!
+    for ((i = 0; i < 60; i++)); do
+        cdp_up && return 0
+        if ! kill -0 "$browser_pid" 2>/dev/null; then
+            wait "$browser_pid" 2>/dev/null || true
+            return 1
+        fi
+        sleep 0.5
+    done
+    return 1
+}
 
 find_brave() {
     local c=() p
@@ -100,8 +115,8 @@ PY
 }
 
 ver="$("$PYTHON" -c 'import sys; print("%d.%d" % sys.version_info[:2])')" || { echo "cannot run '$PYTHON'" >&2; exit 1; }
-if [ "$ver" != "3.12" ]; then
-    echo "Python 3.12 required (found $ver); set PYTHON at the top of this script" >&2
+if ! "$PYTHON" -c 'import sys; sys.exit(sys.version_info < (3, 11))'; then
+    echo "Python 3.11 or newer required (found $ver); set PYTHON at the top of this script" >&2
     exit 1
 fi
 echo "==> $OS / $ARCH / Python $ver"
@@ -145,9 +160,24 @@ else
           --no-first-run --no-default-browser-check --disable-extensions
           "${background_flags[@]}" --window-size=1280,900 "$PLAYGROUND")
     if [ "$(id -u)" = "0" ]; then args=(--no-sandbox "${args[@]}"); fi
-    "$brave" "${args[@]}" >/dev/null 2>&1 &
-    for _ in $(seq 1 60); do cdp_up && break; sleep 0.5; done
-    if ! cdp_up; then echo "CDP did not start on port $CDP_PORT" >&2; exit 1; fi
+    browser_log="$REPO_DIR/logs/brave.log"
+    : >"$browser_log"
+    if ! start_brave; then
+        # Portable builds cannot use the SUID helper without root setup. Some
+        # containers also block the user namespaces needed by Chromium.
+        if [ "$OS" = linux ] && [ "$(id -u)" != "0" ] &&
+           ! kill -0 "$browser_pid" 2>/dev/null &&
+           grep -Eq 'The SUID sandbox helper binary was found, but is not configured correctly|No usable sandbox!|Failed to move to new namespace:.*Operation not permitted' "$browser_log"; then
+            echo "Brave sandbox is unavailable; retrying with --no-sandbox (browser sandbox disabled). See $browser_log" >&2
+            args=(--no-sandbox "${args[@]}")
+            start_brave || true
+        fi
+        if ! cdp_up; then
+            echo "CDP did not start on port $CDP_PORT; browser log: $browser_log" >&2
+            tail -n 50 "$browser_log" >&2
+            exit 1
+        fi
+    fi
 fi
 
 echo "==> bridge on http://127.0.0.1:$BRIDGE_PORT  (Ctrl+C to stop)"
