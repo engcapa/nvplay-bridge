@@ -1,0 +1,14 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Runtime logs and captured session files
+logs/*
+!logs/.gitkeep
+.nvcf_cookies.txt
+.nvcf_captcha.txt
+
+# Optional offline dependency bundle (use `pip install -r requirements.txt`)
+vendor/

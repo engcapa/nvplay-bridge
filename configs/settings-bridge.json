@@ -1,0 +1,19 @@
+{
+  "env": {
+    "ANTHROPIC_BASE_URL": "http://127.0.0.1:8083",
+    "ANTHROPIC_AUTH_TOKEN": "test",
+    "ANTHROPIC_MODEL": "kimi-k3.1-pro",
+    "ANTHROPIC_DEFAULT_HAIKU_MODEL": "kimi-k3.1-pro",
+    "ANTHROPIC_DEFAULT_SONNET_MODEL": "kimi-k3.1-pro",
+    "ANTHROPIC_DEFAULT_OPUS_MODEL": "kimi-k3.1-pro",
+    "CLAUDE_CODE_ALLOW_OTHER_MODELS": "1",
+    "API_TIMEOUT_MS": "600000",
+    "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC": "1"
+  },
+  "model": "kimi-k3.1-pro",
+  "permissions": {
+    "defaultMode": "bypassPermissions"
+  },
+  "enabledPlugins": {},
+  "mcpServers": {}
+}
