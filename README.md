@@ -171,6 +171,8 @@ The bridge accepts only Kimi model aliases; other model IDs return `404 not_foun
 | `BROWSER_TAB_READY_TIMEOUT` | `30` | Seconds per tab recovery attempt and request preparation |
 | `BROWSER_TAB_RECOVERY_ATTEMPTS` | `2` | Recovery attempts before isolating a failed tab |
 | `BROWSER_TAB_RECOVERY_BACKOFF` | `5` | Initial seconds before retrying an isolated tab; doubles to 60s |
+| `BROWSER_POOL_TIMEOUT_RETRIES` | `2` | Additional attempts for NVIDIA HTTP 500 pool-acquire timeouts before content delivery; `0` disables |
+| `BROWSER_POOL_TIMEOUT_BACKOFF` | `5` | Initial seconds between these attempts; doubles to 30s, plus up to 1s jitter |
 | `PLACEHOLDER_RETRY` | `1` | Retry placeholder/empty upstream responses |
 | `LOOP_BREAKER` | `1` | Stop repeated identical tool calls |
 | `BROWSER_DEBUG_LOG` | empty | JSONL metadata log path |
@@ -189,8 +191,9 @@ The bridge accepts only Kimi model aliases; other model IDs return `404 not_foun
 - Browser mode forwards thinking, text and the first tool's arguments as they arrive; interleaved additional tools are buffered and emitted as consecutive content blocks.
 - Browser mode sends `event: ping` every 10s without downstream data, including while queuing and retrying.
 - Placeholder/empty responses may retry once before streaming content is delivered. After thinking/text/tool content has been delivered, errors end the stream without replacing the answer. Non-streaming requests retain the empty-response retry.
+- NVIDIA HTTP 500 errors containing `Pool#acquire(Duration) has been pending for more than the configured timeout` may retry twice before any thinking/text/tool content is delivered. The same downstream SSE connection stays open with heartbeats during the default 5–6s and 10–11s waits. Attempts preserve the payload and share the original total deadline; placeholder correction has a separate one-retry allowance. Other HTTP/network errors are not covered by this policy. Exhaustion returns the original error. Metadata logs use `upstream_retry` and `upstream_retry_skipped` to identify retries and their limits. See [upstream retry design](docs/upstream-pool-timeout-retry.md).
 - Client disconnects abort the matching browser fetch. Interrupted/failed tabs leave the available queue and recover in a dedicated worker before reuse.
-- A preparation failure before arming/sending can switch to another healthy tab inside the original SSE connection, with heartbeats while waiting. Failures after triggering a send are not transparently replayed, even if no first byte has arrived.
+- A preparation failure before arming/sending can switch to another healthy tab inside the original SSE connection, with heartbeats while waiting. Failures after triggering a send are not transparently replayed except for the explicit pool-acquire timeout and empty/placeholder policies above; an uncertain network failure before the first byte still fails immediately.
 - Regular data prevents idle timeouts, but the 3600-second total limit still applies. The included Claude Code settings use `API_TIMEOUT_MS=3900000` (65 minutes) to allow time for cleanup; restart CC to load changed settings.
 - 5-tab pool; recovery never navigates a busy tab, and healthy tabs remain usable while other tabs recover. `/health` includes pool states and recent recovery errors after pool initialization.
 - Repeated tool calls are broken after a session-level repeat threshold
@@ -243,6 +246,7 @@ $env:PYTHONPATH = $REPO     # add ";$REPO\vendor" only if you have an offline bu
 & $PY tests\test_streaming.py
 & $PY tests\test_pool_recovery.py
 & $PY tests\test_responses.py
+& $PY tests\test_upstream_retry.py
 ```
 
 Live regression (needs Brave/CDP and a running bridge):

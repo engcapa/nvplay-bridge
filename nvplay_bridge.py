@@ -56,6 +56,7 @@ from stream_support import AnthropicBlocks
 import asyncio
 import json
 import os
+import random
 import sys
 import threading
 import time
@@ -85,6 +86,8 @@ BROWSER_TIMEOUT = int(os.getenv("BROWSER_TIMEOUT", "3600"))
 BROWSER_HEARTBEAT_SEC = float(os.getenv("BROWSER_HEARTBEAT_SEC", "10"))
 BROWSER_POOL_SIZE = int(os.getenv("BROWSER_POOL_SIZE", "5"))
 BROWSER_DEBUG_LOG = os.getenv("BROWSER_DEBUG_LOG", "")
+BROWSER_POOL_TIMEOUT_RETRIES = max(0, int(os.getenv("BROWSER_POOL_TIMEOUT_RETRIES", "2")))
+BROWSER_POOL_TIMEOUT_BACKOFF = max(0.0, float(os.getenv("BROWSER_POOL_TIMEOUT_BACKOFF", "5")))
 PLACEHOLDER_RETRY = int(os.getenv("PLACEHOLDER_RETRY", "1"))
 LOOP_BREAKER = int(os.getenv("LOOP_BREAKER", "1"))
 BROWSER_DEBUG_MESSAGES = os.getenv("BROWSER_DEBUG_MESSAGES", "") == "1"
@@ -844,6 +847,23 @@ def _sse_summary(text: str) -> tuple[str, bool, str | None, int]:
     return "".join(parts).strip(), has_tool, finish, thinking_chars
 
 
+def _is_upstream_pool_timeout(event: dict[str, Any]) -> bool:
+    message = str(event.get("message", ""))
+    return (event.get("status") == 500 and "Pool#acquire(Duration)" in message
+            and "has been pending for more than the configured timeout" in message)
+
+
+async def _browser_retry_pause(delay: float, deadline: float) -> AsyncIterator[dict[str, Any]]:
+    """Release the failed stream before waiting; cancellation interrupts sleep."""
+    until = min(deadline, time.monotonic() + delay)
+    if BROWSER_HEARTBEAT_SEC > 0:
+        yield {"type": "ping"}
+    while (remaining := until - time.monotonic()) > 0:
+        await asyncio.sleep(min(remaining, BROWSER_HEARTBEAT_SEC) if BROWSER_HEARTBEAT_SEC > 0 else remaining)
+        if BROWSER_HEARTBEAT_SEC > 0:
+            yield {"type": "ping"}
+
+
 async def _browser_events_with_retry(payload: dict[str, Any], *, buffered: bool) -> AsyncIterator[dict[str, Any]]:
     from browser_events import browser_events
 
@@ -851,7 +871,10 @@ async def _browser_events_with_retry(payload: dict[str, Any], *, buffered: bool)
     started = time.monotonic()
     deadline = started + BROWSER_TIMEOUT
     current = payload
-    for attempt in range(1, 3):
+    attempt = pool_retries = 0
+    placeholder_retried = False
+    while True:
+        attempt += 1
         committed = False
         has_text = has_tool = False
         marker = "[Tool use interrupted]"
@@ -865,10 +888,15 @@ async def _browser_events_with_retry(payload: dict[str, Any], *, buffered: bool)
         def log(event: str, **data: Any) -> None:
             _dbg(event, id=req_id, attempt=attempt, sec=round(time.monotonic() - started, 3), **data)
 
+        if time.monotonic() >= deadline:
+            log("browser_error", error="浏览器请求总时限已到")
+            yield {"type": "error", "status": 502, "message": "浏览器请求总时限已到"}
+            return
         log("browser_start", max_tokens=current.get("max_tokens"),
             reasoning_effort=current.get("reasoning_effort"),
             messages=len(current.get("messages") or []), tools=len(current.get("tools") or []))
         try:
+            failure = None
             async with aclosing(browser_events(
                 _get_browser(), current, max(0, deadline - time.monotonic()),
                 BROWSER_HEARTBEAT_SEC, _chunk_events, log,
@@ -876,9 +904,8 @@ async def _browser_events_with_retry(payload: dict[str, Any], *, buffered: bool)
                 async for event in source:
                     kind = event["type"]
                     if kind == "error":
-                        log("browser_error", error=event["message"])
-                        yield event
-                        return
+                        failure = event
+                        break
                     if kind == "ping":
                         yield event
                         continue
@@ -924,41 +951,67 @@ async def _browser_events_with_retry(payload: dict[str, Any], *, buffered: bool)
                             committed = True
                         yield item
 
-            if pending_text.strip() and pending_text.strip() != marker:
-                has_text = True
+            if failure is None:
+                if pending_text.strip() and pending_text.strip() != marker:
+                    has_text = True
+                    for saved in buffered_events:
+                        yield saved
+                    buffered_events.clear()
+                    committed = True
+                    yield {"type": "text", "text": pending_text}
+
+                bad = not has_text and not has_tool
+                # A streamed partial thinking block at its token limit is a valid truncation.
+                if bad and not (not buffered and committed and finish == "length"):
+                    kind = "placeholder" if pending_text.strip() == marker else "empty"
+                    log(f"{kind}_detected", counts=counts, finish=finish)
+                    if PLACEHOLDER_RETRY and not placeholder_retried and (buffered or not committed):
+                        placeholder_retried = True
+                        current = dict(payload)
+                        current["max_tokens"] = min(BROWSER_MAX_TOKENS, max(int(payload.get("max_tokens") or 0), 2048))
+                        current["messages"] = list(payload.get("messages") or []) + [{
+                            "role": "user", "content": "[系统纠正] 上一轮没有有效正文或工具调用。请继续任务，给出真实答案或调用工具，不要输出 [Tool use interrupted]。",
+                        }]
+                        log(f"{kind}_retry_start")
+                        continue
+                    log("browser_error", error="上游没有有效正文或工具调用")
+                    yield {"type": "error", "status": 502, "message": "上游没有有效正文或工具调用；已交付内容的流不能静默重试"}
+                    return
                 for saved in buffered_events:
                     yield saved
-                buffered_events.clear()
-                committed = True
-                yield {"type": "text", "text": pending_text}
-
-            bad = not has_text and not has_tool
-            # A streamed partial thinking block at its token limit is a valid truncation.
-            if bad and not (not buffered and committed and finish == "length"):
-                kind = "placeholder" if pending_text.strip() == marker else "empty"
-                log(f"{kind}_detected", counts=counts, finish=finish)
-                if PLACEHOLDER_RETRY and attempt == 1 and (buffered or not committed):
-                    current = dict(payload)
-                    current["max_tokens"] = min(BROWSER_MAX_TOKENS, max(int(payload.get("max_tokens") or 0), 2048))
-                    current["messages"] = list(payload.get("messages") or []) + [{
-                        "role": "user", "content": "[系统纠正] 上一轮没有有效正文或工具调用。请继续任务，给出真实答案或调用工具，不要输出 [Tool use interrupted]。",
-                    }]
-                    log(f"{kind}_retry_start")
-                    continue
-                log("browser_error", error="上游没有有效正文或工具调用")
-                yield {"type": "error", "status": 502, "message": "上游没有有效正文或工具调用；已交付内容的流不能静默重试"}
+                log("browser_done", counts=counts, finish=finish, usage=usage)
                 return
-            for saved in buffered_events:
-                yield saved
-            log("browser_done", counts=counts, finish=finish, usage=usage)
-            return
         except (asyncio.CancelledError, GeneratorExit):
             log("browser_cancelled")
             raise
         except Exception as exc:
-            log("browser_error", error=str(exc))
-            yield {"type": "error", "status": int(getattr(exc, "status", 502)), "message": str(exc)}
-            return
+            failure = {"type": "error", "status": int(getattr(exc, "status", 502)), "message": str(exc)}
+
+        if _is_upstream_pool_timeout(failure):
+            remaining = max(0, deadline - time.monotonic())
+            backoff = min(30.0, BROWSER_POOL_TIMEOUT_BACKOFF * 2 ** min(pool_retries, 6))
+            delay = backoff + random.uniform(0, min(1.0, backoff * 0.2))
+            reason = ("content_committed" if committed else
+                      "retry_limit" if pool_retries >= BROWSER_POOL_TIMEOUT_RETRIES else
+                      "deadline" if remaining <= delay else None)
+            if reason is None:
+                pool_retries += 1
+                log("upstream_retry", reason="nvidia_pool_acquire_timeout", retry=pool_retries,
+                    next_attempt=attempt + 1, delay=round(delay, 3), remaining=round(remaining, 3),
+                    status=failure["status"], error=failure["message"], counts=counts, usage=usage)
+                try:
+                    async with aclosing(_browser_retry_pause(delay, deadline)) as pause:
+                        async for event in pause:
+                            yield event
+                except (asyncio.CancelledError, GeneratorExit):
+                    log("browser_cancelled")
+                    raise
+                continue
+            log("upstream_retry_skipped", reason=reason, retries=pool_retries, committed=committed,
+                remaining=round(remaining, 3))
+        log("browser_error", error=failure["message"])
+        yield failure
+        return
 
 
 async def iter_events(payload: dict[str, Any], headers: dict[str, str], *,

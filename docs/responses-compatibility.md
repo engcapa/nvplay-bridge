@@ -86,6 +86,14 @@ Partial responses are never silently replayed. Invalid requests return an
 OpenAI-style HTTP error body before generation begins. Client disconnects
 cancel both streaming and non-streaming generation.
 
+Before any thinking, text or tool content is delivered, the browser adapter
+can retry the specific NVIDIA HTTP 500 pool-acquire timeout at most twice.
+It keeps the same response ID and SSE connection, sends heartbeat comments
+during backoff, and shares the request's original total deadline. Other
+HTTP/network failures are not retried by this policy. An exhausted retry
+emits one `response.failed` containing the original error; it never emits
+`response.completed`. See [retry policy](upstream-pool-timeout-retry.md).
+
 ## Stored history
 
 `store` defaults to true. Stored completed/incomplete responses support
