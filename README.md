@@ -1,6 +1,6 @@
 # nvplay-bridge
 
-Anthropic Messages API–compatible bridge for **Kimi K3.1 Pro** running on the NVIDIA Build Playground, driven through a real Brave window over CDP.
+Anthropic Messages and OpenAI Responses API bridge for **Kimi K3.1 Pro** running on the NVIDIA Build Playground, driven through a real Brave window over CDP. Supports Claude Code and Codex over HTTP streaming.
 
 > Unofficial project. Not affiliated with NVIDIA, Moonshot AI, or Anthropic.
 
@@ -14,6 +14,8 @@ nvplay-bridge/
   browser_upstream.py    CDP browser controller and 5-tab pool
   browser_events.py      bounded thread-to-async stream and cancellation
   stream_support.py      incremental SSE parser and Anthropic content blocks
+  responses_support.py   Responses request conversion, output items and bounded history
+  responses_api.py       Responses HTTP/SSE routes and cancellation
   configs/               Claude Code settings and empty MCP config
   tests/                 unit, pool, tab-refresh and live regression scripts
   tools/                 monitors and global-CC setup helper
@@ -178,6 +180,7 @@ The bridge accepts only Kimi model aliases; other model IDs return `404 not_foun
 
 - `GET /health`, `GET /v1/models`
 - `POST /v1/messages`, `POST /v1/messages/count_tokens`
+- `POST /v1/responses` (JSON or SSE), `GET/DELETE /v1/responses/{id}`
 - Anthropic SSE: `message_start`, `content_block_*`, `message_delta`, `message_stop`
 - `output_config.effort` maps directly to upstream `reasoning_effort`; `xhigh` → `max`
 - If CC sends no thinking/effort, the bridge sets no `reasoning_effort`
@@ -195,6 +198,38 @@ The bridge accepts only Kimi model aliases; other model IDs return `404 not_foun
 Readiness, recovery limits and offline regression coverage are described in
 [browser pool recovery](docs/browser-pool-recovery.md).
 
+## OpenAI Responses and Codex
+
+Use `http://127.0.0.1:8083/v1` as an OpenAI SDK base URL. The local endpoint
+does not require a key; SDKs that require one can use a placeholder:
+
+```python
+from openai import OpenAI
+
+client = OpenAI(base_url="http://127.0.0.1:8083/v1", api_key="local-only")
+with client.responses.stream(
+    model="kimi-k3.1-pro", input="Compute 17 + 25.",
+    reasoning={"effort": "high"}, store=False,
+) as stream:
+    for event in stream:
+        if event.type == "response.output_text.delta":
+            print(event.delta, end="", flush=True)
+```
+
+[configs/codex-bridge.toml](configs/codex-bridge.toml) is an example for a
+separate Codex configuration directory. It selects `wire_api="responses"`,
+disables WebSocket transport and hosted web search, and points at the local
+bridge. Existing user configuration is never edited by the supplied tests.
+
+Supported paths include developer instructions, explicit conversation history,
+reasoning/text deltas, function and custom tools, namespaces, interleaved tool
+arguments and tool result round trips. Stored response IDs support continuation
+within this server process, subject to memory limits and expiry. Codex normally
+uses `store=false` and resends explicit history. Upstream truncation emits
+`response.incomplete`; broken streams emit `response.failed` without a false
+completion. See [Responses compatibility](docs/responses-compatibility.md)
+for supported fields, limits and validation results.
+
 ## Tests
 
 ```powershell
@@ -203,6 +238,7 @@ $env:PYTHONPATH = $REPO     # add ";$REPO\vendor" only if you have an offline bu
 & $PY tests\test_pool.py
 & $PY tests\test_streaming.py
 & $PY tests\test_pool_recovery.py
+& $PY tests\test_responses.py
 ```
 
 Live regression (needs Brave/CDP and a running bridge):
@@ -213,6 +249,22 @@ Live regression (needs Brave/CDP and a running bridge):
 
 Streaming-specific live checks start and stop their own temporary HTTP server
 and require only Brave/CDP: `python tests/live_streaming.py`.
+
+Responses E2E uses a temporary server and separate `responsee2e` browser tabs.
+The `--codex` option runs the installed Codex with a temporary configuration
+and workspace, checks actual file/tool execution, and verifies that the
+existing Codex config and auth files retain their original hashes:
+
+```powershell
+& $PY tests\live_responses.py --codex
+```
+
+On Windows this opt-in CLI test uses the restricted MXC sandbox, selected
+only in the temporary test home. It checks sandbox startup before inference;
+it requires a Windows build that supports MXC. No administrator setup is run.
+
+Reports are written to `logs/responses-e2e-report.json`; detailed diagnostics
+and isolated Codex stdout/stderr also stay under `logs/`.
 
 Tab refresh integration test (uses a temporary `?ktest=1` tab):
 

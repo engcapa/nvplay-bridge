@@ -333,9 +333,18 @@ class ReadinessTests(unittest.TestCase):
     def test_readiness_timeout_preserves_diagnostics(self):
         ws = ActivationSocket([dict(READY, captcha_ready=False)])
         pool = bu.BrowserPool()
-        with patch.object(bu.websocket, "create_connection", return_value=ws):
+        now = [100.0]
+        cancel = threading.Event()
+
+        def advance(seconds):
+            now[0] += seconds
+            return False
+
+        with patch.object(bu.websocket, "create_connection", return_value=ws), \
+             patch.object(bu.time, "monotonic", side_effect=lambda: now[0]), \
+             patch.object(cancel, "wait", side_effect=advance):
             with self.assertRaisesRegex(bu.BrowserError, '"visibility": "hidden"'):
-                pool._activate_wait("page", threading.Event(), time.monotonic() + 0.02)
+                pool._activate_wait("page", cancel, now[0] + 0.02)
         self.assertTrue(ws.closed)
 
     def test_recovery_waits_for_new_document_instead_of_accepting_old_ready_page(self):

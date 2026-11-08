@@ -56,6 +56,7 @@ from stream_support import AnthropicBlocks
 import asyncio
 import json
 import os
+import sys
 import threading
 import time
 import uuid
@@ -146,7 +147,7 @@ PASS_SAMPLING = os.getenv("PASS_SAMPLING", "0") == "1"
 app = FastAPI(
     title="nvplay-bridge",
     version="0.3.0",
-    description="Anthropic-compatible bridge for Kimi K3.1 Pro via NVIDIA Build Playground",
+    description="Anthropic Messages and OpenAI Responses bridge for Kimi K3.1 Pro via NVIDIA Build Playground",
 )
 
 
@@ -623,6 +624,16 @@ def _maybe_break_tool_loop(payload: dict[str, Any]) -> None:
         _dbg("loop_breaker_stateful", tool=calls[-1][0], count=count)
 
 
+def _enable_upstream_stream(payload: dict[str, Any]) -> None:
+    # Both downstream protocols use the same upstream streaming dialect.
+    payload["stream"] = True
+    payload["stream_options"] = {"include_usage": True}
+    if UPSTREAM_KIND in {"nvcf", "browser"}:
+        payload["stream_options"]["continuous_usage_stats"] = True
+        payload.pop("temperature", None)
+        payload.pop("top_p", None)
+
+
 def build_payload(body: dict[str, Any]) -> dict[str, Any]:
     requested_effort = _explicit_effort(body)
     _dbg(
@@ -638,13 +649,7 @@ def build_payload(body: dict[str, Any]) -> dict[str, Any]:
     )
     payload = to_openai_request(body)
     # 上游统一走流式：NVCF 只稳定支持 SSE；非流式在本地聚合。
-    payload["stream"] = True
-    payload["stream_options"] = {"include_usage": True}
-    if UPSTREAM_KIND in {"nvcf", "browser"}:
-        payload["stream_options"]["continuous_usage_stats"] = True
-        # Kimi 的 temperature / top_p 是固定值，传了可能 400
-        payload.pop("temperature", None)
-        payload.pop("top_p", None)
+    _enable_upstream_stream(payload)
     # 不在 CC 未传 thinking/effort 时强行设置 reasoning_effort：
     # 上游没有强制预算要求，只有客户端显式传了才映射。
     _dbg(
@@ -1123,9 +1128,13 @@ async def health() -> dict[str, Any]:
 async def list_models() -> dict[str, Any]:
     ids = sorted(ALLOWED_MODELS)
     return {
+        "object": "list",
         "data": [
             {
                 "id": model_id,
+                "object": "model",
+                "created": 1767225600,
+                "owned_by": "nvplay-bridge",
                 "type": "model",
                 "display_name": model_id,
                 "created_at": "2026-01-01T00:00:00Z",
@@ -1208,3 +1217,9 @@ async def create_message(request: Request):
         await asyncio.gather(generation, disconnected, return_exceptions=True)
 
     return JSONResponse(content=message)
+
+
+# Defer binding until the shared backend functions have been defined.
+from responses_api import create_router as _responses_router
+
+app.include_router(_responses_router(sys.modules[__name__]))

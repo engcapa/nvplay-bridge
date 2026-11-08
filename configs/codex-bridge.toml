@@ -1,0 +1,19 @@
+# Example for a separate Codex home. Do not replace your existing config.toml.
+model = "kimi-k3.1-pro"
+model_provider = "nvplay"
+model_reasoning_effort = "high"
+model_context_window = 262144
+model_auto_compact_token_limit = 240000
+web_search = "disabled"
+
+[model_providers.nvplay]
+name = "nvplay local Responses bridge"
+base_url = "http://127.0.0.1:8083/v1"
+wire_api = "responses"
+requires_openai_auth = false
+supports_websockets = false
+stream_idle_timeout_ms = 3900000
+
+# Start conservatively: the bridge already recovers preparation failures.
+request_max_retries = 1
+stream_max_retries = 0
