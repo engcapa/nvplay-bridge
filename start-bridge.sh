@@ -4,7 +4,8 @@
 set -euo pipefail
 
 # ------------------------------ config ------------------------------
-PROXY="http://127.0.0.1:31128"   # "" = direct connection
+PROXY=""                            # optional proxy; "" = no explicit proxy
+# PROXY="http://127.0.0.1:7890"       # example: local HTTP proxy
 PYTHON="python3"                     # Python 3.11+ interpreter
 CDP_PORT=9225
 BRIDGE_PORT=8083

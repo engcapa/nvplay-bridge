@@ -3,7 +3,8 @@
 # On Linux / macOS use start-bridge.sh instead.
 
 # ------------------------------ config ------------------------------
-$Proxy      = "http://192.168.0.110:31028"   # "" = direct connection
+$Proxy      = ""                             # optional proxy; "" = no explicit proxy
+# $Proxy    = "http://127.0.0.1:7890"          # example: local HTTP proxy
 $Python     = "python"                       # Python 3.11+ interpreter
 $CdpPort    = 9225
 $BridgePort = 8083
