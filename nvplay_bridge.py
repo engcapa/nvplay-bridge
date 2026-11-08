@@ -9,7 +9,7 @@ nvplay_bridge.py — Anthropic Messages API 适配层
   nvcf    : NVIDIA Build 的 NVCF predict 代理
             （Cookie + Nv-Captcha-Token 鉴权，SSE）
 
-  browser : 通过 CDP 驱动已登录/匿名的 Chrome Playground 页面
+  browser : 通过 CDP 驱动已登录/匿名的 Brave Playground 页面
             （页面现场签 nv-captcha-token，我们在 fetch 层替换 body）
             需要 browser_upstream.py 与 websocket-client
 
@@ -17,7 +17,7 @@ nvplay_bridge.py — Anthropic Messages API 适配层
 
     pip install fastapi uvicorn httpx websocket-client
 
-    # 1. 完全退出 Chrome，然后用调试端口 + 真实 profile 启动
+    # 1. 完全退出 Brave，然后用调试端口 + 真实 profile 启动
     #    （见 research/README.md）
     # 2. 启动适配层
     export UPSTREAM_KIND=browser

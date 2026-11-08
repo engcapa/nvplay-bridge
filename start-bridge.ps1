@@ -1,5 +1,5 @@
 #Requires -Version 7.0
-# nvplay-bridge launcher: install deps, get a browser with CDP, run the bridge.
+# nvplay-bridge launcher for Windows 11 / Linux / macOS. Brave only.
 
 # ------------------------------ config ------------------------------
 $Proxy      = "http://192.168.0.110:31028"   # "" = direct connection
@@ -8,22 +8,19 @@ $CdpPort    = 9225
 $BridgePort = 8083
 $PoolSize   = 3
 $BravePath  = ""                             # explicit brave binary; "" = detect/download
-$BrowserDir = Join-Path $PSScriptRoot ".browser"
+$BraveDir   = Join-Path $PSScriptRoot ".brave"
 $Playground = "https://build.nvidia.com/moonshotai/kimi-k3_1-pro/playground"
 # --------------------------------------------------------------------
 
 $ErrorActionPreference = "Stop"
 Set-Location $PSScriptRoot
 $net = if ($Proxy) { @{ Proxy = $Proxy } } else { @{} }
+$profileDir = Join-Path ([IO.Path]::GetTempPath()) "brave-cdp"
+$osName = if ($IsWindows) { "Windows" } elseif ($IsMacOS) { "macOS" } else { "Linux" }
 New-Item -ItemType Directory -Force (Join-Path $PSScriptRoot "logs") | Out-Null
 
-try { $pyver = (& $Python -c "import sys; print('%d.%d' % sys.version_info[:2])").Trim() }
-catch { throw "cannot run '$Python'; set `$Python at the top of this script" }
-if ($pyver -ne "3.12") { throw "Python 3.12 required (found $pyver); set `$Python at the top of this script" }
-Write-Host "using Python $pyver"
-
 function Test-Cdp {
-    try { Invoke-RestMethod "http://127.0.0.1:$CdpPort/json/version" -TimeoutSec 2 @net | Out-Null; $true } catch { $false }
+    try { Invoke-RestMethod "http://127.0.0.1:$CdpPort/json/version" -TimeoutSec 2 | Out-Null; $true } catch { $false }
 }
 
 function Find-Brave {
@@ -34,40 +31,51 @@ function Find-Brave {
         $c += "$env:LOCALAPPDATA\BraveSoftware\Brave-Browser\Application\brave.exe"
     } elseif ($IsMacOS) {
         $c += "/Applications/Brave Browser.app/Contents/MacOS/Brave Browser"
+        $c += "$HOME/Applications/Brave Browser.app/Contents/MacOS/Brave Browser"
     } else {
-        $c += "/usr/bin/brave-browser", "/opt/brave.com/brave/brave"
+        $c += "/usr/bin/brave-browser", "/usr/bin/brave", "/opt/brave.com/brave/brave"
     }
-    $c += Get-ChildItem $BrowserDir -Recurse -File -ErrorAction SilentlyContinue |
+    $c += Get-ChildItem $BraveDir -Recurse -File -ErrorAction SilentlyContinue |
           Where-Object { $_.Name -in "brave.exe", "brave", "Brave Browser" } |
           Select-Object -ExpandProperty FullName
     $c | Where-Object { $_ -and (Test-Path -LiteralPath $_) } | Select-Object -First 1
 }
 
-function Install-BravePortable {
-    $arch = if ($env:PROCESSOR_ARCHITECTURE -match 'ARM64|arm64') { 'arm64' } else { 'x64' }
-    $suffix = if ($IsWindows) { "win32-$arch.zip" } elseif ($IsMacOS) { "darwin-$arch.zip" } else { "linux-$(if ($arch -eq 'arm64') { 'arm64' } else { 'amd64' }).zip" }
+function Install-Brave {
+    $arch = switch ("$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)") {
+        "X64" { "x64" }
+        "Arm64" { "arm64" }
+        default { throw "unsupported CPU architecture: $_" }
+    }
+    $suffix = if ($IsWindows) { "win32-$arch.zip" }
+              elseif ($IsMacOS) { "darwin-$arch.zip" }
+              else { "linux-$(if ($arch -eq 'arm64') { 'arm64' } else { 'amd64' }).zip" }
+
     $rel = Invoke-RestMethod "https://api.github.com/repos/brave/brave-browser/releases/latest" `
         -Headers @{ "User-Agent" = "nvplay-bridge" } @net
     $asset = $rel.assets |
         Where-Object { $_.name.EndsWith($suffix) -and $_.name -notmatch "symbols|origin" } |
         Select-Object -First 1
-    if (-not $asset) { throw "no Brave portable build for $suffix" }
+    if (-not $asset) { throw "no Brave build for $suffix" }
 
-    Write-Host "downloading $($asset.name) ($([math]::Round($asset.size / 1MB)) MB)"
-    New-Item -ItemType Directory -Force $BrowserDir | Out-Null
-    $zip = Join-Path $BrowserDir $asset.name
+    Write-Host "downloading $($asset.name) ($([math]::Round($asset.size / 1MB)) MB) into $BraveDir"
+    New-Item -ItemType Directory -Force $BraveDir | Out-Null
+    $zip = Join-Path $BraveDir $asset.name
     Invoke-WebRequest $asset.browser_download_url -OutFile $zip @net
-    Expand-Archive $zip -DestinationPath $BrowserDir -Force
+    Expand-Archive $zip -DestinationPath $BraveDir -Force
     Remove-Item $zip
-    $bin = Get-ChildItem $BrowserDir -Recurse -File |
-           Where-Object { $_.Name -in "brave.exe", "brave", "Brave Browser" } | Select-Object -First 1
-    if (-not $bin) { throw "brave binary not found after extracting $($asset.name)" }
-    if (-not $IsWindows) { & chmod +x $bin.FullName }
-    $bin.FullName
+    if (-not $IsWindows) { & chmod -R +x $BraveDir }
+    Find-Brave
 }
 
+try { $pyver = (& $Python -c "import sys; print('%d.%d' % sys.version_info[:2])").Trim() }
+catch { throw "cannot run '$Python'; set `$Python at the top of this script" }
+if ($pyver -ne "3.12") { throw "Python 3.12 required (found $pyver); set `$Python at the top of this script" }
+Write-Host "==> $osName / Python $pyver"
+
 Write-Host "==> dependencies"
-if (Test-Path -LiteralPath (Join-Path $PSScriptRoot "vendor")) {
+$vendor = Join-Path $PSScriptRoot "vendor"
+if (Test-Path -LiteralPath $vendor) {
     Write-Host "using offline bundle: vendor/"
 } else {
     $pipArgs = @("-m", "pip", "install", "--disable-pip-version-check", "-r", (Join-Path $PSScriptRoot "requirements.txt"))
@@ -75,12 +83,7 @@ if (Test-Path -LiteralPath (Join-Path $PSScriptRoot "vendor")) {
     & $Python @pipArgs
     if ($LASTEXITCODE -ne 0) { throw "pip install failed" }
 }
-$vendor = Join-Path $PSScriptRoot "vendor"
-$env:PYTHONPATH = if (Test-Path -LiteralPath $vendor) {
-    "$PSScriptRoot$([IO.Path]::PathSeparator)$vendor"
-} else {
-    $PSScriptRoot
-}
+$env:PYTHONPATH = if (Test-Path -LiteralPath $vendor) { "$PSScriptRoot$([IO.Path]::PathSeparator)$vendor" } else { $PSScriptRoot }
 
 Write-Host "==> browser (CDP $CdpPort)"
 if (Test-Cdp) {
@@ -88,17 +91,19 @@ if (Test-Cdp) {
 } else {
     $brave = Find-Brave
     if (-not $brave) {
-        Write-Host "Brave not found, fetching a portable build"
-        $brave = Install-BravePortable
+        Write-Host "Brave not found, downloading a portable build"
+        $brave = Install-Brave
     }
     Write-Host "starting $brave"
-    Start-Process -FilePath $brave -ArgumentList @(
-        "--user-data-dir=$(Join-Path $env:TEMP 'brave-cdp')",
+    $bargs = @(
+        "--user-data-dir=$profileDir",
         "--remote-debugging-port=$CdpPort",
         "--remote-allow-origins=*",
         "--no-first-run", "--no-default-browser-check", "--disable-extensions",
         "--window-size=1280,900", $Playground
-    ) | Out-Null
+    )
+    if ($IsLinux -and "$(id -u)" -eq "0") { $bargs = @("--no-sandbox") + $bargs }
+    Start-Process -FilePath $brave -ArgumentList $bargs | Out-Null
     for ($i = 0; $i -lt 60 -and -not (Test-Cdp); $i++) { Start-Sleep -Milliseconds 500 }
     if (-not (Test-Cdp)) { throw "CDP did not start on port $CdpPort" }
 }

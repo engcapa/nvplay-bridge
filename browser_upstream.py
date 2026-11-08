@@ -5,7 +5,7 @@
   2. 我们在 fetch 层把请求体替换成目标 body（可含 tools）；
   3. 克隆响应流，读完整 SSE 文本返回。
 
-前提：Chrome 以 --remote-debugging-port=9222 启动，并打开 Playground 页面。
+前提：Brave 以 --remote-debugging-port=9222 启动，并打开 Playground 页面。
 """
 
 from __future__ import annotations
@@ -154,7 +154,7 @@ class BrowserUpstream:
                 targets = json.load(resp)
         except OSError as exc:
             raise BrowserError(
-                f"CDP 未就绪（{self.base}）。请用 --remote-debugging-port={self.base.rsplit(':', 1)[-1]} 启动 Chrome 并打开 Playground。"
+                f"CDP 未就绪（{self.base}）。请用 --remote-debugging-port={self.base.rsplit(':', 1)[-1]} 启动 Brave 并打开 Playground。"
             ) from exc
         pages = [t for t in targets if t.get("type") == "page" and t.get("webSocketDebuggerUrl")]
         for t in pages:
@@ -162,7 +162,7 @@ class BrowserUpstream:
                 return t
         if pages:
             return pages[0]
-        raise BrowserError("没有可用的页面 target，请先在 Chrome 打开 Playground")
+        raise BrowserError("没有可用的页面 target，请先在 Brave 打开 Playground")
 
     def _connect(self) -> None:
         if self.ws is not None:

@@ -1,6 +1,6 @@
 # nvplay-bridge
 
-Anthropic Messages API–compatible bridge for **Kimi K3.1 Pro** running on the NVIDIA Build Playground, driven through a real Brave/Chromium page over CDP.
+Anthropic Messages API–compatible bridge for **Kimi K3.1 Pro** running on the NVIDIA Build Playground, driven through a real Brave window over CDP.
 
 > Unofficial project. Not affiliated with NVIDIA, Moonshot AI, or Anthropic.
 
@@ -23,13 +23,15 @@ nvplay-bridge/
 
 ## Requirements
 
-- Windows + PowerShell 7
+- Windows 11, Linux or macOS
+- PowerShell 7 (`pwsh`) on Linux and macOS
 - **Python 3.12** — the pinned `pydantic-core` build is CPython 3.12 only
   (`_pydantic_core.cp312-win_amd64.pyd`). A 3.13 interpreter fails at import
   time with `ImportError: cannot import name 'ArgsKwargs' from 'pydantic_core._pydantic_core'`.
 - Dependencies: `python -m pip install -r requirements.txt`
-- Brave or any Chromium with CDP enabled
-- A browser profile that has already passed the Playground hCaptcha once
+- Brave. The launcher detects an installed Brave and otherwise downloads the
+  official portable build for the current OS/architecture into `.brave/`
+- A Brave profile that has already passed the Playground hCaptcha once
 
 Throughout this README, `$REPO` is your checkout and `$PY` is a Python 3.12
 interpreter:
@@ -43,12 +45,13 @@ $PY   = "C:\path\to\python312\python.exe"
 ## Quick start
 
 ```powershell
-.\start-bridge.ps1
+.\start-bridge.ps1          # Windows
+pwsh ./start-bridge.ps1     # Linux / macOS
 ```
 
 All settings live in the config block at the top of the script: `$Proxy` (empty
 string = direct connection), `$Python`, `$CdpPort`, `$BridgePort`, `$PoolSize`,
-`$BravePath`, `$BrowserDir`.
+`$BravePath`, `$BraveDir`.
 
 What it does:
 
@@ -58,12 +61,16 @@ What it does:
    it is not exported to the bridge process
 3. reuses a browser already listening on the CDP port; otherwise finds an
    installed Brave, and if there is none, downloads the official portable build
-   for the current OS/architecture into `.browser/` and extracts it
+   for the current OS/architecture into `.brave/` and extracts it
 4. runs the bridge on `127.0.0.1:8083` in the foreground (`Ctrl+C` to stop)
 
-The first run on a machine without Brave downloads ~200–300 MB.
+The first run on a machine without Brave downloads ~200–300 MB into `.brave/`
+(git-ignored). Later runs reuse it.
 
 ## 1. Start Brave
+
+`start-bridge.ps1` does this for you (and picks the right profile directory for
+each OS). To run it by hand on Windows:
 
 ```powershell
 & "C:\path\to\brave.exe" `
