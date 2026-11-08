@@ -21,7 +21,7 @@ $profileDir = Join-Path ([IO.Path]::GetTempPath()) "brave-cdp"
 New-Item -ItemType Directory -Force (Join-Path $PSScriptRoot "logs") | Out-Null
 
 function Test-Cdp {
-    try { Invoke-RestMethod "http://127.0.0.1:$CdpPort/json/version" -TimeoutSec 2 | Out-Null; $true } catch { $false }
+    try { Invoke-RestMethod "http://127.0.0.1:$CdpPort/json/version" -TimeoutSec 2 -NoProxy | Out-Null; $true } catch { $false }
 }
 
 function Find-Brave {

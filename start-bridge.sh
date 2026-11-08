@@ -43,7 +43,7 @@ fetch() { if [ -n "$PROXY" ]; then curl -fsSL -x "$PROXY" "$@"; else curl -fsSL 
 
 download() { if [ -n "$PROXY" ]; then curl -fL -x "$PROXY" -o "$2" "$1"; else curl -fL -o "$2" "$1"; fi; }
 
-cdp_up() { curl -fsS --max-time 2 "http://127.0.0.1:$CDP_PORT/json/version" >/dev/null 2>&1; }
+cdp_up() { curl -fsS --max-time 2 --noproxy '*' "http://127.0.0.1:$CDP_PORT/json/version" >/dev/null 2>&1; }
 
 find_brave() {
     local c=() p
