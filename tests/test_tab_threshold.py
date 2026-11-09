@@ -15,17 +15,22 @@ BODY = {
     "stream_options": {"include_usage": True},
 }
 
-pool = BrowserPool(port=9225, size=1, base_url=DEFAULT_BASE_URL, prefix="ktest")
-try:
-    for i in (1, 2):
-        text = pool.generate(BODY, timeout=120)
-        print(f"request {i}: sse bytes={len(text)}")
-finally:
-    pool.close()
+def main() -> None:
+    pool = BrowserPool(port=9225, size=1, base_url=DEFAULT_BASE_URL, prefix="ktest")
+    try:
+        for i in (1, 2):
+            text = pool.generate(BODY, timeout=120)
+            print(f"request {i}: sse bytes={len(text)}")
+    finally:
+        pool.close()
 
-# 清理测试标签
-pages = [t for t in json.load(urllib.request.urlopen("http://127.0.0.1:9225/json/list")) if t.get("type") == "page"]
-for page in pages:
-    if "ktest=1" in (page.get("url") or ""):
-        urllib.request.urlopen(f"http://127.0.0.1:9225/json/close/{page['id']}")
-        print("closed", page.get("url"))
+    # 清理测试标签
+    pages = [t for t in json.load(urllib.request.urlopen("http://127.0.0.1:9225/json/list")) if t.get("type") == "page"]
+    for page in pages:
+        if "ktest=1" in (page.get("url") or ""):
+            urllib.request.urlopen(f"http://127.0.0.1:9225/json/close/{page['id']}")
+            print("closed", page.get("url"))
+
+
+if __name__ == "__main__":
+    main()

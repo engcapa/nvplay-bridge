@@ -48,6 +48,25 @@ Validation: the nine new CDP/error-boundary tests passed, as did all 129 tests
 in the explicit offline suite (request conversion, pool/recovery, HTTP delivery,
 Responses, retry policy, agent compatibility and HTTP error collection).
 
+An opt-in probe, `tests/probe_browser_http_errors.py`, also exercised the actual
+running Brave through CDP. Its isolated local page supplies HTTP 500 headers
+before two delayed error chunks, then a successful SSE response on retry.
+Both Messages and Responses completed with exactly two fixture requests and
+the expected success terminal event. This validates real browser reader timing
+without spending NVIDIA requests or touching production tabs.
+
+Two live scripts previously issued network requests at import time. An initial
+discovery attempt exposed that behavior and was stopped; its separate `ktest`
+page was closed. Both scripts now have explicit `main` entry points, so offline
+test discovery does not import a live workload. Standard discovery subsequently
+passed all 129 tests.
+
+The old monitor discarded a partially written JSON line, and did not recover
+from a shortened or replaced log. It now tails byte offsets while retaining
+incomplete records, reports pool states, and offers a snapshot with request IDs,
+ages, activity timestamps, counts, usage and recent errors. Three focused tests
+cover split UTF-8 writes, truncation/replacement and retry/failure tracking.
+
 ## Supervised implementation workload
 
 A separate CC session was started through the bridge, with no background agents,

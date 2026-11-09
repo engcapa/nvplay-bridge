@@ -1,9 +1,12 @@
-"""monitor_bridge.py — 实时监控 bridge debug 日志 90 秒。"""
+"""Follow bridge metadata, or print a snapshot of request activity."""
 
 from __future__ import annotations
 
+import argparse
+from collections import Counter
 import json
 import os
+from pathlib import Path
 import time
 import urllib.request
 
@@ -11,13 +14,79 @@ LOG = os.getenv("BROWSER_DEBUG_LOG") or os.path.join(
     os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "logs", "bridge-debug.jsonl"
 )
 HEALTH = "http://127.0.0.1:8083/health"
+LOCAL_HTTP = urllib.request.build_opener(urllib.request.ProxyHandler({}))
 
 
-def health() -> str:
+class LogTail:
+    """Track bytes and keep unfinished UTF-8/JSON lines until the next read."""
+
+    def __init__(self, path):
+        self.path = Path(path)
+        self.offset = 0
+        self.pending = b""
+        self.identity = None
+
+    def read(self):
+        try:
+            with self.path.open("rb") as source:
+                stat = os.fstat(source.fileno())
+                identity = (stat.st_dev, stat.st_ino)
+                if identity != self.identity or stat.st_size < self.offset:
+                    self.offset = 0
+                    self.pending = b""
+                self.identity = identity
+                source.seek(self.offset)
+                data = source.read()
+                self.offset = source.tell()
+        except FileNotFoundError:
+            return []
+        lines = (self.pending + data).split(b"\n")
+        self.pending = lines.pop()
+        records = []
+        for line in lines:
+            try:
+                record = json.loads(line)
+                if isinstance(record, dict):
+                    records.append(record)
+            except (ValueError, UnicodeDecodeError):
+                continue
+        return records
+
+
+def snapshot(records, now=None):
+    now = time.time() if now is None else now
+    active = {}
+    counts = Counter()
+    errors = []
+    for record in records:
+        kind = record.get("event", "?")
+        counts[kind] += 1
+        request_id = record.get("id")
+        if kind == "browser_start":
+            previous = active.get(request_id, {})
+            active[request_id] = {"id": request_id, "started": previous.get("started", record["ts"])}
+        if request_id in active:
+            request = active[request_id]
+            request.update(phase=kind, last_activity=record["ts"])
+            for key in ("attempt", "tab_id", "counts", "usage"):
+                if key in record:
+                    request[key] = record[key]
+        if kind in ("browser_done", "browser_error", "browser_cancelled"):
+            active.pop(request_id, None)
+        if kind in ("browser_error", "pool_recovery_error"):
+            errors.append(record)
+    for request in active.values():
+        request["age_seconds"] = round(now - request.pop("started"), 1)
+        request["activity_age_seconds"] = round(now - request.pop("last_activity"), 1)
+    return {"events": dict(counts), "active": list(active.values()), "recent_errors": errors[-10:]}
+
+
+def health(url=HEALTH) -> str:
     try:
-        with urllib.request.urlopen(HEALTH, timeout=3) as r:
+        with LOCAL_HTTP.open(url, timeout=3) as r:
             data = json.load(r)
-        return f"ok model={data.get('model')}"
+        tabs = Counter((data.get("browser_pool") or {}).get("tabs", {}).values())
+        return f"{data.get('status')} model={data.get('model')} tabs={dict(tabs)}"
     except Exception as exc:  # noqa: BLE001
         return f"DOWN {exc}"
 
@@ -43,32 +112,36 @@ def fmt(e: dict) -> str:
 
 
 def main() -> int:
-    pos = os.path.getsize(LOG)
-    print("start size", pos, "health", health(), flush=True)
-    start = time.time()
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--log", default=LOG)
+    parser.add_argument("--health-url", default=HEALTH)
+    parser.add_argument("--duration", type=float, default=90, help="Seconds; 0 follows until interrupted")
+    parser.add_argument("--interval", type=float, default=5)
+    parser.add_argument("--lookback", type=float, default=3600, help="Snapshot history window in seconds")
+    parser.add_argument("--snapshot", action="store_true")
+    args = parser.parse_args()
+    if args.duration < 0 or args.interval <= 0 or args.lookback < 0:
+        parser.error("duration/lookback must be nonnegative and interval must be positive")
+    tail = LogTail(args.log)
+    records = tail.read()
+    if args.snapshot:
+        recent = (record for record in records if record.get("ts", 0) >= time.time() - args.lookback)
+        print(json.dumps({"health": health(args.health_url), **snapshot(recent)}, ensure_ascii=False))
+        return 0
+    print("start size", tail.offset, "health", health(args.health_url), flush=True)
+    start = time.monotonic()
     counts: dict[str, int] = {}
     last_health = 0
-    while time.time() - start < 90:
-        time.sleep(5)
-        size = os.path.getsize(LOG)
-        if size > pos:
-            with open(LOG, encoding="utf-8") as f:
-                f.seek(pos)
-                for line in f:
-                    line = line.strip()
-                    if not line:
-                        continue
-                    try:
-                        e = json.loads(line)
-                    except json.JSONDecodeError:
-                        continue
-                    kind = e.get("event", "?")
-                    counts[kind] = counts.get(kind, 0) + 1
-                    print(fmt(e), flush=True)
-            pos = size
-        if time.time() - start - last_health > 15:
-            last_health = time.time() - start
-            print("health:", health(), flush=True)
+    while args.duration == 0 or time.monotonic() - start < args.duration:
+        remaining = max(0, args.duration - (time.monotonic() - start)) if args.duration else args.interval
+        time.sleep(min(args.interval, remaining))
+        for e in tail.read():
+            kind = e.get("event", "?")
+            counts[kind] = counts.get(kind, 0) + 1
+            print(fmt(e), flush=True)
+        if time.monotonic() - start - last_health > 15:
+            last_health = time.monotonic() - start
+            print("health:", health(args.health_url), flush=True)
     print("summary:", counts, flush=True)
     return 0
 

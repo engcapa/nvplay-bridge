@@ -259,7 +259,26 @@ $env:PYTHONPATH = $REPO     # add ";$REPO\vendor" only if you have an offline bu
 & $PY tests\test_upstream_retry.py
 & $PY tests\test_agent_compatibility.py
 & $PY tests\test_browser_http_errors.py
+& $PY tests\test_monitor_bridge.py
 ```
+
+The offline suite can also be discovered with
+`PYTHONPATH=. python3 -m unittest discover -s tests -p 'test_*.py'`.
+Live regression scripts send requests only when executed directly.
+
+For a deterministic check against a running Brave/CDP instance, run
+`PYTHONPATH=. python3 tests/probe_browser_http_errors.py --cdp-port 9225`.
+It opens an isolated local fixture page, verifies delayed/split HTTP error
+collection and retry through Messages and Responses, then closes that page.
+It sends no NVIDIA inference requests and does not use the production pool tabs.
+
+`python3 tools/monitor_bridge.py --snapshot` reports recent active requests,
+their age and last activity, token usage, terminal errors and pool health.
+Use `--lookback 1800` to limit history, `--log PATH` for another metadata log,
+or `--health-url http://127.0.0.1:8084/health` for another service instance.
+The default follows new events for 90 seconds; `--duration 0` follows until
+interrupted. The reader retains incomplete UTF-8/JSON lines and handles file
+replacement or observed truncation without advancing past a partial record.
 
 Live regression (needs Brave/CDP and a running bridge):
 

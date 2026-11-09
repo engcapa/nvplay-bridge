@@ -39,37 +39,42 @@ def summarize(resp: dict) -> str:
     return f"stop={resp.get('stop_reason')} blocks={kinds}"
 
 
-first = post([{"role": "user", "content": "Use get_weather to check San Francisco."}])
-print("first:", summarize(first))
-tool = next((b for b in first.get("content") or [] if b.get("type") == "tool_use"), None)
-if not tool:
-    raise SystemExit("model did not call tool")
+def main() -> None:
+    first = post([{"role": "user", "content": "Use get_weather to check San Francisco."}])
+    print("first:", summarize(first))
+    tool = next((b for b in first.get("content") or [] if b.get("type") == "tool_use"), None)
+    if not tool:
+        raise SystemExit("model did not call tool")
 
-base_messages = [
-    {"role": "user", "content": "Use get_weather to check San Francisco."},
-]
-tool_result = [
-    {
-        "type": "tool_result",
-        "tool_use_id": tool["id"],
-        "content": "Sunny, 18C in San Francisco.",
-    }
-]
+    base_messages = [
+        {"role": "user", "content": "Use get_weather to check San Francisco."},
+    ]
+    tool_result = [
+        {
+            "type": "tool_result",
+            "tool_use_id": tool["id"],
+            "content": "Sunny, 18C in San Francisco.",
+        }
+    ]
 
-with_thinking = base_messages + [
-    {
-        "role": "assistant",
-        "content": [
-            {"type": "thinking", "thinking": "I should call get_weather for SF."},
-            tool,
-        ],
-    },
-    {"role": "user", "content": tool_result},
-]
-without_thinking = base_messages + [
-    {"role": "assistant", "content": [tool]},
-    {"role": "user", "content": tool_result},
-]
+    with_thinking = base_messages + [
+        {
+            "role": "assistant",
+            "content": [
+                {"type": "thinking", "thinking": "I should call get_weather for SF."},
+                tool,
+            ],
+        },
+        {"role": "user", "content": tool_result},
+    ]
+    without_thinking = base_messages + [
+        {"role": "assistant", "content": [tool]},
+        {"role": "user", "content": tool_result},
+    ]
 
-print("with thinking:", summarize(post(with_thinking)))
-print("without thinking:", summarize(post(without_thinking)))
+    print("with thinking:", summarize(post(with_thinking)))
+    print("without thinking:", summarize(post(without_thinking)))
+
+
+if __name__ == "__main__":
+    main()
