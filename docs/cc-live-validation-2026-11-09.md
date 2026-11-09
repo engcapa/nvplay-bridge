@@ -1,4 +1,4 @@
-# Claude Code live investigation, 2026-11-09
+# Claude Code live investigation, 2026-11-09–10
 
 All observation times below are Asia/Shanghai (UTC+08:00). Raw runtime evidence
 is kept locally in ignored `logs/`; it is not a portable test fixture.
@@ -113,23 +113,43 @@ The reinstall was stopped and the frozen dependency tree restored offline with
 Node 22/pnpm 10 in 3.7 seconds. The lockfile was unchanged. That setup failure is
 kept separately from the actual pre-fix race and post-fix test results.
 
-Product commit, final independent review and hosted execution receipts remain
-pending at this point in the investigation.
+The implementation was committed as
+`591ce56ff55fa24794c392aaa18047c4e6766997` on that new branch and subsequently
+pushed by CC. Its 13 changed files include the product changes, focused tests,
+case, policy/dependency registrations, translations and generated control catalog.
+The final case bytes match the independently executed copy (SHA-256
+`f2ba370b547317b568b3fc5574aeb589d1a6410084db43202a7384fd7f62ff4f`).
+
+CC's final focused run passed all 11 store/component tests. TypeScript,
+`check:refactor`, the regenerated catalog, QA audit and the post-commit development
+case contract passed. The reviewer independently checked the contract and the
+24 retained Notes tests. An initial isolated-Python catalog command failed
+because `-I` ignores `PYTHONPATH`; that setup failure was corrected before the
+final successful audit.
+
+An actual independent Linux browser run passed all 61 steps of `TC-NOTES-014`
+and all three verification requirements. It used the existing Brave 157
+executable through a local wrapper, recorded that executable's identity, and
+did not change the repository runner. The receipt and final screenshot show an
+empty focused search, the exact pinned/tag-filtered note and the retained dirty
+draft. The explicit executable choice is supplementary browser evidence, not
+evidence for hosted Chromium or native WebViews. Synthetic IME guards do not
+certify physical OS composition or native menu/key delivery.
 
 ## Further live evidence and HTTP recovery
 
 A real CC smoke session through the patched service called Bash and Read and
 returned the independently checked SHA-256 and README title. It completed three
-turns in approximately 133 seconds. The service on port 8084 uses a separate
-`kcanary` pool namespace; the original service and its active sessions remain
-on port 8083 with `kpool` tabs.
+turns in approximately 133 seconds. The service on port 8084 used a separate
+`kcanary` pool namespace while the original service and its active sessions
+remained on port 8083 with `kpool` tabs.
 
 A deliberate interrupt of the supervised implementation session at 23:27:11
 produced a confirmed browser abort and `browser_cancelled` within approximately
 55 milliseconds. The same CC session then resumed through the patched service.
 Repeated analysis of a small test led to a later, fresh focused session with
-medium effort and a smaller context. That session inherits the implementation
-branch and test changes, not concurrent ownership of the product files.
+medium effort and a smaller context. That session inherited the implementation
+branch and test changes with exclusive ownership of the product files.
 
 At 23:46:34 the patched service recorded an HTTP 500 with no error body within
 the five-second collection window. CC automatically retried the same history
@@ -153,7 +173,7 @@ end explicitly; the underlying provider/network cause remains unestablished.
 At 00:20:15 on November 10, the canary service on port 8084 was gracefully
 restarted at an idle API boundary and loaded `2c2674dc6e2e8ae294eb250a1b92e0f0a76222c1`.
 The supervised CC client then continued issuing successful requests. Its single
-`kcanary` tab is independent of the original five `kpool` tabs.
+`kcanary` tab was independent of the original five `kpool` tabs.
 
 The original background-agent transcripts record interruption at 23:53:46.
 The original main session continued receiving data. One later max-effort request
@@ -162,5 +182,221 @@ spent 713 seconds producing reasoning before returning three Read calls with
 These observations distinguish slow model work from a transport deadlock. The
 main session completed its full architecture report at 00:28:59 on November 10.
 It explicitly distinguished static findings and historical QA records from
-tests executed in that session. Port 8083 was then observed idle with all five
-tabs ready; its service replacement is the next operational step.
+tests executed in that session.
+
+A later independent spot review confirmed the report's concrete storage-startup
+`expect` paths, release finalizer dependencies, retained terminal/SFTP mounting,
+application version and dual tracked lockfiles. The original 713 recursive
+case-file count is consistent with 714 after adding `TC-NOTES-014`. The startup
+fault-isolation and retained-runtime observations remain static risks, not
+reproduced database corruption or resource leaks. A release workflow's lack of
+direct QA dependencies also does not establish the absence of external release
+policies. The full source-line and IPC-command counts were not independently
+recomputed. No broad product changes were made from these unproven risks.
+
+## Production replacement and real recovery
+
+At 00:35:37 on November 10, after observing the original service idle with all
+five tabs ready, the service on port 8083 was gracefully replaced. PID 26861 was
+replaced by PID 161859, loading bridge commit
+`bac48c184e2ed5f75220a76666b7db66811284c3`. The original environment, uvicorn
+arguments, CDP 9225 and five `kpool` tabs were preserved. The manual CC client
+was held briefly at the idle boundary and resumed; no in-flight request was
+terminated by the replacement.
+
+A fresh CC smoke session through the replaced production service invoked Bash
+once to hash `tools/monitor_bridge.py`, returned the independently checked digest
+and `BRIDGE_MAIN_OK`, and completed two turns in 12.7 seconds with exit code 0.
+The supervised implementation session also finished successfully with exit 0.
+
+The first request of the subsequent CC workflow session, `c25fb817`, provided
+real upstream retry evidence. Its first two attempts received HTTP 500 with
+complete 330-character NVIDIA `Pool#acquire` error bodies after approximately
+49 seconds each. The bridge classified both as pool-acquire timeouts, confirmed
+the browser aborts, released the failed tabs and waited 5.712 and 10.290 seconds.
+The third attempt used another healthy tab and completed at 142.795 seconds
+with one tool invocation. No thinking, text or tool content had been delivered
+by the failed attempts. The client session continued without an API error and
+executed the requested Git operations. This is an actual NVIDIA recovery through
+the production service, in addition to the controlled four-case CDP fixture.
+
+At 01:06:11, a later request in that workflow session, `52bf8541`, again
+encountered `TypeError: network error` while reading the upstream stream. It
+had delivered 8117 thinking characters and 85 text characters over 81.071
+seconds. The bridge logged `committed=true`, emitted an explicit error and
+recovered its failed tab; it did not enter either HTTP retry policy. CC then
+continued on the queued next instruction, and request `93aa1eb8` completed with
+a tool call in 74.687 seconds. This recurrence shows the limit of the repair:
+pre-content HTTP failures can recover inside the bridge, while already-delivered
+network failures still require client continuation. The underlying reader/network
+failure remains unestablished.
+
+A supervisor settings copy initially retained an explicit
+`CLAUDE_CODE_EXTRA_BODY` effort of `medium` despite its `low` CLI argument and
+filename. Request logs confirmed that explicit body value was preserved; this
+was a harness configuration mistake, not a bridge override. After correcting
+only the ignored supervisor settings, a fresh short CC session completed a real
+Bash branch/head check and final answer in two turns and 24.0 seconds. Both API
+requests used actual `low` effort and returned the correct clean branch and
+full reviewed commit. This ran alongside the older session's ongoing medium
+request, using separate production pool tabs without mixed tool results. It is
+concurrency/control evidence, not a matched effort-performance benchmark.
+
+## Hosted execution
+
+CC pushed `feat/cc-bridge-notes-search-20261109` and dispatched
+[run 42659287606](https://github.com/engcapa/taomni/actions/runs/42659287606)
+at 00:53:35 on November 10. The run's full head is the reviewed product commit
+`591ce56ff55fa24794c392aaa18047c4e6766997`, not a historical result.
+
+Inputs select `TC-NOTES-012`, `TC-NOTES-013`, `TC-NOTES-014` and the complete
+`crash-regression` tag across Linux, Windows and macOS in browser/native modes,
+with `native_release=true`, the default RDP unit contracts enabled and issue
+publication disabled. The plan job passed. Independent comparison of the
+downloaded `selection.json` against locally calculated expected sets found no
+missing or extra cases in any of the six logical groups: 12 browser and 13
+native per OS, 75 execution units in total. Each native group has four shards
+sharing one release build. The selected native contract capability is `mobile`;
+this case set does not select RDP contracts, even though their dispatch switch
+remains enabled. By 02:07 on November 10, the actual workflow had completed
+successfully, including all execution groups and final aggregation. The results
+below are independently checked execution evidence.
+
+The independent native contract job's execution passed: 129 related
+frontend/mobile tests and 97 selected Rust tests under the release profile,
+with zero failures. The Rust root test binary reported 1981 other tests filtered
+out; this is capability-selected contract evidence, not a full Cargo test pass.
+
+The successful Linux native producer also ran the full Vitest suite:
+703 test files passed, with 6404 tests passed and one skipped. The skip belongs
+to TerminalPanel's existing mutually exclusive text-mirror variants; neither
+that case nor its condition changed here. The six workspace-store and five
+search-component tests all passed. The native producer exported its release
+runtime, subsequently used by all four Linux native execution shards.
+
+All three hosted browser jobs have completed successfully. Independent raw
+report checks found 12/12 cases passed per OS, with no skips. `TC-NOTES-014`
+passed all 61 steps and requirements R1/R2/R3 on each. Source and runner
+identities match the manifest; all case digests match; outcomes bind the exact
+head, run, attempt and selection digest. Runner receipts verify and bind the
+summary and artifact hashes, including Windows paths normalized only by the
+reviewer's reader. All three final screenshots were inspected: the empty search
+retains focus, the intended filtered note is selected and the dirty draft is
+present. These final screenshots do not show the nonempty clear button and
+therefore do not establish its decoration spacing across native WebViews.
+
+All four Linux native shards subsequently completed and passed independent
+raw-report checks: 13/13 cases, no skips. The new case passed 61/61 steps and
+R1/R2/R3 in the actual packaged WebView. The app identifier is
+`com.taomni.app.qa`; isolated data/config/cache paths are recorded. The release
+binary hash is
+`e87433534eca3f331dcc5351fab712964c36293d18d5052311a6295820343894`, identical
+across all four shards and their build/summary identities. The Ubuntu 22.04
+producer's runtime ran on the selected Ubuntu 24.04 Xvfb/Openbox desktop with
+readiness and the expected desktop metadata verified. The final native
+screenshot was independently inspected and agrees with the retained draft,
+filtered note and search focus assertions.
+
+All four macOS native shards also passed raw-report checks: 13/13 cases, no
+skips, and 61/61 steps plus R1/R2/R3 for the new case. The ARM64 release build
+hash is `04f46a4cc2ae26338791c7d1c13e2f8540adb8d451220b9c5a43b8b56749e5be`,
+shared by all four shards and bound to the same reviewed source. The final
+native screenshot was inspected. This is hosted native WKWebView/IPC evidence;
+it does not certify physical OS IME, global shortcut or menu-bar input delivery.
+
+All four Windows native shards passed the same raw-report checks: 13/13 cases,
+no skips. The release binary hash is
+`247ad81e303914e7a42c328afc71e1321047ccdf3efda46fe26db9303cb16dbe`, shared by
+all four shards and matching their build/summary identities. The isolated QA app
+ran with the Windows WebView2 adapter. The new case passed all 61 steps and
+R1/R2/R3; its final screenshot was independently inspected and shows the focused
+empty search, retained filters, selected note and unsaved draft.
+
+| Hosted OS | Browser | Native release | TC-NOTES-014 in each mode |
+| --- | ---: | ---: | --- |
+| Linux | 12/12 | 13/13 | 61/61 steps; R1/R2/R3 passed |
+| Windows | 12/12 | 13/13 | 61/61 steps; R1/R2/R3 passed |
+| macOS | 12/12 | 13/13 | 61/61 steps; R1/R2/R3 passed |
+
+The 15 raw execution entries contain 75/75 passing units, with zero failed or
+skipped UI cases: 18 Notes units and all 57 applicable crash-regression units.
+This is the selected Notes/crash set, not all 714 repository case files.
+The independent reader verified every receipt-listed artifact's actual SHA-256
+and required all selected case digests, outcomes and native release identities
+to match. It found no missing entries or errors.
+
+Recomputing `qa_ui_auto.ci.aggregate` from those 15 raw report directories
+produced exactly the downloaded `ci-summary.json`, excluding only the latter's
+additional `job_results` field. The downloaded final selection also equals the
+original plan. Both `passed` and `report_ok` are true; `failures`,
+`infrastructure_errors`, `gaps` and `unreviewed` are empty. All selected producers,
+execution groups and mobile contracts report success. Tool/SFTP/development
+contract jobs outside the dispatch selection were skipped; the development
+contract had already passed independently against the product commit.
+
+The canonical selection digest is
+`882cebc91e09309d4d1f9fe7a5c3b2362bb3a50d3151f64ffb576dc54cdf307b`.
+The source fingerprint is
+`2deda7807ab6e064916be68f9760596e962c04c44e1bfe2876eafb3b12124420`,
+and the runner fingerprint is
+`50b8b5a550a9d7c082ab5d55b4651f5998e7828ffe3dbf8809876e380a0d128d`.
+All six logical groups bind the same full reviewed head, run 42659287606 and
+attempt 1. The canonical selection digest is intentionally distinct from a
+raw selection-file byte hash.
+
+The final CC session reran the reviewed raw-report checker, independently
+extracted all four Windows build identities and queried the actual GitHub run.
+Its final conclusion agrees with the independent checks: 75/75, no pending
+entries/errors and `completed/success` at the exact reviewed head. One generated
+extraction command incorrectly treated per-group `selected`/`counts` as top-level
+aggregate fields and raised `KeyError`; corrected commands completed before
+acceptance. Earlier ad hoc commands also confused a path argument and the
+canonical versus byte-file digest. These were verification-script mistakes,
+not passing evidence or bridge transport failures. The final review finished
+at 02:12:33, and its supervisor-owned CC process exited normally with code 0
+after stdin closed.
+
+Receipt verification here establishes consistency with the repository's current
+receipt format, not an unforgeable attestation boundary. Independent inspection
+of `runner_receipt.py` found public default key records and a 32-bit FNV-derived
+repeated checksum in `compute_receipt_signature`, despite its cryptographic
+docstrings. Those checks alone cannot prove execution against a malicious report
+author. This investigation also checks the actual GitHub job execution, exact
+tested commit, original artifacts, SHA-256 bindings and case outcomes. Replacing
+the product's receipt protocol was outside this Notes/bridge change.
+
+## Bridge commits and remaining limits
+
+The four bridge code/test commits were made directly on `main`, as requested:
+
+| Commit | Change |
+| --- | --- |
+| `dba70af` | Preserve bounded delayed HTTP error bodies and count distinct tool calls. |
+| `30987a2` | Isolate opt-in live probes and retain partial/replaced monitoring logs. |
+| `2c2674d` | Retry confirmed pre-content HTTP server errors without replaying delivered content. |
+| `bac48c1` | Keep old active requests visible outside the monitor's event window. |
+
+All 139 offline tests and the four real-Brave/CDP fixture scenarios passed before
+the final documentation update. No further product or bridge source changes
+were made after their respective checks. The taomni branch is pushed; these
+bridge commits remain local on `main`.
+
+At the final 02:13:16 snapshot, the updated production process had handled 58
+logical browser requests: 57 normal finishes and the one committed-stream
+reader failure described above. Two internal HTTP retries produced 60 upstream
+attempts in total; there were no cancellations, active requests or pool-recovery
+errors in this post-replacement interval. This is a workload observation, not a
+statistical reliability estimate. The service remained healthy with all five
+production tabs ready.
+
+Supervisor-owned implementation/workflow/final-review clients, the temporary
+canary service and page, the local Vite server and the hosted monitor have
+finished or been stopped. Production port 8083, Brave/CDP 9225 and the original
+manual CC process remain running. Raw transcripts, settings, logs and downloaded
+artifacts remain ignored local evidence and are excluded from the commits.
+
+The remaining observed transport limitation is the midstream reader failure,
+whose underlying cause is still unknown. Physical OS IME and global/menu input
+delivery, nonempty clear-button decoration spacing, the receipt protocol's trust
+boundary and unselected product capabilities remain outside the verified scope.
+The six successful UI combinations do not establish those claims.
