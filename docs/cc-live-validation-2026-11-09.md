@@ -1,402 +1,316 @@
-# Claude Code live investigation, 2026-11-09–10
+# Claude Code 桥接服务实测报告（2026-11-09 至 2026-11-10）
 
-All observation times below are Asia/Shanghai (UTC+08:00). Raw runtime evidence
-is kept locally in ignored `logs/`; it is not a portable test fixture.
+本报告记录通过 `nvplay-bridge` 使用 Claude Code（下文简称 CC）分析、修改和验证 taomni 的全过程。实测时间为 2026 年 11 月 9 日晚至 11 月 10 日凌晨，所有时间均为北京时间（Asia/Shanghai，UTC+08:00），最终统计截止于 11 月 10 日 02:13:16。
 
-## Initial incident
+本次中文整理依据已保存的日志和原始测试产物完成，没有重新执行测试。下文的进程、标签和服务状态均对应实测时的快照。原始日志、会话、设置和下载产物保存在本地被 Git 忽略的 `logs/` 中，没有随报告提交，也不属于可移植的测试夹具。
 
-The running service was launched by `start-bridge.sh`, listening on port 8083
-and using five Brave tabs on CDP port 9225. Claude Code 2.1.319 was analysing
-`/home/zhyhang/code/person/taomni`, with two background analysis agents.
+## 一、实测结论
 
-- At 22:57:01, browser requests `cfea693e` and `ff544a86` failed with
-  `upstream 500: None`. Neither had delivered upstream content.
-- At 23:02:24–25, requests `929e8ff1`, `0a95872f` and `8ea44fc7` failed with
-  `TypeError: network error`. All three had delivered content earlier.
-  The main CC transcript recorded “Server error mid-response” at 23:02:24.891.
-- The user resumed the main session at 23:03:13. Later transcript timestamps,
-  increasing completion-token counts and subsequent tool results confirmed
-  continued work by the main session and both background agents.
+本轮完成了原手工 CC 会话跟进、taomni 缺陷修复及新功能开发、独立代码审查、三平台 browser/native 执行，以及桥接服务修复和实际部署。
 
-The simultaneous network failures are observed upstream reader failures; their
-underlying network/provider cause is not established. Replaying already
-delivered thinking, text or tools would violate stream semantics, so that policy
-remains an explicit failure followed by client continuation.
-
-## Confirmed bridge defects and fixes
-
-`fetch()` makes a response status available before the cloned body's reader
-necessarily produces data. The CDP loop previously raised immediately on a
-non-200 status and aborted the reader. An error header followed by delayed body
-chunks therefore became `500: None`, losing both diagnostics and the detail
-required by the existing narrowly scoped NVIDIA pool-timeout retry policy.
-
-`tests/test_browser_http_errors.py` first reproduced the lost body against the
-old implementation. The fix collects at most 8192 characters for at most five
-seconds, respecting cancellation and the existing total request deadline.
-Collection never emits an HTTP error body as successful model output. The
-bounded message survives the thread/async boundary so a pool-timeout marker
-after a long prefix can still be classified. Other HTTP failures retain their
-status; missing, oversized, stalled and failed bodies are explicit.
-
-The diagnostic `tool_calls` counter also counted each streamed argument fragment
-as a separate invocation. It now counts distinct upstream invocation indexes.
-Failure metadata includes status, delivered-content state, counts and usage,
-which helps distinguish pre-content retries from mid-response failures.
-
-Validation: the nine new CDP/error-boundary tests passed, as did all 129 tests
-in the explicit offline suite (request conversion, pool/recovery, HTTP delivery,
-Responses, retry policy, agent compatibility and HTTP error collection).
-
-An opt-in probe, `tests/probe_browser_http_errors.py`, also exercised the actual
-running Brave through CDP. Its isolated local page supplies HTTP 500 headers
-before two delayed error chunks, then a successful SSE response on retry.
-Both Messages and Responses completed with exactly two fixture requests and
-the expected success terminal event. This validates real browser reader timing
-without spending NVIDIA requests or touching production tabs.
-
-Two live scripts previously issued network requests at import time. An initial
-discovery attempt exposed that behavior and was stopped; its separate `ktest`
-page was closed. Both scripts now have explicit `main` entry points, so offline
-test discovery does not import a live workload. Standard discovery subsequently
-passed all 129 tests.
-
-The old monitor discarded a partially written JSON line, and did not recover
-from a shortened or replaced log. It now tails byte offsets while retaining
-incomplete records, reports pool states, and offers a snapshot with request IDs,
-ages, activity timestamps, counts, usage and recent errors. Three focused tests
-cover split UTF-8 writes, truncation/replacement and retry/failure tracking.
-
-Long-running live work exposed another snapshot defect: filtering log records
-before reconstructing requests dropped a still-active request when its start
-preceded `--lookback`. A real 60-second snapshot showed a busy pool and an empty
-active list. Snapshots now replay the complete available log for lifetimes and
-apply the window only to event counts and recent errors. A focused regression
-covers both ongoing progress and a silent old request, without resurrecting
-completed requests or old errors.
-
-## Supervised implementation workload
-
-A separate CC session was started through the bridge, with no background agents,
-to implement Notes workspace search clearing and investigate one reproducible
-Notes bug. It uses branch `feat/cc-bridge-notes-search-20261109` in taomni.
-
-The selected defect is out-of-order persistence of Notes workspace status
-filters. The native setter is asynchronous; its database mutex serializes
-access but does not guarantee the order in which separate IPC invocations
-acquire it. An independent regression run against the original implementation
-failed: an older delayed write persisted `all` after the UI selected `completed`.
-The same race passes with CC's per-store Promise queue. The queue continues
-after rejection and suppresses errors from obsolete filter revisions. Six
-focused store tests and five mounted search tests passed in CC's run; a separate
-Node 22/pnpm 10 run passed 24 retained content/task/workspace tests.
-
-The feature adds a localized clear button and Escape handling to Notes search,
-retaining focus, filters and the active draft. The reviewer required actual
-Escape events for both IME guards, observable parent bubbling for empty searches,
-and a controlled test harness that really updates the input and calls its spy.
-Early test drafts lacked those checks; their intermediate results are not used
-as acceptance evidence.
-
-Review also caught a browser-specific CSS defect in CC's initial implementation:
-grouping `::-webkit-search-cancel-button` and `::-ms-clear` in one selector list
-caused Brave to discard the entire rule. An isolated real-CDP page returned zero
-CSSOM rules for that list, and retained the WebKit rule when they were split.
-CC applied the split. The new `TC-NOTES-014` case also initially combined the
-default status with Pinned while expecting Pinned alone, and its verification
-step references were misnumbered. Those were returned for correction before
-hosted execution; a reviewed plan is not an executed pass.
-
-One independent command accidentally used the system pnpm version, triggering a
-dependency reinstall and a subsequent `vitest not found` setup failure in CC.
-The reinstall was stopped and the frozen dependency tree restored offline with
-Node 22/pnpm 10 in 3.7 seconds. The lockfile was unchanged. That setup failure is
-kept separately from the actual pre-fix race and post-fix test results.
-
-The implementation was committed as
-`591ce56ff55fa24794c392aaa18047c4e6766997` on that new branch and subsequently
-pushed by CC. Its 13 changed files include the product changes, focused tests,
-case, policy/dependency registrations, translations and generated control catalog.
-The final case bytes match the independently executed copy (SHA-256
-`f2ba370b547317b568b3fc5574aeb589d1a6410084db43202a7384fd7f62ff4f`).
-
-CC's final focused run passed all 11 store/component tests. TypeScript,
-`check:refactor`, the regenerated catalog, QA audit and the post-commit development
-case contract passed. The reviewer independently checked the contract and the
-24 retained Notes tests. An initial isolated-Python catalog command failed
-because `-I` ignores `PYTHONPATH`; that setup failure was corrected before the
-final successful audit.
-
-An actual independent Linux browser run passed all 61 steps of `TC-NOTES-014`
-and all three verification requirements. It used the existing Brave 157
-executable through a local wrapper, recorded that executable's identity, and
-did not change the repository runner. The receipt and final screenshot show an
-empty focused search, the exact pinned/tag-filtered note and the retained dirty
-draft. The explicit executable choice is supplementary browser evidence, not
-evidence for hosted Chromium or native WebViews. Synthetic IME guards do not
-certify physical OS composition or native menu/key delivery.
-
-## Further live evidence and HTTP recovery
-
-A real CC smoke session through the patched service called Bash and Read and
-returned the independently checked SHA-256 and README title. It completed three
-turns in approximately 133 seconds. The service on port 8084 used a separate
-`kcanary` pool namespace while the original service and its active sessions
-remained on port 8083 with `kpool` tabs.
-
-A deliberate interrupt of the supervised implementation session at 23:27:11
-produced a confirmed browser abort and `browser_cancelled` within approximately
-55 milliseconds. The same CC session then resumed through the patched service.
-Repeated analysis of a small test led to a later, fresh focused session with
-medium effort and a smaller context. That session inherited the implementation
-branch and test changes with exclusive ownership of the product files.
-
-At 23:46:34 the patched service recorded an HTTP 500 with no error body within
-the five-second collection window. CC automatically retried the same history
-as a non-streaming request. This establishes a remaining pre-content recovery
-case even when the NVIDIA-specific pool marker is unavailable.
-
-The bridge now additionally retries confirmed HTTP 500/502/503/504 once before
-content delivery. The default backoff is 2–2.4 seconds; it retains the same SSE
-connection, payload and total deadline. HTTP provenance is carried separately
-from normalized API error status, preventing a failed fetch or HTTP-200 error
-event from being mistaken for a received HTTP 5xx response. The specific pool
-timeout policy keeps its separate budget and priority.
-
-All 138 offline tests passed before the subsequent monitor correction; the full
-offline discovery then passed all 139 tests, including that regression. The
-real-CDP fixture covers both specific pool and
-generic server failures through both API protocols: four cases, two fixture
-requests each, all successful. Network failures after delivered content still
-end explicitly; the underlying provider/network cause remains unestablished.
-
-At 00:20:15 on November 10, the canary service on port 8084 was gracefully
-restarted at an idle API boundary and loaded `2c2674dc6e2e8ae294eb250a1b92e0f0a76222c1`.
-The supervised CC client then continued issuing successful requests. Its single
-`kcanary` tab was independent of the original five `kpool` tabs.
-
-The original background-agent transcripts record interruption at 23:53:46.
-The original main session continued receiving data. One later max-effort request
-spent 713 seconds producing reasoning before returning three Read calls with
-`tool_calls` as its finish reason. The following prompt contained 192,558 tokens.
-These observations distinguish slow model work from a transport deadlock. The
-main session completed its full architecture report at 00:28:59 on November 10.
-It explicitly distinguished static findings and historical QA records from
-tests executed in that session.
-
-A later independent spot review confirmed the report's concrete storage-startup
-`expect` paths, release finalizer dependencies, retained terminal/SFTP mounting,
-application version and dual tracked lockfiles. The original 713 recursive
-case-file count is consistent with 714 after adding `TC-NOTES-014`. The startup
-fault-isolation and retained-runtime observations remain static risks, not
-reproduced database corruption or resource leaks. A release workflow's lack of
-direct QA dependencies also does not establish the absence of external release
-policies. The full source-line and IPC-command counts were not independently
-recomputed. No broad product changes were made from these unproven risks.
-
-## Production replacement and real recovery
-
-At 00:35:37 on November 10, after observing the original service idle with all
-five tabs ready, the service on port 8083 was gracefully replaced. PID 26861 was
-replaced by PID 161859, loading bridge commit
-`bac48c184e2ed5f75220a76666b7db66811284c3`. The original environment, uvicorn
-arguments, CDP 9225 and five `kpool` tabs were preserved. The manual CC client
-was held briefly at the idle boundary and resumed; no in-flight request was
-terminated by the replacement.
-
-A fresh CC smoke session through the replaced production service invoked Bash
-once to hash `tools/monitor_bridge.py`, returned the independently checked digest
-and `BRIDGE_MAIN_OK`, and completed two turns in 12.7 seconds with exit code 0.
-The supervised implementation session also finished successfully with exit 0.
-
-The first request of the subsequent CC workflow session, `c25fb817`, provided
-real upstream retry evidence. Its first two attempts received HTTP 500 with
-complete 330-character NVIDIA `Pool#acquire` error bodies after approximately
-49 seconds each. The bridge classified both as pool-acquire timeouts, confirmed
-the browser aborts, released the failed tabs and waited 5.712 and 10.290 seconds.
-The third attempt used another healthy tab and completed at 142.795 seconds
-with one tool invocation. No thinking, text or tool content had been delivered
-by the failed attempts. The client session continued without an API error and
-executed the requested Git operations. This is an actual NVIDIA recovery through
-the production service, in addition to the controlled four-case CDP fixture.
-
-At 01:06:11, a later request in that workflow session, `52bf8541`, again
-encountered `TypeError: network error` while reading the upstream stream. It
-had delivered 8117 thinking characters and 85 text characters over 81.071
-seconds. The bridge logged `committed=true`, emitted an explicit error and
-recovered its failed tab; it did not enter either HTTP retry policy. CC then
-continued on the queued next instruction, and request `93aa1eb8` completed with
-a tool call in 74.687 seconds. This recurrence shows the limit of the repair:
-pre-content HTTP failures can recover inside the bridge, while already-delivered
-network failures still require client continuation. The underlying reader/network
-failure remains unestablished.
-
-A supervisor settings copy initially retained an explicit
-`CLAUDE_CODE_EXTRA_BODY` effort of `medium` despite its `low` CLI argument and
-filename. Request logs confirmed that explicit body value was preserved; this
-was a harness configuration mistake, not a bridge override. After correcting
-only the ignored supervisor settings, a fresh short CC session completed a real
-Bash branch/head check and final answer in two turns and 24.0 seconds. Both API
-requests used actual `low` effort and returned the correct clean branch and
-full reviewed commit. This ran alongside the older session's ongoing medium
-request, using separate production pool tabs without mixed tool results. It is
-concurrency/control evidence, not a matched effort-performance benchmark.
-
-## Hosted execution
-
-CC pushed `feat/cc-bridge-notes-search-20261109` and dispatched
-[run 42659287606](https://github.com/engcapa/taomni/actions/runs/42659287606)
-at 00:53:35 on November 10. The run's full head is the reviewed product commit
-`591ce56ff55fa24794c392aaa18047c4e6766997`, not a historical result.
-
-Inputs select `TC-NOTES-012`, `TC-NOTES-013`, `TC-NOTES-014` and the complete
-`crash-regression` tag across Linux, Windows and macOS in browser/native modes,
-with `native_release=true`, the default RDP unit contracts enabled and issue
-publication disabled. The plan job passed. Independent comparison of the
-downloaded `selection.json` against locally calculated expected sets found no
-missing or extra cases in any of the six logical groups: 12 browser and 13
-native per OS, 75 execution units in total. Each native group has four shards
-sharing one release build. The selected native contract capability is `mobile`;
-this case set does not select RDP contracts, even though their dispatch switch
-remains enabled. By 02:07 on November 10, the actual workflow had completed
-successfully, including all execution groups and final aggregation. The results
-below are independently checked execution evidence.
-
-The independent native contract job's execution passed: 129 related
-frontend/mobile tests and 97 selected Rust tests under the release profile,
-with zero failures. The Rust root test binary reported 1981 other tests filtered
-out; this is capability-selected contract evidence, not a full Cargo test pass.
-
-The successful Linux native producer also ran the full Vitest suite:
-703 test files passed, with 6404 tests passed and one skipped. The skip belongs
-to TerminalPanel's existing mutually exclusive text-mirror variants; neither
-that case nor its condition changed here. The six workspace-store and five
-search-component tests all passed. The native producer exported its release
-runtime, subsequently used by all four Linux native execution shards.
-
-All three hosted browser jobs have completed successfully. Independent raw
-report checks found 12/12 cases passed per OS, with no skips. `TC-NOTES-014`
-passed all 61 steps and requirements R1/R2/R3 on each. Source and runner
-identities match the manifest; all case digests match; outcomes bind the exact
-head, run, attempt and selection digest. Runner receipts verify and bind the
-summary and artifact hashes, including Windows paths normalized only by the
-reviewer's reader. All three final screenshots were inspected: the empty search
-retains focus, the intended filtered note is selected and the dirty draft is
-present. These final screenshots do not show the nonempty clear button and
-therefore do not establish its decoration spacing across native WebViews.
-
-All four Linux native shards subsequently completed and passed independent
-raw-report checks: 13/13 cases, no skips. The new case passed 61/61 steps and
-R1/R2/R3 in the actual packaged WebView. The app identifier is
-`com.taomni.app.qa`; isolated data/config/cache paths are recorded. The release
-binary hash is
-`e87433534eca3f331dcc5351fab712964c36293d18d5052311a6295820343894`, identical
-across all four shards and their build/summary identities. The Ubuntu 22.04
-producer's runtime ran on the selected Ubuntu 24.04 Xvfb/Openbox desktop with
-readiness and the expected desktop metadata verified. The final native
-screenshot was independently inspected and agrees with the retained draft,
-filtered note and search focus assertions.
-
-All four macOS native shards also passed raw-report checks: 13/13 cases, no
-skips, and 61/61 steps plus R1/R2/R3 for the new case. The ARM64 release build
-hash is `04f46a4cc2ae26338791c7d1c13e2f8540adb8d451220b9c5a43b8b56749e5be`,
-shared by all four shards and bound to the same reviewed source. The final
-native screenshot was inspected. This is hosted native WKWebView/IPC evidence;
-it does not certify physical OS IME, global shortcut or menu-bar input delivery.
-
-All four Windows native shards passed the same raw-report checks: 13/13 cases,
-no skips. The release binary hash is
-`247ad81e303914e7a42c328afc71e1321047ccdf3efda46fe26db9303cb16dbe`, shared by
-all four shards and matching their build/summary identities. The isolated QA app
-ran with the Windows WebView2 adapter. The new case passed all 61 steps and
-R1/R2/R3; its final screenshot was independently inspected and shows the focused
-empty search, retained filters, selected note and unsaved draft.
-
-| Hosted OS | Browser | Native release | TC-NOTES-014 in each mode |
-| --- | ---: | ---: | --- |
-| Linux | 12/12 | 13/13 | 61/61 steps; R1/R2/R3 passed |
-| Windows | 12/12 | 13/13 | 61/61 steps; R1/R2/R3 passed |
-| macOS | 12/12 | 13/13 | 61/61 steps; R1/R2/R3 passed |
-
-The 15 raw execution entries contain 75/75 passing units, with zero failed or
-skipped UI cases: 18 Notes units and all 57 applicable crash-regression units.
-This is the selected Notes/crash set, not all 714 repository case files.
-The independent reader verified every receipt-listed artifact's actual SHA-256
-and required all selected case digests, outcomes and native release identities
-to match. It found no missing entries or errors.
-
-Recomputing `qa_ui_auto.ci.aggregate` from those 15 raw report directories
-produced exactly the downloaded `ci-summary.json`, excluding only the latter's
-additional `job_results` field. The downloaded final selection also equals the
-original plan. Both `passed` and `report_ok` are true; `failures`,
-`infrastructure_errors`, `gaps` and `unreviewed` are empty. All selected producers,
-execution groups and mobile contracts report success. Tool/SFTP/development
-contract jobs outside the dispatch selection were skipped; the development
-contract had already passed independently against the product commit.
-
-The canonical selection digest is
-`882cebc91e09309d4d1f9fe7a5c3b2362bb3a50d3151f64ffb576dc54cdf307b`.
-The source fingerprint is
-`2deda7807ab6e064916be68f9760596e962c04c44e1bfe2876eafb3b12124420`,
-and the runner fingerprint is
-`50b8b5a550a9d7c082ab5d55b4651f5998e7828ffe3dbf8809876e380a0d128d`.
-All six logical groups bind the same full reviewed head, run 42659287606 and
-attempt 1. The canonical selection digest is intentionally distinct from a
-raw selection-file byte hash.
-
-The final CC session reran the reviewed raw-report checker, independently
-extracted all four Windows build identities and queried the actual GitHub run.
-Its final conclusion agrees with the independent checks: 75/75, no pending
-entries/errors and `completed/success` at the exact reviewed head. One generated
-extraction command incorrectly treated per-group `selected`/`counts` as top-level
-aggregate fields and raised `KeyError`; corrected commands completed before
-acceptance. Earlier ad hoc commands also confused a path argument and the
-canonical versus byte-file digest. These were verification-script mistakes,
-not passing evidence or bridge transport failures. The final review finished
-at 02:12:33, and its supervisor-owned CC process exited normally with code 0
-after stdin closed.
-
-Receipt verification here establishes consistency with the repository's current
-receipt format, not an unforgeable attestation boundary. Independent inspection
-of `runner_receipt.py` found public default key records and a 32-bit FNV-derived
-repeated checksum in `compute_receipt_signature`, despite its cryptographic
-docstrings. Those checks alone cannot prove execution against a malicious report
-author. This investigation also checks the actual GitHub job execution, exact
-tested commit, original artifacts, SHA-256 bindings and case outcomes. Replacing
-the product's receipt protocol was outside this Notes/bridge change.
-
-## Bridge commits and remaining limits
-
-The four bridge code/test commits were made directly on `main`, as requested:
-
-| Commit | Change |
+| 验证对象 | 实测结果 |
 | --- | --- |
-| `dba70af` | Preserve bounded delayed HTTP error bodies and count distinct tool calls. |
-| `30987a2` | Isolate opt-in live probes and retain partial/replaced monitoring logs. |
-| `2c2674d` | Retry confirmed pre-content HTTP server errors without replaying delivered content. |
-| `bac48c1` | Keep old active requests visible outside the monitor's event window. |
+| 原手工 CC 主会话 | 发生过真实读流错误；继续后于 11 月 10 日 00:28:59 完成工程分析，未发现传输死锁证据 |
+| taomni 产品变更 | 修复 Notes 筛选状态异步保存乱序；新增搜索清空按钮和 Escape 操作；在新分支提交并推送 |
+| GitHub UI 自动化 | 所选 Notes 和全部适用的 `crash-regression` 用例共 75/75 执行单元通过，UI 用例无失败、无跳过 |
+| 新增用例 `TC-NOTES-014` | Linux、Windows、macOS 的 browser/native 六个组合均通过 61/61 步及 R1/R2/R3 验证要求 |
+| 桥接离线回归 | 最终 139 项通过 |
+| 真实 Brave/CDP 故障注入 | 两种 HTTP 错误 × 两套 API 协议，共 4 个场景通过 |
+| 生产桥内重试 | 一次真实 NVIDIA 请求连续两次 HTTP 500 后，第三次尝试成功，CC 未收到中断错误 |
+| 仍未解决的问题 | 已交付内容后的 `TypeError: network error` 曾再次发生，底层网络或上游原因尚未确定 |
 
-All 139 offline tests and the four real-Brave/CDP fixture scenarios passed before
-the final documentation update. No further product or bridge source changes
-were made after their respective checks. The taomni branch is pushed; these
-bridge commits remain local on `main`.
+75 个执行单元是本次选定用例在不同系统和运行模式下的执行次数，不代表全仓库 714 个用例全部通过，也不代表完整 Cargo 测试或物理操作系统输入行为均已验证。
 
-At the final 02:13:16 snapshot, the updated production process had handled 58
-logical browser requests: 57 normal finishes and the one committed-stream
-reader failure described above. Two internal HTTP retries produced 60 upstream
-attempts in total; there were no cancellations, active requests or pool-recovery
-errors in this post-replacement interval. This is a workload observation, not a
-statistical reliability estimate. The service remained healthy with all five
-production tabs ready.
+## 二、环境与工作范围
 
-Supervisor-owned implementation/workflow/final-review clients, the temporary
-canary service and page, the local Vite server and the hosted monitor have
-finished or been stopped. Production port 8083, Brave/CDP 9225 and the original
-manual CC process remain running. Raw transcripts, settings, logs and downloaded
-artifacts remain ignored local evidence and are excluded from the commits.
+| 项目 | 配置 |
+| --- | --- |
+| 桥接工程 | `/home/zhyhang/code/person/nvplay-bridge` |
+| 被测产品 | `/home/zhyhang/code/person/taomni` |
+| 原始启动方式 | `start-bridge.sh` |
+| 生产服务 | `127.0.0.1:8083` |
+| 浏览器连接 | Brave，CDP 端口 `9225`，5 个 `kpool` 标签 |
+| CC 版本 | `2.1.319` |
+| 上游模型 | `moonshotai/kimi-k3.1-pro` |
+| taomni 分支 | `feat/cc-bridge-notes-search-20261109` |
+| taomni 提交 | `591ce56ff55fa24794c392aaa18047c4e6766997` |
+| GitHub workflow | `qa-ui-auto-platforms.yml` |
+| GitHub 运行 | [42659287606](https://github.com/engcapa/taomni/actions/runs/42659287606)，attempt 1 |
 
-The remaining observed transport limitation is the midstream reader failure,
-whose underlying cause is still unknown. Physical OS IME and global/menu input
-delivery, nonempty clear-button decoration spacing, the receipt protocol's trust
-boundary and unselected product capabilities remain outside the verified scope.
-The six successful UI combinations do not establish those claims.
+taomni 变更由 CC 在新分支完成；监督者独立检查复现结果、代码、测试断言和最终产物。桥接修复按要求直接提交到 `main`，提交说明使用详细英文。实测中使用过独立的 `8084` canary 服务和 `kcanary` 标签，以验证修复并隔离生产标签。
+
+## 三、原手工会话的中断调查
+
+### 关键时间线
+
+| 时间 | 观察与判断 |
+| --- | --- |
+| 11 月 9 日 22:57:01 | 请求 `cfea693e`、`ff544a86` 返回 `upstream 500: None`，此前均未交付上游内容 |
+| 23:02:24–25 | 请求 `929e8ff1`、`0a95872f`、`8ea44fc7` 同时段出现 `TypeError: network error`，此前均已交付内容 |
+| 23:02:24.891 | 主会话记录 `Server error mid-response`，与用户观察到的中断一致 |
+| 23:03:13 | 用户输入“继续”；后续日志时间戳、生成 token 数和工具结果证实主会话及后台 agent 仍有进展 |
+| 23:53:46 | 原两个后台分析 agent 的会话记录显示被中断 |
+| 11 月 10 日 00:28:59 | 原主会话完成工程架构分析 |
+
+后续一条 max effort 请求持续生成推理约 713 秒，最终返回 3 个 Read 调用；再下一条请求的输入达到 192,558 tokens。持续返回的数据和最终工具调用表明，这段等待包含长时间模型推理，不能仅凭界面停留认定桥接死锁。
+
+同时发生的三次异常属于已观察到的上游读流失败，其底层网络或提供方根因没有查明。最初两次 `500: None` 的错误正文已经丢失，无法事后证明它们就是 NVIDIA 连接池超时。
+
+对原架构报告的独立抽查确认了数据库启动 `expect` 路径、release finalizer 依赖、终端/SFTP 保留挂载、应用版本和双 lockfile 等具体描述。数据库故障隔离和长期保留运行时属于静态风险，没有复现数据库损坏或资源泄漏。release workflow 缺少直接 QA 依赖，也不能单独证明不存在外部发布策略。完整代码行数和 IPC 命令数量未重新统计，没有据此开展大范围产品修改。
+
+## 四、确认的桥接缺陷与修复
+
+### 1. HTTP 错误正文被过早丢弃
+
+浏览器 `fetch()` 可以先返回 HTTP 状态，响应体 reader 随后才收到正文。原 CDP 循环遇到非 200 状态立即抛错并中止读取，导致“错误响应头先到、正文分块后到”的场景退化为 `500: None`。这既损失诊断信息，也使现有 NVIDIA 连接池超时重试无法识别错误特征。
+
+`tests/test_browser_http_errors.py` 先在旧实现上复现了正文丢失。修复后最多收集 8192 个字符、等待最多 5 秒，同时遵守取消信号和原始请求总时限；HTTP 错误正文不会作为成功模型输出发送。受限长度的正文能够跨线程与异步边界保留，正文前缀较长时仍可识别后面的连接池超时标记。空正文、超长、停滞和读取失败均有明确诊断。
+
+同时修复了诊断计数：原 `tool_calls` 将每个流式参数片段都算成一次调用，现按不同的上游调用索引计数。失败日志记录 HTTP 状态、是否已交付内容、计数和 usage，以区分可重试失败与流中途失败。
+
+该阶段 9 项新增错误边界测试通过，显式离线回归共 129 项通过。后续修复完成后的最终总数为 139 项。
+
+### 2. 对未交付内容的明确 HTTP 5xx 增加重试
+
+23:46:34 的实网请求收到明确 HTTP 500，但 5 秒窗口内没有取得正文。CC 随后携带相同历史改用非流式请求重试。这说明仅依赖特定 NVIDIA 错误正文的策略无法覆盖全部预交付失败。
+
+新增策略保留真实 HTTP 状态来源，在以下边界内重试：
+
+- NVIDIA HTTP 500 且正文包含 `Pool#acquire` 超时特征：保留专项策略，默认额外尝试 2 次，首次等待 5–6 秒，第二次等待 10–11 秒。
+- 其他明确收到的 HTTP 500/502/503/504：默认额外尝试 1 次，等待 2–2.4 秒。专项策略优先，预算独立，专项次数用尽后不会借用通用预算。
+- 只有尚未向下游交付 thinking、正文或工具调用时才可重试；已交付内容后明确返回错误，避免拼接两次答案或重复工具调用。
+- 重试保持同一 SSE 连接、请求体、effort、历史、工具及原始总时限；退避期间继续心跳，并响应客户端断开和取消。
+- 未建立 HTTP 响应的网络失败、HTTP 200 流内的应用错误以及读流异常，不会被误判为已收到的 HTTP 5xx。
+
+该逻辑覆盖 browser 模式下的 Anthropic Messages 和 OpenAI Responses，包含流式、非流式接口。详细配置见[浏览器上游 HTTP 错误重试](upstream-pool-timeout-retry.md)。
+
+### 3. 实网探针在导入时启动网络工作
+
+两个测试脚本原本在模块导入阶段发起实网请求。首次测试发现触发该行为后已停止，并关闭独立 `ktest` 页面。脚本改为显式 `main` 入口，离线测试发现不再导入并启动实网工作。
+
+`tests/probe_browser_http_errors.py` 是显式启用的真实 Brave/CDP 探针。隔离的本地页面先返回 HTTP 500 响应头，再延迟返回正文分块，下一次请求返回成功 SSE。最终覆盖专项连接池错误、通用服务器错误与 Messages、Responses 的四种组合；每种均恰好请求两次后成功，没有发送 NVIDIA 推理请求或操作生产标签。
+
+### 4. 监控遗漏半条日志和长期请求
+
+监控原来会丢弃尚未写完的 JSON 行，不能正确处理日志截断或替换。修复后按字节偏移跟踪，保留不完整 UTF-8/JSON 记录，识别文件身份变化，并输出标签池状态、请求 ID、持续时间、最近活动、计数、usage 和近期错误。3 项针对性测试覆盖分段写入、截断/替换及重试/失败跟踪。
+
+长任务又暴露一个缺陷：先按 `--lookback` 过滤日志，再重建请求状态，会丢失窗口之前开始且仍活跃的请求。实测出现“池内有 busy 标签，active 列表却为空”。现改为先使用完整可用日志重建请求生命周期，仅对事件总数和近期错误应用窗口；新增回归覆盖持续返回和暂时无输出的旧请求，也确保不会复活已完成请求或旧错误。
+
+## 五、CC 完成的 taomni 工作及独立审查
+
+### 缺陷：Notes 筛选状态保存乱序
+
+Notes 工作区的筛选偏好通过异步原生接口保存。数据库 mutex 能串行化访问，但不能保证多个 JavaScript IPC 请求按调用顺序取得锁。
+
+监督者在原实现上独立复现：界面已经选择 `completed`，较早但延迟完成的 `all` 写入仍可覆盖最新状态。CC 加入每个 store 独立的 Promise 队列后，同一竞态回归通过。队列在写入失败后继续处理后续更新，抑制过期版本的错误，同时保留最新版本的错误。
+
+### 新功能：清空 Notes 工作区搜索
+
+新增本地化、可访问的清空按钮和 Escape 操作：
+
+- 清空查询后恢复输入框焦点，保留状态/标签筛选、当前选中笔记和未保存草稿。
+- 非空搜索的 Escape 被处理；空搜索的 Escape 继续向父级冒泡。
+- 对 IME 的 `isComposing` 和 `keyCode === 229` 加保护。
+- 仅对工作区搜索输入框抑制重复的浏览器原生清空装饰。
+
+### 审查中要求修正的问题
+
+| 问题 | 独立检查与修正 |
+| --- | --- |
+| 初稿测试夹具或 spy 没有真实驱动受控输入 | 要求输入确实更新、回调确实调用，才接受断言结果 |
+| IME 和 Escape 测试不完整 | 补充真实 Escape 事件、两种 IME 保护及父级冒泡的可观察断言 |
+| 失败写入后的持久化预期不正确 | 按实际成功/失败顺序纠正期望，验证失败后队列仍可前进 |
+| 将 WebKit 和 MS 专有伪元素合并为一个选择器列表 | 真实 CDP/CSSOM 复现 Brave 丢弃整条规则；拆分后 WebKit 规则被保留 |
+| 新用例同时保留默认状态又开启 Pinned，却期望仅按 Pinned 筛选 | 明确先切换为 `all` 再启用 Pinned，并纠正步骤引用和验证编号 |
+
+初稿缺失断言的结果和仅经过审阅的计划均未作为执行通过证据。
+
+产品最终提交为 `591ce56ff55fa24794c392aaa18047c4e6766997`，分支为 `feat/cc-bridge-notes-search-20261109`，由 CC 推送。共 13 个文件，包含实现、测试、用例、QA 策略/依赖、翻译及生成的控件目录。提交标题为 `fix(notes): serialize filter writes and clear workspace searches`。
+
+## 六、验证结果与证据强度
+
+| 检查 | 结果及范围 |
+| --- | --- |
+| 桥接最终离线测试 | 139 项通过，耗时 16.412 秒 |
+| 真实 Brave/CDP 探针 | 4 个场景通过，每个场景两次请求后成功 |
+| CC Bash + Read 烟测 | 通过修复后的 canary，3 轮约 133 秒，返回的 SHA-256 和 README 标题经独立核对 |
+| 取消与继续 | 23:27:11 主动中断后约 55 毫秒确认浏览器 abort 和 `browser_cancelled`；同一 CC 会话恢复执行 |
+| 更新后生产服务烟测 | Bash 返回正确的 `tools/monitor_bridge.py` 摘要和 `BRIDGE_MAIN_OK`；2 轮约 12.7 秒，退出码 0 |
+| Notes 针对性测试 | 6 项 store 测试、5 项挂载组件测试，共 11 项通过 |
+| Notes 保留行为测试 | 独立使用 Node 22/pnpm 10 执行，24 项通过 |
+| 产品静态与合同检查 | TypeScript、`check:refactor`、控件目录生成、QA audit、提交后 development case contract 均通过 |
+| 独立本地 browser 用例 | Brave 157 实际执行 `TC-NOTES-014`，61/61 步、R1/R2/R3 通过，并检查截图 |
+| CI 完整 Vitest | 703 个测试文件通过，6404 项通过、1 项跳过 |
+| CI 原生合同检查 | 129 项相关前端/mobile 测试及 97 项 release Rust 测试通过；另有 1981 项 Rust 测试被筛除 |
+| CI UI 执行 | 三平台、两种模式，共 75/75 通过，无 UI 用例失败或跳过 |
+
+Vitest 的 1 项跳过来自 TerminalPanel 已有的互斥 text-mirror 变体，测试和跳过条件均未在本次修改。97 项 Rust 结果属于选中能力的合同测试，不代表完整 Cargo 回归。
+
+本地 Brave 通过显式包装器启动，记录了实际可执行文件身份，没有修改仓库 runner；该结果是补充浏览器证据。原生平台结果分别由对应系统的实际 QA release 应用提供。
+
+### 测试与监督脚本中的失误
+
+实测中也记录了与产品或桥接故障不同的设置、脚本错误，并在验收前纠正：
+
+- 监督者一次命令误用了系统 pnpm，触发依赖重装并导致 CC 随后出现 `vitest not found`。已停止重装，使用 Node 22/pnpm 10 冻结依赖离线恢复，耗时 3.7 秒，lockfile 未改变。
+- 一次目录生成命令使用 `python -I`，导致 `PYTHONPATH` 不生效；修正后重新完成 audit。
+- 一份监督设置虽使用 `low` CLI 参数，`CLAUDE_CODE_EXTRA_BODY` 中却仍显式指定 `medium`。请求日志证实桥接保留了该值。修正设置后，新的短上下文会话两次请求实际均为 `low`，24.0 秒内完成 Bash 分支/提交检查和回答。
+- CC 的临时核验脚本曾混淆路径参数、规范化选择摘要与文件字节摘要；最终又将每组的 `selected`/`counts` 误作汇总顶层字段，触发 `KeyError`。均在最终结论前修正并重跑。
+
+上述失败日志单独保留，没有作为产品回归失败或桥接传输失败计数。`low` 与 `medium` 会话曾同时使用不同生产标签，未出现工具结果混串；这支持本次并发隔离观察，不能作为严格的 effort 性能对比。
+
+## 七、GitHub 三平台 browser/native 实测
+
+CC 于 11 月 10 日 00:53:35 推送分支并调度 [run 42659287606](https://github.com/engcapa/taomni/actions/runs/42659287606)。实际测试提交与审查提交完全一致。02:07 观察到整个 workflow 为 `completed/success`。
+
+### 输入与选中范围
+
+```text
+scope=selected
+head=591ce56ff55fa24794c392aaa18047c4e6766997
+platforms=linux,windows,macos
+modes=browser,native
+case_ids=TC-NOTES-014,TC-NOTES-013,TC-NOTES-012
+tags=crash-regression
+native_release=true
+publish_issues=false
+```
+
+独立比对下载的 `selection.json` 与本地计算的预期集合，六组均无遗漏或额外用例。每个平台 browser 12 个、native 13 个；每个 native 组拆为 4 个分片并共享一个 release 构建，共 15 个执行 entry。
+
+`run_rdp_unit_contracts` 保留默认 `true`，但本次用例集合没有选中 RDP contracts。实际选中的原生合同能力是 `mobile`。Tool、SFTP、development contract 等未选中的 job 被跳过；development contract 已在本地对产品提交独立验证通过。问题发布关闭，没有创建 issue。
+
+### 实际执行结果
+
+| 平台 | Browser | Native release | 新用例在每种模式下的结果 |
+| --- | ---: | ---: | --- |
+| Linux | 12/12 | 13/13 | 61/61 步，R1/R2/R3 全部通过 |
+| Windows | 12/12 | 13/13 | 61/61 步，R1/R2/R3 全部通过 |
+| macOS | 12/12 | 13/13 | 61/61 步，R1/R2/R3 全部通过 |
+| 合计 | 36/36 | 39/39 | 六个组合全部通过 |
+
+75 个执行单元中，Notes 为 18 个，适用的完整 `crash-regression` 为 57 个。没有失败或跳过的 UI 用例，也没有遗漏的执行 entry。
+
+监督者独立检查了六个组合的最终截图：搜索框为空且保持焦点，选中笔记及筛选结果正确，未保存草稿保留。最终截图不包含非空搜索时的清空按钮，因此不能据此确认各 WebView 中该按钮与原生装饰的视觉间距。
+
+### 原生构建身份
+
+三个平台均使用隔离的 `com.taomni.app.qa`、release profile，记录了隔离数据/配置/缓存路径。同一平台的四个分片使用相同二进制，其摘要与各自 build/summary 身份一致，源码指纹与选择清单一致。
+
+| 原生构建 | 二进制 SHA-256 |
+| --- | --- |
+| Linux x64 release | `e87433534eca3f331dcc5351fab712964c36293d18d5052311a6295820343894` |
+| Windows x64 release | `247ad81e303914e7a42c328afc71e1321047ccdf3efda46fe26db9303cb16dbe` |
+| macOS ARM64 release | `04f46a4cc2ae26338791c7d1c13e2f8540adb8d451220b9c5a43b8b56749e5be` |
+
+Linux 的 Ubuntu 22.04 构建产物实际运行在选定的 Ubuntu 24.04 Xvfb/Openbox 桌面，readiness 和桌面元数据均核对通过。Windows 使用实际 WebView2 适配器，macOS 使用实际 Darwin ARM64/WKWebView。后两者及 Linux 的执行报告均经过原始产物核验。
+
+### 独立产物复核
+
+监督者逐项检查了真实状态、精确用例集合、用例摘要、稳定源码/runner 身份，以及非 dry-run 标记；并检查 receipt 所列文件实际存在、实际 SHA-256 匹配、receipt 绑定 summary、outcome 绑定 head/run/attempt/规范化选择摘要、退出码为 0。读取 Windows 路径时仅将反斜杠标准化，未修改原始报告。
+
+从 15 份原始报告重新运行 `qa_ui_auto.ci.aggregate`，与下载的 `ci-summary.json` 完全一致，仅后者额外包含 `job_results`。最终下载的选择清单也与原始计划相等。
+
+| 汇总字段 | 最终值 |
+| --- | --- |
+| `passed` / `report_ok` | `true` / `true` |
+| `failures` | `[]` |
+| `infrastructure_errors` | `[]` |
+| `gaps` | `[]` |
+| `unreviewed` | `[]` |
+| 独立复核的 `pending` / `errors` | `[]` / `[]` |
+
+最终 CC 会话复用已审查的原始报告检查脚本，独立抽查 Windows 四个分片的构建身份，并通过 GitHub API 查询实际运行状态。最终结论与监督者一致，02:12:33 完成回答，关闭 stdin 后退出码为 0。
+
+| 身份 | 摘要 |
+| --- | --- |
+| 规范化选择摘要 | `882cebc91e09309d4d1f9fe7a5c3b2362bb3a50d3151f64ffb576dc54cdf307b` |
+| 源码指纹 | `2deda7807ab6e064916be68f9760596e962c04c44e1bfe2876eafb3b12124420` |
+| Runner 指纹 | `50b8b5a550a9d7c082ab5d55b4651f5998e7828ffe3dbf8809876e380a0d128d` |
+| `TC-NOTES-014` 文件摘要 | `f2ba370b547317b568b3fc5574aeb589d1a6410084db43202a7384fd7f62ff4f` |
+
+规范化选择摘要不同于 `selection.json` 的原始文件字节摘要。所有组合均绑定同一完整产品提交、run 42659287606 和 attempt 1。
+
+### Receipt 信任边界
+
+当前 receipt 验证只能证明仓库现有格式的一致性，不能作为不可伪造的密码学证明。独立阅读 `runner_receipt.py` 发现，默认 key 记录公开，`compute_receipt_signature` 使用由 32 位 FNV 派生并重复的校验值，与其密码学描述不符。
+
+因此，本报告还核对了实际 GitHub job 执行、精确提交、原始产物、真实 SHA-256 和用例结果，没有仅凭 receipt 校验通过就认定执行可信。对恶意报告作者的防伪认证未得到证明；迁移产品 receipt 协议未纳入本轮 Notes/桥接修改。
+
+## 八、生产更新与真实故障恢复
+
+11 月 10 日 00:20:15，先在空闲 API 边界更新独立 canary 到 `2c2674d`，后续监督 CC 请求正常。
+
+00:35:37，在确认生产服务空闲、五个标签全部 ready 后，将 8083 服务由 PID 26861 平滑替换为 PID 161859，加载 `bac48c184e2ed5f75220a76666b7db66811284c3`。保留原环境、uvicorn 参数、CDP 9225 和五个 `kpool` 标签。原手工 CC 在空闲边界短暂停住后恢复，没有因更新终止在途请求。
+
+### 真实 NVIDIA 连接池超时在桥内恢复
+
+请求 `c25fb817` 的前两次尝试均收到 HTTP 500，取得完整的 330 字符 `Pool#acquire` 错误正文，每次约等待 49 秒。桥接正确识别专项连接池超时，确认浏览器 abort，释放并恢复失败标签，分别退避 5.712 秒和 10.290 秒。
+
+第三次尝试使用健康标签，在总耗时 142.795 秒后返回一次工具调用。失败尝试没有交付 thinking、正文或工具内容，CC 没有收到 API 中断错误，随后完成分支推送和 workflow 调度。这是实际 NVIDIA 上游恢复证据，补充了四项可控 CDP 注入结果；它不能证明持续拥堵时必然成功。
+
+### 已交付内容后的网络错误仍然存在
+
+01:06:11，请求 `52bf8541` 在运行 81.071 秒、已交付 8117 个 thinking 字符和 85 个正文字符后，遇到 `TypeError: network error`。
+
+桥接记录 `committed=true`，明确返回错误并恢复失败标签，没有进入 HTTP 重试或重放已有内容。CC 在后续排队指令下继续，请求 `93aa1eb8` 于 74.687 秒后成功返回工具调用。
+
+该复发说明修复改善了预交付 HTTP 错误恢复，但没有消除流中途读流异常。其底层网络或上游原因仍未确定。
+
+### 最终生产观察窗口
+
+统计区间为 00:35:37 生产更新后至 02:13:16：
+
+| 指标 | 数量 |
+| --- | ---: |
+| 逻辑浏览器请求 | 58 |
+| 正常完成 | 57 |
+| 流中途终态失败 | 1 |
+| 桥内 HTTP 重试 | 2 |
+| 上游尝试总数 | 60 |
+| 取消 | 0 |
+| 最终活跃请求 | 0 |
+| 标签池恢复错误 | 0 |
+
+最终快照显示服务健康，五个生产标签均 ready。该统计只描述本次工作负载，不构成可靠性概率估计。前述主动取消发生在生产更新之前，不包含在这个窗口内。
+
+监督新增的实现、workflow、最终复核会话均已结束；canary 服务及页面、本地 Vite、GitHub 监控已停止或正常结束。截止该快照，8083 生产服务、Brave/CDP 9225 和原手工 CC 进程保留运行。
+
+## 九、提交与本地证据索引
+
+桥接修复直接在 `main` 提交，均使用详细英文说明：
+
+| 提交 | 内容 |
+| --- | --- |
+| `dba70af` | 保留有界的延迟 HTTP 错误正文，纠正工具调用计数 |
+| `30987a2` | 隔离显式实网探针，修复半条日志、截断与替换场景 |
+| `2c2674d` | 对未交付内容的明确 HTTP 5xx 重试，保留流语义和总时限 |
+| `bac48c1` | 修复监控时间窗口遗漏长期活跃请求 |
+| `3c5b1f9` | 记录最终实测结果、生产更新、GitHub 证据及验证边界 |
+
+上述提交的代码测试结果在本次中文整理前已完成。当前中文变更仅修改报告，未重跑产品构建或测试；提交是否已推送应以实际 Git 状态为准，不从历史快照推断。
+
+| 本地证据路径（相对桥接工程） | 用途 |
+| --- | --- |
+| `logs/offline-discovery-final.log` | 最终 139 项离线回归 |
+| `logs/cdp-error-probe.log` | 四项真实 Brave/CDP 探针 |
+| `logs/notes-review-red.log` | 原实现的乱序写入复现 |
+| `logs/notes-review-race-green.log` | 修复后的竞态回归 |
+| `logs/notes-review-retained-node22.log` | 24 项 Notes 保留行为检查 |
+| `logs/notes-review-css-parser.json` | CSSOM 选择器问题复现 |
+| `logs/notes-review-dev-contract.log` | 独立 development case contract 检查 |
+| `logs/ci-42659287606/reports/` | 15 份原始执行 entry 报告及产物 |
+| `logs/ci-42659287606/aggregate/ci-summary.json` | GitHub 最终汇总 |
+| `logs/ci-42659287606/independent-review.json` | 逐 entry 独立核验 |
+| `logs/ci-42659287606/independent-aggregate.json` | 从原始报告重算的汇总 |
+| `logs/bridge-final-metrics.json` | 生产更新后的最终请求统计 |
+| `logs/main-restart-state.json` | 生产进程更新记录 |
+| `logs/cc-final.jsonl`、`logs/cc-final-exit.json` | CC 最终复核及退出结果 |
+
+## 十、仍需保留的限制与后续方向
+
+1. **流中途网络错误尚未根治。** 需要进一步定位浏览器 reader、网络和上游提供方的相关证据；不能通过无条件重放已交付内容规避，否则可能重复答案或工具调用。
+2. **物理 OS 输入尚未认证。** 合成 IME 保护和 WebView 自动化通过，不代表物理输入法、全局快捷键、AppKit 菜单栏点击或原生窗口输入链路已全部验证。
+3. **视觉证据有明确范围。** 最终截图证明清空后的焦点、筛选和草稿状态，没有证明非空清空按钮在所有 WebView 的装饰间距。
+4. **Receipt 不具备已证明的密码学防伪性。** 本次以实际 GitHub 执行、原始文件及 SHA-256 交叉核验；协议本身仍需单独设计和迁移。
+5. **覆盖限于本轮选中范围。** 75 个 UI 执行单元、相关合同和已列回归均通过；未执行全仓库 714 用例、完整 Cargo 测试或本次未选中的 RDP contracts。
