@@ -36,6 +36,8 @@ TAB_RECOVERY_BACKOFF = max(0.1, float(os.getenv("BROWSER_TAB_RECOVERY_BACKOFF", 
 TAB_REACTIVATE_INTERVAL = 3.0
 PAGE_BUFFER_BYTES = 4 * 1024 * 1024
 DRAIN_BYTES = 64 * 1024
+ERROR_BODY_TIMEOUT = 5.0
+ERROR_BODY_CHARS = 8192
 LOCAL_HTTP = urllib.request.build_opener(urllib.request.ProxyHandler({}))
 
 
@@ -387,6 +389,46 @@ class BrowserUpstream:
             raise BrowserError("页面补丁需要重载后升级")
         self.needs_refresh = False
 
+    def _http_error(self, request_id: str, state: dict, cancel: threading.Event,
+                    deadline: float, trace: Callable | None) -> BrowserHTTPError:
+        """Wait briefly for the body: fetch publishes headers before reader data."""
+        status = int(state["status"])
+        read_deadline = min(deadline, time.monotonic() + ERROR_BODY_TIMEOUT)
+        body = ""
+        reason = "complete"
+        while True:
+            _check(cancel, deadline)
+            data = state.get("data") or ""
+            remaining = ERROR_BODY_CHARS - len(body)
+            body += data[:remaining]
+            self.peak_buffer_bytes = max(self.peak_buffer_bytes, state.get("peak", 0))
+            if len(data) > remaining:
+                reason = "size_limit"
+                break
+            if state.get("error"):
+                reason = "read_error"
+                break
+            if state.get("done"):
+                break
+            if len(body) >= ERROR_BODY_CHARS:
+                reason = "size_limit"
+                break
+            if time.monotonic() >= read_deadline:
+                reason = "body_timeout"
+                break
+            _pause(cancel, deadline, min(POLL_INTERVAL, max(0, read_deadline - time.monotonic())))
+            if time.monotonic() >= read_deadline:
+                reason = "body_timeout"
+                break
+            state = self._eval(f"window.__bridgeDrain({request_id},{DRAIN_BYTES})",
+                               timeout=max(0.001, min(5, read_deadline - time.monotonic())))
+        detail = body or state.get("error") or "empty error response body"
+        if reason != "complete":
+            detail += f" [error body: {reason}]"
+        if trace:
+            trace("browser_http_error", status=status, body_chars=len(body), body_state=reason)
+        return BrowserHTTPError(status, f"上游 {status}: {detail}")
+
     def _stream_locked(self, body: dict, cancel: threading.Event,
                        deadline: float, trace: Callable | None) -> Iterator[str]:
         try:
@@ -433,8 +475,9 @@ class BrowserUpstream:
                 status = int(state.get("status") or 0)
                 data = state.get("data") or ""
                 if status and status != 200:
-                    raise BrowserHTTPError(status if status > 0 else 502,
-                                           f"上游 {status}: {data[:500] or state.get('error')}")
+                    if status > 0:
+                        raise self._http_error(quoted_id, state, cancel, deadline, trace)
+                    raise BrowserHTTPError(502, f"上游 {status}: {data[:500] or state.get('error')}")
                 if state.get("error"):
                     raise BrowserError(f"上游响应读取失败: {state['error']}")
                 if data:

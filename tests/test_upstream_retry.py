@@ -143,6 +143,26 @@ class RetryPolicyTests(RetrySettings, unittest.IsolatedAsyncioTestCase):
         self.assertFalse(any(event["type"] == "thinking" for event in output))
         self.assertEqual([event["usage"] for event in output if event["type"] == "usage"], [{"completion_tokens": 4}])
 
+    async def test_diagnostics_count_invocations_instead_of_argument_fragments(self):
+        browser = ScriptBrowser([[
+            frame({"tool_calls": [{"index": 0, "id": "a", "function": {"name": "read", "arguments": '{"path":'}}]}),
+            frame({"tool_calls": [{"index": 0, "function": {"arguments": '"file"}'}}]}),
+            frame({"tool_calls": [{"index": 1, "id": "b", "function": {"name": "read", "arguments": '{}'}}]}),
+            frame({}, "tool_calls"),
+        ]])
+        await self.collect(browser)
+        self.assertEqual(self.logs("browser_done")[-1]["counts"]["tool_calls"], 2)
+
+    async def test_failure_diagnostics_preserve_delivery_status_and_usage(self):
+        browser = ScriptBrowser([[frame({"reasoning_content": "thinking"}),
+                                  frame(usage={"completion_tokens": 7}), pool_error()]])
+        await self.collect(browser)
+        failure = self.logs("browser_error")[-1]
+        self.assertEqual(failure["status"], 500)
+        self.assertTrue(failure["committed"])
+        self.assertEqual(failure["counts"]["thinking_chars"], 8)
+        self.assertEqual(failure["usage"], {"completion_tokens": 7})
+
     async def test_placeholder_and_pool_timeout_have_independent_retry_limits(self):
         browser = ScriptBrowser([[pool_error()], [frame({"content": "[Tool use interrupted]"}, "stop")],
                                  [pool_error()], [frame({"content": "OK"}, "stop")]])

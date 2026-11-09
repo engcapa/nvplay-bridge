@@ -878,6 +878,7 @@ async def _browser_events_with_retry(payload: dict[str, Any], *, buffered: bool)
         finish = None
         usage: dict[str, Any] = {}
         counts = {"thinking_chars": 0, "text_chars": 0, "tool_calls": 0}
+        tool_indexes: set[int] = set()
         last_progress = started
 
         def log(event: str, **data: Any) -> None:
@@ -913,7 +914,8 @@ async def _browser_events_with_retry(payload: dict[str, Any], *, buffered: bool)
                     if kind == "text":
                         counts["text_chars"] += len(event["text"])
                     if kind == "tool":
-                        counts["tool_calls"] += 1
+                        tool_indexes.add(event["index"])
+                        counts["tool_calls"] = len(tool_indexes)
                     if time.monotonic() - last_progress >= 5:
                         log("browser_progress", counts=dict(counts), usage=usage)
                         last_progress = time.monotonic()
@@ -1004,7 +1006,8 @@ async def _browser_events_with_retry(payload: dict[str, Any], *, buffered: bool)
                 continue
             log("upstream_retry_skipped", reason=reason, retries=pool_retries, committed=committed,
                 remaining=round(remaining, 3))
-        log("browser_error", error=failure["message"])
+        log("browser_error", error=failure["message"], status=failure["status"],
+            committed=committed, counts=counts, usage=usage)
         yield failure
         return
 
