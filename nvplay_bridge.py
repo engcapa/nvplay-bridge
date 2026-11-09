@@ -89,7 +89,10 @@ BROWSER_DEBUG_LOG = os.getenv("BROWSER_DEBUG_LOG", "")
 BROWSER_POOL_TIMEOUT_RETRIES = max(0, int(os.getenv("BROWSER_POOL_TIMEOUT_RETRIES", "2")))
 BROWSER_POOL_TIMEOUT_BACKOFF = max(0.0, float(os.getenv("BROWSER_POOL_TIMEOUT_BACKOFF", "5")))
 PLACEHOLDER_RETRY = int(os.getenv("PLACEHOLDER_RETRY", "1"))
-LOOP_BREAKER = int(os.getenv("LOOP_BREAKER", "1"))
+LOOP_BREAKER = int(os.getenv("LOOP_BREAKER", "0"))
+HISTORY_REASONING = os.getenv("HISTORY_REASONING", "preserve").strip().lower()
+if HISTORY_REASONING not in {"preserve", "omit"}:
+    raise RuntimeError("HISTORY_REASONING must be 'preserve' or 'omit'")
 BROWSER_DEBUG_MESSAGES = os.getenv("BROWSER_DEBUG_MESSAGES", "") == "1"
 
 
@@ -256,12 +259,13 @@ def _refresh_cookie(response: httpx.Response) -> None:
 # --------------------------------------------------------------------------- #
 
 def _loads(raw: str | None) -> Any:
-    if not raw:
-        return {}
     try:
-        return json.loads(raw)
+        value = json.loads(raw or "{}")
     except json.JSONDecodeError:
-        return {}
+        raise UpstreamError(502, "upstream tool parameters are not valid JSON") from None
+    if not isinstance(value, dict):
+        raise UpstreamError(502, "upstream tool parameters must be a JSON object")
+    return value
 
 
 def _text_of(content: Any) -> str:
@@ -400,8 +404,7 @@ def _message_shape(messages: list[dict[str, Any]]) -> list[dict[str, Any]]:
 
 def _convert_messages(body: dict[str, Any]) -> list[dict[str, Any]]:
     out: list[dict[str, Any]] = []
-    # CC 的 tool_use id 可能是 "Bash:0" 这类按轮次复用的短 id；
-    # OpenAI 侧需要全局唯一，否则历史里多次调用同名 id 会让模型误以为没执行。
+    # Also accept legacy histories whose upstream IDs were reused across turns.
     tool_id_pools: dict[str, list[str]] = {}
 
     system = body.get("system")
@@ -532,6 +535,10 @@ def to_openai_request(body: dict[str, Any]) -> dict[str, Any]:
     else:
         limit = OPENAI_MAX_TOKENS
     payload["max_tokens"] = min(int(max_tokens), limit) if max_tokens else limit
+    if body.get("seed") is not None:
+        if type(body["seed"]) is not int:
+            raise ValueError("seed must be an integer")
+        payload["seed"] = body["seed"]
 
     if PASS_SAMPLING:
         if body.get("temperature") is not None:
@@ -570,61 +577,48 @@ def _tool_loop_key(call: dict[str, Any]) -> tuple[Any, Any]:
     return name, raw_args
 
 
-_loop_state: dict[str, tuple[tuple[Any, Any], int]] = {}
-_loop_state_lock = threading.Lock()
-
-
-def _conversation_key(messages: list[dict[str, Any]]) -> str:
-    for message in messages:
-        content = message.get("content")
-        if message.get("role") == "user" and isinstance(content, str) and content.strip():
-            return content[:200]
-    return ""
-
-
 def _maybe_break_tool_loop(payload: dict[str, Any]) -> None:
-    """连续重复同一工具调用时注入“不要重复、直接总结”的纠正。
+    """Optional history-only reminder; never infer executions from HTTP retries.
 
-    CC 可能压缩历史，单次 payload 里只剩最近一次调用，因此同时维护
-    跨请求的会话计数。
+    Compacted histories cannot prove repetition. Avoid shared session counters:
+    clients need not provide a stable session ID and often share prompt prefixes.
     """
     if not LOOP_BREAKER:
         return
     messages = payload.get("messages") or []
-    if any("[系统纠正] 同一个工具调用" in str(m.get("content") or "") for m in messages):
-        return
-    calls: list[tuple[Any, Any]] = []
+    calls: list[dict[str, Any]] = []
     for message in messages:
-        if message.get("role") != "assistant":
-            continue
-        for call in message.get("tool_calls") or []:
-            calls.append(_tool_loop_key(call))
-    if not calls:
+        role = message.get("role")
+        if role == "user":
+            # Includes structured text/image input and new development stages.
+            calls.clear()
+        elif role == "assistant":
+            for call in message.get("tool_calls") or []:
+                calls.append({"key": _tool_loop_key(call), "id": call.get("id"), "result": None})
+        elif role == "tool":
+            for call in reversed(calls):
+                if call["id"] == message.get("tool_call_id") and call["result"] is None:
+                    call["result"] = message.get("content")
+                    break
+    if len(calls) < 3 or messages[-1].get("role") != "tool":
         return
-
-    repeated_in_payload = len(calls) >= 3 and all(call == calls[-1] for call in calls[-3:])
-    key = _conversation_key(messages)
-    with _loop_state_lock:
-        previous = _loop_state.get(key)
-        count = previous[1] + 1 if previous and previous[0] == calls[-1] else 1
-        _loop_state[key] = (calls[-1], count)
-
-    if not repeated_in_payload and count < 3:
+    tail = calls[-3:]
+    if not all(call["key"] == tail[0]["key"] and isinstance(call["result"], str)
+               and call["result"] == tail[0]["result"] for call in tail):
         return
-
+    result = tail[0]["result"].lstrip().lower()
+    if result.startswith(("error:", "<tool_use_error>")):
+        return
     messages.append(
         {
             "role": "user",
             "content": (
-                "[系统纠正] 同一个工具调用已经连续成功执行多次，不要再次调用它；"
-                "请直接基于已有结果给出最终总结。"
+                "[工具调用提醒] 最近三次相同参数的工具调用返回了相同内容。"
+                "请检查已有结果是否足够；如需重试，请先判断原因或调整方法，并继续完成用户任务。"
             ),
         }
     )
-    if repeated_in_payload:
-        _dbg("loop_breaker", tool=calls[-1][0], count=sum(1 for call in calls if call == calls[-1]))
-    else:
-        _dbg("loop_breaker_stateful", tool=calls[-1][0], count=count)
+    _dbg("tool_loop_reminder", tool=tail[0]["key"][0], count=3)
 
 
 def _enable_upstream_stream(payload: dict[str, Any]) -> None:
@@ -665,7 +659,8 @@ def build_payload(body: dict[str, Any]) -> dict[str, Any]:
         requested_effort=requested_effort,
         tools=len(payload.get("tools") or []),
         messages=len(payload.get("messages") or []),
-        system_len=len(json.dumps(payload.get("system") or "", ensure_ascii=False)),
+        system_len=sum(len(_text_of(message.get("content"))) for message in payload.get("messages", [])
+                       if message.get("role") == "system"),
         stream=payload.get("stream"),
     )
     if BROWSER_DEBUG_MESSAGES:
@@ -1016,6 +1011,34 @@ async def _browser_events_with_retry(payload: dict[str, Any], *, buffered: bool)
 
 async def iter_events(payload: dict[str, Any], headers: dict[str, str], *,
                       buffered: bool = True) -> AsyncIterator[dict[str, Any]]:
+    """Give each tool invocation a fresh downstream ID in every API format.
+
+    Some providers reuse IDs such as Read:0 in successive responses. Claude
+    Code deduplicates those IDs before sending history back, so input-side
+    remapping alone is too late to prevent lost calls and results.
+    """
+    if HISTORY_REASONING == "omit":
+        messages = payload.get("messages") or []
+        if any("reasoning_content" in message for message in messages):
+            removed = sum(len(message.get("reasoning_content") or "") for message in messages)
+            # Do not alter the client's history or stored Responses items. Keep
+            # visible text, tool calls/results and all other request controls.
+            payload = {**payload, "messages": [
+                {key: value for key, value in message.items() if key != "reasoning_content"}
+                for message in messages
+            ]}
+            _dbg("history_reasoning_omitted", removed_chars=removed, messages=len(messages))
+    tool_ids: dict[int, str] = {}
+    async with aclosing(_iter_upstream_events(payload, headers, buffered=buffered)) as source:
+        async for event in source:
+            if event.get("type") == "tool" and event.get("id"):
+                event = dict(event)
+                event["id"] = tool_ids.setdefault(event["index"], f"toolu_{uuid.uuid4().hex[:24]}")
+            yield event
+
+
+async def _iter_upstream_events(payload: dict[str, Any], headers: dict[str, str], *,
+                               buffered: bool = True) -> AsyncIterator[dict[str, Any]]:
     """归一化上游增量；仅非流式聚合允许撤回尚未交付的思考后重试。"""
     if UPSTREAM_KIND == "browser":
         async with aclosing(_browser_events_with_retry(payload, buffered=buffered)) as source:
@@ -1171,6 +1194,9 @@ async def health() -> dict[str, Any]:
         "model": UPSTREAM_MODEL,
         "cookie_present": bool(load_cookie()),
         "captcha_present": bool(load_captcha()),
+        "tool_ids": "unique_per_invocation",
+        "loop_reminder_enabled": bool(LOOP_BREAKER),
+        "history_reasoning": HISTORY_REASONING,
     }
     if UPSTREAM_KIND == "browser" and _browser is not None and hasattr(_browser, "status"):
         result["browser_pool"] = _browser.status()
@@ -1242,6 +1268,8 @@ async def create_message(request: Request):
         headers = build_headers()
     except ConfigError as exc:
         return JSONResponse(status_code=503, content=error_body(str(exc)))
+    except ValueError as exc:
+        return JSONResponse(status_code=400, content=error_body(str(exc), "invalid_request_error"))
 
     model = body.get("model") or UPSTREAM_MODEL
 

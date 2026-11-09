@@ -165,7 +165,7 @@ The bridge accepts only Kimi model aliases; other model IDs return `404 not_foun
 | `BROWSER_CDP_PORT` | `9222` | CDP port |
 | `BROWSER_POOL_SIZE` | `5` | Number of Playground tabs |
 | `BROWSER_TIMEOUT` | `3600` | Total request seconds, including queue, preparation and retries |
-| `BROWSER_FIRST_BYTE_TIMEOUT` | `120` | Seconds from send to first upstream data |
+| `BROWSER_FIRST_BYTE_TIMEOUT` | `BROWSER_TIMEOUT` (`3600`) | Seconds from send to first upstream data; the total request deadline still applies |
 | `BROWSER_IDLE_TIMEOUT` | `90` | Max seconds without upstream data after generation starts |
 | `BROWSER_POLL_INTERVAL` | `0.1` | CDP incremental drain interval in seconds |
 | `BROWSER_HEARTBEAT_SEC` | `10` | SSE ping interval while generating; `0` disables |
@@ -178,7 +178,8 @@ The bridge accepts only Kimi model aliases; other model IDs return `404 not_foun
 | `BROWSER_POOL_TIMEOUT_RETRIES` | `2` | Additional attempts for NVIDIA HTTP 500 pool-acquire timeouts before content delivery; `0` disables |
 | `BROWSER_POOL_TIMEOUT_BACKOFF` | `5` | Initial seconds between these attempts; doubles to 30s, plus up to 1s jitter |
 | `PLACEHOLDER_RETRY` | `1` | Retry placeholder/empty upstream responses |
-| `LOOP_BREAKER` | `1` | Stop repeated identical tool calls |
+| `LOOP_BREAKER` | `0` | Optional reminder for three identical calls/results in the current user turn; never forces task completion |
+| `HISTORY_REASONING` | `preserve` | `preserve` / `omit`: include or omit past assistant reasoning upstream; `omit` is experimental for the NVIDIA deployment |
 | `BROWSER_DEBUG_LOG` | empty | JSONL metadata log path |
 | `BROWSER_DEBUG_MESSAGES` | `0` | Log outbound message shapes |
 
@@ -191,7 +192,11 @@ The bridge accepts only Kimi model aliases; other model IDs return `404 not_foun
 - `output_config.effort` maps directly to upstream `reasoning_effort`; `xhigh` → `max`
 - If CC sends no thinking/effort, the bridge sets no `reasoning_effort`
 - Missing `max_tokens` → `131072` (128K); larger values are capped
-- Assistant `thinking` blocks are passed back as `reasoning_content`
+- Optional bridge extension: an explicitly supplied integer `seed` (including `0`) is forwarded upstream in both APIs; absent/null leaves it unset. A seed does not guarantee identical provider output.
+- Assistant `thinking` blocks are passed back as `reasoning_content` with `HISTORY_REASONING=preserve` (default). Set `HISTORY_REASONING=omit` before starting the bridge to keep visible messages and tool calls/results while excluding old reasoning from subsequent upstream requests. Both policies still deliver newly generated thinking to the client; the setting does not alter effort or output budget. `/health` reports the active policy.
+- Kimi's official K3.1 Pro API documentation requires preserving complete assistant messages, including reasoning, for multi-turn and tool use. The NVIDIA UI was observed to omit old reasoning in a local mocked follow-up, and one repair-task experiment succeeded with omission. This does not establish a general quality benefit; keep `preserve` as the default. See [history policy and evidence](docs/agent-compatibility.md).
+- Tool invocation IDs are fresh across responses in Messages and Responses, for both SSE and JSON. Tool names, arguments and returned text are preserved.
+- Invalid/non-object tool parameter JSON fails explicitly; Messages JSON aggregation does not silently replace malformed arguments with `{}`.
 - Browser mode forwards thinking, text and the first tool's arguments as they arrive; interleaved additional tools are buffered and emitted as consecutive content blocks.
 - Browser mode sends `event: ping` every 10s without downstream data, including while queuing and retrying.
 - Placeholder/empty responses may retry once before streaming content is delivered. After thinking/text/tool content has been delivered, errors end the stream without replacing the answer. Non-streaming requests retain the empty-response retry.
@@ -200,7 +205,7 @@ The bridge accepts only Kimi model aliases; other model IDs return `404 not_foun
 - A preparation failure before arming/sending can switch to another healthy tab inside the original SSE connection, with heartbeats while waiting. Failures after triggering a send are not transparently replayed except for the explicit pool-acquire timeout and empty/placeholder policies above; an uncertain network failure before the first byte still fails immediately.
 - Regular data prevents idle timeouts, but the 3600-second total limit still applies. The included Claude Code settings use `API_TIMEOUT_MS=3900000` (65 minutes) to allow time for cleanup; restart CC to load changed settings.
 - 5-tab pool; recovery never navigates a busy tab, and healthy tabs remain usable while other tabs recover. `/health` includes pool states and recent recovery errors after pool initialization.
-- Repeated tool calls are broken after a session-level repeat threshold
+- The optional tool repetition reminder uses only completed calls in the supplied history since the latest user message. It does not count HTTP resends, share counters between sessions, or tell the agent to finish early. `Error:` and `<tool_use_error>` results are excluded; other tool errors have no universal encoding. It is disabled by default.
 
 Readiness, recovery limits and offline regression coverage are described in
 [browser pool recovery](docs/browser-pool-recovery.md).
@@ -251,6 +256,7 @@ $env:PYTHONPATH = $REPO     # add ";$REPO\vendor" only if you have an offline bu
 & $PY tests\test_pool_recovery.py
 & $PY tests\test_responses.py
 & $PY tests\test_upstream_retry.py
+& $PY tests\test_agent_compatibility.py
 ```
 
 Live regression (needs Brave/CDP and a running bridge):

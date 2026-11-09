@@ -8,6 +8,7 @@ import os
 import tempfile
 import time
 import unittest
+from unittest.mock import patch
 
 os.environ.setdefault("UPSTREAM_KIND", "browser")
 os.environ.setdefault("UPSTREAM_MODEL", "moonshotai/kimi-k3.1-pro")
@@ -168,11 +169,14 @@ class ConversionTests(unittest.TestCase):
                 {"role": "tool", "tool_call_id": "call_3", "content": "OK"},
             ]
         }
-        bridge._maybe_break_tool_loop(payload)
+        with patch.object(bridge, "LOOP_BREAKER", 1):
+            bridge._maybe_break_tool_loop(payload)
         self.assertEqual(payload["messages"][-1]["role"], "user")
-        self.assertIn("[系统纠正] 同一个工具调用", payload["messages"][-1]["content"])
+        self.assertIn("[工具调用提醒]", payload["messages"][-1]["content"])
+        self.assertNotIn("最终总结", payload["messages"][-1]["content"])
         count_before = len(payload["messages"])
-        bridge._maybe_break_tool_loop(payload)
+        with patch.object(bridge, "LOOP_BREAKER", 1):
+            bridge._maybe_break_tool_loop(payload)
         self.assertEqual(len(payload["messages"]), count_before)
 
     def test_tool_loop_breaker_ignores_description(self) -> None:
@@ -195,11 +199,15 @@ class ConversionTests(unittest.TestCase):
                 for i in range(3)
             ]
         }
-        bridge._maybe_break_tool_loop(payload)
-        self.assertIn("[系统纠正] 同一个工具调用", payload["messages"][-1]["content"])
+        completed = []
+        for index, message in enumerate(payload["messages"]):
+            completed.extend([message, {"role": "tool", "tool_call_id": f"call_{index}", "content": "OK"}])
+        payload["messages"] = completed
+        with patch.object(bridge, "LOOP_BREAKER", 1):
+            bridge._maybe_break_tool_loop(payload)
+        self.assertIn("[工具调用提醒]", payload["messages"][-1]["content"])
 
-    def test_stateful_loop_breaker(self) -> None:
-        bridge._loop_state.clear()
+    def test_resent_history_does_not_count_as_new_executions(self) -> None:
         payload = {
             "messages": [
                 {"role": "user", "content": "stateful-loop-test"},
@@ -217,11 +225,11 @@ class ConversionTests(unittest.TestCase):
                 {"role": "tool", "tool_call_id": "call_1", "content": "OK"},
             ]
         }
-        bridge._maybe_break_tool_loop(payload)
-        bridge._maybe_break_tool_loop(payload)
-        self.assertNotIn("[系统纠正] 同一个工具调用", str(payload["messages"][-1]["content"]))
-        bridge._maybe_break_tool_loop(payload)
-        self.assertIn("[系统纠正] 同一个工具调用", payload["messages"][-1]["content"])
+        with patch.object(bridge, "LOOP_BREAKER", 1):
+            for _ in range(5):
+                bridge._maybe_break_tool_loop(payload)
+        self.assertEqual(len(payload["messages"]), 3)
+        self.assertEqual(payload["messages"][-1]["content"], "OK")
 
     def test_duplicate_tool_ids_get_unique_mapping(self) -> None:
         body = {

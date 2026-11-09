@@ -310,13 +310,14 @@ class HTTPTests(unittest.IsolatedAsyncioTestCase):
                 first = await client.post(self.base + "/v1/responses", json={"model": "kimi-k3.1-pro", "input": "weather?", "tools": [FUNCTION]})
                 self.assertEqual(first.status_code, 200, first.text)
                 response_id = first.json()["id"]
+                call_id = first.json()["output"][0]["call_id"]
                 retrieved = await client.get(self.base + "/v1/responses/" + response_id)
                 self.assertEqual(retrieved.json(), first.json())
                 second = await client.post(self.base + "/v1/responses", json={"model": "kimi-k3.1-pro", "previous_response_id": response_id,
-                    "input": [{"type": "function_call_output", "call_id": "call_1", "output": "sunny"}], "store": False})
+                    "input": [{"type": "function_call_output", "call_id": call_id, "output": "sunny"}], "store": False})
                 self.assertEqual(second.status_code, 200, second.text)
                 self.assertEqual(second.json()["output"][0]["content"][0]["text"], "sunny")
-                self.assertEqual(browser.calls[1]["messages"][-1]["tool_call_id"], "call_1")
+                self.assertEqual(browser.calls[1]["messages"][-1]["tool_call_id"], call_id)
                 self.assertEqual((await client.get(self.base + "/v1/responses/" + second.json()["id"])).status_code, 404)
                 self.assertTrue((await client.delete(self.base + "/v1/responses/" + response_id)).json()["deleted"])
                 self.assertEqual((await client.get(self.base + "/v1/responses/" + response_id)).status_code, 404)

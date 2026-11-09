@@ -222,6 +222,9 @@ def prepare_request(body: dict, backend, prior: dict | None = None) -> tuple[dic
     max_tokens = body.get("max_output_tokens")
     if max_tokens is not None and (isinstance(max_tokens, bool) or not isinstance(max_tokens, int) or max_tokens < 1):
         raise RequestError("Expected a positive integer", "max_output_tokens")
+    seed = body.get("seed")
+    if seed is not None and type(seed) is not int:
+        raise RequestError("Expected an integer", "seed")
     reasoning = _object(body.get("reasoning") if body.get("reasoning") is not None else {}, "reasoning")
     if reasoning.get("summary") not in (None, "auto", "concise", "detailed"):
         raise RequestError("Unsupported reasoning summary", "reasoning.summary")
@@ -234,7 +237,8 @@ def prepare_request(body: dict, backend, prior: dict | None = None) -> tuple[dic
         raise RequestError("Unsupported reasoning effort", "reasoning.effort")
     mapped_effort = "low" if effort in ("none", "minimal") else effort
     payload = backend.to_openai_request({"model": body["model"], "messages": [],
-                                        "max_tokens": max_tokens, "output_config": {"effort": mapped_effort}})
+                                        "max_tokens": max_tokens, "seed": seed,
+                                        "output_config": {"effort": mapped_effort}})
     backend._enable_upstream_stream(payload)
     tools, registry = convert_tools(body.get("tools"))
     items = deepcopy(prior["items"]) if prior else []
