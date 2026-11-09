@@ -73,3 +73,35 @@ A separate CC session was started through the bridge, with no background agents,
 to implement Notes workspace search clearing and investigate one reproducible
 Notes bug. It uses branch `feat/cc-bridge-notes-search-20261109` in taomni.
 The review and hosted execution results will be recorded after completion.
+
+## Further live evidence and HTTP recovery
+
+A real CC smoke session through the patched service called Bash and Read and
+returned the independently checked SHA-256 and README title. It completed three
+turns in approximately 133 seconds. The service on port 8084 uses a separate
+`kcanary` pool namespace; the original service and its active sessions remain
+on port 8083 with `kpool` tabs.
+
+A deliberate interrupt of the supervised implementation session at 23:27:11
+produced a confirmed browser abort and `browser_cancelled` within approximately
+55 milliseconds. The same CC session then resumed through the patched service.
+Repeated analysis of a small test led to a later, fresh focused session with
+medium effort and a smaller context. That session inherits the implementation
+branch and test changes, not concurrent ownership of the product files.
+
+At 23:46:34 the patched service recorded an HTTP 500 with no error body within
+the five-second collection window. CC automatically retried the same history
+as a non-streaming request. This establishes a remaining pre-content recovery
+case even when the NVIDIA-specific pool marker is unavailable.
+
+The bridge now additionally retries confirmed HTTP 500/502/503/504 once before
+content delivery. The default backoff is 2–2.4 seconds; it retains the same SSE
+connection, payload and total deadline. HTTP provenance is carried separately
+from normalized API error status, preventing a failed fetch or HTTP-200 error
+event from being mistaken for a received HTTP 5xx response. The specific pool
+timeout policy keeps its separate budget and priority.
+
+All 138 offline tests pass. The real-CDP fixture covers both specific pool and
+generic server failures through both API protocols: four cases, two fixture
+requests each, all successful. Network failures after delivered content still
+end explicitly; the underlying provider/network cause remains unestablished.

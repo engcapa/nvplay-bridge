@@ -88,6 +88,8 @@ BROWSER_POOL_SIZE = int(os.getenv("BROWSER_POOL_SIZE", "5"))
 BROWSER_DEBUG_LOG = os.getenv("BROWSER_DEBUG_LOG", "")
 BROWSER_POOL_TIMEOUT_RETRIES = max(0, int(os.getenv("BROWSER_POOL_TIMEOUT_RETRIES", "2")))
 BROWSER_POOL_TIMEOUT_BACKOFF = max(0.0, float(os.getenv("BROWSER_POOL_TIMEOUT_BACKOFF", "5")))
+BROWSER_HTTP_5XX_RETRIES = max(0, int(os.getenv("BROWSER_HTTP_5XX_RETRIES", "1")))
+BROWSER_HTTP_5XX_BACKOFF = max(0.0, float(os.getenv("BROWSER_HTTP_5XX_BACKOFF", "2")))
 PLACEHOLDER_RETRY = int(os.getenv("PLACEHOLDER_RETRY", "1"))
 LOOP_BREAKER = int(os.getenv("LOOP_BREAKER", "0"))
 HISTORY_REASONING = os.getenv("HISTORY_REASONING", "preserve").strip().lower()
@@ -866,7 +868,7 @@ async def _browser_events_with_retry(payload: dict[str, Any], *, buffered: bool)
     started = time.monotonic()
     deadline = started + BROWSER_TIMEOUT
     current = payload
-    attempt = pool_retries = 0
+    attempt = pool_retries = http_retries = 0
     placeholder_retried = False
     while True:
         attempt += 1
@@ -984,16 +986,25 @@ async def _browser_events_with_retry(payload: dict[str, Any], *, buffered: bool)
         except Exception as exc:
             failure = {"type": "error", "status": int(getattr(exc, "status", 502)), "message": str(exc)}
 
-        if _is_upstream_pool_timeout(failure):
+        pool_timeout = _is_upstream_pool_timeout(failure)
+        http_failure = failure.get("http_status") in (500, 502, 503, 504)
+        if pool_timeout or http_failure:
+            retries = pool_retries if pool_timeout else http_retries
+            limit = BROWSER_POOL_TIMEOUT_RETRIES if pool_timeout else BROWSER_HTTP_5XX_RETRIES
+            initial_backoff = BROWSER_POOL_TIMEOUT_BACKOFF if pool_timeout else BROWSER_HTTP_5XX_BACKOFF
+            policy = "nvidia_pool_acquire_timeout" if pool_timeout else "upstream_http_5xx"
             remaining = max(0, deadline - time.monotonic())
-            backoff = min(30.0, BROWSER_POOL_TIMEOUT_BACKOFF * 2 ** min(pool_retries, 6))
+            backoff = min(30.0, initial_backoff * 2 ** min(retries, 6))
             delay = backoff + random.uniform(0, min(1.0, backoff * 0.2))
             reason = ("content_committed" if committed else
-                      "retry_limit" if pool_retries >= BROWSER_POOL_TIMEOUT_RETRIES else
+                      "retry_limit" if retries >= limit else
                       "deadline" if remaining <= delay else None)
             if reason is None:
-                pool_retries += 1
-                log("upstream_retry", reason="nvidia_pool_acquire_timeout", retry=pool_retries,
+                if pool_timeout:
+                    pool_retries += 1
+                else:
+                    http_retries += 1
+                log("upstream_retry", reason=policy, retry=retries + 1,
                     next_attempt=attempt + 1, delay=round(delay, 3), remaining=round(remaining, 3),
                     status=failure["status"], error=failure["message"], counts=counts, usage=usage)
                 try:
@@ -1004,7 +1015,7 @@ async def _browser_events_with_retry(payload: dict[str, Any], *, buffered: bool)
                     log("browser_cancelled")
                     raise
                 continue
-            log("upstream_retry_skipped", reason=reason, retries=pool_retries, committed=committed,
+            log("upstream_retry_skipped", reason=reason, policy=policy, retries=retries, committed=committed,
                 remaining=round(remaining, 3))
         log("browser_error", error=failure["message"], status=failure["status"],
             committed=committed, counts=counts, usage=usage)

@@ -123,6 +123,12 @@ class BrowserHTTPErrorTests(unittest.TestCase):
         self.assertEqual(tab.aborts, 1)
         self.assertFalse(tab._lock.locked())
 
+    def test_failed_fetch_is_not_misclassified_as_a_received_http_response(self):
+        tab = HTTPErrorTab([{"status": -1, "data": "", "done": True, "error": "network error"}])
+        with self.assertRaises(bu.BrowserError) as caught:
+            list(tab.stream({}))
+        self.assertNotIsInstance(caught.exception, bu.BrowserHTTPError)
+
 
 class CDPRetryTests(unittest.IsolatedAsyncioTestCase):
     async def test_delayed_long_pool_timeout_body_reaches_retry_policy(self):

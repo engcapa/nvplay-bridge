@@ -8,7 +8,7 @@ import threading
 import time
 from collections.abc import AsyncIterator, Callable
 
-from browser_upstream import BrowserCancelled, BrowserError, ERROR_BODY_CHARS
+from browser_upstream import BrowserCancelled, BrowserError, BrowserHTTPError, ERROR_BODY_CHARS
 from stream_support import SSEDecoder
 
 BACKPRESSURE_TIMEOUT = 30.0
@@ -90,8 +90,11 @@ async def browser_events(browser, payload: dict, timeout: float, heartbeat: floa
         except Exception as exc:
             if not cancel.is_set():
                 # Control errors must not block again on an already full data queue.
-                terminal_error.append({"type": "error", "status": int(getattr(exc, "status", 502)),
-                                       "message": str(exc)[:ERROR_BODY_CHARS + 256]})
+                error = {"type": "error", "status": int(getattr(exc, "status", 502)),
+                         "message": str(exc)[:ERROR_BODY_CHARS + 256]}
+                if isinstance(exc, BrowserHTTPError):
+                    error["http_status"] = exc.status
+                terminal_error.append(error)
         finally:
             try:
                 if source is not None:

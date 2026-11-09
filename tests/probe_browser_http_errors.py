@@ -27,13 +27,14 @@ PAGE = b"""<!doctype html><meta charset=utf-8>
 <script>
 window.hcaptcha = {execute() {}};
 window.fixtureRequests = 0;
+window.fixtureError = "pool";
 window.fetch = async function(input) {
   window.fixtureRequests++;
   const failure = window.fixtureRequests === 1;
   const enc = new TextEncoder();
   const parts = failure
-    ? ['data:{"detail":"Pool#acquire(Duration)',
-       ' has been pending for more than the configured timeout of 45000ms"}\\n\\n']
+    ? window.fixtureError === 'pool' ? ['data:{"detail":"Pool#acquire(Duration)',
+       ' has been pending for more than the configured timeout of 45000ms"}\\n\\n'] : ['Internal', ' Server Error']
     : ['data: {"choices":[{"delta":{"content":"RECOVERED_CDP"},"finish_reason":"stop"}]}\\n\\n'];
   const stream = new ReadableStream({
     async start(controller) {
@@ -72,26 +73,29 @@ async def check(browser):
     bridge.BROWSER_TIMEOUT = 15
     bridge.BROWSER_POOL_TIMEOUT_BACKOFF = 0
     bridge.BROWSER_POOL_TIMEOUT_RETRIES = 1
+    bridge.BROWSER_HTTP_5XX_RETRIES = 1
+    bridge.BROWSER_HTTP_5XX_BACKOFF = 0
     bridge.BROWSER_HEARTBEAT_SEC = 0.05
     async with httpx.AsyncClient(transport=httpx.ASGITransport(app=bridge.app),
                                  base_url="http://local-probe") as client:
-        for endpoint in ("messages", "responses"):
-            browser._connect()
-            browser._eval("window.fixtureRequests = 0")
-            body = {"model": "kimi-k3.1-pro", "stream": True}
-            if endpoint == "messages":
-                body["messages"] = [{"role": "user", "content": "fixture"}]
-            else:
-                body.update(input="fixture", store=False)
-            response = await client.post("/v1/" + endpoint, json=body)
-            assert response.status_code == 200, response.text
-            assert "RECOVERED_CDP" in response.text, response.text
-            assert "event: error" not in response.text, response.text
-            assert "response.failed" not in response.text, response.text
-            assert browser._eval("window.fixtureRequests") == 2
-            terminal = "message_stop" if endpoint == "messages" else "response.completed"
-            assert f"event: {terminal}" in response.text, response.text
-            print(json.dumps({"endpoint": endpoint, "requests": 2, "result": "pass"}))
+        for error_kind in ("pool", "generic"):
+            for endpoint in ("messages", "responses"):
+                browser._connect()
+                browser._eval(f"window.fixtureRequests = 0; window.fixtureError = {json.dumps(error_kind)}")
+                body = {"model": "kimi-k3.1-pro", "stream": True}
+                if endpoint == "messages":
+                    body["messages"] = [{"role": "user", "content": "fixture"}]
+                else:
+                    body.update(input="fixture", store=False)
+                response = await client.post("/v1/" + endpoint, json=body)
+                assert response.status_code == 200, response.text
+                assert "RECOVERED_CDP" in response.text, response.text
+                assert "event: error" not in response.text, response.text
+                assert "response.failed" not in response.text, response.text
+                assert browser._eval("window.fixtureRequests") == 2
+                terminal = "message_stop" if endpoint == "messages" else "response.completed"
+                assert f"event: {terminal}" in response.text, response.text
+                print(json.dumps({"endpoint": endpoint, "error_kind": error_kind, "requests": 2, "result": "pass"}))
 
 
 def main():

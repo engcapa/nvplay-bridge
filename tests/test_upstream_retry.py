@@ -60,6 +60,7 @@ class RetrySettings:
         super().setUp()
         self.settings = patch.multiple(bridge, UPSTREAM_KIND="browser", BROWSER_TIMEOUT=3,
             BROWSER_POOL_TIMEOUT_RETRIES=2, BROWSER_POOL_TIMEOUT_BACKOFF=0.01,
+            BROWSER_HTTP_5XX_RETRIES=1, BROWSER_HTTP_5XX_BACKOFF=0.01,
             BROWSER_HEARTBEAT_SEC=0.01, PLACEHOLDER_RETRY=1)
         self.settings.start()
         self.addCleanup(self.settings.stop)
@@ -111,17 +112,75 @@ class RetryPolicyTests(RetrySettings, unittest.IsolatedAsyncioTestCase):
                 self.assertEqual(browser.calls, [{}] * (1 + limit))
         self.assertEqual(self.logs("upstream_retry_skipped")[-1]["reason"], "retry_limit")
 
-    async def test_generic_http_errors_and_uncertain_network_failures_are_not_replayed(self):
+    async def test_disabled_generic_http_policy_and_uncertain_failures_are_not_replayed(self):
         errors = [BrowserHTTPError(status, POOL_TIMEOUT) for status in (400, 429, 502, 503)]
         errors += [BrowserHTTPError(500, "Internal Server Error"), BrowserError(POOL_TIMEOUT),
                    BrowserError("上游响应读取失败: TypeError: network error"),
                    BrowserHTTPError(500, "Pool#acquire(Duration): an unrelated error")]
         for error in errors:
-            with self.subTest(error=str(error), status=getattr(error, "status", None)):
+            with self.subTest(error=str(error), status=getattr(error, "status", None)), \
+                    patch.object(bridge, "BROWSER_HTTP_5XX_RETRIES", 0):
                 browser = ScriptBrowser([[error], [frame({"content": "WRONG"}, "stop")]])
                 output = await self.collect(browser)
                 self.assertEqual(browser.calls, [{}])
                 self.assertEqual(output[-1]["type"], "error")
+
+    async def test_confirmed_http_server_errors_retry_once_with_unchanged_payload(self):
+        for status in (500, 502, 503, 504):
+            with self.subTest(status=status):
+                browser = ScriptBrowser([[BrowserHTTPError(status, "empty error response body")],
+                                         [frame({"content": "recovered"}, "stop")]])
+                payload = {"messages": [{"role": "user", "content": "hello"}], "seed": 0}
+                output = await self.collect(browser, payload=payload)
+                self.assertEqual(browser.calls, [payload, payload])
+                self.assertEqual(browser.closed, [0, 1])
+                self.assertEqual([event["text"] for event in output if event["type"] == "text"], ["recovered"])
+                self.assertEqual(self.logs("upstream_retry")[-1]["reason"], "upstream_http_5xx")
+
+    async def test_generic_retry_requires_a_confirmed_retryable_http_status(self):
+        errors = [BrowserHTTPError(status, "not transient") for status in (400, 401, 403, 404, 413, 422, 429, 501, 505)]
+        errors += [BrowserError("upstream 503: network error"), BrowserError("fetch failed")]
+        scripts = [[error] for error in errors]
+        scripts.append(['data: {"error":{"message":"Internal Server Error"}}\n\n'])
+        for script in scripts:
+            with self.subTest(script=str(script)):
+                browser = ScriptBrowser([script, [frame({"content": "WRONG"}, "stop")]])
+                output = await self.collect(browser)
+                self.assertEqual(len(browser.calls), 1)
+                self.assertEqual(output[-1]["type"], "error")
+
+    async def test_generic_retry_exhaustion_and_deadline_preserve_failure(self):
+        browser = ScriptBrowser([[BrowserHTTPError(500, "original HTTP failure")]])
+        output = await self.collect(browser)
+        self.assertEqual(len(browser.calls), 2)
+        self.assertEqual(output[-1]["message"], "original HTTP failure")
+        self.assertEqual(self.logs("upstream_retry_skipped")[-1]["reason"], "retry_limit")
+        browser = ScriptBrowser([[BrowserHTTPError(503, "overloaded")]])
+        with patch.multiple(bridge, BROWSER_TIMEOUT=0.05, BROWSER_HTTP_5XX_BACKOFF=0.1):
+            output = await self.collect(browser)
+        self.assertEqual(len(browser.calls), 1)
+        self.assertEqual(output[-1]["status"], 503)
+        self.assertEqual(self.logs("upstream_retry_skipped")[-1]["reason"], "deadline")
+
+    async def test_generic_http_retry_never_replays_delivered_content(self):
+        for delta in ({"reasoning_content": "thinking"}, {"content": "partial"},
+                      {"tool_calls": [{"index": 0, "id": "a", "function": {"name": "read", "arguments": '{}'}}]}):
+            with self.subTest(delta=delta):
+                browser = ScriptBrowser([[frame(delta), BrowserHTTPError(500, "server error")],
+                                         [frame({"content": "WRONG"}, "stop")]])
+                output = await self.collect(browser)
+                self.assertEqual(len(browser.calls), 1)
+                self.assertEqual(output[-1]["message"], "server error")
+                self.assertEqual(self.logs("upstream_retry_skipped")[-1]["reason"], "content_committed")
+
+    async def test_generic_and_pool_timeout_retry_budgets_are_independent(self):
+        browser = ScriptBrowser([[BrowserHTTPError(500, "server error")], [pool_error()],
+                                 [frame({"content": "recovered"}, "stop")]])
+        output = await self.collect(browser)
+        self.assertEqual(len(browser.calls), 3)
+        self.assertEqual([event["text"] for event in output if event["type"] == "text"], ["recovered"])
+        self.assertEqual([event["reason"] for event in self.logs("upstream_retry")],
+                         ["upstream_http_5xx", "nvidia_pool_acquire_timeout"])
 
     async def test_thinking_text_and_tool_delivery_each_prevent_replay(self):
         for delta in ({"reasoning_content": "thinking"}, {"content": "partial"},
@@ -241,27 +300,29 @@ class HTTPRetryTests(RetrySettings, unittest.IsolatedAsyncioTestCase):
             ("/v1/messages", "event: ping", "event: message_stop", "event: message_start"),
             ("/v1/responses", ": ping", "event: response.completed", "event: response.created"),
         ):
-            with self.subTest(endpoint=endpoint):
-                browser = ScriptBrowser([[pool_error()], [frame({"content": "RECOVERED"}, "stop")]])
-                async with httpx.AsyncClient(trust_env=False, timeout=3) as client:
-                    with patch.multiple(bridge, _browser=browser, BROWSER_POOL_TIMEOUT_BACKOFF=0.2):
-                        async with client.stream("POST", self.base + endpoint, json=self.request_body(endpoint)) as response:
-                            self.assertEqual(response.status_code, 200)
-                            lines, seen = response.aiter_lines(), []
-                            async with asyncio.timeout(2):
-                                async for line in lines:
-                                    seen.append(line)
-                                    if line == ping:
-                                        break
-                            self.assertIn(ping, seen)
-                            self.assertEqual(len(browser.calls), 1)
-                            self.assertEqual(browser.closed, [0])
-                            seen.extend([line async for line in lines])
-                self.assertEqual(seen.count(start), 1)
-                self.assertEqual(seen.count(terminal), 1)
-                self.assertIn("RECOVERED", "\n".join(seen))
-                self.assertNotIn("Pool#acquire", "\n".join(seen))
-                self.assertEqual(len(browser.calls), 2)
+            for failure in (pool_error(), BrowserHTTPError(500, "Internal Server Error")):
+                with self.subTest(endpoint=endpoint, failure=str(failure)):
+                    browser = ScriptBrowser([[failure], [frame({"content": "RECOVERED"}, "stop")]])
+                    async with httpx.AsyncClient(trust_env=False, timeout=3) as client:
+                        with patch.multiple(bridge, _browser=browser, BROWSER_POOL_TIMEOUT_BACKOFF=0.2,
+                                            BROWSER_HTTP_5XX_BACKOFF=0.2):
+                            async with client.stream("POST", self.base + endpoint, json=self.request_body(endpoint)) as response:
+                                self.assertEqual(response.status_code, 200)
+                                lines, seen = response.aiter_lines(), []
+                                async with asyncio.timeout(2):
+                                    async for line in lines:
+                                        seen.append(line)
+                                        if line == ping:
+                                            break
+                                self.assertIn(ping, seen)
+                                self.assertEqual(len(browser.calls), 1)
+                                self.assertEqual(browser.closed, [0])
+                                seen.extend([line async for line in lines])
+                    self.assertEqual(seen.count(start), 1)
+                    self.assertEqual(seen.count(terminal), 1)
+                    self.assertIn("RECOVERED", "\n".join(seen))
+                    self.assertNotIn("Pool#acquire", "\n".join(seen))
+                    self.assertEqual(len(browser.calls), 2)
 
     async def test_both_protocols_emit_one_terminal_error_after_retry_exhaustion(self):
         for endpoint, failed, completed in (("/v1/messages", "event: error", "event: message_stop"),

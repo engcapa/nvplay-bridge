@@ -477,7 +477,7 @@ class BrowserUpstream:
                 if status and status != 200:
                     if status > 0:
                         raise self._http_error(quoted_id, state, cancel, deadline, trace)
-                    raise BrowserHTTPError(502, f"上游 {status}: {data[:500] or state.get('error')}")
+                    raise BrowserError(f"上游请求未建立: {data[:500] or state.get('error')}")
                 if state.get("error"):
                     raise BrowserError(f"上游响应读取失败: {state['error']}")
                 if data:
