@@ -67,12 +67,54 @@ incomplete records, reports pool states, and offers a snapshot with request IDs,
 ages, activity timestamps, counts, usage and recent errors. Three focused tests
 cover split UTF-8 writes, truncation/replacement and retry/failure tracking.
 
+Long-running live work exposed another snapshot defect: filtering log records
+before reconstructing requests dropped a still-active request when its start
+preceded `--lookback`. A real 60-second snapshot showed a busy pool and an empty
+active list. Snapshots now replay the complete available log for lifetimes and
+apply the window only to event counts and recent errors. A focused regression
+covers both ongoing progress and a silent old request, without resurrecting
+completed requests or old errors.
+
 ## Supervised implementation workload
 
 A separate CC session was started through the bridge, with no background agents,
 to implement Notes workspace search clearing and investigate one reproducible
 Notes bug. It uses branch `feat/cc-bridge-notes-search-20261109` in taomni.
-The review and hosted execution results will be recorded after completion.
+
+The selected defect is out-of-order persistence of Notes workspace status
+filters. The native setter is asynchronous; its database mutex serializes
+access but does not guarantee the order in which separate IPC invocations
+acquire it. An independent regression run against the original implementation
+failed: an older delayed write persisted `all` after the UI selected `completed`.
+The same race passes with CC's per-store Promise queue. The queue continues
+after rejection and suppresses errors from obsolete filter revisions. Six
+focused store tests and five mounted search tests passed in CC's run; a separate
+Node 22/pnpm 10 run passed 24 retained content/task/workspace tests.
+
+The feature adds a localized clear button and Escape handling to Notes search,
+retaining focus, filters and the active draft. The reviewer required actual
+Escape events for both IME guards, observable parent bubbling for empty searches,
+and a controlled test harness that really updates the input and calls its spy.
+Early test drafts lacked those checks; their intermediate results are not used
+as acceptance evidence.
+
+Review also caught a browser-specific CSS defect in CC's initial implementation:
+grouping `::-webkit-search-cancel-button` and `::-ms-clear` in one selector list
+caused Brave to discard the entire rule. An isolated real-CDP page returned zero
+CSSOM rules for that list, and retained the WebKit rule when they were split.
+CC applied the split. The new `TC-NOTES-014` case also initially combined the
+default status with Pinned while expecting Pinned alone, and its verification
+step references were misnumbered. Those were returned for correction before
+hosted execution; a reviewed plan is not an executed pass.
+
+One independent command accidentally used the system pnpm version, triggering a
+dependency reinstall and a subsequent `vitest not found` setup failure in CC.
+The reinstall was stopped and the frozen dependency tree restored offline with
+Node 22/pnpm 10 in 3.7 seconds. The lockfile was unchanged. That setup failure is
+kept separately from the actual pre-fix race and post-fix test results.
+
+Product commit, final independent review and hosted execution receipts remain
+pending at this point in the investigation.
 
 ## Further live evidence and HTTP recovery
 
@@ -101,7 +143,24 @@ from normalized API error status, preventing a failed fetch or HTTP-200 error
 event from being mistaken for a received HTTP 5xx response. The specific pool
 timeout policy keeps its separate budget and priority.
 
-All 138 offline tests pass. The real-CDP fixture covers both specific pool and
+All 138 offline tests passed before the subsequent monitor correction; the full
+offline discovery then passed all 139 tests, including that regression. The
+real-CDP fixture covers both specific pool and
 generic server failures through both API protocols: four cases, two fixture
 requests each, all successful. Network failures after delivered content still
 end explicitly; the underlying provider/network cause remains unestablished.
+
+At 00:20:15 on November 10, the canary service on port 8084 was gracefully
+restarted at an idle API boundary and loaded `2c2674dc6e2e8ae294eb250a1b92e0f0a76222c1`.
+The supervised CC client then continued issuing successful requests. Its single
+`kcanary` tab is independent of the original five `kpool` tabs.
+
+The original background-agent transcripts record interruption at 23:53:46.
+The original main session continued receiving data. One later max-effort request
+spent 713 seconds producing reasoning before returning three Read calls with
+`tool_calls` as its finish reason. The following prompt contained 192,558 tokens.
+These observations distinguish slow model work from a transport deadlock. The
+main session completed its full architecture report at 00:28:59 on November 10.
+It explicitly distinguished static findings and historical QA records from
+tests executed in that session. Port 8083 was then observed idle with all five
+tabs ready; its service replacement is the next operational step.

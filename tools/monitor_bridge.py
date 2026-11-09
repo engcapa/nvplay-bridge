@@ -53,14 +53,17 @@ class LogTail:
         return records
 
 
-def snapshot(records, now=None):
+def snapshot(records, now=None, since=None):
+    """Replay request lifetimes, applying the window only to event/error totals."""
     now = time.time() if now is None else now
     active = {}
     counts = Counter()
     errors = []
     for record in records:
         kind = record.get("event", "?")
-        counts[kind] += 1
+        recent = since is None or record.get("ts", 0) >= since
+        if recent:
+            counts[kind] += 1
         request_id = record.get("id")
         if kind == "browser_start":
             previous = active.get(request_id, {})
@@ -73,7 +76,7 @@ def snapshot(records, now=None):
                     request[key] = record[key]
         if kind in ("browser_done", "browser_error", "browser_cancelled"):
             active.pop(request_id, None)
-        if kind in ("browser_error", "pool_recovery_error"):
+        if recent and kind in ("browser_error", "pool_recovery_error"):
             errors.append(record)
     for request in active.values():
         request["age_seconds"] = round(now - request.pop("started"), 1)
@@ -117,7 +120,7 @@ def main() -> int:
     parser.add_argument("--health-url", default=HEALTH)
     parser.add_argument("--duration", type=float, default=90, help="Seconds; 0 follows until interrupted")
     parser.add_argument("--interval", type=float, default=5)
-    parser.add_argument("--lookback", type=float, default=3600, help="Snapshot history window in seconds")
+    parser.add_argument("--lookback", type=float, default=3600, help="Event/error window in seconds; active requests retain their full lifetime")
     parser.add_argument("--snapshot", action="store_true")
     args = parser.parse_args()
     if args.duration < 0 or args.interval <= 0 or args.lookback < 0:
@@ -125,8 +128,9 @@ def main() -> int:
     tail = LogTail(args.log)
     records = tail.read()
     if args.snapshot:
-        recent = (record for record in records if record.get("ts", 0) >= time.time() - args.lookback)
-        print(json.dumps({"health": health(args.health_url), **snapshot(recent)}, ensure_ascii=False))
+        now = time.time()
+        print(json.dumps({"health": health(args.health_url),
+                          **snapshot(records, now=now, since=now - args.lookback)}, ensure_ascii=False))
         return 0
     print("start size", tail.offset, "health", health(args.health_url), flush=True)
     start = time.monotonic()

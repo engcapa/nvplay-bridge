@@ -277,7 +277,8 @@ It sends no NVIDIA inference requests and does not use the production pool tabs.
 
 `python3 tools/monitor_bridge.py --snapshot` reports recent active requests,
 their age and last activity, token usage, terminal errors and pool health.
-Use `--lookback 1800` to limit history, `--log PATH` for another metadata log,
+Use `--lookback 1800` to limit event/error history; active requests retain their
+full lifetime, including requests with no recent progress. Use `--log PATH` for another metadata log,
 or `--health-url http://127.0.0.1:8084/health` for another service instance.
 The default follows new events for 90 seconds; `--duration 0` follows until
 interrupted. The reader retains incomplete UTF-8/JSON lines and handles file

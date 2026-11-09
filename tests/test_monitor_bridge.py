@@ -53,6 +53,31 @@ class MonitorTests(unittest.TestCase):
         self.assertEqual(request["usage"]["completion_tokens"], 42)
         self.assertTrue(result["recent_errors"][0]["committed"])
 
+    def test_lookback_keeps_long_running_and_silent_requests(self):
+        result = snapshot([
+            {"event": "browser_start", "id": "running", "ts": 10},
+            {"event": "browser_start", "id": "silent", "ts": 11},
+            {"event": "browser_tab", "id": "silent", "ts": 12, "tab_id": "kpool=2"},
+            {"event": "browser_start", "id": "finished", "ts": 13},
+            {"event": "browser_done", "id": "finished", "ts": 14},
+            {"event": "browser_start", "id": "old-error", "ts": 15},
+            {"event": "browser_error", "id": "old-error", "ts": 16, "error": "old"},
+            {"event": "browser_progress", "id": "running", "ts": 98,
+             "usage": {"completion_tokens": 42}},
+            {"event": "browser_start", "id": "new-error", "ts": 98.5},
+            {"event": "browser_error", "id": "new-error", "ts": 99, "error": "new"},
+        ], now=100, since=95)
+        active = {request["id"]: request for request in result["active"]}
+        self.assertEqual(set(active), {"running", "silent"})
+        self.assertEqual(active["running"]["age_seconds"], 90)
+        self.assertEqual(active["running"]["activity_age_seconds"], 2)
+        self.assertEqual(active["running"]["usage"]["completion_tokens"], 42)
+        self.assertEqual(active["silent"]["age_seconds"], 89)
+        self.assertEqual(active["silent"]["activity_age_seconds"], 88)
+        self.assertEqual(active["silent"]["tab_id"], "kpool=2")
+        self.assertEqual(result["events"], {"browser_progress": 1, "browser_start": 1, "browser_error": 1})
+        self.assertEqual([event["error"] for event in result["recent_errors"]], ["new"])
+
 
 if __name__ == "__main__":
     unittest.main()
