@@ -23,7 +23,10 @@ def read_json(path: Path) -> dict:
 def observe(base: Path, checkpoint: Path | None, health_url: str, lookback: float) -> dict:
     now = time.time()
     report = summarize(base)
-    bridge = snapshot(LogTail(base / "bridge-debug.jsonl").read(), now=now, since=now - lookback)
+    records = LogTail(base / "bridge-debug.jsonl").read()
+    bridge = snapshot(records, now=now, since=now - lookback)
+    preparation = [row for row in records if row.get("event") == "browser_prepare_retry"
+                   and row.get("ts", 0) >= now - lookback]
     campaign = read_json(base / "campaign-state.json")
     resource = read_json(base / "resource-monitor-state.json")
     result = {
@@ -37,8 +40,12 @@ def observe(base: Path, checkpoint: Path | None, health_url: str, lookback: floa
                     "retry_count", "age_seconds", "activity_age_seconds", "counts") if key in row}
                    for row in bridge["active"]],
         "recent_errors": [event_summary(row) for row in bridge["recent_errors"]],
-        "upstream_errors_in_lookback": len(bridge["recent_upstream_errors"]),
-        "retries_in_lookback": len(bridge["recent_retries"]), "lookback_seconds": lookback,
+        "upstream_errors_in_lookback": bridge["events"].get("browser_http_error", 0),
+        "retries_in_lookback": bridge["events"].get("upstream_retry", 0),
+        "preparation_retries_in_lookback": len(preparation),
+        "recent_preparation_retries": [{**event_summary(row), "tab_id": row.get("tab_id")}
+                                        for row in preparation[-10:]],
+        "lookback_seconds": lookback,
         "campaign": {key: campaign[key] for key in ("status", "task", "repeat") if key in campaign},
         "campaign_error_present": (base / "campaign-error.json").exists(),
     }

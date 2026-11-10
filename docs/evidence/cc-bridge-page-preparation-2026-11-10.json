@@ -1,0 +1,53 @@
+{
+  "observed_at": 1794320862.836184,
+  "classification": "Recovered page preparation failure; distinct from HTTP or terminal request errors",
+  "reason": "Disclaimer dialog did not close",
+  "request_id": "94f1f94a",
+  "events": [
+    {
+      "event": "browser_start",
+      "ts": 1794320746.8588235,
+      "id": "94f1f94a",
+      "sec": 0.0,
+      "attempt": 1
+    },
+    {
+      "event": "browser_prepare_retry",
+      "ts": 1794320756.9553096,
+      "id": "94f1f94a",
+      "tab_id": "kpool=1",
+      "sec": 10.096,
+      "attempt": 1
+    },
+    {
+      "event": "browser_pool_release",
+      "ts": 1794320756.9554772,
+      "id": "94f1f94a",
+      "tab_id": "kpool=1",
+      "needs_refresh": true,
+      "sec": 10.097,
+      "attempt": 1
+    },
+    {
+      "event": "pool_recovery_start",
+      "ts": 1794320756.961038,
+      "tab_id": "kpool=1",
+      "recovery_attempt": 1
+    },
+    {
+      "event": "browser_tab",
+      "ts": 1794320756.971287,
+      "id": "94f1f94a",
+      "tab_id": "kpool=3",
+      "sec": 10.112,
+      "attempt": 1
+    },
+    {
+      "event": "pool_ready",
+      "ts": 1794320763.8424542,
+      "tab_id": "kpool=1"
+    }
+  ],
+  "source_prefix_bytes": 2569775,
+  "source_prefix_sha256": "691c71617c7ba2197f8b7ce7e64534c485d7919c9cfab0c908d4e5ff9d3d6b80"
+}
