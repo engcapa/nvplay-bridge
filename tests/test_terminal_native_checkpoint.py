@@ -201,9 +201,9 @@ class CheckpointPushTests(unittest.TestCase):
     def git(self, *args):
         return subprocess.check_output(["git", *args], cwd=self.repo, text=True).strip()
 
-    def save(self):
+    def save(self, *, changes_only=False):
         with patch.object(checkpoint, "REPO", self.repo), patch.object(checkpoint, "collect", return_value=self.data):
-            checkpoint.save(self.base, self.output, "unused", commit=True, push=True)
+            checkpoint.save(self.base, self.output, "unused", commit=True, push=True, changes_only=changes_only)
 
     def test_checkpoint_is_pushed_without_committing_unrelated_staged_work(self):
         self.save()
@@ -219,9 +219,25 @@ class CheckpointPushTests(unittest.TestCase):
         first = self.git("rev-parse", "HEAD")
         self.assertFalse(json.loads((self.base / "checkpoint-git-sync.json").read_text())["pushed"])
         self.git("remote", "set-url", "origin", str(self.remote))
-        self.save()
+        self.data["previous_checkpoint_git_sync"] = {"pushed": False}
+        self.save(changes_only=True)
         self.assertEqual(self.git("rev-parse", "HEAD"), first)
         self.assertTrue(json.loads((self.base / "checkpoint-git-sync.json").read_text())["pushed"])
+
+    def test_periodic_checkpoint_skips_elapsed_only_updates_but_keeps_tool_progress(self):
+        row = {"attempt": "stage/task--high--r1", "status": "agent_running", "started_at": 1,
+               "elapsed_seconds": 10, "tool_calls": 1}
+        self.data.update(checkpoint_at=11, results={"pending": [row]})
+        self.save(changes_only=True)
+        first = self.git("rev-parse", "HEAD")
+        self.data["checkpoint_at"] = 131
+        row["elapsed_seconds"] = 130
+        self.save(changes_only=True)
+        self.assertEqual(self.git("rev-parse", "HEAD"), first)
+        self.assertEqual(json.loads(self.output.read_text())["checkpoint_at"], 11)
+        row["tool_calls"] += 1
+        self.save(changes_only=True)
+        self.assertNotEqual(self.git("rev-parse", "HEAD"), first)
 
 
 if __name__ == "__main__":

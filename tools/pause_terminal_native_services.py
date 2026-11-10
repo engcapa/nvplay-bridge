@@ -7,6 +7,8 @@ import json
 import os
 from pathlib import Path
 import signal
+import subprocess
+import sys
 import time
 
 from archive_terminal_native_roots import completed_roots
@@ -55,6 +57,28 @@ def preflight(base: Path) -> tuple[dict, list[str]]:
             "controller": controller}, blocked
 
 
+def bridge_log_matches(proc: Path, log: Path, owner_uid: int) -> bool:
+    expected = f"BROWSER_DEBUG_LOG={log}"
+    environ = proc / "environ"
+    try:
+        return expected.encode() in environ.read_bytes().split(b"\0")
+    except PermissionError:
+        # Container root may lack CAP_SYS_PTRACE. Check one value as the
+        # ordinary owner; do not return or print the process environment.
+        owner = proc.stat()
+        if os.geteuid() != 0 or owner_uid == 0 or owner.st_uid != owner_uid:
+            raise
+        code = ("from pathlib import Path; import sys; "
+                "raise SystemExit(0 if sys.argv[2].encode() in "
+                "Path(sys.argv[1]).read_bytes().split(bytes(1)) else 1)")
+        result = subprocess.run([sys.executable, "-I", "-S", "-c", code, str(environ), expected],
+                                user=owner.st_uid, group=owner.st_gid, extra_groups=[], env={},
+                                capture_output=True, timeout=5)
+        if result.stderr or result.returncode not in (0, 1):
+            raise RuntimeError("cannot verify bridge log as the process owner")
+        return result.returncode == 0
+
+
 def identify(base: Path, filename: str, expected_command: str) -> dict | None:
     record_path = base / filename
     if not record_path.is_file():
@@ -64,23 +88,24 @@ def identify(base: Path, filename: str, expected_command: str) -> dict | None:
     actual = process_identity(pid)
     if actual is None:
         return None
+    if "boot_id" in record and "start_ticks" in record:
+        expected = {key: record[key] for key in ("pid", "boot_id", "start_ticks")}
+        if expected != actual:
+            raise RuntimeError(f"refusing reused PID: {filename}")
     proc = Path("/proc") / str(pid)
     args = (proc / "cmdline").read_bytes().replace(b"\0", b" ").decode(errors="replace")
     if expected_command not in args:
         raise RuntimeError(f"refusing PID with different command: {filename}")
     if filename == "bridge-runtime.json":
-        env = dict(item.split(b"=", 1) for item in (proc / "environ").read_bytes().split(b"\0") if b"=" in item)
-        owned = env.get(b"BROWSER_DEBUG_LOG") == str(base / "bridge-debug.jsonl").encode()
+        owned = bridge_log_matches(proc, base / "bridge-debug.jsonl", base.stat().st_uid)
     elif filename == "brave-process.json":
         owned = f"--user-data-dir={base}/brave-profile " in args
     else:
         owned = str(base) in args
     if not owned:
         raise RuntimeError(f"refusing process outside this campaign: {filename}")
-    if "boot_id" in record and "start_ticks" in record:
-        expected = {key: record[key] for key in ("pid", "boot_id", "start_ticks")}
-        if expected != actual:
-            raise RuntimeError(f"refusing reused PID: {filename}")
+    if process_identity(pid) != actual:
+        raise RuntimeError(f"process identity changed during inspection: {filename}")
     return {"record": filename, "identity": actual}
 
 

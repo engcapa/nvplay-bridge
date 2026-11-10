@@ -168,13 +168,37 @@ def collect(base: Path, health_url: str) -> dict:
     return result
 
 
-def save(base: Path, output: Path, health_url: str, commit: bool, push: bool = False):
+def progress_key(data: dict) -> dict:
+    """Ignore timestamps, log rotation and idle polling when deciding to commit."""
+    report = data.get("results", {})
+    activity = data.get("bridge_activity", {})
+    return {**{key: data.get(key) for key in ("status", "protocol", "campaign", "controls", "bridge_runtime",
+                "interrupted_attempts_excluded_from_grades", "administrative_pause", "compressed_root_evidence")},
+            "transition": data.get("transport_transition", {}).get("status"),
+            "attempts": report.get("attempts", []),
+            "pending": [{k: row.get(k) for k in ("attempt", "status", "started_at", "tool_calls")}
+                        for row in report.get("pending", [])],
+            "active": sorted((row["id"], row.get("retry_count", 0),
+                              (row.get("usage", {}).get("completion_tokens") or 0) // 16384)
+                             for row in activity.get("active", [])),
+            "bridge_reachable": data.get("bridge_health", {}).get("status")}
+
+
+def save(base: Path, output: Path, health_url: str, commit: bool, push: bool = False,
+         *, changes_only: bool = False):
     if push and not commit:
         raise ValueError("pushing checkpoints requires committing them")
     with (base / "checkpoint.lock").open("a+") as lock:
         fcntl.flock(lock, fcntl.LOCK_EX)
         data = collect(base, health_url)
-        write_json(output, data)
+        unchanged = (changes_only and output.is_file() and
+                     progress_key(data) == progress_key(json.loads(output.read_text())))
+        if unchanged:
+            sync = data.get("previous_checkpoint_git_sync", {})
+            if not push or sync.get("pushed") is not False:
+                return
+        else:
+            write_json(output, data)
         if commit:
             repo = REPO
             relative = str(output.resolve().relative_to(repo))
@@ -184,14 +208,15 @@ def save(base: Path, output: Path, health_url: str, commit: bool, push: bool = F
                 # the repository owner and use that owner's normal identity.
                 git = ["runuser", "-u", pwd.getpwuid(repo.stat().st_uid).pw_name, "--", "git"]
             # Commit this file alone, even if an operator has unrelated staged edits.
-            subprocess.run([*git, "add", "--", relative], cwd=repo, check=True)
-            changed = subprocess.run([*git, "diff", "--cached", "--quiet", "--", relative], cwd=repo)
-            if changed.returncode not in (0, 1):
-                raise RuntimeError("git checkpoint diff failed")
-            if changed.returncode:
-                subprocess.run([*git, "commit", "--only", "-m",
-                                f'Checkpoint CC bridge evaluation: {data["new_formal_attempts_completed"]}/{data["new_formal_attempts_planned"]}, {data["status"]}',
-                                "--", relative], cwd=repo, check=True)
+            if not unchanged:
+                subprocess.run([*git, "add", "--", relative], cwd=repo, check=True)
+                changed = subprocess.run([*git, "diff", "--cached", "--quiet", "--", relative], cwd=repo)
+                if changed.returncode not in (0, 1):
+                    raise RuntimeError("git checkpoint diff failed")
+                if changed.returncode:
+                    subprocess.run([*git, "commit", "--only", "-m",
+                                    f'Checkpoint CC bridge evaluation: {data["new_formal_attempts_completed"]}/{data["new_formal_attempts_planned"]}, {data["status"]}',
+                                    "--", relative], cwd=repo, check=True)
             if push:
                 # A temporary push failure must not terminate a running CC task.
                 # Every following checkpoint retries, even without a new commit.
@@ -218,14 +243,16 @@ def main():
     parser.add_argument("--health-url", default="http://127.0.0.1:8083/health")
     parser.add_argument("--commit", action="store_true")
     parser.add_argument("--push", action="store_true", help="Push after every commit; retry on the next checkpoint")
-    parser.add_argument("--interval", type=float, default=0, help="Zero saves once; otherwise follow until interrupted")
+    parser.add_argument("--interval", type=float, default=0,
+                        help="Zero saves once; otherwise save only changed progress at this interval")
     args = parser.parse_args()
     if args.interval < 0:
         parser.error("interval must be nonnegative")
     if args.push and not args.commit:
         parser.error("--push requires --commit")
     while True:
-        save(args.base.resolve(), args.output.resolve(), args.health_url, args.commit, args.push)
+        save(args.base.resolve(), args.output.resolve(), args.health_url, args.commit, args.push,
+             changes_only=bool(args.interval))
         if not args.interval:
             return
         time.sleep(args.interval)

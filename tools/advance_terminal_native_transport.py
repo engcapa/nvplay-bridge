@@ -75,7 +75,7 @@ def commit_evidence(base, output):
 def start_process(base, name, command, *, env=None, ordinary_user=False):
     options = {}
     if ordinary_user:
-        options.update(user=REPO.stat().st_uid, group=REPO.stat().st_gid)
+        options.update(user=REPO.stat().st_uid, group=REPO.stat().st_gid, extra_groups=[])
     with (base / f"{name}.log").open("ab") as log:
         child = subprocess.Popen(command, cwd=REPO, env=env, stdout=log, stderr=subprocess.STDOUT,
                                  start_new_session=True, **options)
@@ -92,6 +92,8 @@ def main():
     parser.add_argument("--evidence-output", type=Path, required=True)
     parser.add_argument("--from-stage", required=True)
     parser.add_argument("--to-stage", required=True)
+    parser.add_argument("--resume-before-deploy", action="store_true",
+                        help="Resume a failed preflight only if the original runtime is still in place")
     args = parser.parse_args()
     if os.geteuid() != 0:
         parser.error("use sudo for verified rootfs archival and ordinary-UID CC setup")
@@ -108,7 +110,16 @@ def main():
     if (base / "transport-transition-complete.json").exists():
         raise RuntimeError("transition already completed; use the running campaign")
     state_path = base / "transport-transition-state.json"
-    if state_path.exists() and json.loads(state_path.read_text())["status"] != "waiting_for_natural_completion":
+    previous = json.loads(state_path.read_text()) if state_path.exists() else {}
+    if args.resume_before_deploy:
+        before = json.loads((base / "transport-before-checkpoint.json").read_text())
+        if (previous.get("status") != "archiving_completed_attempts"
+                or campaign_progress(base)["controller_alive"]
+                or any((base / name).exists() for name in ("transport-rollout-smoke",
+                                                          "bridge-runtime-before-transport-fix.json"))
+                or before["bridge_runtime"] != json.loads((base / "bridge-runtime.json").read_text())):
+            raise RuntimeError("the recorded boundary is no longer safe to resume before deployment")
+    elif previous and previous["status"] != "waiting_for_natural_completion":
         raise RuntimeError("previous transition already reached the deployment boundary; inspect before resuming")
     plan_path = base / "evaluation-plan.json"
     initial_plan = plan_path.read_bytes()
@@ -116,6 +127,8 @@ def main():
     formal = plan["formal_native_subset"]
     if formal["stage"] != args.from_stage or args.to_stage in plan["bridge_runtime_by_stage"]:
         raise RuntimeError("source or destination stage does not match the plan")
+    if args.resume_before_deploy and before["bridge_runtime"] != plan["bridge_runtime_by_stage"][args.from_stage]:
+        raise RuntimeError("recorded source-stage runtime changed since the predeployment checkpoint")
     validated_runtime = json.loads((validation / "bridge-runtime.json").read_text())
     if (not json.loads((validation / "validation-complete.json").read_text()).get("passed")
             or not json.loads((validation / "smoke-result.json").read_text()).get("passed")
@@ -153,20 +166,21 @@ def main():
     write_json(base / "transport-transition-state.json", {"status": "archiving_completed_attempts", "at": time.time()})
     for root in list(completed_roots(base)):
         archive_root(root)
-    # Stop only after natural completion, inspection, and verified archives.
-    with (base / "checkpoint.lock").open("a+") as lock:
-        fcntl.flock(lock, fcntl.LOCK_EX)
-        service = identify(base, "checkpoint-process.json", "checkpoint_terminal_native.py")
-        if service:
-            record["stopped_checkpoint"] = stop(service)
-    checkpoint = start_process(base, "checkpoint", [sys.executable, "-u", "tools/checkpoint_terminal_native.py",
-        "--base", str(base), "--output", str(output), "--health-url", health_url,
-        "--interval", "120", "--commit", "--push"], ordinary_user=True)
     service = identify(base, "bridge-runtime.json", "nvplay_bridge:app")
     if service is None:
         raise RuntimeError("recorded old bridge is not running")
-    record["stopped_bridge"] = stop(service)
+    # Stop only after natural completion, inspection, and verified archives.
+    with (base / "checkpoint.lock").open("a+") as lock:
+        fcntl.flock(lock, fcntl.LOCK_EX)
+        checkpoint_service = identify(base, "checkpoint-process.json", "checkpoint_terminal_native.py")
+        if checkpoint_service:
+            record["stopped_checkpoint"] = stop(checkpoint_service)
+    checkpoint = start_process(base, "checkpoint", [sys.executable, "-u", "tools/checkpoint_terminal_native.py",
+        "--base", str(base), "--output", str(output), "--health-url", health_url,
+        "--interval", "120", "--commit", "--push"], ordinary_user=True)
+    write_json(state_path, {"status": "switching_bridge", "at": time.time()})
     write_json(base / "bridge-runtime-before-transport-fix.json", old_runtime)
+    record["stopped_bridge"] = stop(service)
     settings = dict(old_runtime["configuration"])
     settings["BROWSER_DEBUG_LOG"] = str(base / "bridge-debug.jsonl")
     child = start_process(base, "bridge-server", [sys.executable, "-m", "uvicorn", "nvplay_bridge:app",
