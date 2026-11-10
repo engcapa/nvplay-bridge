@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794323605.7430882,
+  "checkpoint_at": 1794323726.0454495,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-resume-20261110-1647",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -541,7 +541,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794323605.861971,
+    "generated_at": 1794323726.1672592,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-128k-fixed/28800/high": {
@@ -916,7 +916,7 @@
         "task": "batched-eval-parity",
         "effort": "max",
         "started_at": 1794315384.410672,
-        "elapsed_seconds": 8221.4,
+        "elapsed_seconds": 8341.7,
         "tool_calls": 54,
         "last_tool": "Bash"
       }
@@ -958,23 +958,23 @@
         "reasoning_effort": "max",
         "tab_id": "kpool=2",
         "counts": {
-          "thinking_chars": 602137,
+          "thinking_chars": 615737,
           "text_chars": 0,
           "tool_calls": 0
         },
         "usage": {
           "prompt_tokens": 172356,
-          "completion_tokens": 64376,
-          "total_tokens": 236732,
+          "completion_tokens": 65736,
+          "total_tokens": 238092,
           "prompt_tokens_details": {
             "cached_tokens": 171904
           },
           "completion_tokens_details": {
-            "reasoning_tokens": 64376
+            "reasoning_tokens": 65736
           }
         },
-        "age_seconds": 3161.0,
-        "activity_age_seconds": 1.2
+        "age_seconds": 3281.3,
+        "activity_age_seconds": 2.4
       }
     ],
     "recent_errors": [],
@@ -1134,8 +1134,8 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "0f3b446a18eefd01776dcafd4df7c3219bbb0f22b4d57d3ff56b45078a428384",
-      "size": 787
+      "sha256": "8cd83d9772a73e5c12083897fcc93a87777da3a90da5b9b62d95b0ab127a9e61",
+      "size": 786
     },
     {
       "path": "restoration-regression.log",
