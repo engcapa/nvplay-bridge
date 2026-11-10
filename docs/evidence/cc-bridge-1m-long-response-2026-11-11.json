@@ -35,5 +35,39 @@
     "path": "logs/eval-cc-1m-20261110-2355/bridge-debug.jsonl",
     "bytes": 239888,
     "sha256": "89bbb181442c706f522c2cd1eea411340ffb8ff645f017065a96f49afd0b5eb5"
-  }
+  },
+  "follow_up_observations": [
+    {
+      "at": 1794333432.1648157,
+      "latest_event": "browser_progress",
+      "latest_progress_at": 1794333428.0394752,
+      "elapsed_seconds": 3129.738,
+      "usage": {
+        "prompt_tokens": 75996,
+        "completion_tokens": 66885,
+        "total_tokens": 142881,
+        "prompt_tokens_details": {
+          "cached_tokens": 55552
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 66885
+        }
+      },
+      "counts": {
+        "thinking_chars": 310546,
+        "text_chars": 0,
+        "tool_calls": 0
+      },
+      "completion_tokens_exceed_65536": true,
+      "reported_prompt_plus_completion_tokens_exceed_131072": true,
+      "terminal_events_at_observation": [],
+      "partial": true,
+      "log_prefix": {
+        "bytes": 350199,
+        "sha256": "a9cfcf09818a037c75d925bffa275360f5af9db234b0ab931d1b4779df7e3294"
+      },
+      "entire_131072_output_demonstrated": false,
+      "one_million_input_capacity_demonstrated": false
+    }
+  ]
 }
