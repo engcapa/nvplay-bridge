@@ -284,6 +284,11 @@ their age and last activity, token usage, terminal errors and pool health.
 Snapshots also list upstream HTTP failures and retry decisions separately.
 Active entries retain their reasoning effort, retry count and last retry reason
 across attempts, including when those earlier events fall outside the lookback.
+For browser-level stream failures, `python3 tools/monitor_cdp_network.py --output logs/cdp-network.jsonl`
+passively observes prediction requests on existing pool tabs. It records HTTP
+status, transport protocol, completion time and Chromium network error codes,
+without storing request bodies or headers. Use `--cdp-port` and `--prefix` to
+select another pool; restart the observer if pool tabs are recreated.
 Use `--lookback 1800` to limit event/error history; active requests retain their
 full lifetime, including requests with no recent progress. Use `--log PATH` for another metadata log,
 or `--health-url http://127.0.0.1:8084/health` for another service instance.

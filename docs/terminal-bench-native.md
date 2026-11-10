@@ -52,6 +52,10 @@ sudo -n python3 tools/eval_terminal_native.py run --base logs/<run> --stage form
 
 这条命令只覆盖计划中通过对照的题目，不代表完成全 66 题。完整数据集包含 GPU、多服务和特殊系统环境任务，必须分别适配、验证和披露缺项。
 
+本轮按用户补充要求，将正式阶段输出上限固定为 128K（131,072），原 30 分钟试跑的实际请求上限为 32,000。正式阶段使用独立的 `settings-formal-high.json`、`settings-formal-max.json`，设置 `CLAUDE_CODE_MAX_OUTPUT_TOKENS=128000`，并通过 `CLAUDE_CODE_EXTRA_BODY` 的 `max_tokens=131072` 固定最终请求值；同一对象中的 `output_config.effort` 分别为 high/max。CC 2.1.110 的环境变量上限按十进制 128,000 截断，请求体覆盖则可以发出 131,072；两者已在真实 CC 进程的本地协议夹具上验证，没有修改 CC 源码。
+
+正式 bridge 使用 `BROWSER_TIMEOUT=28800`，CC 使用 `API_TIMEOUT_MS=29400000`，避免旧的一小时请求上限先于八小时 agent 预算结束长响应。正式开始前还需执行真实上游工具烟测，并从 `browser_start.max_tokens` 验证实际下发。提高输出上限不要求模型必须输出到上限；试跑与正式阶段不能合并计算。
+
 ## 结果与限制
 
 `result.json` 保存客户端结束状态、原始判分、超时、实际请求 effort、重试、错误和 token 用量；`identity.json` 记录运行器源文件摘要和版本。报告同时给出产物通过率和包含基础设施失败的端到端通过率，并按 stage、预算、effort 分组。未发出模型请求、判分器超时、奖励文件缺失或奖励与退出码矛盾均不能伪装成模型得分。

@@ -27,6 +27,7 @@ def transport_evidence(records: dict[str, list[dict]] | None, request_ids: list[
         return None
     failures, durations, completed = Counter(), [], []
     usages, partial_usage, missing_usage = [], 0, 0
+    output_limits = set()
     for request_id in request_ids:
         starts = {}
         latest_usage, final_usage = None, False
@@ -39,6 +40,8 @@ def transport_evidence(records: dict[str, list[dict]] | None, request_ids: list[
                 final_usage = kind == "browser_done" and bool(event.get("usage"))
             if kind == "browser_start":
                 starts[attempt] = event["ts"]
+                if isinstance(event.get("max_tokens"), int):
+                    output_limits.add(event["max_tokens"])
             elif kind == "browser_http_error":
                 failures[str(event["status"])] += 1
                 if attempt in starts and event["ts"] >= starts[attempt]:
@@ -50,7 +53,8 @@ def transport_evidence(records: dict[str, list[dict]] | None, request_ids: list[
             partial_usage += not final_usage
         else:
             missing_usage += 1
-    return {"http_status_counts": dict(failures),
+    return {"max_output_tokens": sorted(output_limits),
+            "http_status_counts": dict(failures),
             "timed_http_failures": len(durations),
             "http_failed_attempt_seconds": round(sum(durations), 3),
             "completed_requests": len(completed),
@@ -145,6 +149,8 @@ def summarize(base: Path) -> dict:
                        "cancelled_requests": sum(row["bridge_cancelled"] for row in attempts),
                        "transport": {
                            "attempts_with_evidence": len(transport),
+                           "max_output_tokens": sorted({limit for item in transport
+                                                        for limit in item["max_output_tokens"]}),
                            "http_status_counts": dict(sum((Counter(item["http_status_counts"])
                                                             for item in transport), Counter())),
                            "timed_http_failures": sum(item["timed_http_failures"] for item in transport),

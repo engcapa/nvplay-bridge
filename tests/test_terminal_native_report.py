@@ -13,7 +13,7 @@ from report_terminal_native import summarize, transport_evidence  # noqa: E402
 class NativeReportTests(unittest.TestCase):
     def test_http_failure_time_uses_each_attempt_and_includes_exhausted_errors(self):
         events = [
-            {"id": "a", "event": "browser_start", "attempt": 1, "ts": 0},
+            {"id": "a", "event": "browser_start", "attempt": 1, "ts": 0, "max_tokens": 131072},
             {"id": "a", "event": "browser_http_error", "attempt": 1, "ts": 50, "sec": 50, "status": 500},
             {"id": "a", "event": "browser_start", "attempt": 2, "ts": 55},
             {"id": "a", "event": "browser_http_error", "attempt": 2, "ts": 100, "sec": 100, "status": 500},
@@ -28,6 +28,7 @@ class NativeReportTests(unittest.TestCase):
         for event in events:
             records.setdefault(event["id"], []).append(event)
         result = transport_evidence(records, ["a", "b"])
+        self.assertEqual(result["max_output_tokens"], [131072])
         self.assertEqual(result["http_status_counts"], {"500": 2, "503": 1})
         self.assertEqual(result["timed_http_failures"], 3)
         self.assertEqual(result["http_failed_attempt_seconds"], 140)
