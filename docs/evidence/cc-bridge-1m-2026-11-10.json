@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794351507.1176245,
+  "checkpoint_at": 1794351612.295219,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-1m-20261110-2355",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -789,8 +789,8 @@
     "host_memory_limit_bytes": "30064771072"
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794351384.097182,
-    "commit": "a8b6afe76e6b9e6c90960022751336cb8b12f4d6",
+    "attempted_at": 1794351507.1664972,
+    "commit": "4331e95a7e8732d0ca0c724465fd37b0afed46f9",
     "pushed": true,
     "returncode": 0
   },
@@ -1167,7 +1167,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794351507.131301,
+    "generated_at": 1794351612.3329241,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-1m-720k/28800/max": {
@@ -1213,6 +1213,51 @@
           "total_tokens": 484929,
           "cached_prompt_tokens": 299008,
           "reasoning_tokens": 99359
+        }
+      },
+      "formal-1m-720k-drain-v3/28800/high": {
+        "attempts": 1,
+        "valid_grades": 1,
+        "infrastructure_errors": 0,
+        "artifact_passes": 1,
+        "artifact_pass_at_1": 1.0,
+        "end_to_end_passes": 1,
+        "end_to_end_pass_rate": 1.0,
+        "agent_seconds": 772.66,
+        "logical_requests": 11,
+        "bridge_errors": 0,
+        "bridge_errors_after_content": 0,
+        "bridge_errors_before_content": 0,
+        "bridge_retries": 0,
+        "http_failures_retried": 0,
+        "requests_recovered_after_retry": 0,
+        "cancelled_requests": 0,
+        "transport": {
+          "attempts_with_evidence": 1,
+          "max_output_tokens": [
+            131072
+          ],
+          "http_status_counts": {},
+          "timed_http_failures": 0,
+          "http_failed_attempt_seconds": 0,
+          "completed_requests": 11,
+          "observed_usage": {
+            "prompt_tokens": 216031,
+            "completion_tokens": 13467,
+            "total_tokens": 229498,
+            "cached_prompt_tokens": 171008,
+            "reasoning_tokens": 11118
+          },
+          "requests_with_partial_usage": 0,
+          "requests_without_observed_usage": 0,
+          "longest_completed_request_seconds": 422.483
+        },
+        "usage": {
+          "prompt_tokens": 216031,
+          "completion_tokens": 13467,
+          "total_tokens": 229498,
+          "cached_prompt_tokens": 171008,
+          "reasoning_tokens": 11118
         }
       }
     },
@@ -1269,35 +1314,78 @@
           "reasoning_tokens": 99359
         },
         "source_head": "fa6050911e5a8dba50b33784649d1cf23d97e1a9"
+      },
+      {
+        "task": "mvcc-lsm-compaction",
+        "stage": "formal-1m-720k-drain-v3",
+        "effort": "high",
+        "repeat": 1,
+        "budget_seconds": 28800,
+        "agent_wall_clock_timeout_seconds": null,
+        "artifact_score": 1,
+        "infrastructure_error": null,
+        "end_to_end_success": true,
+        "agent_seconds": 772.66,
+        "agent_timed_out": false,
+        "cc_subtype": "success",
+        "cc_turns": 27,
+        "logical_requests": 11,
+        "upstream_attempts": 11,
+        "bridge_errors": 0,
+        "bridge_errors_after_content": 0,
+        "bridge_errors_before_content": 0,
+        "bridge_retries": 0,
+        "http_failures_retried": 0,
+        "requests_recovered_after_retry": 0,
+        "bridge_cancelled": 0,
+        "bridge_unfinished": [],
+        "transport": {
+          "max_output_tokens": [
+            131072
+          ],
+          "http_status_counts": {},
+          "timed_http_failures": 0,
+          "http_failed_attempt_seconds": 0,
+          "completed_requests": 11,
+          "completed_request_seconds": 745.535,
+          "longest_completed_request_seconds": 422.483,
+          "observed_usage": {
+            "prompt_tokens": 216031,
+            "completion_tokens": 13467,
+            "total_tokens": 229498,
+            "cached_prompt_tokens": 171008,
+            "reasoning_tokens": 11118
+          },
+          "requests_with_partial_usage": 0,
+          "requests_without_observed_usage": 0
+        },
+        "usage": {
+          "prompt_tokens": 216031,
+          "completion_tokens": 13467,
+          "total_tokens": 229498,
+          "cached_prompt_tokens": 171008,
+          "reasoning_tokens": 11118
+        },
+        "source_head": "e5ab0f70368a0c4cb0294f2dabc2f8e682cd9e09"
       }
     ],
     "pending": [
-      {
-        "attempt": "runs/formal-1m-720k-drain-v3/mvcc-lsm-compaction--high--r1",
-        "status": "agent_running",
-        "task": "mvcc-lsm-compaction",
-        "effort": "high",
-        "started_at": 1794350735.1676376,
-        "elapsed_seconds": 772.0,
-        "tool_calls": 26,
-        "last_tool": "Read"
-      },
       {
         "attempt": "runs/formal-1m-720k-drain-v3/mvcc-lsm-compaction--max--r1",
         "status": "agent_running",
         "task": "mvcc-lsm-compaction",
         "effort": "max",
         "started_at": 1794350735.2327607,
-        "elapsed_seconds": 771.9,
+        "elapsed_seconds": 877.1,
         "tool_calls": 18,
         "last_tool": "Bash"
       }
     ]
   },
   "new_formal_attempts_planned": 25,
-  "new_formal_attempts_completed": 1,
+  "new_formal_attempts_completed": 2,
   "preserved_prior_attempts_completed": 5,
-  "combined_plan_positions_completed": 6,
+  "combined_plan_positions_completed": 7,
   "campaign": {
     "controller_alive": true,
     "status": "formal_running",
@@ -1324,23 +1412,23 @@
       "idle_seconds": 3600.0
     },
     "pool_states": {
-      "ready": 3,
-      "busy": 2
+      "ready": 4,
+      "busy": 1
     },
     "recovering_tabs": []
   },
   "bridge_activity": {
     "events_last_300s": {
-      "browser_progress": 108,
-      "browser_buffer": 6,
-      "browser_pool_release": 6,
-      "browser_done": 6,
-      "request": 6,
-      "payload": 6,
-      "browser_start": 6,
-      "browser_tab": 6,
-      "browser_first_data": 6,
-      "browser_first_content": 6
+      "browser_progress": 89,
+      "browser_first_data": 5,
+      "browser_first_content": 5,
+      "browser_buffer": 5,
+      "browser_pool_release": 5,
+      "browser_done": 5,
+      "request": 4,
+      "payload": 4,
+      "browser_start": 4,
+      "browser_tab": 4
     },
     "active": [
       {
@@ -1351,49 +1439,23 @@
         "reasoning_effort": "max",
         "tab_id": "kpool=3",
         "counts": {
-          "thinking_chars": 68655,
+          "thinking_chars": 77579,
           "text_chars": 0,
           "tool_calls": 0
         },
         "usage": {
           "prompt_tokens": 16159,
-          "completion_tokens": 14391,
-          "total_tokens": 30550,
+          "completion_tokens": 16207,
+          "total_tokens": 32366,
           "prompt_tokens_details": {
             "cached_tokens": 9472
           },
           "completion_tokens_details": {
-            "reasoning_tokens": 14391
+            "reasoning_tokens": 16207
           }
         },
-        "age_seconds": 657.5,
-        "activity_age_seconds": 5.3
-      },
-      {
-        "id": "148a8137",
-        "retry_count": 0,
-        "phase": "browser_progress",
-        "attempt": 1,
-        "reasoning_effort": "high",
-        "tab_id": "kpool=5",
-        "counts": {
-          "thinking_chars": 2089,
-          "text_chars": 345,
-          "tool_calls": 0
-        },
-        "usage": {
-          "prompt_tokens": 29341,
-          "completion_tokens": 495,
-          "total_tokens": 29836,
-          "prompt_tokens_details": {
-            "cached_tokens": 27264
-          },
-          "completion_tokens_details": {
-            "reasoning_tokens": 436
-          }
-        },
-        "age_seconds": 45.1,
-        "activity_age_seconds": 3.4
+        "age_seconds": 762.7,
+        "activity_age_seconds": 1.5
       }
     ],
     "recent_errors": [],
@@ -1448,8 +1510,8 @@
     },
     {
       "path": "campaign-state.json",
-      "sha256": "4d226dd529a24ecd93929a26858dee157e12e1602f12f3e5ba2987496618d165",
-      "size": 3835
+      "sha256": "aa5a6ef418db58efa98bbd568f721828b9af05378fa74d557432541357460345",
+      "size": 3879
     },
     {
       "path": "cdp-monitor-process.json",
@@ -1463,8 +1525,8 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "570bc14273ef0217cff8d56c75d5cfbd87ad39b3dbf431194cec4ba5bd6c8e70",
-      "size": 133
+      "sha256": "355e2c03463c4b9daebd3064644e3ca810c2f7f293d738d8209d7249289836f4",
+      "size": 134
     },
     {
       "path": "checkpoint-process-before-wall-clock-update.json",
@@ -1668,8 +1730,8 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "4a344d9f2b9521aac5968f527adb37a6844d55d8ba9879a456fcb1a61fb65616",
-      "size": 823
+      "sha256": "4cbfe7bba328abe9ea8b5ce57ff4ea82e9a549f533a277fe61aa83d18685c50d",
+      "size": 822
     },
     {
       "path": "runs/formal-1m-720k/batched-eval-parity--max--r1/artifacts.json",
@@ -1697,6 +1759,16 @@
       "size": 7171
     },
     {
+      "path": "runs/formal-1m-720k-drain-v3/mvcc-lsm-compaction--high--r1/artifacts.json",
+      "sha256": "c6ec143134fb47ab1edfb36237ae70b16bd6a92c6f963176586d6791bd787c58",
+      "size": 1476
+    },
+    {
+      "path": "runs/formal-1m-720k-drain-v3/mvcc-lsm-compaction--high--r1/grade.json",
+      "sha256": "de44ab9e9467c9bfdbe07eb6ac95ada83191a16f8da1ef59ab53659f1b034277",
+      "size": 248
+    },
+    {
       "path": "runs/formal-1m-720k-drain-v3/mvcc-lsm-compaction--high--r1/identity.json",
       "sha256": "e573edd4c9a2e012b0faf0be4ec2cf9f4b6b1ac7c20303df5c82f4c56c70c72a",
       "size": 3598
@@ -1705,6 +1777,11 @@
       "path": "runs/formal-1m-720k-drain-v3/mvcc-lsm-compaction--high--r1/request-protocol.json",
       "sha256": "812cac27cb03a7e556c0fb964da200dbb9c87249d65bb763537800137920d8e7",
       "size": 1000
+    },
+    {
+      "path": "runs/formal-1m-720k-drain-v3/mvcc-lsm-compaction--high--r1/result.json",
+      "sha256": "0184b559ffc32b0f051ac46217833f6681b7d8ce951bb17dd0b8e727b6dd85c1",
+      "size": 6652
     },
     {
       "path": "runs/formal-1m-720k-drain-v3/mvcc-lsm-compaction--max--r1/identity.json",
