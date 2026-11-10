@@ -120,7 +120,7 @@ def allocate_uid(base: Path) -> int:
         return uid
 
 
-def run_logged(args: list[str], log: Path, timeout: float,
+def run_logged(args: list[str], log: Path, timeout: float | None,
                state: Path | None = None, uid: int | None = None) -> dict:
     started = time.time()
     timed_out = False
@@ -143,7 +143,7 @@ def run_logged(args: list[str], log: Path, timeout: float,
         finally:
             if uid is not None:
                 kill_uid(uid)
-    return {"exit_code": code, "timed_out": timed_out, "started_at": started,
+    return {"exit_code": code, "timed_out": timed_out, "timeout_seconds": timeout, "started_at": started,
             "finished_at": time.time(), "duration_seconds": round(time.time() - started, 3)}
 
 

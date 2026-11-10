@@ -108,6 +108,7 @@ def summarize(base: Path) -> dict:
         failed_ids.update(data["bridge"]["unfinished"])
         row = {"task": data["task"], "stage": data["stage"], "effort": data["effort"],
                "repeat": data["repeat"], "budget_seconds": data["budget_seconds"],
+               "agent_wall_clock_timeout_seconds": data.get("agent_wall_clock_timeout_seconds", data["budget_seconds"]),
                "artifact_score": data["grade"]["score"], "infrastructure_error": infra,
                "end_to_end_success": data["end_to_end_success"],
                "agent_seconds": data["agent"]["duration_seconds"],

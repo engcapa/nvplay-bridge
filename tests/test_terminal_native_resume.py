@@ -18,6 +18,7 @@ class NativeResumeTests(unittest.TestCase):
         self.base = Path(temporary.name)
         self.evaluation = Evaluation.__new__(Evaluation)
         self.evaluation.base = self.base
+        self.evaluation.plan = {}
         self.evaluation.verify_source = lambda _: None
         self.output = self.base / "runs/formal/fixture--high--r1"
         self.output.mkdir(parents=True)
@@ -69,6 +70,17 @@ class NativeResumeTests(unittest.TestCase):
         self.assertEqual(identity["pid"], os.getpid())
         self.assertTrue(int(identity["start_ticks"]) > 0)
         self.assertEqual(identity, process_identity(os.getpid()))
+
+    def test_changed_wall_clock_policy_refuses_to_relabel_completed_result(self):
+        result = {"task": "fixture", "effort": "high", "stage": "formal", "repeat": 1,
+                  "budget_seconds": 28800, "agent": {"exit_code": 0}, "grade": {"score": 1}}
+        (self.output / "result.json").write_text(json.dumps(result))
+        self.evaluation.plan = {"formal_native_subset": {"stage": "formal", "agent_wall_clock_timeout_seconds": None}}
+        with self.assertRaisesRegex(RuntimeError, "wall-clock protocol"):
+            self.resume()
+        result["agent_wall_clock_timeout_seconds"] = None
+        (self.output / "result.json").write_text(json.dumps(result))
+        self.assertTrue(self.resume())
 
 
 if __name__ == "__main__":

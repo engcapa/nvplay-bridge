@@ -108,6 +108,14 @@ class NativeEvaluationTests(unittest.TestCase):
         self.assertTrue(result["timed_out"])
         self.assertNotEqual(result["exit_code"], 0)
 
+    def test_explicit_unlimited_wait_preserves_the_childs_natural_completion(self):
+        log = self.root / "unlimited-process.log"
+        result = run_logged([sys.executable, "-c", "import time; time.sleep(0.2); print('NATURAL_COMPLETION')"], log, None)
+        self.assertIsNone(result["timeout_seconds"])
+        self.assertEqual(result["exit_code"], 0)
+        self.assertFalse(result["timed_out"])
+        self.assertIn("NATURAL_COMPLETION", log.read_text())
+
 
 if __name__ == "__main__":
     unittest.main()

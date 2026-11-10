@@ -121,6 +121,14 @@ class NativeRequestSettingTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "duplicate"):
             attempt_batches(plan, "new", 3)
 
+    def test_no_session_deadline_is_explicit_and_does_not_change_legacy_stages(self):
+        self.evaluation.plan["formal_native_subset"].update(stage="formal-1m-720k", agent_wall_clock_timeout_seconds=None)
+        self.assertIsNone(self.evaluation.agent_timeout("formal-1m-720k", 28800))
+        self.assertEqual(self.evaluation.agent_timeout("pilot", 1800), 1800)
+        self.evaluation.plan["formal_native_subset"]["agent_wall_clock_timeout_seconds"] = 0
+        with self.assertRaises(ValueError):
+            self.evaluation.agent_timeout("formal-1m-720k", 28800)
+
 
 if __name__ == "__main__":
     unittest.main()

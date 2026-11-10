@@ -227,7 +227,8 @@ def record_host_resources(base: Path):
 
 
 def configure(base: Path, proxy: str, *, cc_model: str | None = None,
-              compact_window: int | None = None, continuation_checkpoint: Path | None = None):
+              compact_window: int | None = None, continuation_checkpoint: Path | None = None,
+              no_agent_timeout: bool = False):
     from copy import deepcopy
     from eval_terminal_native import DEFAULT_PILOT, NODE_NETWORK_DIRECTORY, initialize_plan, network_tree_identity
 
@@ -238,6 +239,9 @@ def configure(base: Path, proxy: str, *, cc_model: str | None = None,
     historical = json.loads((repo / "docs/evidence/cc-bridge-native-2026-11-10.json").read_text())
     formal = deepcopy(historical["protocol"]["formal_fixed"])
     formal["frozen_at"] = time.time()
+    if no_agent_timeout:
+        formal["agent_wall_clock_timeout_seconds"] = None
+        formal["budget_seconds_is_reference_only"] = True
     if bool(cc_model) != bool(compact_window):
         raise ValueError("a custom context model and its compaction window must be configured together")
     if cc_model:
@@ -334,6 +338,8 @@ def main():
     parser.add_argument("--cc-model")
     parser.add_argument("--auto-compact-window", type=int)
     parser.add_argument("--continue-checkpoint", type=Path)
+    parser.add_argument("--no-agent-timeout", action="store_true",
+                        help="wait for CC to exit naturally; retain the old budget only as a protocol reference")
     args = parser.parse_args()
     base = args.base.resolve()
     base.mkdir(parents=True, exist_ok=True)
@@ -343,7 +349,7 @@ def main():
         wheels(base, args.proxy)
     elif args.action == "configure":
         configure(base, args.proxy, cc_model=args.cc_model, compact_window=args.auto_compact_window,
-                  continuation_checkpoint=args.continue_checkpoint)
+                  continuation_checkpoint=args.continue_checkpoint, no_agent_timeout=args.no_agent_timeout)
     elif args.action == "resources":
         record_host_resources(base)
     else:

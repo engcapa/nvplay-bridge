@@ -41,7 +41,9 @@ python3 tools/checkpoint_terminal_native.py --base logs/<run> --output docs/evid
 
 用户要求远端持续保存时，在 checkpoint 命令增加 `--push`，在 campaign 命令增加 `--push-checkpoints`。每次提交后立即经指定代理推送；失败保留本地提交，写入私有 `checkpoint-git-sync.json` / `checkpoint-push.log`，下一次检查点再次推送，不终止在途 CC。
 
-2026-11-10 的新上下文阶段使用 `configure --cc-model 'kimi-k3.1-pro[1m]' --auto-compact-window 720000 --continue-checkpoint docs/evidence/cc-bridge-resume-2026-11-10.json`。模型、压缩开关和窗口由计划与设置共同校验，实际启动不再强制禁用压缩；旧阶段继续保留原配置。续跑计划冻结所有缺失位置，保留旧 checkpoint 中已完成的成功和失败，单独报告新阶段成绩。原始日志已丢失的未完成任务不能恢复或补分，必须明确登记后用新会话重跑。
+2026-11-10 的新上下文阶段使用 `configure --cc-model 'kimi-k3.1-pro[1m]' --auto-compact-window 720000 --no-agent-timeout --continue-checkpoint docs/evidence/cc-bridge-resume-2026-11-10.json`。模型、压缩开关和窗口由计划与设置共同校验，实际启动不再强制禁用压缩；旧阶段继续保留原配置。`--no-agent-timeout` 将 `agent_wall_clock_timeout_seconds` 显式冻结为 null，CC 会话等待自然结束；旧的 `budget_seconds=28800` 只作原协议参考，结果与请求协议同时记录实际超时策略，续跑拒绝混用两种策略的已完成结果。请求级 bridge/API 超时与原始 verifier 限制另行保留。
+
+续跑计划冻结所有缺失位置，保留旧 checkpoint 中已完成的成功和失败，单独报告新阶段成绩。原始日志已丢失的未完成任务不能恢复或补分，必须明确登记后用新会话重跑。
 
 `tests/probe_cc_context.py` 使用未修改的固定 CC 和本地 Messages 夹具，验证 1M 窗口报告、压缩阈值附近的行为、关闭压缩对照及实际请求模型。它模拟 usage，不能证明上游实际容纳了等量输入；真实 smoke 另验证 high/max 工具闭环与实际窗口。
 

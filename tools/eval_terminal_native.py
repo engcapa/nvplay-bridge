@@ -217,6 +217,13 @@ class Evaluation:
         if file_hashes(self.dataset / name) != self.plan["task_identities"][name]:
             raise ValueError(f"benchmark source changed: {name}")
 
+    def agent_timeout(self, stage: str, budget: int) -> int | None:
+        formal = self.plan.get("formal_native_subset", {})
+        timeout = formal.get("agent_wall_clock_timeout_seconds", budget) if stage == formal.get("stage") else budget
+        if timeout is not None and (type(timeout) is not int or timeout <= 0):
+            raise ValueError("agent wall-clock timeout must be a positive integer or explicit null")
+        return timeout
+
     def network_adapter(self, stage: str) -> dict | None:
         formal = self.plan.get("formal_native_subset", {})
         spec = formal.get("node_network_adapter") if stage == formal.get("stage") else None
@@ -242,6 +249,8 @@ class Evaluation:
                         "repeat": repeat, "budget_seconds": budget}
             if any(result.get(key) != value for key, value in expected.items()):
                 raise RuntimeError(f"completed attempt does not match resumed protocol: {output}")
+            if result.get("agent_wall_clock_timeout_seconds", result.get("budget_seconds")) != self.agent_timeout(stage, budget):
+                raise RuntimeError(f"completed attempt does not match resumed wall-clock protocol: {output}")
             if not isinstance(result.get("agent"), dict) or not isinstance(result.get("grade"), dict):
                 raise RuntimeError(f"completed attempt has no process/grade evidence: {output}")
             print(json.dumps({"attempt_preserved": name, "effort": effort, "repeat": repeat,
@@ -431,6 +440,7 @@ class Evaluation:
         identity = self.identity(stage)
         settings = self.request_settings(effort, stage)
         adapter = self.network_adapter(stage)
+        wall_timeout = self.agent_timeout(stage, budget)
         if adapter:
             identity["cc_network_adapter"] = adapter
         self.verify_source(name)
@@ -473,6 +483,7 @@ class Evaluation:
             "cc_api_timeout_ms": settings["env"].get("API_TIMEOUT_MS"),
             "cc_launch_configuration": launch,
             "agent_budget_seconds": budget, "cc_network_adapter": adapter,
+            "agent_wall_clock_timeout_seconds": wall_timeout,
             "cc_bootstrap": bootstrap, "bootstrap_environment": bootstrap_env})
         write_json(config / "mcp.json", {"mcpServers": {}})
         (config / "instruction.md").write_bytes((self.dataset / name / "instruction.md").read_bytes())
@@ -483,7 +494,8 @@ class Evaluation:
                 "--tools", "Bash,Read,Write,Edit,Glob,Grep", "--model", launch["model"],
                 "--effort", effort, "--max-turns", "500"]
         # Only runner budget information is appended; no task-specific hints.
-        prefix = f"The runner enforces a {budget}-second wall-clock limit for this {stage} attempt. "
+        prefix = (f"The runner enforces a {wall_timeout}-second wall-clock limit for this {stage} attempt. "
+                  if wall_timeout is not None else "The runner imposes no automatic wall-clock cutoff for this attempt. ")
         prefix += "Work independently. Do not retrieve benchmark solutions, tests or task-specific online hints.\n\n"
         (config / "prompt.txt").write_text(prefix + (config / "instruction.md").read_text())
         command = "cd /app && " + shlex.join(args) + " < /eval/prompt.txt"
@@ -500,7 +512,7 @@ class Evaluation:
         cpus = self.task(name)["environment"]["cpus"]
         process = run_logged(shell_command(root, command, uid=uid, environment=env,
                                            cpus=cpus, cpu_offset=cpus if effort == "max" else 0),
-                             output / "cc.jsonl", budget, output / "agent-state.json", uid)
+                             output / "cc.jsonl", wall_timeout, output / "agent-state.json", uid)
         client = cc_result(output / "cc.jsonl")
         write_json(output / "status.json", {"status": "grading", "task": name, "effort": effort})
         # The verifier replaces this attempt's agent on the same disjoint CPU
@@ -512,7 +524,8 @@ class Evaluation:
         if not telemetry["logical_requests"]:
             infra = "no_model_request_dispatched"
         result = {"task": name, "effort": effort, "stage": stage, "repeat": repeat,
-                  "budget_seconds": budget, "agent": process, "cc": client, "grade": grade,
+                  "budget_seconds": budget, "agent_wall_clock_timeout_seconds": wall_timeout,
+                  "agent": process, "cc": client, "grade": grade,
                   "bridge": telemetry, "source_head": identity["bridge_head"],
                   "infrastructure_error": infra,
                   "end_to_end_success": grade["score"] == 1 and process["exit_code"] == 0

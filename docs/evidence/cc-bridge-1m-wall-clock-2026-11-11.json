@@ -1,0 +1,24 @@
+{
+  "amended_before_any_new_scored_attempt": true,
+  "recorded_at": 1794327891.378731,
+  "requested_by": "user: do not forcibly stop CC due elapsed time",
+  "stage": "formal-1m-720k",
+  "prior_plan_sha256": "ac94bbb9347bff069eea4ed2ff7efaba2b0abb00d0f171fad635e6a33b526c62",
+  "amended_plan_sha256": "4d88b30690003d74bc1f17964a76958dd19aaf8a5fc94be29ffdfc5919623a8f",
+  "reference_budget_seconds": 28800,
+  "agent_wall_clock_timeout_seconds": null,
+  "prior_completed_results_relabelled": false,
+  "prior_live_smoke_deadline_seconds": 28800,
+  "bridge_and_api_request_timeouts_changed": false,
+  "verifier_timeouts_changed": false,
+  "regression": {
+    "unlimited-support-regression.log": {
+      "passed": 9,
+      "sha256": "e69817ca6e1f8c47c9422c09a63b7db4ca17ddc439c6ebe816fcabf2717339ac"
+    },
+    "unlimited-native-regression.log": {
+      "passed": 46,
+      "sha256": "3d182c85507ee62e0007739fcf80f331e205c14999457ca6915ad6997beeb1d2"
+    }
+  }
+}

@@ -56,7 +56,7 @@ def smoke(evaluation, effort):
     started = time.time()
     process = run_logged(shell_command(root, "cd /app && " + shlex.join(command) + " < /eval/prompt.txt",
                                        uid=uid, environment=env, cpus=1, cpu_offset=1 if effort == "max" else 0),
-                         output / "cc.jsonl", 28800, output / "agent-state.json", uid)
+                         output / "cc.jsonl", evaluation.agent_timeout(stage, 28800), output / "agent-state.json", uid)
     client = cc_result(output / "cc.jsonl")
     telemetry = bridge_activity(evaluation.base / "bridge-debug.jsonl", started, process["finished_at"], effort)
     calls = []
