@@ -281,6 +281,9 @@ It sends no NVIDIA inference requests and does not use the production pool tabs.
 
 `python3 tools/monitor_bridge.py --snapshot` reports recent active requests,
 their age and last activity, token usage, terminal errors and pool health.
+Snapshots also list upstream HTTP failures and retry decisions separately.
+Active entries retain their reasoning effort, retry count and last retry reason
+across attempts, including when those earlier events fall outside the lookback.
 Use `--lookback 1800` to limit event/error history; active requests retain their
 full lifetime, including requests with no recent progress. Use `--log PATH` for another metadata log,
 or `--health-url http://127.0.0.1:8084/health` for another service instance.

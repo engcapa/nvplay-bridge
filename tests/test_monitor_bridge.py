@@ -78,6 +78,32 @@ class MonitorTests(unittest.TestCase):
         self.assertEqual(result["events"], {"browser_progress": 1, "browser_start": 1, "browser_error": 1})
         self.assertEqual([event["error"] for event in result["recent_errors"]], ["new"])
 
+    def test_upstream_failure_and_effort_remain_visible_across_retry_and_lookback(self):
+        records = [
+            {"event": "browser_start", "id": "max", "ts": 10, "attempt": 1, "reasoning_effort": "max"},
+            {"event": "browser_start", "id": "high", "ts": 11, "attempt": 1, "reasoning_effort": "high"},
+            {"event": "browser_http_error", "id": "max", "ts": 15, "status": 500},
+            {"event": "upstream_retry", "id": "max", "ts": 16, "reason": "nvidia_pool_acquire_timeout",
+             "status": 500, "delay": 5},
+            {"event": "browser_start", "id": "max", "ts": 21, "attempt": 2},
+        ]
+        result = snapshot(records, now=22)
+        active = {value["id"]: value for value in result["active"]}
+        self.assertEqual(active["max"]["reasoning_effort"], "max")
+        self.assertEqual(active["max"]["retry_count"], 1)
+        self.assertEqual(active["max"]["last_retry"]["status"], 500)
+        self.assertEqual(active["max"]["age_seconds"], 12)
+        self.assertEqual(active["high"]["reasoning_effort"], "high")
+        self.assertEqual(active["high"]["retry_count"], 0)
+        self.assertEqual(result["recent_errors"], [])
+        self.assertEqual(result["recent_upstream_errors"][0]["status"], 500)
+        self.assertEqual(result["recent_retries"][0]["reasoning_effort"], "max")
+        # Windowed histories may expire while the active retry stays visible.
+        later = snapshot(records, now=100, since=95)
+        self.assertEqual(later["recent_upstream_errors"], [])
+        self.assertEqual(later["recent_retries"], [])
+        self.assertEqual(later["active"][0]["last_retry"]["status"], 500)
+
 
 if __name__ == "__main__":
     unittest.main()

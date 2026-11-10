@@ -59,6 +59,8 @@ def snapshot(records, now=None, since=None):
     active = {}
     counts = Counter()
     errors = []
+    upstream_errors = []
+    retries = []
     for record in records:
         kind = record.get("event", "?")
         recent = since is None or record.get("ts", 0) >= since
@@ -67,21 +69,34 @@ def snapshot(records, now=None, since=None):
         request_id = record.get("id")
         if kind == "browser_start":
             previous = active.get(request_id, {})
-            active[request_id] = {"id": request_id, "started": previous.get("started", record["ts"])}
+            active[request_id] = {"id": request_id, "started": previous.get("started", record["ts"]),
+                                  "retry_count": previous.get("retry_count", 0)}
+            for key in ("reasoning_effort", "last_retry"):
+                if key in previous:
+                    active[request_id][key] = previous[key]
         if request_id in active:
             request = active[request_id]
             request.update(phase=kind, last_activity=record["ts"])
-            for key in ("attempt", "tab_id", "counts", "usage"):
+            for key in ("attempt", "tab_id", "counts", "usage", "reasoning_effort"):
                 if key in record:
                     request[key] = record[key]
+            if kind == "upstream_retry":
+                request["retry_count"] += 1
+                request["last_retry"] = {key: record[key] for key in ("reason", "status", "delay") if key in record}
         if kind in ("browser_done", "browser_error", "browser_cancelled"):
             active.pop(request_id, None)
         if recent and kind in ("browser_error", "pool_recovery_error"):
             errors.append(record)
+        if recent and kind in ("browser_http_error", "upstream_retry"):
+            tagged = dict(record)
+            if request_id in active and "reasoning_effort" in active[request_id]:
+                tagged["reasoning_effort"] = active[request_id]["reasoning_effort"]
+            (upstream_errors if kind == "browser_http_error" else retries).append(tagged)
     for request in active.values():
         request["age_seconds"] = round(now - request.pop("started"), 1)
         request["activity_age_seconds"] = round(now - request.pop("last_activity"), 1)
-    return {"events": dict(counts), "active": list(active.values()), "recent_errors": errors[-10:]}
+    return {"events": dict(counts), "active": list(active.values()), "recent_errors": errors[-10:],
+            "recent_upstream_errors": upstream_errors[-10:], "recent_retries": retries[-10:]}
 
 
 def health(url=HEALTH) -> str:
