@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794318073.3268285,
+  "checkpoint_at": 1794318193.4676018,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-resume-20261110-1647",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -541,7 +541,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794318073.3863986,
+    "generated_at": 1794318193.522986,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-128k-fixed/28800/high": {
@@ -862,9 +862,9 @@
         "task": "batched-eval-parity",
         "effort": "high",
         "started_at": 1794315384.4192412,
-        "elapsed_seconds": 2689.0,
-        "tool_calls": 38,
-        "last_tool": "Write"
+        "elapsed_seconds": 2809.1,
+        "tool_calls": 40,
+        "last_tool": "Bash"
       },
       {
         "attempt": "runs/formal-128k-fixed/batched-eval-parity--max--r1",
@@ -872,7 +872,7 @@
         "task": "batched-eval-parity",
         "effort": "max",
         "started_at": 1794315384.410672,
-        "elapsed_seconds": 2689.0,
+        "elapsed_seconds": 2809.1,
         "tool_calls": 45,
         "last_tool": "Bash"
       }
@@ -896,23 +896,23 @@
       "idle_seconds": 3600.0
     },
     "pool_states": {
-      "ready": 3,
-      "busy": 2
+      "busy": 2,
+      "ready": 3
     },
     "recovering_tabs": []
   },
   "bridge_activity": {
     "events_last_300s": {
-      "browser_progress": 115,
-      "browser_buffer": 2,
-      "browser_pool_release": 2,
-      "browser_done": 2,
-      "request": 2,
-      "payload": 2,
-      "browser_start": 2,
-      "browser_tab": 2,
-      "browser_first_data": 1,
-      "browser_first_content": 1
+      "browser_progress": 98,
+      "browser_buffer": 4,
+      "browser_pool_release": 4,
+      "browser_done": 4,
+      "request": 4,
+      "payload": 4,
+      "browser_start": 4,
+      "browser_tab": 4,
+      "browser_first_data": 4,
+      "browser_first_content": 4
     },
     "active": [
       {
@@ -923,33 +923,49 @@
         "reasoning_effort": "max",
         "tab_id": "kpool=4",
         "counts": {
-          "thinking_chars": 226404,
+          "thinking_chars": 238733,
           "text_chars": 0,
           "tool_calls": 0
         },
         "usage": {
           "prompt_tokens": 71025,
-          "completion_tokens": 46495,
-          "total_tokens": 117520,
+          "completion_tokens": 49009,
+          "total_tokens": 120034,
           "prompt_tokens_details": {
             "cached_tokens": 70656
           },
           "completion_tokens_details": {
-            "reasoning_tokens": 46495
+            "reasoning_tokens": 49009
           }
         },
-        "age_seconds": 1549.1,
-        "activity_age_seconds": 0.9
+        "age_seconds": 1669.3,
+        "activity_age_seconds": 3.4
       },
       {
-        "id": "6d270f40",
+        "id": "dd08bd80",
         "retry_count": 0,
-        "phase": "browser_tab",
+        "phase": "browser_progress",
         "attempt": 1,
         "reasoning_effort": "high",
-        "tab_id": "kpool=3",
-        "age_seconds": 12.9,
-        "activity_age_seconds": 12.9
+        "tab_id": "kpool=1",
+        "counts": {
+          "thinking_chars": 2892,
+          "text_chars": 0,
+          "tool_calls": 0
+        },
+        "usage": {
+          "prompt_tokens": 88302,
+          "completion_tokens": 662,
+          "total_tokens": 88964,
+          "prompt_tokens_details": {
+            "cached_tokens": 88064
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 662
+          }
+        },
+        "age_seconds": 34.2,
+        "activity_age_seconds": 5.0
       }
     ],
     "recent_errors": [],
@@ -1104,7 +1120,7 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "62100d6f9b934d37b2a850b49c7a3019a6f27e4e50ec440e5e9d1a585acd70ea",
+      "sha256": "ffa3acae790740fc287b2896244ae68925ec701aa3814ed7b140248089bd1acc",
       "size": 787
     },
     {
