@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794351631.3397553,
+  "checkpoint_at": 1794351754.4592104,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-1m-20261110-2355",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -789,8 +789,8 @@
     "host_memory_limit_bytes": "30064771072"
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794351612.3781126,
-    "commit": "5ab11bb6f9479cd92c392b5dc3947f02b3f51201",
+    "attempted_at": 1794351631.3883147,
+    "commit": "0462e874d182d1d396c38e752a601836487eb082",
     "pushed": true,
     "returncode": 0
   },
@@ -1167,7 +1167,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794351631.3542802,
+    "generated_at": 1794351754.478183,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-1m-720k/28800/max": {
@@ -1376,7 +1376,7 @@
         "task": "mvcc-lsm-compaction",
         "effort": "max",
         "started_at": 1794350735.2327607,
-        "elapsed_seconds": 896.1,
+        "elapsed_seconds": 1019.2,
         "tool_calls": 18,
         "last_tool": "Bash"
       }
@@ -1419,16 +1419,16 @@
   },
   "bridge_activity": {
     "events_last_300s": {
-      "browser_first_data": 4,
-      "browser_first_content": 4,
-      "browser_progress": 86,
-      "browser_buffer": 4,
-      "browser_pool_release": 4,
-      "browser_done": 4,
-      "request": 3,
-      "payload": 3,
-      "browser_start": 3,
-      "browser_tab": 3
+      "browser_progress": 67,
+      "browser_buffer": 2,
+      "browser_pool_release": 2,
+      "browser_done": 2,
+      "request": 1,
+      "payload": 1,
+      "browser_start": 1,
+      "browser_tab": 1,
+      "browser_first_data": 1,
+      "browser_first_content": 1
     },
     "active": [
       {
@@ -1439,23 +1439,23 @@
         "reasoning_effort": "max",
         "tab_id": "kpool=3",
         "counts": {
-          "thinking_chars": 78451,
+          "thinking_chars": 89691,
           "text_chars": 0,
           "tool_calls": 0
         },
         "usage": {
           "prompt_tokens": 16159,
-          "completion_tokens": 16403,
-          "total_tokens": 32562,
+          "completion_tokens": 18992,
+          "total_tokens": 35151,
           "prompt_tokens_details": {
             "cached_tokens": 9472
           },
           "completion_tokens_details": {
-            "reasoning_tokens": 16403
+            "reasoning_tokens": 18992
           }
         },
-        "age_seconds": 781.7,
-        "activity_age_seconds": 4.8
+        "age_seconds": 904.8,
+        "activity_age_seconds": 0.3
       }
     ],
     "recent_errors": [],
@@ -1525,7 +1525,7 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "62289a36632bf17af267b7dde90541c471fbeeae0d7720b62c34ad70b10a389a",
+      "sha256": "21d19512d867ee00199fce062a2192356f2928dddfdafb467345ceb9717aad9e",
       "size": 134
     },
     {
@@ -1730,8 +1730,8 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "4cbfe7bba328abe9ea8b5ce57ff4ea82e9a549f533a277fe61aa83d18685c50d",
-      "size": 822
+      "sha256": "c1da3a53d733d532e28cd504080c3396bc18a711c55f2e3775400330de97dd41",
+      "size": 824
     },
     {
       "path": "runs/formal-1m-720k/batched-eval-parity--max--r1/artifacts.json",
@@ -2102,6 +2102,26 @@
       "archive": "verifier-root.tar.gz",
       "sha256": "2c900beea2728d7c2e2938feab76229deb379ad820a45fefdf452d4b70cf953d",
       "bytes": 513309978,
+      "tar_compare_passed_before_reclaim": true,
+      "restore": "sudo tar -xpf verifier-root.tar.gz -C ."
+    },
+    {
+      "directory": "runs/formal-1m-720k-drain-v3/mvcc-lsm-compaction--high--r1",
+      "archived_at": 1794351644.196922,
+      "root": "agent-root",
+      "archive": "agent-root.tar.gz",
+      "sha256": "e8f9a0999eef16c1957392c29766be4202d47f4f17af26c508239e874361834f",
+      "bytes": 354693234,
+      "tar_compare_passed_before_reclaim": true,
+      "restore": "sudo tar -xpf agent-root.tar.gz -C ."
+    },
+    {
+      "directory": "runs/formal-1m-720k-drain-v3/mvcc-lsm-compaction--high--r1",
+      "archived_at": 1794351680.7354019,
+      "root": "verifier-root",
+      "archive": "verifier-root.tar.gz",
+      "sha256": "4290e1a120f88492dff7fa89d704d6f45debd515cd205ef3d79d8e712ef9f50f",
+      "bytes": 488826921,
       "tar_compare_passed_before_reclaim": true,
       "restore": "sudo tar -xpf verifier-root.tar.gz -C ."
     },
