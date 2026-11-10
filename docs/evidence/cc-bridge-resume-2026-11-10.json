@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794318794.2379062,
+  "checkpoint_at": 1794318914.38514,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-resume-20261110-1647",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -541,7 +541,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794318794.2957788,
+    "generated_at": 1794318914.475051,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-128k-fixed/28800/high": {
@@ -862,9 +862,9 @@
         "task": "batched-eval-parity",
         "effort": "high",
         "started_at": 1794315384.4192412,
-        "elapsed_seconds": 3409.9,
-        "tool_calls": 48,
-        "last_tool": "Edit"
+        "elapsed_seconds": 3530.0,
+        "tool_calls": 52,
+        "last_tool": "Read"
       },
       {
         "attempt": "runs/formal-128k-fixed/batched-eval-parity--max--r1",
@@ -872,7 +872,7 @@
         "task": "batched-eval-parity",
         "effort": "max",
         "started_at": 1794315384.410672,
-        "elapsed_seconds": 3409.9,
+        "elapsed_seconds": 3530.1,
         "tool_calls": 49,
         "last_tool": "Bash"
       }
@@ -903,21 +903,21 @@
   },
   "bridge_activity": {
     "events_last_300s": {
-      "browser_buffer": 5,
-      "browser_pool_release": 6,
-      "browser_done": 5,
-      "request": 5,
-      "payload": 5,
-      "browser_start": 5,
-      "browser_tab": 5,
-      "browser_progress": 109,
-      "browser_first_data": 4,
-      "browser_first_content": 4,
+      "browser_progress": 107,
+      "browser_buffer": 8,
+      "browser_pool_release": 9,
+      "browser_done": 8,
+      "request": 8,
+      "payload": 8,
+      "browser_start": 8,
       "browser_prepare_retry": 1,
       "pool_recovery_start": 1,
+      "browser_tab": 8,
       "pool_activation": 2,
       "pool_page_ready": 1,
-      "pool_ready": 1
+      "pool_ready": 1,
+      "browser_first_data": 8,
+      "browser_first_content": 8
     },
     "active": [
       {
@@ -928,33 +928,49 @@
         "reasoning_effort": "max",
         "tab_id": "kpool=2",
         "counts": {
-          "thinking_chars": 44350,
+          "thinking_chars": 50613,
           "text_chars": 0,
           "tool_calls": 0
         },
         "usage": {
           "prompt_tokens": 127054,
-          "completion_tokens": 8941,
-          "total_tokens": 135995,
+          "completion_tokens": 10208,
+          "total_tokens": 137262,
           "prompt_tokens_details": {
             "cached_tokens": 125952
           },
           "completion_tokens_details": {
-            "reasoning_tokens": 8941
+            "reasoning_tokens": 10208
           }
         },
-        "age_seconds": 326.4,
-        "activity_age_seconds": 1.1
+        "age_seconds": 446.6,
+        "activity_age_seconds": 3.7
       },
       {
-        "id": "725ac0cf",
+        "id": "915b2af9",
         "retry_count": 0,
-        "phase": "browser_tab",
+        "phase": "browser_progress",
         "attempt": 1,
         "reasoning_effort": "high",
         "tab_id": "kpool=4",
-        "age_seconds": 4.7,
-        "activity_age_seconds": 4.6
+        "counts": {
+          "thinking_chars": 5714,
+          "text_chars": 169,
+          "tool_calls": 0
+        },
+        "usage": {
+          "prompt_tokens": 109789,
+          "completion_tokens": 1283,
+          "total_tokens": 111072,
+          "prompt_tokens_details": {
+            "cached_tokens": 107136
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 1211
+          }
+        },
+        "age_seconds": 48.9,
+        "activity_age_seconds": 0.7
       }
     ],
     "recent_errors": [],
@@ -1109,7 +1125,7 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "100cf4f260c78f7696edd136ed83085e0417f97dc8e9508a51355004b1e28326",
+      "sha256": "ff4234b1b7434a31c17953347d1b297ed6a0a57f220ce473f82080ee4bb77771",
       "size": 787
     },
     {
