@@ -451,5 +451,28 @@
     "pool_prefix_distinct_from_scored_service": true,
     "shared_browser_and_container_resources": true,
     "not_an_effort_speed_comparison": true
+  },
+  "natural_boundary_coordinator": {
+    "started_and_waiting": true,
+    "identity": {
+      "pid": 109537,
+      "boot_id": "84bdf8c2-84f9-4339-9906-273d6191a66c",
+      "start_ticks": "710185",
+      "started_at": 1794331635.7264624,
+      "from_stage": "formal-1m-720k",
+      "to_stage": "formal-1m-720k-drain-v3",
+      "source_sha256": "b169c12853c5d7184427a9c1741671e285c2955d3532b9581b1105b67db6722f"
+    },
+    "observed_at": 1794331667.6924367,
+    "state": {
+      "status": "waiting_for_natural_completion",
+      "at": 1794331665.7279334,
+      "current_agent_signalled": false
+    },
+    "source_commit": "d001b82",
+    "remaining_slot_tests_passed": 4,
+    "checkpoint_tests_passed": 17,
+    "target_stage": "formal-1m-720k-drain-v3",
+    "rollout_result_will_be_written_to": "docs/evidence/cc-bridge-1m-drain-rollout-2026-11-11.json"
   }
 }
