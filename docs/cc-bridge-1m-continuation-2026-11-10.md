@@ -27,3 +27,7 @@
 原始五题判分对照仍在执行；完整通过后才启动新阶段计分。已结束的烟测和对照 rootfs 正在按压缩、tar compare、SHA256 的顺序归档，验证通过后才回收展开副本。
 
 00:23 在首个计分会话前明确修订墙钟策略：`agent_wall_clock_timeout_seconds=null`，进程等待自然结束；`budget_seconds=28800` 标为参考值，不代表会话截止时间。原始隐藏判分器仍遵守任务自身的验收时限。原八小时的已完成烟测保留原进程记录；两种会话策略不得重新标记已完成结果。自然等待和原有限等待均由实际子进程测试覆盖，原生专项 46 项、支持工具 9 项通过。修订前后计划摘要及检查证据见 [会话等待策略](evidence/cc-bridge-1m-wall-clock-2026-11-11.json)。
+
+00:28 五题全部完成初始 0 分、原始参考解 1 分对照。参考解原始隐藏检查分别为 session 7/7、embedding 11/11、batched 5/5、mvcc 15/15；KS 原始自定义判分器奖励为 1，没有 CTRF 测试数，不能补造检查数量。脱敏验收复核见 [对照证据](evidence/cc-bridge-1m-controls-2026-11-11.json)。控制器已启动，逐项压缩验证剩余对照 rootfs 后进入冻结的 25 个正式位置，计分前没有向 CC 提供对照结果或历史诊断。
+
+恢复新阶段的运行命令：`sudo -n python3 tools/run_terminal_native_campaign.py --base logs/eval-cc-1m-20261110-2355 --checkpoint-output docs/evidence/cc-bridge-1m-2026-11-10.json --push-checkpoints`。若控制器停止且原始运行目录仍在，用同一命令追加 `--resume --recover-interrupted`；重新启动服务并记录实际身份后再恢复。若目录被清空，按最新提交的结果、协议和未完成位置重建，不能将旧终态或产物视为仍然可用。

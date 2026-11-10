@@ -1,0 +1,148 @@
+{
+  "reviewed_at": 1794328174.8780441,
+  "valid": true,
+  "controls": [
+    {
+      "task": "batched-eval-parity",
+      "control": "baseline",
+      "artifact_score": 0,
+      "infrastructure_error": null,
+      "verifier": {
+        "test_count": 5,
+        "statuses": {
+          "failed": 5
+        },
+        "sha256": "9105a46cbe592d6d7f16d798524169ec4f3e0da54bbf35d464924e7a79986e86"
+      },
+      "declared_read_only_files_unchanged": {}
+    },
+    {
+      "task": "batched-eval-parity",
+      "control": "oracle",
+      "artifact_score": 1,
+      "infrastructure_error": null,
+      "verifier": {
+        "test_count": 5,
+        "statuses": {
+          "passed": 5
+        },
+        "sha256": "559b09b8deef2e2bec46d632eb45cb160d81c729cd7db17f2d767d5623ea944c"
+      },
+      "declared_read_only_files_unchanged": {}
+    },
+    {
+      "task": "embedding-drift-monitor",
+      "control": "baseline",
+      "artifact_score": 0,
+      "infrastructure_error": null,
+      "verifier": {
+        "test_count": 11,
+        "statuses": {
+          "failed": 8,
+          "passed": 3
+        },
+        "sha256": "8ec72da4fb337763859f7f92098f3d7132a0979a15c428981e4fbbd4a1465073"
+      },
+      "declared_read_only_files_unchanged": {}
+    },
+    {
+      "task": "embedding-drift-monitor",
+      "control": "oracle",
+      "artifact_score": 1,
+      "infrastructure_error": null,
+      "verifier": {
+        "test_count": 11,
+        "statuses": {
+          "passed": 11
+        },
+        "sha256": "3c23c71617b76e2a87babbc408504f7b4ac358bdf1558c054baabe87539719a8"
+      },
+      "declared_read_only_files_unchanged": {}
+    },
+    {
+      "task": "ks-solver-cpp",
+      "control": "baseline",
+      "artifact_score": 0,
+      "infrastructure_error": null,
+      "verifier": null,
+      "declared_read_only_files_unchanged": {}
+    },
+    {
+      "task": "ks-solver-cpp",
+      "control": "oracle",
+      "artifact_score": 1,
+      "infrastructure_error": null,
+      "verifier": null,
+      "declared_read_only_files_unchanged": {}
+    },
+    {
+      "task": "mvcc-lsm-compaction",
+      "control": "baseline",
+      "artifact_score": 0,
+      "infrastructure_error": null,
+      "verifier": {
+        "test_count": 15,
+        "statuses": {
+          "failed": 12,
+          "passed": 3
+        },
+        "sha256": "9ddd7be9dc50a4b696130fc79d7cadfdeda7ba655ea4fc35b0cb4cc4a0036777"
+      },
+      "declared_read_only_files_unchanged": {}
+    },
+    {
+      "task": "mvcc-lsm-compaction",
+      "control": "oracle",
+      "artifact_score": 1,
+      "infrastructure_error": null,
+      "verifier": {
+        "test_count": 15,
+        "statuses": {
+          "passed": 15
+        },
+        "sha256": "2f3de163a63dca849ab3a09e627821635e1680c94b82ca9451de28e12acdf01c"
+      },
+      "declared_read_only_files_unchanged": {}
+    },
+    {
+      "task": "session-window-debug",
+      "control": "baseline",
+      "artifact_score": 0,
+      "infrastructure_error": null,
+      "verifier": {
+        "test_count": 7,
+        "statuses": {
+          "failed": 5,
+          "passed": 2
+        },
+        "sha256": "768dcad808d2a7eb04c6230c2d164227eed1259bd0e13335a9b1727d49df6ca2"
+      },
+      "declared_read_only_files_unchanged": {
+        "app/app/types.py": true,
+        "app/app/DESIGN.md": true,
+        "app/app/__init__.py": true
+      }
+    },
+    {
+      "task": "session-window-debug",
+      "control": "oracle",
+      "artifact_score": 1,
+      "infrastructure_error": null,
+      "verifier": {
+        "test_count": 7,
+        "statuses": {
+          "passed": 7
+        },
+        "sha256": "8dc53268ee2d662f077205f92337ce04896362274c4c0341137827c4c5a4bdf0"
+      },
+      "declared_read_only_files_unchanged": {
+        "app/app/types.py": true,
+        "app/app/DESIGN.md": true,
+        "app/app/__init__.py": true
+      }
+    }
+  ],
+  "source_review_sha256": "b0691b57e8efed10c660b3c695549b524874f3ac74f164a8ddce0d3d073af8f0",
+  "original_graders_modified": false,
+  "model_feedback_provided": false
+}
