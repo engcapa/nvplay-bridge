@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794321801.0044878,
+  "checkpoint_at": 1794321921.3250706,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-resume-20261110-1647",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -541,7 +541,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794321801.136597,
+    "generated_at": 1794321921.4550319,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-128k-fixed/28800/high": {
@@ -862,8 +862,8 @@
         "task": "batched-eval-parity",
         "effort": "high",
         "started_at": 1794315384.4192412,
-        "elapsed_seconds": 6416.7,
-        "tool_calls": 87,
+        "elapsed_seconds": 6537.0,
+        "tool_calls": 88,
         "last_tool": "Bash"
       },
       {
@@ -872,7 +872,7 @@
         "task": "batched-eval-parity",
         "effort": "max",
         "started_at": 1794315384.410672,
-        "elapsed_seconds": 6416.7,
+        "elapsed_seconds": 6537.0,
         "tool_calls": 54,
         "last_tool": "Bash"
       }
@@ -896,23 +896,23 @@
       "idle_seconds": 3600.0
     },
     "pool_states": {
-      "busy": 2,
-      "ready": 3
+      "ready": 3,
+      "busy": 2
     },
     "recovering_tabs": []
   },
   "bridge_activity": {
     "events_last_300s": {
-      "browser_progress": 107,
-      "browser_first_data": 7,
-      "browser_first_content": 7,
-      "browser_buffer": 7,
-      "browser_pool_release": 7,
-      "browser_done": 7,
-      "request": 7,
-      "payload": 7,
-      "browser_start": 7,
-      "browser_tab": 7
+      "browser_progress": 114,
+      "browser_buffer": 4,
+      "browser_pool_release": 4,
+      "browser_done": 4,
+      "request": 4,
+      "payload": 4,
+      "browser_start": 4,
+      "browser_tab": 4,
+      "browser_first_data": 4,
+      "browser_first_content": 4
     },
     "active": [
       {
@@ -923,33 +923,49 @@
         "reasoning_effort": "max",
         "tab_id": "kpool=2",
         "counts": {
-          "thinking_chars": 227647,
+          "thinking_chars": 255397,
           "text_chars": 0,
           "tool_calls": 0
         },
         "usage": {
           "prompt_tokens": 172356,
-          "completion_tokens": 26927,
-          "total_tokens": 199283,
+          "completion_tokens": 29702,
+          "total_tokens": 202058,
           "prompt_tokens_details": {
             "cached_tokens": 171904
           },
           "completion_tokens_details": {
-            "reasoning_tokens": 26927
+            "reasoning_tokens": 29702
           }
         },
-        "age_seconds": 1356.2,
-        "activity_age_seconds": 4.1
+        "age_seconds": 1476.5,
+        "activity_age_seconds": 1.8
       },
       {
-        "id": "b870059d",
+        "id": "f010f09d",
         "retry_count": 0,
-        "phase": "browser_tab",
+        "phase": "browser_progress",
         "attempt": 1,
         "reasoning_effort": "high",
-        "tab_id": "kpool=1",
-        "age_seconds": 4.8,
-        "activity_age_seconds": 4.8
+        "tab_id": "kpool=3",
+        "counts": {
+          "thinking_chars": 8635,
+          "text_chars": 0,
+          "tool_calls": 0
+        },
+        "usage": {
+          "prompt_tokens": 171270,
+          "completion_tokens": 1914,
+          "total_tokens": 173184,
+          "prompt_tokens_details": {
+            "cached_tokens": 170752
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 1914
+          }
+        },
+        "age_seconds": 100.4,
+        "activity_age_seconds": 2.6
       }
     ],
     "recent_errors": [],
@@ -1104,8 +1120,8 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "d8822a9cf0638a23738bc618679b2eb9df79067ac3dc68434e460cf9499033ba",
-      "size": 786
+      "sha256": "ea1e4ffee8b06e08b5ce2664bae52b56ee66e6d290a4033a80d2358b5fea088a",
+      "size": 787
     },
     {
       "path": "restoration-regression.log",
