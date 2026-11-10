@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794309664.5969424,
+  "checkpoint_at": 1794309784.7238157,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-resume-20261110-1647",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -541,7 +541,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794309664.6299393,
+    "generated_at": 1794309784.7498002,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-128k-fixed/28800/high": {
@@ -756,8 +756,8 @@
         "task": "embedding-drift-monitor",
         "effort": "high",
         "started_at": 1794309436.7690861,
-        "elapsed_seconds": 227.9,
-        "tool_calls": 16,
+        "elapsed_seconds": 348.0,
+        "tool_calls": 18,
         "last_tool": "Bash"
       },
       {
@@ -766,7 +766,7 @@
         "task": "embedding-drift-monitor",
         "effort": "max",
         "started_at": 1794309436.757663,
-        "elapsed_seconds": 227.9,
+        "elapsed_seconds": 348.0,
         "tool_calls": 14,
         "last_tool": "Bash"
       }
@@ -790,51 +790,25 @@
       "idle_seconds": 3600.0
     },
     "pool_states": {
-      "busy": 2,
-      "ready": 3
+      "ready": 3,
+      "busy": 2
     },
     "recovering_tabs": []
   },
   "bridge_activity": {
     "events_last_300s": {
-      "request": 12,
-      "payload": 12,
-      "browser_start": 12,
-      "browser_tab": 12,
-      "browser_first_data": 12,
-      "browser_first_content": 12,
-      "browser_progress": 77,
-      "browser_buffer": 10,
-      "browser_pool_release": 10,
-      "browser_done": 10
+      "browser_first_data": 9,
+      "browser_progress": 102,
+      "browser_first_content": 9,
+      "browser_buffer": 7,
+      "browser_pool_release": 7,
+      "browser_done": 7,
+      "request": 7,
+      "payload": 7,
+      "browser_start": 7,
+      "browser_tab": 7
     },
     "active": [
-      {
-        "id": "39a95728",
-        "retry_count": 0,
-        "phase": "browser_progress",
-        "attempt": 1,
-        "reasoning_effort": "high",
-        "tab_id": "kpool=1",
-        "counts": {
-          "thinking_chars": 13739,
-          "text_chars": 0,
-          "tool_calls": 0
-        },
-        "usage": {
-          "prompt_tokens": 14649,
-          "completion_tokens": 3137,
-          "total_tokens": 17786,
-          "prompt_tokens_details": {
-            "cached_tokens": 12544
-          },
-          "completion_tokens_details": {
-            "reasoning_tokens": 3137
-          }
-        },
-        "age_seconds": 120.9,
-        "activity_age_seconds": 3.1
-      },
       {
         "id": "72773755",
         "retry_count": 0,
@@ -843,23 +817,49 @@
         "reasoning_effort": "max",
         "tab_id": "kpool=4",
         "counts": {
-          "thinking_chars": 8386,
+          "thinking_chars": 23839,
           "text_chars": 0,
           "tool_calls": 0
         },
         "usage": {
           "prompt_tokens": 17103,
-          "completion_tokens": 1732,
-          "total_tokens": 18835,
+          "completion_tokens": 4993,
+          "total_tokens": 22096,
           "prompt_tokens_details": {
             "cached_tokens": 14464
           },
           "completion_tokens_details": {
-            "reasoning_tokens": 1732
+            "reasoning_tokens": 4993
           }
         },
-        "age_seconds": 74.6,
-        "activity_age_seconds": 0.8
+        "age_seconds": 194.8,
+        "activity_age_seconds": 3.8
+      },
+      {
+        "id": "13e9d8b6",
+        "retry_count": 0,
+        "phase": "browser_progress",
+        "attempt": 1,
+        "reasoning_effort": "high",
+        "tab_id": "kpool=5",
+        "counts": {
+          "thinking_chars": 620,
+          "text_chars": 0,
+          "tool_calls": 0
+        },
+        "usage": {
+          "prompt_tokens": 19806,
+          "completion_tokens": 123,
+          "total_tokens": 19929,
+          "prompt_tokens_details": {
+            "cached_tokens": 19584
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 123
+          }
+        },
+        "age_seconds": 46.7,
+        "activity_age_seconds": 1.7
       }
     ],
     "recent_errors": [],
@@ -1004,7 +1004,7 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "22b83a41431a8eb37040b04a0bf5162e64d40684b603dcb3c9dbf14601e02d1d",
+      "sha256": "f07213c7f672bb2145ec7e404c81d21d0f84ac0366d96fc421b3c32c64b2d310",
       "size": 790
     },
     {
