@@ -115,5 +115,38 @@
         }
       }
     }
-  ]
+  ],
+  "terminal_update": {
+    "observed_at": 1794318459.2002194,
+    "request_id": "058834ab",
+    "terminal": {
+      "event": "browser_done",
+      "id": "058834ab",
+      "ts": 1794318418.5863385,
+      "attempt": 1,
+      "sec": 1894.375,
+      "counts": {
+        "thinking_chars": 260507,
+        "text_chars": 273,
+        "tool_calls": 2
+      },
+      "usage": {
+        "prompt_tokens": 71025,
+        "completion_tokens": 54218,
+        "total_tokens": 125243,
+        "prompt_tokens_details": {
+          "cached_tokens": 70656
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 54217
+        }
+      }
+    },
+    "success": true,
+    "upstream_attempts": 1,
+    "retries": 0,
+    "errors": 0,
+    "source_prefix_bytes": 2185944,
+    "source_prefix_sha256": "e15ff03a83c2d89b8798cadab12f48ce2ffb71625e46223a60b62c43505bdbdc"
+  }
 }
