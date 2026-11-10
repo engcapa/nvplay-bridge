@@ -1,0 +1,60 @@
+{
+  "generated_at": 1794309594.311,
+  "scope": "Independent self-authored idle trace; original hidden scores unchanged; modules reviewed before ordinary-user execution",
+  "probe_source": "tools/probe_session_window_idle.py",
+  "trace": {
+    "registered_sources": [
+      "first",
+      "second"
+    ],
+    "events": [
+      {
+        "source": "first",
+        "time": 41,
+        "value": 3
+      },
+      {
+        "source": "second",
+        "time": 59,
+        "value": -2
+      }
+    ],
+    "idle_ticks": [
+      250,
+      250
+    ],
+    "criterion": "Final watermark advances beyond the value before idle; exact values need not match the reference"
+  },
+  "calibrated_on_baseline_and_reference": true,
+  "variants": {
+    "baseline": {
+      "exit_code": 1,
+      "watermark_before": 41,
+      "watermark_after_first_idle": 41,
+      "watermark_after_second_idle": 41,
+      "forward_progress": false
+    },
+    "reference": {
+      "exit_code": 0,
+      "watermark_before": 41,
+      "watermark_after_first_idle": 59,
+      "watermark_after_second_idle": 59,
+      "forward_progress": true
+    },
+    "high": {
+      "exit_code": 0,
+      "watermark_before": 41,
+      "watermark_after_first_idle": 291,
+      "watermark_after_second_idle": 541,
+      "forward_progress": true
+    },
+    "max": {
+      "exit_code": 1,
+      "watermark_before": 41,
+      "watermark_after_first_idle": 41,
+      "watermark_after_second_idle": 41,
+      "forward_progress": false
+    }
+  },
+  "feedback_supplied_to_evaluated_agents": false
+}

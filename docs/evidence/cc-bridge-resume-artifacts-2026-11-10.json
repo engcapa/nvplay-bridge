@@ -1,5 +1,5 @@
 {
-  "reviewed_at": 1794308161.3196518,
+  "reviewed_at": 1794309371.158081,
   "attempts": [
     {
       "attempt": "runs/formal-128k-fixed/session-window-debug--high--r1",
@@ -30,6 +30,46 @@
           "passed": 7
         },
         "sha256": "dcdce1f77e24ce16ba7e0c26c0b4191aefd0296c99c5b6d912a26f52473e2497"
+      }
+    },
+    {
+      "attempt": "runs/formal-128k-fixed/session-window-debug--max--r1",
+      "task": "session-window-debug",
+      "control": null,
+      "effort": "max",
+      "repeat": 1,
+      "artifact_score": 0,
+      "infrastructure_error": null,
+      "changed_original_files": [
+        "app/app/events.py",
+        "app/app/gc.py",
+        "app/app/merger.py",
+        "app/app/sessions.py"
+      ],
+      "added_files": [
+        "app/app/__pycache__/__init__.cpython-312.pyc",
+        "app/app/__pycache__/emitter.cpython-312.pyc",
+        "app/app/__pycache__/events.cpython-312.pyc",
+        "app/app/__pycache__/gc.cpython-312.pyc",
+        "app/app/__pycache__/merger.cpython-312.pyc",
+        "app/app/__pycache__/sessions.cpython-312.pyc",
+        "app/app/__pycache__/types.cpython-312.pyc"
+      ],
+      "removed_original_files": [],
+      "declared_read_only_files_unchanged": {
+        "app/app/types.py": true,
+        "app/app/DESIGN.md": true,
+        "app/app/__init__.py": true
+      },
+      "read_only_check_scope": "explicit session-window task constraints",
+      "artifact_errors_present": false,
+      "verifier": {
+        "test_count": 7,
+        "statuses": {
+          "passed": 6,
+          "failed": 1
+        },
+        "sha256": "54c9bc4e1246b575e9a8b2abe531bfbdc8075ea0b1aa1d3ae8be2ec7ac0bf059"
       }
     }
   ],
