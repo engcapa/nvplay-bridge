@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794314680.9732974,
+  "checkpoint_at": 1794314709.57351,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-resume-20261110-1647",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -541,7 +541,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794314681.0128715,
+    "generated_at": 1794314709.616895,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-128k-fixed/28800/high": {
@@ -808,7 +808,7 @@
         "task": "embedding-drift-monitor",
         "effort": "max",
         "started_at": 1794309436.757663,
-        "elapsed_seconds": 5244.2,
+        "elapsed_seconds": 5272.9,
         "tool_calls": 87,
         "last_tool": "Bash"
       }
@@ -839,7 +839,7 @@
   },
   "bridge_activity": {
     "events_last_300s": {
-      "browser_progress": 85,
+      "browser_progress": 78,
       "browser_buffer": 7,
       "browser_pool_release": 7,
       "browser_done": 7,
@@ -859,23 +859,23 @@
         "reasoning_effort": "max",
         "tab_id": "kpool=5",
         "counts": {
-          "thinking_chars": 1140,
+          "thinking_chars": 3989,
           "text_chars": 0,
           "tool_calls": 0
         },
         "usage": {
           "prompt_tokens": 118926,
-          "completion_tokens": 264,
-          "total_tokens": 119190,
+          "completion_tokens": 854,
+          "total_tokens": 119780,
           "prompt_tokens_details": {
             "cached_tokens": 118656
           },
           "completion_tokens_details": {
-            "reasoning_tokens": 264
+            "reasoning_tokens": 854
           }
         },
-        "age_seconds": 43.4,
-        "activity_age_seconds": 0.5
+        "age_seconds": 72.0,
+        "activity_age_seconds": 3.6
       }
     ],
     "recent_errors": [],
@@ -1030,8 +1030,8 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "62070c53ed7de89333f05055a647f658850a101637818b9af696d5a36153d764",
-      "size": 791
+      "sha256": "1db8e3a948db1dab42dd4128dd914d7863bfb91c48946d16008867a0d19d1645",
+      "size": 790
     },
     {
       "path": "restoration-regression.log",
