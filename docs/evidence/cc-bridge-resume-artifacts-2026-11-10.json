@@ -1,6 +1,56 @@
 {
-  "reviewed_at": 1794315341.4027836,
+  "reviewed_at": 1794322631.1669211,
   "attempts": [
+    {
+      "attempt": "runs/formal-128k-fixed/batched-eval-parity--high--r1",
+      "task": "batched-eval-parity",
+      "control": null,
+      "effort": "high",
+      "repeat": 1,
+      "artifact_score": 1,
+      "infrastructure_error": null,
+      "changed_original_files": [
+        "app/evalbench/evaluate.py",
+        "app/evalbench/generation.py",
+        "app/evalbench/metrics.py",
+        "app/evalbench/model.py",
+        "app/evalbench/prefix_cache.py",
+        "app/evalbench/scoring.py",
+        "app/evalbench/spans.py"
+      ],
+      "added_files": [
+        "app/evalbench/__pycache__/evaluate.cpython-311.pyc",
+        "app/evalbench/__pycache__/generation.cpython-311.pyc",
+        "app/evalbench/__pycache__/metrics.cpython-311.pyc",
+        "app/evalbench/__pycache__/model.cpython-311.pyc",
+        "app/evalbench/__pycache__/prefix_cache.cpython-311.pyc",
+        "app/evalbench/__pycache__/scoring.cpython-311.pyc",
+        "app/evalbench/__pycache__/spans.cpython-311.pyc"
+      ],
+      "removed_original_files": [],
+      "declared_read_only_files_unchanged": {},
+      "read_only_check_scope": "not checked",
+      "artifact_errors_present": false,
+      "verifier": {
+        "test_count": 5,
+        "statuses": {
+          "passed": 5
+        },
+        "sha256": "ae08a6d872406b4fb08a49accc98ec44715ab2bac9d773dcda99703a33502127"
+      },
+      "client_terminal": {
+        "exit_code": 1,
+        "timed_out": false,
+        "subtype": "success",
+        "is_error": true,
+        "terminal_reason": "blocking_limit",
+        "api_error_status": null,
+        "prompt_too_long": true,
+        "reported_context_window_tokens": [
+          200000
+        ]
+      }
+    },
     {
       "attempt": "runs/formal-128k-fixed/embedding-drift-monitor--high--r1",
       "task": "embedding-drift-monitor",
@@ -39,6 +89,18 @@
           "passed": 11
         },
         "sha256": "b312bc3b886f3ef7a23130e406f863ce5646c0c87cae5d09097a6b6dd1d01dd8"
+      },
+      "client_terminal": {
+        "exit_code": 0,
+        "timed_out": false,
+        "subtype": "success",
+        "is_error": false,
+        "terminal_reason": "completed",
+        "api_error_status": null,
+        "prompt_too_long": false,
+        "reported_context_window_tokens": [
+          200000
+        ]
       }
     },
     {
@@ -69,6 +131,18 @@
           "passed": 11
         },
         "sha256": "de542b6e89b879e4e3407545f2a888e702703c11f40d123436394d14451b00d3"
+      },
+      "client_terminal": {
+        "exit_code": 0,
+        "timed_out": false,
+        "subtype": "success",
+        "is_error": false,
+        "terminal_reason": "completed",
+        "api_error_status": null,
+        "prompt_too_long": false,
+        "reported_context_window_tokens": [
+          200000
+        ]
       }
     },
     {
@@ -100,6 +174,18 @@
           "passed": 7
         },
         "sha256": "dcdce1f77e24ce16ba7e0c26c0b4191aefd0296c99c5b6d912a26f52473e2497"
+      },
+      "client_terminal": {
+        "exit_code": 0,
+        "timed_out": false,
+        "subtype": "success",
+        "is_error": false,
+        "terminal_reason": "completed",
+        "api_error_status": null,
+        "prompt_too_long": false,
+        "reported_context_window_tokens": [
+          200000
+        ]
       }
     },
     {
@@ -140,6 +226,18 @@
           "failed": 1
         },
         "sha256": "54c9bc4e1246b575e9a8b2abe531bfbdc8075ea0b1aa1d3ae8be2ec7ac0bf059"
+      },
+      "client_terminal": {
+        "exit_code": 0,
+        "timed_out": false,
+        "subtype": "success",
+        "is_error": false,
+        "terminal_reason": "completed",
+        "api_error_status": null,
+        "prompt_too_long": false,
+        "reported_context_window_tokens": [
+          200000
+        ]
       }
     }
   ],

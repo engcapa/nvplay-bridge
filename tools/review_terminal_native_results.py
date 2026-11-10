@@ -17,6 +17,22 @@ from native_eval_support import file_hashes, write_json
 READ_ONLY = {"session-window-debug": ("app/app/types.py", "app/app/DESIGN.md", "app/app/__init__.py")}
 
 
+def client_terminal(directory: Path, data: dict) -> dict:
+    final = {}
+    for line in (directory / "cc.jsonl").read_text(errors="replace").splitlines():
+        try:
+            event = json.loads(line)
+        except ValueError:
+            continue
+        if event.get("type") == "result":
+            final = event
+    return {"exit_code": data["agent"]["exit_code"], "timed_out": data["agent"]["timed_out"],
+            **{key: final.get(key) for key in ("subtype", "is_error", "terminal_reason", "api_error_status")},
+            "prompt_too_long": final.get("is_error") is True and str(final.get("result") or "").strip() == "Prompt is too long",
+            "reported_context_window_tokens": sorted({model["contextWindow"]
+                for model in (final.get("modelUsage") or {}).values() if "contextWindow" in model})}
+
+
 def review(base: Path, controls: bool = False) -> dict:
     rows = []
     results = sorted((base / "runs").glob("*/*/result.json"))
@@ -55,6 +71,8 @@ def review(base: Path, controls: bool = False) -> dict:
                      "declared_read_only_files_unchanged": readonly,
                      "read_only_check_scope": "explicit session-window task constraints" if readonly else "not checked",
                      "artifact_errors_present": bool(artifacts["errors"]), "verifier": verifier})
+        if not control:
+            rows[-1]["client_terminal"] = client_terminal(directory, data)
     return {"reviewed_at": time.time(), "attempts": rows,
             "scope": "saved copied-artifact hashes and original verifier results; not a semantic code review"}
 
