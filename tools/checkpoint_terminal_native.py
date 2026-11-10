@@ -114,6 +114,11 @@ def collect(base: Path, health_url: str) -> dict:
     result["preserved_prior_attempts_completed"] = prior
     result["combined_plan_positions_completed"] = prior + len(report["attempts"])
     result["campaign"] = campaign_progress(base)
+    transition_path = base / "transport-transition-state.json"
+    if transition_path.is_file():
+        transition = json.loads(transition_path.read_text())
+        result["transport_transition"] = {key: transition[key] for key in (
+            "status", "at", "current_agent_signalled") if key in transition}
     pause_path = base / "pause-state.json"
     pause = json.loads(pause_path.read_text()) if pause_path.is_file() else {}
     if pause:

@@ -121,3 +121,7 @@ python3 tools/monitor_bridge.py --log logs/<run>/bridge-debug.jsonl --snapshot -
 ```
 
 CC 的美元估价按第三方模型名猜测，不作为实际成本。重试中未返回的用量不能凭空补齐。全部原始证据应保留到复核结束，再按本机磁盘预算清理 rootfs。
+
+传输修复需要分阶段部署时，可用 `tools/advance_terminal_native_transport.py` 等待在途会话自然结束，核对已验证模块、保存成绩、归档、切换服务并在实际部署重做工具烟测，再继续冻结的剩余位置。`formal_native_subset.preserved_local_schedule` 保留本目录早期阶段已完成的位置（包括失败），checkpoint 的计划总数为这部分加剩余 schedule；历史阶段协议保存在 `protocol_history`，结果仍按原 stage 分组。该控制器不会中断 CC，也不会覆盖或择优重跑成绩。使用前应检查记录的控制器、部署与原始目录是否仍在；部分部署失败需先诊断。
+
+`clone_root` 会先解析基座根目录别名再复制，保留 rootfs 内部链接；拒绝已有目标（含悬空链接）。克隆输出必须具有独立 inode，不能把目录链接当成隔离副本。

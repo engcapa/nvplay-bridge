@@ -61,6 +61,13 @@ class NativeCheckpointTests(unittest.TestCase):
         (control / "result.json").write_text('{"valid":false,"baseline":{"score":0},"oracle":{"score":0}}')
         self.assertEqual(self.collect()["status"], "validating_controls")
 
+    def test_transition_state_is_visible_without_private_details(self):
+        (self.base / "transport-transition-state.json").write_text(json.dumps({
+            "status": "validating_actual_rollout", "at": 42, "private": "PRIVATE_ROLLOUT_LOG"}))
+        result = self.collect()
+        self.assertEqual(result["transport_transition"], {"status": "validating_actual_rollout", "at": 42})
+        self.assertNotIn("PRIVATE_ROLLOUT_LOG", json.dumps(result))
+
     def campaign(self, identity=True):
         owner = {"pid": 42, "boot_id": "boot", "start_ticks": "123"}
         state = {"status": "formal_running", "pid": 42, "task": "fixture", "repeat": 1,
