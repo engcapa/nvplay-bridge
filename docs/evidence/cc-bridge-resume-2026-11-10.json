@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "status": "restoring_environment",
+  "resumed_at": "2026-11-10T16:47:00+08:00",
+  "run_directory": "logs/eval-cc-resume-20261110-1647",
+  "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
+  "historical_completed_observations_preserved": 12,
+  "historical_administrative_interruptions_excluded": 2,
+  "new_formal_attempts_planned": 30,
+  "new_formal_attempts_completed": 0,
+  "external_proxy": "http://127.0.0.1:31128",
+  "local_bridge_and_cdp_direct": true,
+  "other_projects_in_scope": false,
+  "raw_logs_survive_cleanup": false
+}
