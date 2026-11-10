@@ -39,6 +39,8 @@
 
 资源区间和已完成工具轨迹的汇总代码已提交，可分别使用 `tools/summarize_terminal_native_resources.py` 和 `tools/audit_terminal_native_tools.py` 重建。资源工具用先前保存的 225 次采样前缀实测，数值与 SHA256 均完全复现；轨迹工具重扫首对产物，调用数和零候选结论一致，并保存原始会话文件摘要。候选只发布工具序号、类别和输入摘要，需要人工复核，不发布工具输入或模型正文。
 
+组合观察命令也已保存：`python3 tools/observe_terminal_native.py --base logs/eval-cc-resume-20261110-1647 --checkpoint docs/evidence/cc-bridge-resume-2026-11-10.json`。它只读完成数、请求进度、资源、实际 `/health`、checkpoint 新鲜度及各监控 PID；对保存了 boot/start 的进程核对身份，兼容旧控制器的 attempt owner，只有 PID 的旧记录则明确以 `identity_matches=null` 表示未经身份核验。已在当前真实活动会话验证控制器身份与资源监控身份均匹配。
+
 已提交可复用的环境搭建、服务启动、真实 CC 工具烟测、持续检查点、续跑恢复及 rootfs 压缩归档代码。自动检查点每 120 秒单独提交脱敏 JSON。重启恢复逻辑保留所有已完成失败，只有控制器与 agent 均停止时才允许归档未完成任务；已用失败保留、协议拒绝、活进程拒绝和原日志保全测试验证。磁盘探针确认不支持 reflink，因此结束后的完整 rootfs 将在压缩、逐文件比较和摘要验证后回收展开副本。
 
 新增只读结果复核工具，从已结束 attempt 的实际复制产物摘要、原始输入和 root 专属验收结果提取修改范围、首题只读文件一致性及逐项测试通过数，不发布测试名或正文。已对保存的十个初始/参考对照实测：五个初始产物均无改动，得分与验收计数一致，首题三个只读文件均保留；该工具不替代人工语义审查或原判分器。
