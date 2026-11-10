@@ -35,6 +35,8 @@
 
 18:27 增加独立资源采样器，每 30 秒将 cgroup 内存常驻量、文件缓存、OOM/分配失败计数、CPU 限流与磁盘余量写入运行目录；不接触 agent 文件系统，也不改变正在运行的服务。首次实采分配失败与 OOM 均为 0。采样范围是共享容器，不能作为单次作答资源用量。
 
+22:38 另按实际 bridge/浏览器 PID 树与第三题两档独立 UID 做进程 RSS 快照：bridge 70,728 KiB，浏览器 15 个进程合计 3,324,688 KiB，high/max 分别 243,572 / 263,888 KiB。进程 RSS 求和可能重复计算共享页，也不能与容器 cgroup 用量直接等同；这次快照没有表明 bridge 发生泄漏，见 [进程内存证据](evidence/cc-bridge-process-memory-2026-11-10.json)。
+
 运行中的采样区间汇总见 [资源证据](evidence/cc-bridge-resume-resources-2026-11-10.json)，其中保留采样前缀的字节数及摘要；后续采样继续追加。首对两档已结束会话的显式工具输入扫描见 [工具轨迹复核](evidence/cc-bridge-resume-tool-audit-2026-11-10.json)：high 72 次、max 102 次，均无外部检索或隐藏目录访问候选；该候选扫描不能排除任意动态行为。
 
 资源区间和已完成工具轨迹的汇总代码已提交，可分别使用 `tools/summarize_terminal_native_resources.py` 和 `tools/audit_terminal_native_tools.py` 重建。资源工具用先前保存的 225 次采样前缀实测，数值与 SHA256 均完全复现；轨迹工具重扫首对产物，调用数和零候选结论一致，并保存原始会话文件摘要。候选只发布工具序号、类别和输入摘要，需要人工复核，不发布工具输入或模型正文。

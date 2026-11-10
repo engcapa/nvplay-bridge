@@ -1,0 +1,22 @@
+{
+  "sampled_at": 1794321519.9427288,
+  "scope": "Selected campaign process RSS; sums can double-count shared pages and are not per-attempt cgroup memory",
+  "groups": {
+    "bridge": {
+      "processes": 1,
+      "rss_kib_sum": 70728
+    },
+    "browser": {
+      "processes": 15,
+      "rss_kib_sum": 3324688
+    },
+    "cc_high_uid_20006": {
+      "processes": 2,
+      "rss_kib_sum": 243572
+    },
+    "cc_max_uid_20007": {
+      "processes": 2,
+      "rss_kib_sum": 263888
+    }
+  }
+}
