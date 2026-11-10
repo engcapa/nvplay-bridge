@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794315069.917664,
+  "checkpoint_at": 1794315190.0392976,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-resume-20261110-1647",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -541,7 +541,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794315069.965446,
+    "generated_at": 1794315190.0907154,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-128k-fixed/28800/high": {
@@ -808,7 +808,7 @@
         "task": "embedding-drift-monitor",
         "effort": "max",
         "started_at": 1794309436.757663,
-        "elapsed_seconds": 5633.2,
+        "elapsed_seconds": 5753.3,
         "tool_calls": 90,
         "last_tool": "Bash"
       }
@@ -859,23 +859,23 @@
         "reasoning_effort": "max",
         "tab_id": "kpool=3",
         "counts": {
-          "thinking_chars": 5490,
+          "thinking_chars": 14220,
           "text_chars": 0,
           "tool_calls": 0
         },
         "usage": {
           "prompt_tokens": 124016,
-          "completion_tokens": 1166,
-          "total_tokens": 125182,
+          "completion_tokens": 3001,
+          "total_tokens": 127017,
           "prompt_tokens_details": {
             "cached_tokens": 123520
           },
           "completion_tokens_details": {
-            "reasoning_tokens": 1166
+            "reasoning_tokens": 3001
           }
         },
-        "age_seconds": 88.5,
-        "activity_age_seconds": 2.5
+        "age_seconds": 208.7,
+        "activity_age_seconds": 3.8
       }
     ],
     "recent_errors": [],
@@ -1030,7 +1030,7 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "04ab45d1dad3d7ae42276cbd117dfa89a98cf505dc0243e6d3f961ce703f14cf",
+      "sha256": "a43eb490772c45aaec5659f822f9fb6a3d40a815561308b125dfb00981619ef3",
       "size": 791
     },
     {
