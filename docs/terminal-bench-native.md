@@ -47,6 +47,14 @@ python3 tools/checkpoint_terminal_native.py --base logs/<run> --output docs/evid
 
 若文件系统不支持 reflink，可运行 `sudo -n python3 tools/archive_terminal_native_roots.py --base logs/<run>`。它只处理已结束的任务、有效对照和烟测，拒绝仍被进程使用的 rootfs；先用 tar/gzip 保存完整文件树，再运行 tar compare 核对原目录、计算 SHA256，最后回收展开目录。日志、判分、原始产物及压缩 rootfs 均保留，可按各 `*-root-archive.json` 的命令还原。不要清理仍在运行的 rootfs 或模板。
 
+`tools/run_terminal_native_campaign.py` 将模板准备、对照、烟测和正式 30 次串联起来；每次完成立即保存并提交 checkpoint，再核验压缩 rootfs。它复用同一运行器及原始判分器，两个 effort 仍按题配对运行，单次预算保持八小时。Git 操作使用仓库所有者身份，避免 root 创建不可写的 Git 对象。
+
+```sh
+sudo -n python3 tools/run_terminal_native_campaign.py --base logs/<run> --checkpoint-output docs/evidence/<checkpoint>.json
+# 容器重启、服务恢复并记录新身份后：
+sudo -n python3 tools/run_terminal_native_campaign.py --base logs/<run> --checkpoint-output docs/evidence/<checkpoint>.json --resume --recover-interrupted
+```
+
 ## 执行顺序
 
 把固定 tarball 放入 `logs/<run>/terminal-bench.tar.gz`，解压到 `logs/<run>/terminal-bench/`。启动自己的 bridge 和持续监控，再准备 `settings-high.json`、`settings-max.json`，其中包含所用 bridge 地址、模型和对应 `output_config.effort`。这些本机配置不提交 Git。

@@ -7,7 +7,9 @@ from collections import Counter
 import fcntl
 import hashlib
 import json
+import os
 from pathlib import Path
+import pwd
 import subprocess
 import time
 import urllib.request
@@ -124,13 +126,18 @@ def save(base: Path, output: Path, health_url: str, commit: bool):
         if commit:
             repo = Path(__file__).resolve().parents[1]
             relative = str(output.resolve().relative_to(repo))
+            git = ["git"]
+            if os.geteuid() == 0 and repo.stat().st_uid != 0:
+                # Provisioning uses root; Git objects must remain writable by
+                # the repository owner and use that owner's normal identity.
+                git = ["runuser", "-u", pwd.getpwuid(repo.stat().st_uid).pw_name, "--", "git"]
             # Commit this file alone, even if an operator has unrelated staged edits.
-            subprocess.run(["git", "add", "--", relative], cwd=repo, check=True)
-            changed = subprocess.run(["git", "diff", "--cached", "--quiet", "--", relative], cwd=repo)
+            subprocess.run([*git, "add", "--", relative], cwd=repo, check=True)
+            changed = subprocess.run([*git, "diff", "--cached", "--quiet", "--", relative], cwd=repo)
             if changed.returncode not in (0, 1):
                 raise RuntimeError("git checkpoint diff failed")
             if changed.returncode:
-                subprocess.run(["git", "commit", "--only", "-m",
+                subprocess.run([*git, "commit", "--only", "-m",
                                 f'Checkpoint CC bridge evaluation: {data["new_formal_attempts_completed"]}/30, {data["status"]}',
                                 "--", relative], cwd=repo, check=True)
         print(json.dumps({"checkpoint": str(output), "status": data["status"],
