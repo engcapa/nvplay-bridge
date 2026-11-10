@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794310865.7315252,
+  "checkpoint_at": 1794310985.8248515,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-resume-20261110-1647",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -541,7 +541,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794310865.758228,
+    "generated_at": 1794310985.8605993,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-128k-fixed/28800/high": {
@@ -756,8 +756,8 @@
         "task": "embedding-drift-monitor",
         "effort": "high",
         "started_at": 1794309436.7690861,
-        "elapsed_seconds": 1429.0,
-        "tool_calls": 44,
+        "elapsed_seconds": 1549.1,
+        "tool_calls": 45,
         "last_tool": "Bash"
       },
       {
@@ -766,8 +766,8 @@
         "task": "embedding-drift-monitor",
         "effort": "max",
         "started_at": 1794309436.757663,
-        "elapsed_seconds": 1429.0,
-        "tool_calls": 24,
+        "elapsed_seconds": 1549.1,
+        "tool_calls": 25,
         "last_tool": "Bash"
       }
     ]
@@ -790,60 +790,76 @@
       "idle_seconds": 3600.0
     },
     "pool_states": {
-      "ready": 3,
-      "busy": 2
+      "busy": 2,
+      "ready": 3
     },
     "recovering_tabs": []
   },
   "bridge_activity": {
     "events_last_300s": {
-      "browser_buffer": 10,
-      "browser_pool_release": 10,
-      "browser_done": 10,
-      "request": 10,
-      "payload": 10,
-      "browser_start": 10,
-      "browser_tab": 10,
-      "browser_progress": 93,
-      "browser_first_data": 9,
-      "browser_first_content": 9
+      "browser_progress": 96,
+      "browser_buffer": 8,
+      "browser_pool_release": 8,
+      "browser_done": 8,
+      "request": 8,
+      "payload": 8,
+      "browser_start": 8,
+      "browser_tab": 8,
+      "browser_first_data": 8,
+      "browser_first_content": 8
     },
     "active": [
       {
-        "id": "22f400ea",
+        "id": "66165156",
         "retry_count": 0,
         "phase": "browser_progress",
         "attempt": 1,
         "reasoning_effort": "max",
-        "tab_id": "kpool=4",
+        "tab_id": "kpool=1",
         "counts": {
-          "thinking_chars": 2413,
+          "thinking_chars": 4487,
           "text_chars": 0,
           "tool_calls": 0
         },
         "usage": {
-          "prompt_tokens": 38117,
-          "completion_tokens": 529,
-          "total_tokens": 38646,
+          "prompt_tokens": 39664,
+          "completion_tokens": 1475,
+          "total_tokens": 41139,
           "prompt_tokens_details": {
-            "cached_tokens": 32896
+            "cached_tokens": 38016
           },
           "completion_tokens_details": {
-            "reasoning_tokens": 529
+            "reasoning_tokens": 1475
           }
         },
-        "age_seconds": 88.2,
-        "activity_age_seconds": 3.1
+        "age_seconds": 81.8,
+        "activity_age_seconds": 2.9
       },
       {
-        "id": "ecc1fbed",
+        "id": "182afc42",
         "retry_count": 0,
-        "phase": "browser_tab",
+        "phase": "browser_progress",
         "attempt": 1,
         "reasoning_effort": "high",
-        "tab_id": "kpool=5",
-        "age_seconds": 16.4,
-        "activity_age_seconds": 16.4
+        "tab_id": "kpool=2",
+        "counts": {
+          "thinking_chars": 3798,
+          "text_chars": 0,
+          "tool_calls": 0
+        },
+        "usage": {
+          "prompt_tokens": 38056,
+          "completion_tokens": 1032,
+          "total_tokens": 39088,
+          "prompt_tokens_details": {
+            "cached_tokens": 36352
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 1032
+          }
+        },
+        "age_seconds": 64.2,
+        "activity_age_seconds": 3.5
       }
     ],
     "recent_errors": [],
@@ -993,7 +1009,7 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "fcb787312f864e6fbb1bc9c6d3c37da12b0771338aa2f0c1689170a4ae9d8b4a",
+      "sha256": "d173d8f2430e93049e0c81d2723f584e478d8bcd492c2c5c2d7a387ebb9ff416",
       "size": 791
     },
     {
