@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794346703.5280607,
+  "checkpoint_at": 1794346826.6341634,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-1m-20261110-2355",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -552,8 +552,8 @@
     "host_memory_limit_bytes": "30064771072"
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794346580.708422,
-    "commit": "ac31653568c7520ff17e47a2ec81f6bae8db7c6f",
+    "attempted_at": 1794346703.5640252,
+    "commit": "72fea2a62be624ba09779c8a2558b06b0e9dbbc9",
     "pushed": true,
     "returncode": 0
   },
@@ -930,7 +930,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794346703.5368092,
+    "generated_at": 1794346826.6435003,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-1m-720k/28800/max": {
@@ -1135,8 +1135,8 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "6df3fcd58b7ea545d4bdf904514e416bcb75de15c0b9786e32ced7a14b5bc1d3",
-      "size": 133
+      "sha256": "0f08d6ac6d60682fc3a06ddc4664974107e5f769bab6d81cc9a81cadbdd3f27b",
+      "size": 134
     },
     {
       "path": "checkpoint-process-before-wall-clock-update.json",
@@ -1325,7 +1325,7 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "3022ee7e994d01aedfbd472473de38c4d73f7520bd263b62e5816c9eec4be0e1",
+      "sha256": "d68085e11c6f098052e570df8e2fc669c4fa9453135452af66baae5f2276fcc5",
       "size": 825
     },
     {
