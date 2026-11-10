@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794320838.5685084,
+  "checkpoint_at": 1794320958.8447404,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-resume-20261110-1647",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -541,7 +541,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794320838.6868038,
+    "generated_at": 1794320958.9705126,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-128k-fixed/28800/high": {
@@ -862,8 +862,8 @@
         "task": "batched-eval-parity",
         "effort": "high",
         "started_at": 1794315384.4192412,
-        "elapsed_seconds": 5454.2,
-        "tool_calls": 73,
+        "elapsed_seconds": 5574.5,
+        "tool_calls": 74,
         "last_tool": "Bash"
       },
       {
@@ -872,7 +872,7 @@
         "task": "batched-eval-parity",
         "effort": "max",
         "started_at": 1794315384.410672,
-        "elapsed_seconds": 5454.3,
+        "elapsed_seconds": 5574.5,
         "tool_calls": 54,
         "last_tool": "Bash"
       }
@@ -903,21 +903,21 @@
   },
   "bridge_activity": {
     "events_last_300s": {
-      "browser_progress": 103,
+      "browser_progress": 104,
       "browser_buffer": 2,
       "browser_pool_release": 3,
       "browser_done": 2,
       "request": 2,
       "payload": 2,
       "browser_start": 2,
-      "browser_tab": 2,
-      "browser_first_data": 2,
-      "browser_first_content": 2,
       "browser_prepare_retry": 1,
       "pool_recovery_start": 1,
+      "browser_tab": 2,
       "pool_activation": 2,
       "pool_page_ready": 1,
-      "pool_ready": 1
+      "pool_ready": 1,
+      "browser_first_data": 2,
+      "browser_first_content": 2
     },
     "active": [
       {
@@ -928,49 +928,49 @@
         "reasoning_effort": "max",
         "tab_id": "kpool=2",
         "counts": {
-          "thinking_chars": 33091,
+          "thinking_chars": 50197,
           "text_chars": 0,
           "tool_calls": 0
         },
         "usage": {
           "prompt_tokens": 172356,
-          "completion_tokens": 6670,
-          "total_tokens": 179026,
+          "completion_tokens": 9182,
+          "total_tokens": 181538,
           "prompt_tokens_details": {
             "cached_tokens": 171904
           },
           "completion_tokens_details": {
-            "reasoning_tokens": 6670
+            "reasoning_tokens": 9182
           }
         },
-        "age_seconds": 393.8,
-        "activity_age_seconds": 1.3
+        "age_seconds": 514.1,
+        "activity_age_seconds": 4.2
       },
       {
-        "id": "94f1f94a",
+        "id": "bf144614",
         "retry_count": 0,
         "phase": "browser_progress",
         "attempt": 1,
         "reasoning_effort": "high",
-        "tab_id": "kpool=3",
+        "tab_id": "kpool=5",
         "counts": {
-          "thinking_chars": 3952,
+          "thinking_chars": 1846,
           "text_chars": 0,
           "tool_calls": 0
         },
         "usage": {
-          "prompt_tokens": 152082,
-          "completion_tokens": 821,
-          "total_tokens": 152903,
+          "prompt_tokens": 154368,
+          "completion_tokens": 1186,
+          "total_tokens": 155554,
           "prompt_tokens_details": {
-            "cached_tokens": 144640
+            "cached_tokens": 152064
           },
           "completion_tokens_details": {
-            "reasoning_tokens": 821
+            "reasoning_tokens": 1186
           }
         },
-        "age_seconds": 91.7,
-        "activity_age_seconds": 1.5
+        "age_seconds": 56.0,
+        "activity_age_seconds": 4.7
       }
     ],
     "recent_errors": [],
@@ -1125,7 +1125,7 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "ae463b2ae28aa0cdf8490714f2d8f5fbd055e5f5fa8f781d4694dd1a14d4cbc6",
+      "sha256": "a60ffeffa72c50115f802a4636f2bc1cf4d9369214683f3a06a463f342da71bb",
       "size": 787
     },
     {
