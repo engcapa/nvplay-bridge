@@ -49,5 +49,33 @@
     }
   ],
   "source_prefix_bytes": 2569775,
-  "source_prefix_sha256": "691c71617c7ba2197f8b7ce7e64534c485d7919c9cfab0c908d4e5ff9d3d6b80"
+  "source_prefix_sha256": "691c71617c7ba2197f8b7ce7e64534c485d7919c9cfab0c908d4e5ff9d3d6b80",
+  "terminal_update": {
+    "observed_at": 1794320975.9093926,
+    "event": {
+      "event": "browser_done",
+      "ts": 1794320902.3006222,
+      "id": "94f1f94a",
+      "attempt": 1,
+      "sec": 155.442,
+      "counts": {
+        "thinking_chars": 4575,
+        "text_chars": 137,
+        "tool_calls": 1
+      },
+      "usage": {
+        "prompt_tokens": 152082,
+        "completion_tokens": 2218,
+        "total_tokens": 154300,
+        "prompt_tokens_details": {
+          "cached_tokens": 144640
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 966
+        }
+      }
+    },
+    "source_prefix_bytes": 2589256,
+    "source_prefix_sha256": "18e6e2c7cda7a6482d83417083d74a66940acd4942d0fafb8867fdc9dba17639"
+  }
 }
