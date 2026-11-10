@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794302098.5518513,
+  "checkpoint_at": 1794302218.6007698,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-resume-20261110-1647",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -272,7 +272,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794302098.5526726,
+    "generated_at": 1794302218.6019623,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
@@ -296,13 +296,75 @@
       "idle_seconds": 3600.0
     },
     "pool_states": {
-      "ready": 5
+      "busy": 2,
+      "ready": 3
     },
     "recovering_tabs": []
   },
   "bridge_activity": {
-    "events_last_300s": {},
-    "active": [],
+    "events_last_300s": {
+      "request": 2,
+      "payload": 2,
+      "browser_start": 2,
+      "browser_tab": 2,
+      "browser_first_data": 2,
+      "browser_progress": 4,
+      "browser_first_content": 2
+    },
+    "active": [
+      {
+        "id": "113d47ac",
+        "retry_count": 0,
+        "phase": "browser_progress",
+        "attempt": 1,
+        "reasoning_effort": "max",
+        "tab_id": "kpool=2",
+        "counts": {
+          "thinking_chars": 1319,
+          "text_chars": 0,
+          "tool_calls": 0
+        },
+        "usage": {
+          "prompt_tokens": 7621,
+          "completion_tokens": 286,
+          "total_tokens": 7907,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 286
+          }
+        },
+        "age_seconds": 25.0,
+        "activity_age_seconds": 0.6
+      },
+      {
+        "id": "d7db61e1",
+        "retry_count": 0,
+        "phase": "browser_first_content",
+        "attempt": 1,
+        "reasoning_effort": "high",
+        "tab_id": "kpool=1",
+        "counts": {
+          "thinking_chars": 0,
+          "text_chars": 0,
+          "tool_calls": 0
+        },
+        "usage": {
+          "prompt_tokens": 7622,
+          "completion_tokens": 1,
+          "total_tokens": 7623,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 1
+          }
+        },
+        "age_seconds": 24.9,
+        "activity_age_seconds": 3.0
+      }
+    ],
     "recent_errors": [],
     "recent_upstream_errors": [],
     "recent_retries": []
@@ -384,6 +446,11 @@
       "size": 83
     },
     {
+      "path": "next-uid.json",
+      "sha256": "6374f76111c1a8827aa7e1fbc749fbe6cfc6c483a496eb3d17405e3f6f9bd025",
+      "size": 20
+    },
+    {
       "path": "node-regression.log",
       "sha256": "19b76c02491206ff8c5cb055cba644f9c9f5a6e40fce0d78b510e4614fdc50aa",
       "size": 235
@@ -429,5 +496,26 @@
       "size": 1809
     }
   ],
-  "compressed_root_evidence": []
+  "compressed_root_evidence": [
+    {
+      "directory": "controls/session-window-debug/baseline",
+      "archived_at": 1794302126.9795184,
+      "root": "agent-root",
+      "archive": "agent-root.tar.gz",
+      "sha256": "2c767096f0e04f31c1ddcaccbf85dc2875cc84c5dba35d8e7291b5c6f6938c12",
+      "bytes": 353013912,
+      "tar_compare_passed_before_reclaim": true,
+      "restore": "sudo tar -xpf agent-root.tar.gz -C ."
+    },
+    {
+      "directory": "controls/session-window-debug/baseline",
+      "archived_at": 1794302174.0277984,
+      "root": "verifier-root",
+      "archive": "verifier-root.tar.gz",
+      "sha256": "042789417dcc571cd7fbed2ab6d8eb8b093cae69ca7b8c400c7915cf39187770",
+      "bytes": 486831569,
+      "tar_compare_passed_before_reclaim": true,
+      "restore": "sudo tar -xpf verifier-root.tar.gz -C ."
+    }
+  ]
 }
