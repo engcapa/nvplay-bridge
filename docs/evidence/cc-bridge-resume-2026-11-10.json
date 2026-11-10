@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794305340.2777584,
+  "checkpoint_at": 1794305460.338911,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-resume-20261110-1647",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -541,7 +541,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794305340.2862794,
+    "generated_at": 1794305460.350659,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
@@ -552,9 +552,9 @@
         "task": "session-window-debug",
         "effort": "high",
         "started_at": 1794304311.0699286,
-        "elapsed_seconds": 1029.2,
-        "tool_calls": 24,
-        "last_tool": "Edit"
+        "elapsed_seconds": 1149.3,
+        "tool_calls": 25,
+        "last_tool": "Glob"
       },
       {
         "attempt": "runs/formal-128k-fixed/session-window-debug--max--r1",
@@ -562,9 +562,9 @@
         "task": "session-window-debug",
         "effort": "max",
         "started_at": 1794304311.0446827,
-        "elapsed_seconds": 1029.2,
-        "tool_calls": 13,
-        "last_tool": "Bash"
+        "elapsed_seconds": 1149.3,
+        "tool_calls": 17,
+        "last_tool": "Read"
       }
     ]
   },
@@ -586,76 +586,60 @@
       "idle_seconds": 3600.0
     },
     "pool_states": {
-      "busy": 2,
-      "ready": 3
+      "ready": 3,
+      "busy": 2
     },
     "recovering_tabs": []
   },
   "bridge_activity": {
     "events_last_300s": {
-      "browser_progress": 113,
+      "browser_progress": 106,
+      "browser_buffer": 5,
+      "browser_pool_release": 5,
+      "browser_done": 5,
+      "request": 5,
+      "payload": 5,
+      "browser_start": 5,
+      "browser_tab": 5,
       "browser_first_data": 4,
-      "browser_first_content": 4,
-      "browser_buffer": 3,
-      "browser_pool_release": 3,
-      "browser_done": 3,
-      "request": 3,
-      "payload": 3,
-      "browser_start": 3,
-      "browser_tab": 3
+      "browser_first_content": 4
     },
     "active": [
       {
-        "id": "c734aa4e",
+        "id": "9001b676",
         "retry_count": 0,
         "phase": "browser_progress",
         "attempt": 1,
         "reasoning_effort": "max",
         "tab_id": "kpool=4",
         "counts": {
-          "thinking_chars": 64998,
+          "thinking_chars": 99,
           "text_chars": 0,
           "tool_calls": 0
         },
         "usage": {
-          "prompt_tokens": 27182,
-          "completion_tokens": 13141,
-          "total_tokens": 40323,
+          "prompt_tokens": 43088,
+          "completion_tokens": 210,
+          "total_tokens": 43298,
           "prompt_tokens_details": {
-            "cached_tokens": 26368
+            "cached_tokens": 42496
           },
           "completion_tokens_details": {
-            "reasoning_tokens": 13141
+            "reasoning_tokens": 210
           }
         },
-        "age_seconds": 420.0,
-        "activity_age_seconds": 3.3
+        "age_seconds": 24.5,
+        "activity_age_seconds": 4.1
       },
       {
-        "id": "7cdd9427",
+        "id": "4a559293",
         "retry_count": 0,
-        "phase": "browser_progress",
+        "phase": "browser_tab",
         "attempt": 1,
         "reasoning_effort": "high",
-        "tab_id": "kpool=1",
-        "counts": {
-          "thinking_chars": 24257,
-          "text_chars": 0,
-          "tool_calls": 0
-        },
-        "usage": {
-          "prompt_tokens": 32967,
-          "completion_tokens": 5333,
-          "total_tokens": 38300,
-          "prompt_tokens_details": {
-            "cached_tokens": 32512
-          },
-          "completion_tokens_details": {
-            "reasoning_tokens": 5333
-          }
-        },
-        "age_seconds": 217.1,
-        "activity_age_seconds": 2.4
+        "tab_id": "kpool=3",
+        "age_seconds": 13.3,
+        "activity_age_seconds": 13.3
       }
     ],
     "recent_errors": [],
