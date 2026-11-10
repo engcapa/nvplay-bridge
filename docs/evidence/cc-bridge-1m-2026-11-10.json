@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794328561.170515,
+  "checkpoint_at": 1794328584.53349,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-1m-20261110-2355",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -552,8 +552,8 @@
     "host_memory_limit_bytes": "30064771072"
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794328556.893616,
-    "commit": "7fe16c5ca1e814bac4e2e0932dd52843003bfbef",
+    "attempted_at": 1794328561.1973584,
+    "commit": "19b01105ee463cad96c7a32d5fd02b6b900f452e",
     "pushed": true,
     "returncode": 0
   },
@@ -930,11 +930,22 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794328561.1718035,
+    "generated_at": 1794328584.5351145,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
-    "pending": []
+    "pending": [
+      {
+        "attempt": "runs/formal-1m-720k/batched-eval-parity--max--r1",
+        "status": "agent_running",
+        "task": "batched-eval-parity",
+        "effort": "max",
+        "started_at": 1794328566.7493997,
+        "elapsed_seconds": 17.8,
+        "tool_calls": 0,
+        "last_tool": null
+      }
+    ]
   },
   "new_formal_attempts_planned": 25,
   "new_formal_attempts_completed": 0,
@@ -962,13 +973,49 @@
       "idle_seconds": 3600.0
     },
     "pool_states": {
-      "ready": 5
+      "ready": 4,
+      "busy": 1
     },
     "recovering_tabs": []
   },
   "bridge_activity": {
-    "events_last_300s": {},
-    "active": [],
+    "events_last_300s": {
+      "request": 1,
+      "payload": 1,
+      "browser_start": 1,
+      "browser_tab": 1,
+      "browser_first_data": 1,
+      "browser_progress": 1,
+      "browser_first_content": 1
+    },
+    "active": [
+      {
+        "id": "2e6f697f",
+        "retry_count": 0,
+        "phase": "browser_first_content",
+        "attempt": 1,
+        "reasoning_effort": "max",
+        "tab_id": "kpool=3",
+        "counts": {
+          "thinking_chars": 0,
+          "text_chars": 0,
+          "tool_calls": 0
+        },
+        "usage": {
+          "prompt_tokens": 8421,
+          "completion_tokens": 1,
+          "total_tokens": 8422,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 1
+          }
+        },
+        "age_seconds": 16.8,
+        "activity_age_seconds": 2.0
+      }
+    ],
     "recent_errors": [],
     "recent_upstream_errors": [],
     "recent_retries": []
@@ -1021,8 +1068,8 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "a577bf9ca583229448f4cc67d91290e3b155f7df64d51e6f02ffe4f8a4a27eb0",
-      "size": 133
+      "sha256": "e614d4f556d734603708d5f0c9e5cc9e346ccf6d0c1ff91477691347076821cb",
+      "size": 134
     },
     {
       "path": "checkpoint-process-before-wall-clock-update.json",
@@ -1121,7 +1168,7 @@
     },
     {
       "path": "next-uid.json",
-      "sha256": "6374f76111c1a8827aa7e1fbc749fbe6cfc6c483a496eb3d17405e3f6f9bd025",
+      "sha256": "8579449cf0333c1c9fd1ee1c2f1cd92d34e228ca3dcd71d83d8bdea6cd9fc1c9",
       "size": 20
     },
     {
@@ -1171,8 +1218,18 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "8ffe2e51aa97cd563d24decff9f809ade00a1e69217e77d747e58252bdee6762",
-      "size": 808
+      "sha256": "c76c4f772b2b463b01ef438e7ea91cd9cb9346282cd60a52cdd3ba36db998abf",
+      "size": 821
+    },
+    {
+      "path": "runs/formal-1m-720k/batched-eval-parity--max--r1/identity.json",
+      "sha256": "d9a87b02077a31deea3d4e34c1518e881f16d2f5cad7f550810aa9672dbbdb42",
+      "size": 3553
+    },
+    {
+      "path": "runs/formal-1m-720k/batched-eval-parity--max--r1/request-protocol.json",
+      "sha256": "3695fcf45dbb86188d7ccbbf1c375d2032a7763a98cb6fefd8cccdb480ebccaa",
+      "size": 999
     },
     {
       "path": "settings-formal-high.json",
