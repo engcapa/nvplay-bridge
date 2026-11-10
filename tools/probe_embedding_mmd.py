@@ -32,6 +32,7 @@ def main():
                         help="Parent of reviewed drift_monitor package; importing executes its code")
     args = parser.parse_args()
     module_dir = args.module_dir.resolve(strict=True)
+    sys.dont_write_bytecode = True
     sys.path.insert(0, str(module_dir))
     import numpy as np
     from drift_monitor.statistical_tests import mmd
