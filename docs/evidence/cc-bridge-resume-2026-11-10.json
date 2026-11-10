@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794313628.2611525,
+  "checkpoint_at": 1794313748.4033298,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-resume-20261110-1647",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -541,7 +541,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794313628.3202927,
+    "generated_at": 1794313748.4775352,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-128k-fixed/28800/high": {
@@ -756,9 +756,9 @@
         "task": "embedding-drift-monitor",
         "effort": "high",
         "started_at": 1794309436.7690861,
-        "elapsed_seconds": 4191.5,
-        "tool_calls": 87,
-        "last_tool": "Edit"
+        "elapsed_seconds": 4311.7,
+        "tool_calls": 90,
+        "last_tool": "Bash"
       },
       {
         "attempt": "runs/formal-128k-fixed/embedding-drift-monitor--max--r1",
@@ -766,9 +766,9 @@
         "task": "embedding-drift-monitor",
         "effort": "max",
         "started_at": 1794309436.757663,
-        "elapsed_seconds": 4191.6,
-        "tool_calls": 73,
-        "last_tool": "Edit"
+        "elapsed_seconds": 4311.7,
+        "tool_calls": 74,
+        "last_tool": "Write"
       }
     ]
   },
@@ -790,23 +790,23 @@
       "idle_seconds": 3600.0
     },
     "pool_states": {
-      "busy": 2,
-      "ready": 3
+      "ready": 3,
+      "busy": 2
     },
     "recovering_tabs": []
   },
   "bridge_activity": {
     "events_last_300s": {
-      "browser_progress": 71,
+      "browser_first_data": 8,
+      "browser_progress": 78,
+      "browser_first_content": 8,
       "browser_buffer": 9,
       "browser_pool_release": 9,
       "browser_done": 8,
-      "request": 9,
-      "payload": 9,
-      "browser_start": 10,
-      "browser_tab": 10,
-      "browser_first_data": 8,
-      "browser_first_content": 8,
+      "request": 8,
+      "payload": 8,
+      "browser_start": 9,
+      "browser_tab": 9,
       "browser_http_error": 1,
       "browser_abort": 1,
       "pool_recovery_start": 1,
@@ -817,63 +817,68 @@
     },
     "active": [
       {
-        "id": "4b02f94d",
+        "id": "d1e195e1",
         "retry_count": 0,
         "phase": "browser_progress",
         "attempt": 1,
         "reasoning_effort": "high",
-        "tab_id": "kpool=1",
+        "tab_id": "kpool=3",
         "counts": {
-          "thinking_chars": 3257,
-          "text_chars": 215,
-          "tool_calls": 1
+          "thinking_chars": 4219,
+          "text_chars": 0,
+          "tool_calls": 0
         },
         "usage": {
-          "prompt_tokens": 98396,
-          "completion_tokens": 1155,
-          "total_tokens": 99551,
+          "prompt_tokens": 100571,
+          "completion_tokens": 1090,
+          "total_tokens": 101661,
           "prompt_tokens_details": {
-            "cached_tokens": 97664
+            "cached_tokens": 98304
           },
           "completion_tokens_details": {
-            "reasoning_tokens": 765
+            "reasoning_tokens": 1090
           }
         },
-        "age_seconds": 91.5,
-        "activity_age_seconds": 3.2
+        "age_seconds": 95.9,
+        "activity_age_seconds": 4.5
       },
       {
-        "id": "ad4ab46f",
-        "retry_count": 0,
-        "phase": "browser_tab",
-        "attempt": 1,
+        "id": "fae0df6a",
+        "retry_count": 1,
         "reasoning_effort": "max",
-        "tab_id": "kpool=2",
-        "age_seconds": 0.5,
-        "activity_age_seconds": 0.5
+        "last_retry": {
+          "reason": "nvidia_pool_acquire_timeout",
+          "status": 500,
+          "delay": 5.459
+        },
+        "phase": "browser_tab",
+        "attempt": 2,
+        "tab_id": "kpool=5",
+        "age_seconds": 55.1,
+        "activity_age_seconds": 0.3
       }
     ],
     "recent_errors": [],
     "recent_upstream_errors": [
       {
         "event": "browser_http_error",
-        "ts": 1794313389.8181105,
-        "id": "9ef8e968",
+        "ts": 1794313742.5633943,
+        "id": "fae0df6a",
         "attempt": 1,
         "reasoning_effort": "max",
         "status": 500,
-        "sec": 49.353
+        "sec": 49.259
       }
     ],
     "recent_retries": [
       {
         "event": "upstream_retry",
-        "ts": 1794313389.89498,
-        "id": "9ef8e968",
+        "ts": 1794313742.5988846,
+        "id": "fae0df6a",
         "attempt": 1,
         "reasoning_effort": "max",
         "status": 500,
-        "sec": 49.43,
+        "sec": 49.294,
         "counts": {
           "thinking_chars": 0,
           "text_chars": 0,
@@ -1032,7 +1037,7 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "62a9882d92087e71a02971ee078bf22d6cf774a5124c97354dac7c8ff29c8dd2",
+      "sha256": "b9b5ca68239caf3b1e9508f2cbab92b1bfd242315c7388622e8584aa1bbcde3a",
       "size": 791
     },
     {
