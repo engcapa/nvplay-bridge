@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794304619.776437,
+  "checkpoint_at": 1794304739.8715608,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-resume-20261110-1647",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -541,7 +541,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794304619.781556,
+    "generated_at": 1794304739.8792899,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
@@ -552,8 +552,8 @@
         "task": "session-window-debug",
         "effort": "high",
         "started_at": 1794304311.0699286,
-        "elapsed_seconds": 308.7,
-        "tool_calls": 10,
+        "elapsed_seconds": 428.8,
+        "tool_calls": 13,
         "last_tool": "Bash"
       },
       {
@@ -562,7 +562,7 @@
         "task": "session-window-debug",
         "effort": "max",
         "started_at": 1794304311.0446827,
-        "elapsed_seconds": 308.7,
+        "elapsed_seconds": 428.8,
         "tool_calls": 11,
         "last_tool": "Bash"
       }
@@ -593,44 +593,18 @@
   },
   "bridge_activity": {
     "events_last_300s": {
-      "browser_first_data": 9,
-      "browser_progress": 105,
-      "browser_first_content": 9,
-      "browser_buffer": 7,
-      "browser_pool_release": 7,
-      "browser_done": 7,
-      "request": 7,
-      "payload": 7,
-      "browser_start": 7,
-      "browser_tab": 7
+      "browser_progress": 114,
+      "browser_buffer": 3,
+      "browser_pool_release": 3,
+      "browser_done": 3,
+      "request": 3,
+      "payload": 3,
+      "browser_start": 3,
+      "browser_tab": 3,
+      "browser_first_data": 2,
+      "browser_first_content": 2
     },
     "active": [
-      {
-        "id": "10d8300a",
-        "retry_count": 0,
-        "phase": "browser_progress",
-        "attempt": 1,
-        "reasoning_effort": "high",
-        "tab_id": "kpool=5",
-        "counts": {
-          "thinking_chars": 31317,
-          "text_chars": 0,
-          "tool_calls": 0
-        },
-        "usage": {
-          "prompt_tokens": 11991,
-          "completion_tokens": 6098,
-          "total_tokens": 18089,
-          "prompt_tokens_details": {
-            "cached_tokens": 11648
-          },
-          "completion_tokens_details": {
-            "reasoning_tokens": 6098
-          }
-        },
-        "age_seconds": 233.7,
-        "activity_age_seconds": 2.6
-      },
       {
         "id": "c2268b54",
         "retry_count": 0,
@@ -639,23 +613,33 @@
         "reasoning_effort": "max",
         "tab_id": "kpool=3",
         "counts": {
-          "thinking_chars": 30856,
+          "thinking_chars": 42927,
           "text_chars": 0,
           "tool_calls": 0
         },
         "usage": {
           "prompt_tokens": 12068,
-          "completion_tokens": 5860,
-          "total_tokens": 17928,
+          "completion_tokens": 8283,
+          "total_tokens": 20351,
           "prompt_tokens_details": {
             "cached_tokens": 11648
           },
           "completion_tokens_details": {
-            "reasoning_tokens": 5860
+            "reasoning_tokens": 8283
           }
         },
-        "age_seconds": 216.9,
-        "activity_age_seconds": 1.7
+        "age_seconds": 337.0,
+        "activity_age_seconds": 4.4
+      },
+      {
+        "id": "6eb4b651",
+        "retry_count": 0,
+        "phase": "browser_tab",
+        "attempt": 1,
+        "reasoning_effort": "high",
+        "tab_id": "kpool=2",
+        "age_seconds": 5.0,
+        "activity_age_seconds": 5.0
       }
     ],
     "recent_errors": [],
