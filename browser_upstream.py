@@ -244,6 +244,23 @@ class BrowserHTTPError(BrowserError):
         self.status = status
 
 
+def _connect_cdp(url: str, timeout: float):
+    try:
+        return websocket.create_connection(url, timeout=timeout)
+    except Exception as exc:
+        exc.cdp_phase = "connect"
+        raise
+
+
+def _read_cdp(ws, method: str):
+    try:
+        return json.loads(ws.recv())
+    except Exception as exc:
+        exc.cdp_phase = "receive"
+        exc.cdp_method = method
+        raise
+
+
 class BrowserUpstream:
     def __init__(self, port: int = 9222, target_hint: str = DEFAULT_HINT) -> None:
         self.base = f"http://127.0.0.1:{port}"
@@ -274,7 +291,7 @@ class BrowserUpstream:
         if self.ws is not None:
             return
         target = self._target()
-        self.ws = websocket.create_connection(target["webSocketDebuggerUrl"], timeout=5)
+        self.ws = _connect_cdp(target["webSocketDebuggerUrl"], timeout=5)
         self._call("Runtime.enable")
 
     def _call(self, method: str, params: dict | None = None, timeout: float = 5.0):
@@ -286,7 +303,7 @@ class BrowserUpstream:
         deadline = time.monotonic() + timeout
         while time.monotonic() < deadline:
             self.ws.settimeout(max(0.1, deadline - time.monotonic()))
-            msg = json.loads(self.ws.recv())
+            msg = _read_cdp(self.ws, method)
             if msg.get("id") == mid:
                 if "error" in msg:
                     raise BrowserError(str(msg["error"]))
@@ -588,7 +605,7 @@ class BrowserPool:
         deadline = time.monotonic() + timeout
         while time.monotonic() < deadline:
             ws.settimeout(max(0.01, deadline - time.monotonic()))
-            msg = json.loads(ws.recv())
+            msg = _read_cdp(ws, method)
             if msg.get("id") == mid:
                 if "error" in msg:
                     raise BrowserError(str(msg["error"]))
@@ -596,7 +613,7 @@ class BrowserPool:
         raise BrowserError(f"CDP timeout: {method}")
 
     def _inspect_page(self, ws_url: str) -> dict:
-        ws = websocket.create_connection(ws_url, timeout=5)
+        ws = _connect_cdp(ws_url, timeout=5)
         try:
             result = self._call(ws, 1, "Runtime.evaluate",
                                 {"expression": PAGE_STATE_JS, "returnByValue": True})
@@ -605,7 +622,7 @@ class BrowserPool:
             ws.close()
 
     def _navigate(self, ws_url: str, url: str) -> dict:
-        ws = websocket.create_connection(ws_url, timeout=5)
+        ws = _connect_cdp(ws_url, timeout=5)
         try:
             self._call(ws, 1, "Page.enable")
             result = self._call(ws, 2, "Page.navigate", {"url": url})
@@ -619,7 +636,7 @@ class BrowserPool:
                        deadline: float, trace: Callable | None = None,
                        navigation: dict | None = None) -> None:
         _check(cancel, deadline)
-        ws = websocket.create_connection(ws_url, timeout=5)
+        ws = _connect_cdp(ws_url, timeout=5)
         try:
             _check(cancel, deadline)
             self._call(ws, 1, "Page.enable")
@@ -770,7 +787,10 @@ class BrowserPool:
                     except BrowserCancelled:
                         raise
                     except Exception as exc:
-                        self._log("pool_recovery_error", tab_id=hint, recovery_attempt=attempt, error=str(exc)[:1500])
+                        self._log("pool_recovery_error", tab_id=hint, recovery_attempt=attempt,
+                                  error=str(exc)[:1500], error_type=type(exc).__name__,
+                                  cdp_phase=getattr(exc, "cdp_phase", None),
+                                  cdp_method=getattr(exc, "cdp_method", None))
                         if attempt == TAB_RECOVERY_ATTEMPTS:
                             raise
                 self._turns[hint] = 0

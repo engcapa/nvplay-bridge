@@ -176,6 +176,14 @@ max 的上游累计输出为 44,012 token，其中推理 40,844；high 分别为
 
 与此同时已有真实流持续超过 1,200 秒，不能把一次约 304 秒的 HTTP/2 故障解释成全局五分钟上游限制。修复前补充观察与修复后正式阶段分开保留，此决定写入计划时两次补充观察均尚未判分。
 
+### 修复前宽预算的补充观察
+
+`formal/session-window-debug/high/r1` 已在 3,715.052 秒后退出，退出码 1、`is_error=true`、`Request timed out`；并未耗尽 28,800 秒 agent 预算。独立核对全部生产模块及设计文件的摘要，确认与初始代码完全相同，尚未交付修复。原始隐藏判分器正常结束，2/7 通过，产物分为 0、端到端失败；max 仍在运行。
+
+该 high 会话包含 17 个逻辑请求：10 个成功、2 个交付后错误（一次 HTTP/2 断流、一次 90 秒无数据超时）、5 个约 301 秒的客户端取消，无遗留请求；实际输出上限同时出现 64,000 和 131,072。这个结果证明仅放宽总预算仍会被更短的网络等待限制打断，不能解释为模型已完成修复但逻辑错误，也不与固定协议成绩混合。
+
+另观测到 `kpool=1` 恢复期间的 10 次 CDP 连接超时。两个在途任务仍能使用其他标签；该槽位经原有退避机制自动恢复。只读 Runtime/Page 探针当时均能响应，未重启服务、关闭标签或注入 provider 请求。因旧日志未记录失败的具体 CDP 方法，无法确定根因，暂不认定代码缺陷。随后补充诊断字段，保留异常原类型及消息，并标明 connect/receive 阶段、失败命令和异常类型；完整 Python 回归 **176 项通过，16.279 秒**。新诊断将在下次干净启动时生效，不冒充连接根因修复。监控中的维护错误与逻辑请求终止错误分别计数。
+
 ## 全 66 题的原生覆盖边界
 
 已经审计 66 题的环境要求，其中 3 题明确要求 GPU、11 题包含多服务环境。本机没有可用 NVIDIA 设备，也没有可用的 `/dev/kvm` 或 `/dev/fuse`，当前权限不允许创建 mount namespace。
@@ -209,6 +217,7 @@ chroot 缺少 `/proc`，没有每题强制内存或磁盘配额，基础系统�
 - `cc-http-timeout-control/`：延迟响应头的客户端超时诊断，不计入模型分数。
 - `cc-http-timeout-diagnosed/`、`cc-http-timeout-tracked-adapter/`：原始 Undici 错误码、真实 CC 修复前后长等待与最终适配器复测。
 - `node-timeout-regression.log`、`node-runtime-chroot-probe/`：取消和 origin 隔离回归、普通 UID 的原生加载检查。
+- `independent-reviews/formal/`：修复前宽预算产物的独立审查；`pool-transient-recovery-review.json`：CDP 暂时恢复失败及自行恢复的原始事件。
 - `wal-oracle-diagnostic*.log`：参考解不稳定的独立诊断。
 - `summary.json`：按 stage、预算和 effort 分组的派生汇总，不包含题目正文。
 

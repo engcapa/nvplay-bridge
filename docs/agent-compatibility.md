@@ -116,6 +116,11 @@ fixture with a 310-second delayed fallback response. Supply `--output` and
 It records passive Undici errors without capturing request credentials or
 contents. These probes do not invoke NVIDIA or evaluate model quality.
 
+Pool recovery failures report `error_type`, `cdp_phase` and, for receive
+failures, `cdp_method`. A CDP timeout during maintenance is distinct from a
+terminal model request error. The diagnostic context preserves the original
+exception type and message, so recovery and retry classification stay intact.
+
 The opt-in `tests/probe_cc_midresponse.py` runs real CC processes against an
 isolated local HTTP/CDP fixture. It truncates an HTTP 200 stream after text,
 thinking, thinking plus text, or complete tool JSON without a finish marker,
