@@ -24,6 +24,10 @@ def smoke(evaluation, effort):
     clone_root(evaluation.base / "native-base", root)
     uid = allocate_uid(evaluation.base)
     subprocess.run(["chown", "-R", f"{uid}:{uid}", str(root / "app"), str(root / "home/agent")], check=True)
+    passwd = root / "etc/passwd"
+    passwd.write_text(passwd.read_text().replace("agent:x:1000:1000:", f"agent:x:{uid}:{uid}:"))
+    group = root / "etc/group"
+    group.write_text(group.read_text().replace("agent:x:1000:", f"agent:x:{uid}:"))
     settings = evaluation.request_settings(effort, stage)
     settings["env"].update(DISABLE_AUTOUPDATER="1", DISABLE_AUTO_COMPACT="1", CLAUDE_CODE_DISABLE_AUTO_MEMORY="1")
     adapter = evaluation.network_adapter(stage)

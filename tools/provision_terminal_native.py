@@ -102,6 +102,20 @@ def build_base(base: Path, proxy: str, node: Path, uv_wheel: Path):
            "-o", f"Acquire::https::Proxy={proxy}", "-o", "Acquire::Retries=4",
            "-o", "Acquire::Languages=none"]
     checked(apt + ["update"], log, env=apt_env)
+    fixed_archives = {}
+    for package in APT_FIXED:
+        description = subprocess.check_output(["chroot", root, "apt-cache", "show", package], text=True)
+        fields = dict(line.split(": ", 1) for line in description.split("\n\n", 1)[0].splitlines() if ": " in line)
+        target = root / "var/cache/apt/archives" / Path(fields["Filename"]).name
+        if not target.exists() or digest(target) != fields["SHA256"]:
+            temporary = target.with_suffix(".deb.part")
+            checked(["curl", "--proxy", proxy, "--connect-timeout", "30", "--max-time", "600", "--retry", "4",
+                     "--fail", "--location", "--silent", "--show-error", "--output", temporary,
+                     "https://archive.ubuntu.com/ubuntu/" + fields["Filename"]], log)
+            if digest(temporary) != fields["SHA256"]:
+                raise ValueError(f"APT archive differs from authenticated index: {package}")
+            temporary.rename(target)
+        fixed_archives[package] = {"filename": target.name, "sha256": fields["SHA256"]}
     checked(apt + ["install", "-y", "--no-install-recommends", "build-essential", "make", "patch",
                    "git", "curl", "ca-certificates", "tmux", "file", "util-linux", "procps", *APT_FIXED], log, env=apt_env)
     if not any(line.startswith("agent:") for line in (root / "etc/passwd").read_text().splitlines()):
@@ -145,8 +159,12 @@ def build_base(base: Path, proxy: str, node: Path, uv_wheel: Path):
                 "cc_cli_sha256": digest(cli), "node_sha256": digest(root / "usr/local/bin/node"),
                 "node_version": "24.13.0", "uv_wheel_sha256": digest(uv_wheel),
                 "dpkg": subprocess.check_output(["chroot", root, "dpkg-query", "-W"], text=True),
+                "fixed_apt_archives": fixed_archives,
                 "proxy": proxy, "docker_processes_started": 0}
     write_json(base / "native-base-manifest.json", manifest)
+    checked(["chroot", root, "apt-get", "clean"], log)
+    shutil.rmtree(root / "var/lib/apt/lists")
+    (root / "var/lib/apt/lists/partial").mkdir(parents=True)
     write_json(marker, {"prepared_at": time.time(), "manifest": "native-base-manifest.json"})
 
 
