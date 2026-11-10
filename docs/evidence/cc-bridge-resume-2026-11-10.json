@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794308822.998801,
+  "checkpoint_at": 1794308943.1336806,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-resume-20261110-1647",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -541,7 +541,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794308823.0492382,
+    "generated_at": 1794308943.1711128,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-128k-fixed/28800/high": {
@@ -655,7 +655,7 @@
         "task": "session-window-debug",
         "effort": "max",
         "started_at": 1794304311.0446827,
-        "elapsed_seconds": 4512.0,
+        "elapsed_seconds": 4632.1,
         "tool_calls": 100,
         "last_tool": "Bash"
       }
@@ -686,16 +686,16 @@
   },
   "bridge_activity": {
     "events_last_300s": {
-      "browser_first_content": 8,
-      "browser_buffer": 7,
-      "browser_pool_release": 7,
-      "browser_done": 7,
-      "request": 7,
-      "payload": 7,
-      "browser_start": 7,
-      "browser_tab": 7,
-      "browser_first_data": 7,
-      "browser_progress": 53
+      "browser_progress": 56,
+      "browser_buffer": 2,
+      "browser_pool_release": 2,
+      "browser_done": 2,
+      "request": 2,
+      "payload": 2,
+      "browser_start": 2,
+      "browser_tab": 2,
+      "browser_first_data": 2,
+      "browser_first_content": 2
     },
     "active": [
       {
@@ -706,23 +706,23 @@
         "reasoning_effort": "max",
         "tab_id": "kpool=3",
         "counts": {
-          "thinking_chars": 2527,
+          "thinking_chars": 15093,
           "text_chars": 0,
           "tool_calls": 0
         },
         "usage": {
           "prompt_tokens": 125757,
-          "completion_tokens": 480,
-          "total_tokens": 126237,
+          "completion_tokens": 3042,
+          "total_tokens": 128799,
           "prompt_tokens_details": {
             "cached_tokens": 125440
           },
           "completion_tokens_details": {
-            "reasoning_tokens": 480
+            "reasoning_tokens": 3042
           }
         },
-        "age_seconds": 36.1,
-        "activity_age_seconds": 1.2
+        "age_seconds": 156.2,
+        "activity_age_seconds": 3.3
       }
     ],
     "recent_errors": [],
@@ -867,7 +867,7 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "1b426089a4c44661e10ff1defc445228ada774c3f99bcb7cda1ac8835de3602c",
+      "sha256": "1b1deac0a37af592cc1c1e642664cc64453947a07d371a48f506c2e62ff774bb",
       "size": 788
     },
     {
