@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794304045.5817084,
+  "checkpoint_at": 1794304139.541517,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-resume-20261110-1647",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -541,7 +541,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794304045.583494,
+    "generated_at": 1794304139.5435266,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
@@ -813,6 +813,16 @@
       "bytes": 564549333,
       "tar_compare_passed_before_reclaim": true,
       "restore": "sudo tar -xpf verifier-root.tar.gz -C ."
+    },
+    {
+      "directory": "controls/ks-solver-cpp/baseline",
+      "archived_at": 1794304091.2589362,
+      "root": "agent-root",
+      "archive": "agent-root.tar.gz",
+      "sha256": "699b9963bc7b25656f2dd25651ede4fb8fec6bf220c3326ae6622f028c38628a",
+      "bytes": 353010146,
+      "tar_compare_passed_before_reclaim": true,
+      "restore": "sudo tar -xpf agent-root.tar.gz -C ."
     },
     {
       "directory": "controls/mvcc-lsm-compaction/baseline",
