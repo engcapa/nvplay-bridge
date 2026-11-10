@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794309417.4203796,
+  "checkpoint_at": 1794309423.5619955,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-resume-20261110-1647",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -541,7 +541,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794309417.455783,
+    "generated_at": 1794309423.5903635,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-128k-fixed/28800/high": {
@@ -749,11 +749,22 @@
         "source_head": "508a582197501490ff84c781f2bd40af187c2aa5"
       }
     ],
-    "pending": []
+    "pending": [
+      {
+        "attempt": "runs/formal-128k-fixed/embedding-drift-monitor--high--r1",
+        "tool_calls": 0,
+        "last_tool": null
+      },
+      {
+        "attempt": "runs/formal-128k-fixed/embedding-drift-monitor--max--r1",
+        "tool_calls": 0,
+        "last_tool": null
+      }
+    ]
   },
   "new_formal_attempts_planned": 30,
   "new_formal_attempts_completed": 2,
-  "status": "controls_validated",
+  "status": "formal_running",
   "bridge_health": {
     "status": "ok",
     "model": "moonshotai/kimi-k3.1-pro",
@@ -775,7 +786,7 @@
   },
   "bridge_activity": {
     "events_last_300s": {
-      "browser_progress": 33,
+      "browser_progress": 31,
       "browser_buffer": 3,
       "browser_pool_release": 3,
       "browser_done": 3,
@@ -899,7 +910,7 @@
     },
     {
       "path": "next-uid.json",
-      "sha256": "58feef9701da76fc0b24d067b20dee159ce205089ba27d5a6e381622ec9fd49f",
+      "sha256": "05fafd366421858fb0bb638ab8b22bc11b927db0844ed3193d764e0fe1fc7c9a",
       "size": 20
     },
     {
@@ -929,13 +940,23 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "b2578bfc4ec794ea40a096b1f2a337c4a8a954f4a0b23cb8b761a231668db9bc",
-      "size": 788
+      "sha256": "5d16d0c0193d4a7e139be9f98807df9f36aeefe28d15256066b7d9f68ac35704",
+      "size": 791
     },
     {
       "path": "restoration-regression.log",
       "sha256": "2fa3cf9cd317a05c8d0a703d84abc0a9bf94685c5ea7a72e2ab929694daabe6f",
       "size": 1223
+    },
+    {
+      "path": "runs/formal-128k-fixed/embedding-drift-monitor--high--r1/identity.json",
+      "sha256": "bad9d330d8c22dfb311f7e954c89d468348ab4d2036006cc8feff3ed979c2b91",
+      "size": 2828
+    },
+    {
+      "path": "runs/formal-128k-fixed/embedding-drift-monitor--max--r1/identity.json",
+      "sha256": "bad9d330d8c22dfb311f7e954c89d468348ab4d2036006cc8feff3ed979c2b91",
+      "size": 2828
     },
     {
       "path": "runs/formal-128k-fixed/session-window-debug--high--r1/artifacts.json",
