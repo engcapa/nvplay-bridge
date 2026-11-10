@@ -1,0 +1,361 @@
+{
+  "frozen_at": 1794328656.1416671,
+  "first_scored_attempt": "batched-eval-parity--max--r1",
+  "first_scored_started_at": 1794328566.7493997,
+  "stage": "formal-1m-720k",
+  "formal_protocol": {
+    "tasks": [
+      "session-window-debug",
+      "embedding-drift-monitor",
+      "batched-eval-parity",
+      "mvcc-lsm-compaction",
+      "ks-solver-cpp"
+    ],
+    "repeats_per_effort": 3,
+    "budget_seconds": 28800,
+    "frozen_at": 1794326672.8477445,
+    "selection_basis": "Same five tasks selected and validated by native environment feasibility; retain every task regardless of pilot success or failure.",
+    "full_66_status": "not executable with current validated native recipes and hardware; no GPU devices; full coverage remains incomplete",
+    "excluded_or_pending": {
+      "unstable_oracle_verifier": 1,
+      "gpu_hardware_unavailable": 3,
+      "native_recipes_pending": 57
+    },
+    "max_output_tokens": 131072,
+    "cc_output_environment_tokens": 128000,
+    "bridge_request_timeout_seconds": 28800,
+    "cc_api_timeout_ms": 29400000,
+    "stage": "formal-1m-720k",
+    "bridge_fixed_max_output_tokens": 131072,
+    "bridge_first_byte_timeout_seconds": 3600,
+    "bridge_idle_timeout_seconds": 3600,
+    "node_network_adapter": {
+      "tree_sha256": "2a6ca0d5c23145f875c4b65c50645c1480526f86e45d7b455542b597e504716f",
+      "files": 208,
+      "package": "undici@7.18.2",
+      "scope": "configured ANTHROPIC_BASE_URL origin only",
+      "timeout_source": "API_TIMEOUT_MS process environment before unmodified Node CC starts"
+    },
+    "cc_model": "kimi-k3.1-pro[1m]",
+    "cc_model_context_window_tokens": 1000000,
+    "cc_auto_compact_window_tokens": 720000,
+    "automatic_compaction_enabled": true,
+    "schedule": [
+      {
+        "task": "batched-eval-parity",
+        "repeat": 1,
+        "effort": "max"
+      },
+      {
+        "task": "mvcc-lsm-compaction",
+        "repeat": 1,
+        "effort": "high"
+      },
+      {
+        "task": "mvcc-lsm-compaction",
+        "repeat": 1,
+        "effort": "max"
+      },
+      {
+        "task": "ks-solver-cpp",
+        "repeat": 1,
+        "effort": "high"
+      },
+      {
+        "task": "ks-solver-cpp",
+        "repeat": 1,
+        "effort": "max"
+      },
+      {
+        "task": "session-window-debug",
+        "repeat": 2,
+        "effort": "high"
+      },
+      {
+        "task": "session-window-debug",
+        "repeat": 2,
+        "effort": "max"
+      },
+      {
+        "task": "embedding-drift-monitor",
+        "repeat": 2,
+        "effort": "high"
+      },
+      {
+        "task": "embedding-drift-monitor",
+        "repeat": 2,
+        "effort": "max"
+      },
+      {
+        "task": "batched-eval-parity",
+        "repeat": 2,
+        "effort": "high"
+      },
+      {
+        "task": "batched-eval-parity",
+        "repeat": 2,
+        "effort": "max"
+      },
+      {
+        "task": "mvcc-lsm-compaction",
+        "repeat": 2,
+        "effort": "high"
+      },
+      {
+        "task": "mvcc-lsm-compaction",
+        "repeat": 2,
+        "effort": "max"
+      },
+      {
+        "task": "ks-solver-cpp",
+        "repeat": 2,
+        "effort": "high"
+      },
+      {
+        "task": "ks-solver-cpp",
+        "repeat": 2,
+        "effort": "max"
+      },
+      {
+        "task": "session-window-debug",
+        "repeat": 3,
+        "effort": "high"
+      },
+      {
+        "task": "session-window-debug",
+        "repeat": 3,
+        "effort": "max"
+      },
+      {
+        "task": "embedding-drift-monitor",
+        "repeat": 3,
+        "effort": "high"
+      },
+      {
+        "task": "embedding-drift-monitor",
+        "repeat": 3,
+        "effort": "max"
+      },
+      {
+        "task": "batched-eval-parity",
+        "repeat": 3,
+        "effort": "high"
+      },
+      {
+        "task": "batched-eval-parity",
+        "repeat": 3,
+        "effort": "max"
+      },
+      {
+        "task": "mvcc-lsm-compaction",
+        "repeat": 3,
+        "effort": "high"
+      },
+      {
+        "task": "mvcc-lsm-compaction",
+        "repeat": 3,
+        "effort": "max"
+      },
+      {
+        "task": "ks-solver-cpp",
+        "repeat": 3,
+        "effort": "high"
+      },
+      {
+        "task": "ks-solver-cpp",
+        "repeat": 3,
+        "effort": "max"
+      }
+    ],
+    "agent_wall_clock_timeout_seconds": null,
+    "budget_seconds_is_reference_only": true
+  },
+  "continuation": {
+    "source_checkpoint": "docs/evidence/cc-bridge-resume-2026-11-10.json",
+    "source_checkpoint_sha256": "d6483c8c6491e89e11c7366e3837a4f2d9b5f54cd1a2d121a0382f03f9588f26",
+    "preserved_completed_attempts": 5,
+    "total_plan_positions": 30,
+    "preserved_positions": [
+      {
+        "task": "session-window-debug",
+        "repeat": 1,
+        "effort": "high"
+      },
+      {
+        "task": "session-window-debug",
+        "repeat": 1,
+        "effort": "max"
+      },
+      {
+        "task": "embedding-drift-monitor",
+        "repeat": 1,
+        "effort": "high"
+      },
+      {
+        "task": "embedding-drift-monitor",
+        "repeat": 1,
+        "effort": "max"
+      },
+      {
+        "task": "batched-eval-parity",
+        "repeat": 1,
+        "effort": "high"
+      }
+    ],
+    "prior_results_must_remain_in_original_stage": true,
+    "old_raw_evidence_available": false,
+    "unresolved_prior_pending": [
+      {
+        "attempt": "runs/formal-128k-fixed/batched-eval-parity--max--r1",
+        "status": "agent_running",
+        "task": "batched-eval-parity",
+        "effort": "max",
+        "started_at": 1794315384.410672,
+        "elapsed_seconds": 8823.0,
+        "tool_calls": 54,
+        "last_tool": "Bash"
+      }
+    ],
+    "unresolved_pending_score": null,
+    "unresolved_pending_excluded_from_model_grades": true
+  },
+  "actual_first_attempt_identity": {
+    "identity_version": 2,
+    "bridge_head": "fa6050911e5a8dba50b33784649d1cf23d97e1a9",
+    "tooling_repository_head": "560ea988315005fd817fbbf9264ac5491c7e3a91",
+    "tooling_worktree_status": [],
+    "runner_sha256": {
+      "eval_terminal_native.py": "e1ebe953e12f3bfa6a236e8fa8ff2642b0fbeeca6c2ee0553e084636cb44e341",
+      "native_eval_support.py": "8251b8e163fbc895e98d1c377d608cf145dad5d39f17a43bfcfc448d3a92c790",
+      "timeout.cjs": "8a2f4200101482502082b68abeca68dfb1664016b4c4cc8b5f7f9b9877523f25",
+      "package.json": "18db56d8ef89e74797e4a90571469196e2dcb991188f967697cef08bc7165d49",
+      "package-lock.json": "0c749353801f077a529cf117ca9219b81ef73da39b9dafb0e7cbb8bd8147cc83",
+      "run_terminal_native_campaign.py": "30524b7198e5882a8d01b9facb365d08b3b33bb5c80f456be7ddb4a84f397a49",
+      "archive_terminal_native_roots.py": "fa868a60d2dce0a08ca7e20bf898445b45fe466443267482a05993fe42046db2",
+      "checkpoint_terminal_native.py": "01423da4e513b9cdabbd2b2e8dc6e223f886c5bb61c346de69b2253249c39850"
+    },
+    "cc_version": "2.1.110",
+    "dataset_commit": "452bf305c6daa62fc59061d22133a7cbc7c1572e",
+    "bridge_runtime": {
+      "started_at": 1794326501.5226843,
+      "source_head": "fa6050911e5a8dba50b33784649d1cf23d97e1a9",
+      "source_module_sha256": {
+        "nvplay_bridge.py": "537f857a142c8d4391d02837bab2d2123b2fe802185f785d34696dde1287856f",
+        "browser_upstream.py": "4527940480f77254813c53d850d16df919aa586e709bdb703a7e47552ed15925",
+        "browser_events.py": "9ca0a5b7d18edcde37bf19aef27ddf226b588f840f97b4b9df46fc08042daf29",
+        "stream_support.py": "f46b07b3cdf1e4cae0f409caf26c0a279bd57477f5259ee8bba045c14f95f602",
+        "responses_api.py": "da451613bf0a1c4aa12ef03effc4d5ffe1ea330fb48006f9d09925233f9580c6",
+        "responses_support.py": "ed907b22106ff58923efa5431c20422e59bfdeb9a719b0766969522e444f033e"
+      },
+      "configuration": {
+        "UPSTREAM_KIND": "browser",
+        "UPSTREAM_MODEL": "moonshotai/kimi-k3.1-pro",
+        "BROWSER_CDP_PORT": "9225",
+        "BROWSER_POOL_SIZE": "5",
+        "BROWSER_TIMEOUT": "28800",
+        "BROWSER_FIRST_BYTE_TIMEOUT": "3600",
+        "BROWSER_IDLE_TIMEOUT": "3600",
+        "BROWSER_MAX_TOKENS": "131072",
+        "BROWSER_FIXED_MAX_TOKENS": "131072",
+        "BROWSER_HTTP_5XX_RETRIES": "2",
+        "BROWSER_DEBUG_LOG": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-1m-20261110-2355/bridge-debug.jsonl"
+      },
+      "fixed_max_output_tokens": 131072,
+      "request_timeout_seconds": 28800,
+      "first_byte_timeout_seconds": 3600,
+      "idle_timeout_seconds": 3600,
+      "cdp_port": 9225,
+      "bridge_port": 8083,
+      "pid": 37175,
+      "health_at_start": {
+        "status": "ok",
+        "upstream_kind": "browser",
+        "upstream_url": "browser://cdp:9225",
+        "model": "moonshotai/kimi-k3.1-pro",
+        "cookie_present": false,
+        "captcha_present": false,
+        "tool_ids": "unique_per_invocation",
+        "loop_reminder_enabled": false,
+        "history_reasoning": "preserve",
+        "browser_output_tokens": {
+          "maximum": 131072,
+          "fixed": 131072
+        },
+        "browser_timeouts": {
+          "total_seconds": 28800,
+          "first_byte_seconds": 3600.0,
+          "idle_seconds": 3600.0
+        }
+      },
+      "boot_id": "84bdf8c2-84f9-4339-9906-273d6191a66c",
+      "start_ticks": "196772",
+      "process_identity_observed_at": 1794326642.1575377
+    },
+    "cc_network_adapter": {
+      "tree_sha256": "2a6ca0d5c23145f875c4b65c50645c1480526f86e45d7b455542b597e504716f",
+      "files": 208,
+      "require": "/opt/cc-node-runtime/timeout.cjs",
+      "cli": "/opt/claude-code-2.1.110/package/cli.js"
+    }
+  },
+  "actual_request_protocol": {
+    "settings_sha256": "6e2eae3469a250be5aed670d756ccff143f3203edc2bd838490b1cb8f7091a3c",
+    "cc_output_environment_tokens": "128000",
+    "extra_body": {
+      "max_tokens": 131072,
+      "output_config": {
+        "effort": "max"
+      }
+    },
+    "cc_api_timeout_ms": "29400000",
+    "cc_launch_configuration": {
+      "model": "kimi-k3.1-pro[1m]",
+      "automatic_compaction_enabled": true,
+      "auto_compact_window_tokens": 720000
+    },
+    "agent_budget_seconds": 28800,
+    "cc_network_adapter": {
+      "tree_sha256": "2a6ca0d5c23145f875c4b65c50645c1480526f86e45d7b455542b597e504716f",
+      "files": 208,
+      "require": "/opt/cc-node-runtime/timeout.cjs",
+      "cli": "/opt/claude-code-2.1.110/package/cli.js"
+    },
+    "agent_wall_clock_timeout_seconds": null,
+    "cc_bootstrap": [
+      "node",
+      "--require",
+      "/opt/cc-node-runtime/timeout.cjs",
+      "/opt/claude-code-2.1.110/package/cli.js"
+    ],
+    "bootstrap_environment": {
+      "API_TIMEOUT_MS": "29400000",
+      "ANTHROPIC_BASE_URL": "http://127.0.0.1:8083"
+    }
+  },
+  "settings_hash_verified": true,
+  "forced_disable_auto_compact_absent": true,
+  "actual_compact_window": "720000",
+  "first_upstream_starts": [
+    {
+      "id": "2e6f697f",
+      "ts": 1794328567.711808,
+      "attempt": 1,
+      "reasoning_effort": "max",
+      "max_tokens": 131072
+    },
+    {
+      "id": "77b459f4",
+      "ts": 1794328587.0539887,
+      "attempt": 1,
+      "reasoning_effort": "max",
+      "max_tokens": 131072
+    }
+  ],
+  "control_archive_count": 20,
+  "smoke_archive_count": 2,
+  "original_evidence_hashes": {
+    "request-protocol.json": "3695fcf45dbb86188d7ccbbf1c375d2032a7763a98cb6fefd8cccdb480ebccaa",
+    "identity.json": "d9a87b02077a31deea3d4e34c1518e881f16d2f5cad7f550810aa9672dbbdb42",
+    "evaluation-plan.json": "4d88b30690003d74bc1f17964a76958dd19aaf8a5fc94be29ffdfc5919623a8f"
+  }
+}

@@ -31,3 +31,5 @@
 00:28 五题全部完成初始 0 分、原始参考解 1 分对照。参考解原始隐藏检查分别为 session 7/7、embedding 11/11、batched 5/5、mvcc 15/15；KS 原始自定义判分器奖励为 1，没有 CTRF 测试数，不能补造检查数量。脱敏验收复核见 [对照证据](evidence/cc-bridge-1m-controls-2026-11-11.json)。控制器已启动，逐项压缩验证剩余对照 rootfs 后进入冻结的 25 个正式位置，计分前没有向 CC 提供对照结果或历史诊断。
 
 恢复新阶段的运行命令：`sudo -n python3 tools/run_terminal_native_campaign.py --base logs/eval-cc-1m-20261110-2355 --checkpoint-output docs/evidence/cc-bridge-1m-2026-11-10.json --push-checkpoints`。若控制器停止且原始运行目录仍在，用同一命令追加 `--resume --recover-interrupted`；重新启动服务并记录实际身份后再恢复。若目录被清空，按最新提交的结果、协议和未完成位置重建，不能将旧终态或产物视为仍然可用。
+
+**00:36:06 新阶段首个计分会话 `batched-eval-parity` max / r1 已启动**，独立 UID 20002。22 份对照/烟测 rootfs 全部压缩、tar compare 与 SHA256 校验后归档。实际请求协议及 agent 设置已核对：模型 `kimi-k3.1-pro[1m]`、启用自动压缩、窗口 720000、输出环境值 128000、请求 131072、API 29400000ms、会话墙钟截止为 null；首个实际上游请求为 max、131072。真实部署与控制器冻结身份见 [正式启动证据](evidence/cc-bridge-1m-protocol-2026-11-11.json)。启动后已执行工具，尚未完成或判分；结果以持续检查点为准。
