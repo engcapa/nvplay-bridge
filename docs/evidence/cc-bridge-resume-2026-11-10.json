@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794303299.14315,
+  "checkpoint_at": 1794303396.474629,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-resume-20261110-1647",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -519,7 +519,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794303299.1450698,
+    "generated_at": 1794303396.476395,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
@@ -582,8 +582,8 @@
     },
     {
       "path": "campaign-state.json",
-      "sha256": "4583641739fe8c4d4dc2116202bf1218bf122c5cf3f299f9e2cf122989995485",
-      "size": 2861
+      "sha256": "c82e07e46aa3508b1c9c05dec00bb7e64bb500b72d2dc892f2d6a56cecc25aee",
+      "size": 2864
     },
     {
       "path": "campaign-validation.log",
@@ -719,6 +719,26 @@
       "archive": "verifier-root.tar.gz",
       "sha256": "9c3a83ed54fda251bfa4aebf903258d6b3e4d4380c06aca4cc73af682345446e",
       "bytes": 513279301,
+      "tar_compare_passed_before_reclaim": true,
+      "restore": "sudo tar -xpf verifier-root.tar.gz -C ."
+    },
+    {
+      "directory": "controls/batched-eval-parity/oracle",
+      "archived_at": 1794303331.8117704,
+      "root": "agent-root",
+      "archive": "agent-root.tar.gz",
+      "sha256": "865e209cf5004fba519acc7d13cb92e14b6d09bd2b5dec837995a87ace31e8f1",
+      "bytes": 507815266,
+      "tar_compare_passed_before_reclaim": true,
+      "restore": "sudo tar -xpf agent-root.tar.gz -C ."
+    },
+    {
+      "directory": "controls/batched-eval-parity/oracle",
+      "archived_at": 1794303395.9448903,
+      "root": "verifier-root",
+      "archive": "verifier-root.tar.gz",
+      "sha256": "9a30aaf4134b7f2bcf31da0ff590b42af561062cd67c8e6410c0ac87c5083295",
+      "bytes": 514381636,
       "tar_compare_passed_before_reclaim": true,
       "restore": "sudo tar -xpf verifier-root.tar.gz -C ."
     },
