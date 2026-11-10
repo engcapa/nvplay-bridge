@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794327884.8337643,
+  "checkpoint_at": 1794327963.1469228,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-1m-20261110-2355",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -190,7 +190,9 @@
           "repeat": 3,
           "effort": "max"
         }
-      ]
+      ],
+      "agent_wall_clock_timeout_seconds": null,
+      "budget_seconds_is_reference_only": true
     },
     "restart_relationship": {
       "recorded_at": 1794326675.3552976,
@@ -550,8 +552,8 @@
     "host_memory_limit_bytes": "30064771072"
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794327760.4999516,
-    "commit": "a5c740ed7c90ecafbb8839959d070beefa7669b7",
+    "attempted_at": 1794327884.8540378,
+    "commit": "c3f79167b148686ffa83738759d35999a5fde614",
     "pushed": true,
     "returncode": 0
   },
@@ -906,7 +908,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794327884.8351343,
+    "generated_at": 1794327963.1484706,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
@@ -984,12 +986,17 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "1988c61a13caf68e1684ee0cf6c02825ced41a2a37f6be52e04f9817d3bea27b",
+      "sha256": "1d9e4ef65636c6f172d939aac3d5c392a948683d6179626b029dd1b77bb4db82",
       "size": 134
     },
     {
+      "path": "checkpoint-process-before-wall-clock-update.json",
+      "sha256": "434a2b5d9f0585bc8dc863aa8efabb53ac1ea0abad2aaf0f424eff323e07d086",
+      "size": 509
+    },
+    {
       "path": "checkpoint-process.json",
-      "sha256": "57124769947401756c042a52147b1f94aab6115fbf042ece04d4457b793ba131",
+      "sha256": "6049dfff9b5d9b98305c346bd2010e89684339b2aea8aef56c788747b7a481c6",
       "size": 475
     },
     {
@@ -1005,6 +1012,11 @@
     {
       "path": "controls/embedding-drift-monitor/result.json",
       "sha256": "49e2e6301ceef488af59fb478fb657bcf56b47cb01c93f0e42dcba3244f92db5",
+      "size": 528
+    },
+    {
+      "path": "controls/mvcc-lsm-compaction/result.json",
+      "sha256": "2cfae6c698cf5bfbf4ace42c5ebab14a570b081ef084a68d2e36a9121454a532",
       "size": 528
     },
     {
@@ -1029,8 +1041,8 @@
     },
     {
       "path": "evaluation-plan.json",
-      "sha256": "ac94bbb9347bff069eea4ed2ff7efaba2b0abb00d0f171fad635e6a33b526c62",
-      "size": 26209
+      "sha256": "4d88b30690003d74bc1f17964a76958dd19aaf8a5fc94be29ffdfc5919623a8f",
+      "size": 26301
     },
     {
       "path": "full-regression.log",
@@ -1114,8 +1126,8 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "ccd5a948e09791bae21d3c5c3a562d754f251dac4b28dd1ac5865ac8ef316293",
-      "size": 717
+      "sha256": "59d40e18634900bc1f66e62955c3cf146be6a33957d40478bc8a1600318d91dc",
+      "size": 716
     },
     {
       "path": "settings-formal-high.json",
