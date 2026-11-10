@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794303179.0969872,
+  "checkpoint_at": 1794303299.14315,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-resume-20261110-1647",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -519,7 +519,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794303179.0989358,
+    "generated_at": 1794303299.1450698,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
@@ -702,6 +702,26 @@
     }
   ],
   "compressed_root_evidence": [
+    {
+      "directory": "controls/batched-eval-parity/baseline",
+      "archived_at": 1794303200.3064504,
+      "root": "agent-root",
+      "archive": "agent-root.tar.gz",
+      "sha256": "e755ddb0cd41fe08710b1dbecaa463f7c9905d6ecbdf09d835d2258017f899e5",
+      "bytes": 507799869,
+      "tar_compare_passed_before_reclaim": true,
+      "restore": "sudo tar -xpf agent-root.tar.gz -C ."
+    },
+    {
+      "directory": "controls/batched-eval-parity/baseline",
+      "archived_at": 1794303266.7264156,
+      "root": "verifier-root",
+      "archive": "verifier-root.tar.gz",
+      "sha256": "9c3a83ed54fda251bfa4aebf903258d6b3e4d4380c06aca4cc73af682345446e",
+      "bytes": 513279301,
+      "tar_compare_passed_before_reclaim": true,
+      "restore": "sudo tar -xpf verifier-root.tar.gz -C ."
+    },
     {
       "directory": "controls/embedding-drift-monitor/baseline",
       "archived_at": 1794302433.2909346,
