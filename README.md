@@ -269,6 +269,10 @@ The offline suite can also be discovered with
 `PYTHONPATH=. python3 -m unittest discover -s tests -p 'test_*.py'`.
 Live regression scripts send requests only when executed directly.
 
+For supervised CC benchmark runs without Docker, see the
+[native Terminal-Bench evaluation guide](docs/terminal-bench-native.md).
+The adapted subset scores are separate from the official AA Intelligence Index.
+
 For a deterministic check against a running Brave/CDP instance, run
 `PYTHONPATH=. python3 tests/probe_browser_http_errors.py --cdp-port 9225`.
 It opens an isolated local fixture page, verifies delayed/split HTTP error
