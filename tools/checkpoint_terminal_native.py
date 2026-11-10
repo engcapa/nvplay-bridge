@@ -102,12 +102,20 @@ def collect(base: Path, health_url: str) -> dict:
     result["new_formal_attempts_planned"] = expected or 30
     result["new_formal_attempts_completed"] = len(report["attempts"])
     result["campaign"] = campaign_progress(base)
+    pause_path = base / "pause-state.json"
+    pause = json.loads(pause_path.read_text()) if pause_path.is_file() else {}
+    if pause:
+        result["administrative_pause"] = {key: pause[key] for key in (
+            "status", "paused_at", "completed", "interrupted_attempts", "reason") if key in pause}
     if report["pending"]:
         result["status"] = "formal_running"
     elif report["attempts"] and len(report["attempts"]) == expected:
         result["status"] = "formal_complete"
     elif result["campaign"]["controller_alive"] and result["campaign"].get("status") == "formal_running":
         result["status"] = "formal_running"
+    elif (report["attempts"] and pause.get("status") == "paused_for_reboot"
+          and pause.get("completed") == len(report["attempts"])):
+        result["status"] = "formal_paused"
     elif report["attempts"]:
         result["status"] = "formal_incomplete"
     elif controls:

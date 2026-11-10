@@ -112,6 +112,37 @@ class NativeCheckpointTests(unittest.TestCase):
         with self.partial_report(count=6):
             self.assertEqual(self.collect()["status"], "formal_complete")
 
+    def pause(self, count=2):
+        (self.base / "pause-state.json").write_text(json.dumps({
+            "status": "paused_for_reboot", "completed": count, "interrupted_attempts": 0,
+            "reason": "user requested reboot", "extra": "PRIVATE_PAUSE_FIELD"}))
+
+    def test_explicit_completed_boundary_pause_is_distinct_from_unexpected_stop(self):
+        self.pause()
+        with self.partial_report():
+            result = self.collect()
+        self.assertEqual(result["status"], "formal_paused")
+        self.assertEqual(result["administrative_pause"]["interrupted_attempts"], 0)
+        self.assertNotIn("PRIVATE_PAUSE_FIELD", json.dumps(result))
+
+    def test_stale_pause_cannot_hide_new_results_or_restarted_controller(self):
+        self.pause(count=1)
+        with self.partial_report():
+            self.assertEqual(self.collect()["status"], "formal_incomplete")
+        self.pause()
+        owner = self.campaign()
+        with self.partial_report(), patch("checkpoint_terminal_native.process_identity", return_value=owner):
+            self.assertEqual(self.collect()["status"], "formal_running")
+
+    def test_pending_or_fully_completed_campaign_takes_precedence_over_pause(self):
+        self.pause()
+        with patch("checkpoint_terminal_native.summarize", return_value={
+                "attempts": [{}, {}], "pending": [{"status": "agent_running"}], "totals": {}}):
+            self.assertEqual(self.collect()["status"], "formal_running")
+        self.pause(count=6)
+        with self.partial_report(count=6):
+            self.assertEqual(self.collect()["status"], "formal_complete")
+
 
 if __name__ == "__main__":
     unittest.main()
