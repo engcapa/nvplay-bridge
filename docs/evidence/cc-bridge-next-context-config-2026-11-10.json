@@ -1,0 +1,65 @@
+{
+  "status": "requested_for_next_protocol_stage_not_applied_to_current_attempts",
+  "requested_by": "user",
+  "request_date": "2026-11-10",
+  "cc_version": "2.1.110",
+  "cc_launch": {
+    "model_argument": ["--model", "kimi-k3.1-pro[1m]"],
+    "model_context_window_tokens": 1000000,
+    "environment": {
+      "CLAUDE_CODE_AUTO_COMPACT_WINDOW": "720000"
+    },
+    "automatic_compaction_enabled": true,
+    "must_remove_forced_settings": {
+      "DISABLE_AUTO_COMPACT": "1"
+    },
+    "must_not_enable": [
+      "DISABLE_COMPACT",
+      "CLAUDE_CODE_DISABLE_1M_CONTEXT"
+    ],
+    "blocking_limit_override": null
+  },
+  "upstream": {
+    "model": "moonshotai/kimi-k3.1-pro",
+    "provider_1m_capacity": "user supplied; no full-capacity probe performed",
+    "suffix_applies_to": "CC launch model argument",
+    "bridge_alias_acceptance": "verify actual CC request model in an offline fixture before scoring"
+  },
+  "output_protocol": {
+    "CLAUDE_CODE_MAX_OUTPUT_TOKENS": "128000",
+    "request_max_tokens": 131072,
+    "BROWSER_MAX_TOKENS": 131072,
+    "BROWSER_FIXED_MAX_TOKENS": 131072
+  },
+  "timeouts": {
+    "agent_budget_seconds": 28800,
+    "BROWSER_TIMEOUT": 28800,
+    "BROWSER_FIRST_BYTE_TIMEOUT": 3600,
+    "BROWSER_IDLE_TIMEOUT": 3600,
+    "API_TIMEOUT_MS": 29400000
+  },
+  "external_proxy": "http://127.0.0.1:31128",
+  "local_bridge_and_cdp_direct": true,
+  "pinned_cli_static_analysis": {
+    "cli_sha256": "cc686e832fdfb97841608875a918043db5d565a2110821b8fc4cd9fad12ea861",
+    "suffix_context_function": "TG uses HP(model) to select 1000000 tokens",
+    "auto_compact_window_function": "ke caps the environment window to the model context window",
+    "configured_auto_compact_window_tokens": 720000,
+    "output_reservation_cap_tokens": 20000,
+    "derived_effective_window_tokens": 700000,
+    "auto_compact_headroom_tokens": 13000,
+    "derived_auto_compact_trigger_tokens": 687000,
+    "blocking_headroom_tokens": 3000,
+    "derived_local_blocking_threshold_tokens": 697000,
+    "scope": "Source analysis with the fixed 128000 CC output setting; next-stage runtime verification remains required"
+  },
+  "required_before_next_scored_attempt": [
+    "Keep the current high/max task on its original frozen protocol until both finish naturally",
+    "Finish grading, verified archival, checkpoint commit and requested reboot pause",
+    "After reboot, replace the runner's hardcoded --model and forced DISABLE_AUTO_COMPACT setting",
+    "Align generated CC settings and frozen protocol with the new model and compaction window",
+    "Validate 1M reporting, the 720000 window and bridge model acceptance with an independent offline fixture",
+    "Run necessary real upstream high/max tool smoke tests and record actual runtime identities",
+    "Preserve all earlier outcomes and record a distinct context/compaction protocol stage before continuing"
+  ]
+}

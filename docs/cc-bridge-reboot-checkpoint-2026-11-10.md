@@ -2,6 +2,8 @@
 
 **已于 2026-11-10 16:47（北京时间）收到用户继续评测的指令并恢复工作。** 本文保留重启前交接；新批次状态、修复与结果见 [重启后评测记录](cc-bridge-resumed-benchmark-2026-11-10.md) 和 [持续检查点](evidence/cc-bridge-resume-2026-11-10.json)。
 
+**本次新增重启要求：** 第三题 `batched-eval-parity` 的在途 max 自然结束、验收归档后，提交 checkpoint 并暂停，不启动第四题。用户已指定下一阶段 CC 启动模型为 `--model 'kimi-k3.1-pro[1m]'`，最大压缩窗口为 `CLAUDE_CODE_AUTO_COMPACT_WINDOW=720000`，启用自动压缩；具体参数及实施前检查见 [下一阶段配置](evidence/cc-bridge-next-context-config-2026-11-10.json)。下文恢复清单和参数表保留历史协议，下一阶段上下文配置以这条新指令为准。
+
 ## 已持久保存的内容
 
 - [中文实测报告](cc-bridge-native-benchmark-2026-11-10.md)：逐阶段结果、排查修复过程及实际效果。
