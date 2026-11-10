@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794303899.3914568,
+  "checkpoint_at": 1794303922.1882753,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-resume-20261110-1647",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -530,7 +530,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794303899.3933275,
+    "generated_at": 1794303922.18994,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
@@ -593,8 +593,8 @@
     },
     {
       "path": "campaign-state.json",
-      "sha256": "c65b2a0ae4c22a3b4f5575ea719c3c61d7b98125c365d9dd2322ae3e3a140934",
-      "size": 2862
+      "sha256": "62426c360391c440384078088fc0755910a82b8980033f68c9859f9a950eec03",
+      "size": 2858
     },
     {
       "path": "campaign-validation.log",
@@ -827,6 +827,16 @@
       "bytes": 354188672,
       "tar_compare_passed_before_reclaim": true,
       "restore": "sudo tar -xpf agent-root.tar.gz -C ."
+    },
+    {
+      "directory": "controls/mvcc-lsm-compaction/oracle",
+      "archived_at": 1794303921.685616,
+      "root": "verifier-root",
+      "archive": "verifier-root.tar.gz",
+      "sha256": "505eab13e9effc5deb22990ed7105efda34de79da179f9ec5362b6b52b8ce31c",
+      "bytes": 488836165,
+      "tar_compare_passed_before_reclaim": true,
+      "restore": "sudo tar -xpf verifier-root.tar.gz -C ."
     },
     {
       "directory": "controls/session-window-debug/baseline",
