@@ -4,11 +4,13 @@ import json
 from pathlib import Path
 import sys
 import tempfile
+import subprocess
 import unittest
 from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tools"))
 from checkpoint_terminal_native import collect
+import checkpoint_terminal_native as checkpoint
 
 
 class NativeCheckpointTests(unittest.TestCase):
@@ -142,6 +144,62 @@ class NativeCheckpointTests(unittest.TestCase):
         self.pause(count=6)
         with self.partial_report(count=6):
             self.assertEqual(self.collect()["status"], "formal_complete")
+
+    def test_continuation_counts_only_missing_positions_without_losing_prior_progress(self):
+        plan = json.loads((self.base / "evaluation-plan.json").read_text())
+        plan.update(formal_native_subset={"schedule": [{}, {}]},
+                    continuation={"preserved_completed_attempts": 4})
+        (self.base / "evaluation-plan.json").write_text(json.dumps(plan))
+        with self.partial_report(count=2):
+            result = self.collect()
+        self.assertEqual(result["new_formal_attempts_planned"], 2)
+        self.assertEqual(result["combined_plan_positions_completed"], 6)
+        self.assertEqual(result["status"], "formal_complete")
+
+
+class CheckpointPushTests(unittest.TestCase):
+    def setUp(self):
+        temporary = tempfile.TemporaryDirectory()
+        self.addCleanup(temporary.cleanup)
+        self.root = Path(temporary.name)
+        self.repo, self.remote, self.base = (self.root / name for name in ("repo", "remote.git", "logs"))
+        self.repo.mkdir()
+        self.base.mkdir()
+        self.git("init", "-q")
+        self.git("config", "user.name", "Checkpoint fixture")
+        self.git("config", "user.email", "fixture@example.invalid")
+        subprocess.run(["git", "init", "--bare", "-q", str(self.remote)], check=True)
+        self.git("remote", "add", "origin", str(self.remote))
+        (self.repo / "unrelated.txt").write_text("operator's staged work\n")
+        self.git("add", "unrelated.txt")
+        self.output = self.repo / "docs/checkpoint.json"
+        self.data = {"new_formal_attempts_completed": 1, "new_formal_attempts_planned": 25,
+                     "status": "formal_running"}
+
+    def git(self, *args):
+        return subprocess.check_output(["git", *args], cwd=self.repo, text=True).strip()
+
+    def save(self):
+        with patch.object(checkpoint, "REPO", self.repo), patch.object(checkpoint, "collect", return_value=self.data):
+            checkpoint.save(self.base, self.output, "unused", commit=True, push=True)
+
+    def test_checkpoint_is_pushed_without_committing_unrelated_staged_work(self):
+        self.save()
+        self.assertEqual(self.git("diff", "--cached", "--name-only"), "unrelated.txt")
+        self.assertEqual(self.git("ls-tree", "-r", "--name-only", "HEAD"), "docs/checkpoint.json")
+        remote = subprocess.check_output(["git", "--git-dir", str(self.remote), "rev-parse", "HEAD"], text=True).strip()
+        self.assertEqual(self.git("rev-parse", "HEAD"), remote)
+        self.assertTrue(json.loads((self.base / "checkpoint-git-sync.json").read_text())["pushed"])
+
+    def test_failed_push_keeps_checkpoint_and_retries_even_without_new_changes(self):
+        self.git("remote", "set-url", "origin", str(self.root / "missing.git"))
+        self.save()
+        first = self.git("rev-parse", "HEAD")
+        self.assertFalse(json.loads((self.base / "checkpoint-git-sync.json").read_text())["pushed"])
+        self.git("remote", "set-url", "origin", str(self.remote))
+        self.save()
+        self.assertEqual(self.git("rev-parse", "HEAD"), first)
+        self.assertTrue(json.loads((self.base / "checkpoint-git-sync.json").read_text())["pushed"])
 
 
 if __name__ == "__main__":

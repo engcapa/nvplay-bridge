@@ -29,7 +29,7 @@ def smoke(evaluation, effort):
     group = root / "etc/group"
     group.write_text(group.read_text().replace("agent:x:1000:", f"agent:x:{uid}:"))
     settings = evaluation.request_settings(effort, stage)
-    settings["env"].update(DISABLE_AUTOUPDATER="1", DISABLE_AUTO_COMPACT="1", CLAUDE_CODE_DISABLE_AUTO_MEMORY="1")
+    launch = evaluation.cc_launch_configuration(settings, stage)
     adapter = evaluation.network_adapter(stage)
     if not adapter:
         raise RuntimeError("the formal Node network adapter must be enabled")
@@ -51,7 +51,7 @@ def smoke(evaluation, effort):
     command = bootstrap + ["-p", "--output-format", "stream-json", "--verbose", "--settings", "/eval/settings.json",
         "--setting-sources", "", "--strict-mcp-config", "--mcp-config", "/eval/mcp.json",
         "--permission-mode", "bypassPermissions", "--disable-slash-commands",
-        "--tools", "Bash,Read,Write,Edit,Glob,Grep", "--model", "kimi-k3.1-pro", "--effort", effort]
+        "--tools", "Bash,Read,Write,Edit,Glob,Grep", "--model", launch["model"], "--effort", effort]
     env = {key: settings["env"][key] for key in ("API_TIMEOUT_MS", "ANTHROPIC_BASE_URL")}
     started = time.time()
     process = run_logged(shell_command(root, "cd /app && " + shlex.join(command) + " < /eval/prompt.txt",
@@ -69,13 +69,18 @@ def smoke(evaluation, effort):
             calls.extend(block.get("name") for block in event.get("message", {}).get("content", [])
                          if block.get("type") == "tool_use")
     answer = root / "app/answer.txt"
+    windows = sorted({value.get("contextWindow") for value in (client or {}).get("modelUsage", {}).values()
+                      if value.get("contextWindow")})
+    expected_window = evaluation.plan["formal_native_subset"].get("cc_model_context_window_tokens")
     correct = (answer.is_file() and not answer.is_symlink() and answer.read_text().strip() == expected
                and client and client.get("result", "").strip() == expected and "Bash" in calls)
     passed = bool(correct and process["exit_code"] == 0 and not process["timed_out"] and not client["is_error"]
-                  and telemetry["actual_efforts"] == [effort] and not telemetry["errors"] and not telemetry["unfinished"])
+                  and telemetry["actual_efforts"] == [effort] and not telemetry["errors"] and not telemetry["unfinished"]
+                  and (expected_window is None or windows == [expected_window]))
     result = {"effort": effort, "passed": passed, "process": process, "uid": uid,
               "tool_calls": calls, "expected_sha256": expected, "bridge": telemetry,
-              "source_identity": evaluation.identity(stage), "network_adapter": adapter}
+              "source_identity": evaluation.identity(stage), "network_adapter": adapter,
+              "cc_launch_configuration": launch, "reported_context_windows": windows}
     write_json(output / "result.json", result)
     print(json.dumps({"smoke_effort": effort, "passed": passed, "seconds": process["duration_seconds"]}), flush=True)
     return result

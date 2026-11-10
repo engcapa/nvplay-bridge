@@ -114,6 +114,30 @@ def initialize_plan(base: Path, names: list[str]) -> None:
                       "task_identities": source_task_hashes(archive, base / "terminal-bench/tasks", names)})
 
 
+def attempt_batches(plan: dict, stage: str, repeats: int, names: list[str] | None = None) -> list:
+    """Use frozen continuation slots without silently repeating earlier outcomes."""
+    formal = plan.get("formal_native_subset", {})
+    names = names or plan["pilot_tasks"]
+    slots = formal.get("schedule") if stage == formal.get("stage") else None
+    if slots is None:
+        slots = [{"task": name, "repeat": repeat, "effort": effort}
+                 for repeat in range(1, repeats + 1) for name in names for effort in plan["efforts"]]
+    seen, batches = set(), []
+    for slot in slots:
+        name, repeat, effort = (slot[key] for key in ("task", "repeat", "effort"))
+        identity = (name, repeat, effort)
+        if (name not in plan["pilot_tasks"] or effort not in plan["efforts"]
+                or type(repeat) is not int or not 1 <= repeat <= repeats or identity in seen):
+            raise ValueError("invalid or duplicate frozen continuation slot")
+        seen.add(identity)
+        if name not in names:
+            continue
+        if not batches or batches[-1][:2] != (name, repeat):
+            batches.append((name, repeat, []))
+        batches[-1][2].append(effort)
+    return batches
+
+
 class Evaluation:
     def __init__(self, base: Path):
         self.base = base.resolve()
@@ -166,7 +190,28 @@ class Evaluation:
             runtime = self.plan.get("bridge_runtime_by_stage", {}).get(stage, {})
             if fixed and runtime.get("fixed_max_output_tokens") != fixed:
                 raise ValueError("formal bridge runtime does not match the frozen fixed output protocol")
+        if formal.get("cc_model"):
+            env = settings.get("env", {})
+            enabled = formal.get("automatic_compaction_enabled", False)
+            if (settings.get("model") != formal["cc_model"]
+                    or env.get("ANTHROPIC_MODEL") != formal["cc_model"]
+                    or (enabled and (env.get("CLAUDE_CODE_AUTO_COMPACT_WINDOW")
+                                     != str(formal["cc_auto_compact_window_tokens"])
+                        or any(str(env.get(key, "")).lower() in ("1", "true") for key in (
+                            "DISABLE_AUTO_COMPACT", "DISABLE_COMPACT", "CLAUDE_CODE_DISABLE_1M_CONTEXT"))))):
+                raise ValueError("formal settings do not match the frozen model/context/compaction protocol")
         return settings
+
+    def cc_launch_configuration(self, settings: dict, stage: str) -> dict:
+        formal = self.plan.get("formal_native_subset", {})
+        formal = formal if stage == formal.get("stage") else {}
+        enabled = formal.get("automatic_compaction_enabled", False)
+        settings["env"].update(DISABLE_AUTOUPDATER="1", CLAUDE_CODE_DISABLE_AUTO_MEMORY="1")
+        if not enabled:
+            settings["env"]["DISABLE_AUTO_COMPACT"] = "1"
+        return {"model": formal.get("cc_model", "kimi-k3.1-pro"),
+                "automatic_compaction_enabled": enabled,
+                "auto_compact_window_tokens": formal.get("cc_auto_compact_window_tokens")}
 
     def verify_source(self, name: str) -> None:
         if file_hashes(self.dataset / name) != self.plan["task_identities"][name]:
@@ -410,8 +455,7 @@ class Evaluation:
         group.write_text(group.read_text().replace("agent:x:1000:", f"agent:x:{uid}:"))
         config = root / "eval"
         config.mkdir()
-        settings["env"].update(DISABLE_AUTOUPDATER="1", DISABLE_AUTO_COMPACT="1",
-                               CLAUDE_CODE_DISABLE_AUTO_MEMORY="1")
+        launch = self.cc_launch_configuration(settings, stage)
         write_json(config / "settings.json", settings)
         bootstrap = ["claude"]
         bootstrap_env = {}
@@ -427,6 +471,7 @@ class Evaluation:
             "cc_output_environment_tokens": settings["env"].get("CLAUDE_CODE_MAX_OUTPUT_TOKENS"),
             "extra_body": json.loads(settings["env"].get("CLAUDE_CODE_EXTRA_BODY", "{}")),
             "cc_api_timeout_ms": settings["env"].get("API_TIMEOUT_MS"),
+            "cc_launch_configuration": launch,
             "agent_budget_seconds": budget, "cc_network_adapter": adapter,
             "cc_bootstrap": bootstrap, "bootstrap_environment": bootstrap_env})
         write_json(config / "mcp.json", {"mcpServers": {}})
@@ -435,7 +480,7 @@ class Evaluation:
                 "--settings", "/eval/settings.json", "--setting-sources", "",
                 "--strict-mcp-config", "--mcp-config", "/eval/mcp.json",
                 "--permission-mode", "bypassPermissions", "--disable-slash-commands",
-                "--tools", "Bash,Read,Write,Edit,Glob,Grep", "--model", "kimi-k3.1-pro",
+                "--tools", "Bash,Read,Write,Edit,Glob,Grep", "--model", launch["model"],
                 "--effort", effort, "--max-turns", "500"]
         # Only runner budget information is appended; no task-specific hints.
         prefix = f"The runner enforces a {budget}-second wall-clock limit for this {stage} attempt. "
@@ -522,19 +567,18 @@ def main() -> None:
     else:
         # Pair efforts on each task. At most one attempt for each effort runs at
         # once, so bridge requests can be attributed by effort and time window.
-        for repeat in range(1, args.repeats + 1):
-            for name in args.tasks:
-                with ThreadPoolExecutor(max_workers=2) as pool:
-                    futures = []
-                    for effort in ("high", "max"):
-                        if args.resume and evaluation.resume_attempt(name, effort, args.stage, repeat,
-                                                                     args.budget, args.recover_interrupted):
-                            continue
-                        uid = allocate_uid(evaluation.base)
-                        futures.append(pool.submit(evaluation.attempt, name, effort,
-                                                   args.stage, repeat, args.budget, uid))
-                    for future in futures:
-                        future.result()
+        for name, repeat, efforts in attempt_batches(evaluation.plan, args.stage, args.repeats, args.tasks):
+            with ThreadPoolExecutor(max_workers=2) as pool:
+                futures = []
+                for effort in efforts:
+                    if args.resume and evaluation.resume_attempt(name, effort, args.stage, repeat,
+                                                                 args.budget, args.recover_interrupted):
+                        continue
+                    uid = allocate_uid(evaluation.base)
+                    futures.append(pool.submit(evaluation.attempt, name, effort,
+                                               args.stage, repeat, args.budget, uid))
+                for future in futures:
+                    future.result()
 
 
 if __name__ == "__main__":

@@ -39,6 +39,12 @@ python3 tools/start_terminal_native_services.py --base logs/<run> --brave .brave
 python3 tools/checkpoint_terminal_native.py --base logs/<run> --output docs/evidence/<checkpoint>.json --interval 120 --commit
 ```
 
+用户要求远端持续保存时，在 checkpoint 命令增加 `--push`，在 campaign 命令增加 `--push-checkpoints`。每次提交后立即经指定代理推送；失败保留本地提交，写入私有 `checkpoint-git-sync.json` / `checkpoint-push.log`，下一次检查点再次推送，不终止在途 CC。
+
+2026-11-10 的新上下文阶段使用 `configure --cc-model 'kimi-k3.1-pro[1m]' --auto-compact-window 720000 --continue-checkpoint docs/evidence/cc-bridge-resume-2026-11-10.json`。模型、压缩开关和窗口由计划与设置共同校验，实际启动不再强制禁用压缩；旧阶段继续保留原配置。续跑计划冻结所有缺失位置，保留旧 checkpoint 中已完成的成功和失败，单独报告新阶段成绩。原始日志已丢失的未完成任务不能恢复或补分，必须明确登记后用新会话重跑。
+
+`tests/probe_cc_context.py` 使用未修改的固定 CC 和本地 Messages 夹具，验证 1M 窗口报告、压缩阈值附近的行为、关闭压缩对照及实际请求模型。它模拟 usage，不能证明上游实际容纳了等量输入；真实 smoke 另验证 high/max 工具闭环与实际窗口。
+
 服务启动器拒绝占用已有端口，显式使用外网代理和八小时、128K 配置；它不替换正在工作的服务。首次工具烟测创建标签池后，另启动 `tools/monitor_cdp_network.py` 持续观测网络终态。checkpoint 仅归档协议、版本、统计、产物摘要及证据哈希，隐藏 CC 正文和错误响应正文；`--commit` 每次只提交指定检查点文件。
 
 准备好服务及 Node 安装树后，`python3 tools/provision_terminal_native.py configure --base logs/<run>` 校验实际 `/health`、历史任务摘要及网络适配器，生成正式设置文件，并一次性冻结新计划。`sudo -n python3 tools/smoke_terminal_native.py --base logs/<run>` 使用两个普通 UID，运行 high/max 的真实 Bash/Python 随机文件 SHA256 闭环，独立核对文件及最终回答；此烟测不计入题目分数。

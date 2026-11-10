@@ -1,0 +1,178 @@
+{
+  "recorded_at": 1794326605.6710992,
+  "context_fixture": {
+    "passed": true,
+    "cases": [
+      {
+        "case": "small-context",
+        "passed": true,
+        "exit_code": 0,
+        "seconds": 1.531,
+        "synthetic_input_tokens": 1000,
+        "automatic_compaction_enabled": true,
+        "configured_window_tokens": 720000,
+        "reported_context_windows": [
+          1000000
+        ],
+        "compaction_boundaries": 0,
+        "requests": [
+          {
+            "number": 1,
+            "model": "kimi-k3.1-pro",
+            "max_tokens": 131072,
+            "stream": true,
+            "bridge_alias_accepted": true,
+            "system_sha256": "012f02447a01f2671958c31faecf62e82785d58b380ad3e9696729763619ba02",
+            "message_count": 1
+          },
+          {
+            "number": 2,
+            "model": "kimi-k3.1-pro",
+            "max_tokens": 131072,
+            "stream": true,
+            "bridge_alias_accepted": true,
+            "system_sha256": "012f02447a01f2671958c31faecf62e82785d58b380ad3e9696729763619ba02",
+            "message_count": 3
+          }
+        ],
+        "cc_is_error": false,
+        "cc_log_sha256": "54e38d3358374b46098e17cdc1aab6d171bc81addfdbaed06c82fbe552427db7"
+      },
+      {
+        "case": "below-compact-trigger",
+        "passed": true,
+        "exit_code": 0,
+        "seconds": 1.549,
+        "synthetic_input_tokens": 686000,
+        "automatic_compaction_enabled": true,
+        "configured_window_tokens": 720000,
+        "reported_context_windows": [
+          1000000
+        ],
+        "compaction_boundaries": 0,
+        "requests": [
+          {
+            "number": 1,
+            "model": "kimi-k3.1-pro",
+            "max_tokens": 131072,
+            "stream": true,
+            "bridge_alias_accepted": true,
+            "system_sha256": "3fbec60703aab11251d5273fe83ca31acc9711b69ad5059400a37ee3907ea056",
+            "message_count": 1
+          },
+          {
+            "number": 2,
+            "model": "kimi-k3.1-pro",
+            "max_tokens": 131072,
+            "stream": true,
+            "bridge_alias_accepted": true,
+            "system_sha256": "3fbec60703aab11251d5273fe83ca31acc9711b69ad5059400a37ee3907ea056",
+            "message_count": 3
+          }
+        ],
+        "cc_is_error": false,
+        "cc_log_sha256": "141639f9e965188e2bf44eab009cbf7f0cc03c93b42213b86e6c9eea394e021d"
+      },
+      {
+        "case": "automatic-compaction",
+        "passed": true,
+        "exit_code": 0,
+        "seconds": 1.549,
+        "synthetic_input_tokens": 688000,
+        "automatic_compaction_enabled": true,
+        "configured_window_tokens": 720000,
+        "reported_context_windows": [
+          1000000
+        ],
+        "compaction_boundaries": 1,
+        "requests": [
+          {
+            "number": 1,
+            "model": "kimi-k3.1-pro",
+            "max_tokens": 131072,
+            "stream": true,
+            "bridge_alias_accepted": true,
+            "system_sha256": "f3dd559bd2d028dadb198183e8057c2b2b34a6369246b8cbc517838ee8528f65",
+            "message_count": 1
+          },
+          {
+            "number": 2,
+            "model": "kimi-k3.1-pro",
+            "max_tokens": 131072,
+            "stream": true,
+            "bridge_alias_accepted": true,
+            "system_sha256": "f3dd559bd2d028dadb198183e8057c2b2b34a6369246b8cbc517838ee8528f65",
+            "message_count": 3
+          },
+          {
+            "number": 3,
+            "model": "kimi-k3.1-pro",
+            "max_tokens": 131072,
+            "stream": true,
+            "bridge_alias_accepted": true,
+            "system_sha256": "15199d3c5a4bc9b405ce7d845713844e3b3894e88239fc60ebc2466718c22ae3",
+            "message_count": 1
+          }
+        ],
+        "cc_is_error": false,
+        "cc_log_sha256": "30cd6cf8303363c04f44b63f22c8acc9b54b6a12cda5baa2867038b473b28086"
+      },
+      {
+        "case": "disabled-control",
+        "passed": true,
+        "exit_code": 0,
+        "seconds": 1.549,
+        "synthetic_input_tokens": 688000,
+        "automatic_compaction_enabled": false,
+        "configured_window_tokens": 720000,
+        "reported_context_windows": [
+          1000000
+        ],
+        "compaction_boundaries": 0,
+        "requests": [
+          {
+            "number": 1,
+            "model": "kimi-k3.1-pro",
+            "max_tokens": 131072,
+            "stream": true,
+            "bridge_alias_accepted": true,
+            "system_sha256": "8c5af2ba331b115bafe93c72f10f54e7f5772fc046535660a73282766b3ae0e0",
+            "message_count": 1
+          },
+          {
+            "number": 2,
+            "model": "kimi-k3.1-pro",
+            "max_tokens": 131072,
+            "stream": true,
+            "bridge_alias_accepted": true,
+            "system_sha256": "8c5af2ba331b115bafe93c72f10f54e7f5772fc046535660a73282766b3ae0e0",
+            "message_count": 3
+          }
+        ],
+        "cc_is_error": false,
+        "cc_log_sha256": "aae06f5ea936a793b15c6aeb4344629cc1dc7bf4fa6853e7155f504fb85fd640"
+      }
+    ],
+    "cli_sha256": "cc686e832fdfb97841608875a918043db5d565a2110821b8fc4cd9fad12ea861",
+    "probe_sha256": "6d11e2b65b5f500c3eb0f5d48fe4ca3659b3a18f916a5cef62640ebe3c16a169",
+    "upstream_requests": 0,
+    "actual_large_payload_capacity_tested": false
+  },
+  "regression": {
+    "full-regression.log": {
+      "passed": 201,
+      "sha256": "59263c34bcfaecd44d95553e46b1496e5f5b25a56bcfbc981bded4a1839cd054",
+      "size": 2312
+    },
+    "node-network-regression.log": {
+      "passed": 1,
+      "sha256": "bc347cf073271949ddffaae4fec26fe66c81d5fdccf660db9aa2e409305cf1bd",
+      "size": 235
+    },
+    "continuation-regression.log": {
+      "passed": 42,
+      "sha256": "ad51de6dd2235222614a13af19d06c592da103f851712bb00704c82453c24bb7",
+      "size": 1581
+    }
+  }
+}

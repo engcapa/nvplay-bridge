@@ -21,6 +21,7 @@ from report_terminal_native import summarize
 
 
 LOCAL_HTTP = urllib.request.build_opener(urllib.request.ProxyHandler({}))
+REPO = Path(__file__).resolve().parents[1]
 SAFE_EVENT_KEYS = ("event", "ts", "id", "attempt", "reasoning_effort", "status", "sec", "committed",
                    "counts", "usage", "phase", "method", "error_type", "max_tokens")
 
@@ -72,7 +73,7 @@ def collect(base: Path, health_url: str) -> dict:
         result["protocol"] = {key: plan[key] for key in (
             "source_commit", "source_archive_sha256", "cc_version", "model", "efforts", "pilot_tasks",
             "formal_repeats", "formal_task_budget_seconds", "formal_native_subset",
-            "restart_relationship", "bridge_runtime_by_stage") if key in plan}
+            "restart_relationship", "bridge_runtime_by_stage", "continuation") if key in plan}
         result["task_manifest_sha256"] = {
             task: hashlib.sha256(json.dumps(files, sort_keys=True).encode()).hexdigest()
             for task, files in plan.get("task_identities", {}).items()}
@@ -83,6 +84,7 @@ def collect(base: Path, health_url: str) -> dict:
                            ("download-manifest.json", "downloads"),
                            ("wheel-manifest.json", "wheels"),
                            ("host-resources.json", "host_resources"),
+                           ("checkpoint-git-sync.json", "previous_checkpoint_git_sync"),
                            ("smoke-result.json", "smoke")):
         path = base / filename
         if path.exists():
@@ -98,9 +100,16 @@ def collect(base: Path, health_url: str) -> dict:
         json.loads(path.read_text()) for path in sorted((base / "runs-interrupted").glob("*/*/interruption.json"))]
     report = summarize(base)
     result["results"] = report
-    expected = len(result.get("protocol", {}).get("pilot_tasks", [])) * 2 * result.get("protocol", {}).get("formal_repeats", 3)
+    protocol = result.get("protocol", {})
+    formal = protocol.get("formal_native_subset", {})
+    schedule = formal.get("schedule")
+    expected = (len(schedule) if schedule is not None else
+                len(protocol.get("pilot_tasks", [])) * 2 * protocol.get("formal_repeats", 3))
     result["new_formal_attempts_planned"] = expected or 30
     result["new_formal_attempts_completed"] = len(report["attempts"])
+    prior = protocol.get("continuation", {}).get("preserved_completed_attempts", 0)
+    result["preserved_prior_attempts_completed"] = prior
+    result["combined_plan_positions_completed"] = prior + len(report["attempts"])
     result["campaign"] = campaign_progress(base)
     pause_path = base / "pause-state.json"
     pause = json.loads(pause_path.read_text()) if pause_path.is_file() else {}
@@ -151,13 +160,15 @@ def collect(base: Path, health_url: str) -> dict:
     return result
 
 
-def save(base: Path, output: Path, health_url: str, commit: bool):
+def save(base: Path, output: Path, health_url: str, commit: bool, push: bool = False):
+    if push and not commit:
+        raise ValueError("pushing checkpoints requires committing them")
     with (base / "checkpoint.lock").open("a+") as lock:
         fcntl.flock(lock, fcntl.LOCK_EX)
         data = collect(base, health_url)
         write_json(output, data)
         if commit:
-            repo = Path(__file__).resolve().parents[1]
+            repo = REPO
             relative = str(output.resolve().relative_to(repo))
             git = ["git"]
             if os.geteuid() == 0 and repo.stat().st_uid != 0:
@@ -171,8 +182,23 @@ def save(base: Path, output: Path, health_url: str, commit: bool):
                 raise RuntimeError("git checkpoint diff failed")
             if changed.returncode:
                 subprocess.run([*git, "commit", "--only", "-m",
-                                f'Checkpoint CC bridge evaluation: {data["new_formal_attempts_completed"]}/30, {data["status"]}',
+                                f'Checkpoint CC bridge evaluation: {data["new_formal_attempts_completed"]}/{data["new_formal_attempts_planned"]}, {data["status"]}',
                                 "--", relative], cwd=repo, check=True)
+            if push:
+                # A temporary push failure must not terminate a running CC task.
+                # Every following checkpoint retries, even without a new commit.
+                sync = {"attempted_at": time.time(), "commit": subprocess.check_output(
+                    [*git, "rev-parse", "HEAD"], cwd=repo, text=True).strip()}
+                with (base / "checkpoint-push.log").open("ab") as log:
+                    try:
+                        pushed = subprocess.run([*git, "-c", "http.proxy=http://127.0.0.1:31128",
+                                                 "push", "--porcelain", "origin", "HEAD"], cwd=repo,
+                                                stdout=log, stderr=subprocess.STDOUT, timeout=60)
+                        sync.update(pushed=pushed.returncode == 0, returncode=pushed.returncode)
+                    except subprocess.TimeoutExpired:
+                        sync.update(pushed=False, error_type="TimeoutExpired")
+                write_json(base / "checkpoint-git-sync.json", sync)
+                print(json.dumps({"checkpoint_push": sync}), flush=True)
         print(json.dumps({"checkpoint": str(output), "status": data["status"],
                           "completed": data["new_formal_attempts_completed"]}), flush=True)
 
@@ -183,12 +209,15 @@ def main():
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--health-url", default="http://127.0.0.1:8083/health")
     parser.add_argument("--commit", action="store_true")
+    parser.add_argument("--push", action="store_true", help="Push after every commit; retry on the next checkpoint")
     parser.add_argument("--interval", type=float, default=0, help="Zero saves once; otherwise follow until interrupted")
     args = parser.parse_args()
     if args.interval < 0:
         parser.error("interval must be nonnegative")
+    if args.push and not args.commit:
+        parser.error("--push requires --commit")
     while True:
-        save(args.base.resolve(), args.output.resolve(), args.health_url, args.commit)
+        save(args.base.resolve(), args.output.resolve(), args.health_url, args.commit, args.push)
         if not args.interval:
             return
         time.sleep(args.interval)

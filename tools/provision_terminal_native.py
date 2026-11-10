@@ -201,7 +201,8 @@ def record_host_resources(base: Path):
     write_json(base / "host-resources.json", resources)
 
 
-def configure(base: Path, proxy: str):
+def configure(base: Path, proxy: str, *, cc_model: str | None = None,
+              compact_window: int | None = None, continuation_checkpoint: Path | None = None):
     from copy import deepcopy
     from eval_terminal_native import DEFAULT_PILOT, NODE_NETWORK_DIRECTORY, initialize_plan, network_tree_identity
 
@@ -212,6 +213,42 @@ def configure(base: Path, proxy: str):
     historical = json.loads((repo / "docs/evidence/cc-bridge-native-2026-11-10.json").read_text())
     formal = deepcopy(historical["protocol"]["formal_fixed"])
     formal["frozen_at"] = time.time()
+    if bool(cc_model) != bool(compact_window):
+        raise ValueError("a custom context model and its compaction window must be configured together")
+    if cc_model:
+        if cc_model != "kimi-k3.1-pro[1m]" or not 0 < compact_window <= 1000000:
+            raise ValueError("this continuation supports the requested Kimi 1M context configuration")
+        formal.update(stage="formal-1m-720k", cc_model=cc_model,
+                      cc_model_context_window_tokens=1000000,
+                      cc_auto_compact_window_tokens=compact_window, automatic_compaction_enabled=True)
+    continuation = None
+    if continuation_checkpoint:
+        previous = json.loads(continuation_checkpoint.read_text())
+        old = previous["protocol"]
+        if (old["source_commit"] != "452bf305c6daa62fc59061d22133a7cbc7c1572e"
+                or old["cc_version"] != "2.1.110" or old["pilot_tasks"] != DEFAULT_PILOT):
+            raise ValueError("continuation checkpoint uses a different dataset, CLI or task set")
+        completed = {(row["task"], row["repeat"], row["effort"])
+                     for row in previous["results"]["attempts"]}
+        all_slots = [{"task": task, "repeat": repeat, "effort": effort}
+                     for repeat in range(1, formal["repeats_per_effort"] + 1)
+                     for task in formal["tasks"] for effort in ("high", "max")]
+        if (len(completed) != len(previous["results"]["attempts"])
+                or not completed.issubset({(x["task"], x["repeat"], x["effort"]) for x in all_slots})):
+            raise ValueError("invalid or duplicate completed positions in continuation checkpoint")
+        formal["schedule"] = [slot for slot in all_slots
+                              if (slot["task"], slot["repeat"], slot["effort"]) not in completed]
+        if not formal["schedule"]:
+            raise ValueError("there are no missing formal positions to continue")
+        continuation = {"source_checkpoint": str(continuation_checkpoint),
+                        "source_checkpoint_sha256": digest(continuation_checkpoint),
+                        "preserved_completed_attempts": len(completed), "total_plan_positions": len(all_slots),
+                        "preserved_positions": [slot for slot in all_slots
+                                                if (slot["task"], slot["repeat"], slot["effort"]) in completed],
+                        "prior_results_must_remain_in_original_stage": True,
+                        "old_raw_evidence_available": False,
+                        "unresolved_prior_pending": previous["results"].get("pending", []),
+                        "unresolved_pending_score": None, "unresolved_pending_excluded_from_model_grades": True}
     installed = network_tree_identity(NODE_NETWORK_DIRECTORY)
     if installed != {key: formal["node_network_adapter"][key] for key in ("tree_sha256", "files")}:
         raise ValueError("Node network installation differs from the archived protocol")
@@ -229,18 +266,34 @@ def configure(base: Path, proxy: str):
         if hashlib.sha256(json.dumps(files, sort_keys=True).encode()).hexdigest() != historical["protocol"]["task_manifest_sha256"][task]:
             raise ValueError(f"restored task differs from historical manifest: {task}")
     plan["formal_native_subset"] = formal
+    if continuation:
+        plan["continuation"] = continuation
     plan["bridge_runtime_by_stage"] = {formal["stage"]: runtime}
     plan["restart_relationship"] = {
         "recorded_at": time.time(), "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
         "historical_complete_observations_preserved": 12, "historical_user_interruptions_excluded": 2,
         "new_full_formal_attempts": 30, "new_sessions_and_roots": True, "no_scored_feedback": True,
         "same_five_tasks_and_equal_effort_limits": True}
+    if continuation:
+        plan["restart_relationship"].update(
+            new_full_formal_attempts=len(formal["schedule"]),
+            original_plan_positions=continuation["total_plan_positions"],
+            preserved_previous_completed=continuation["preserved_completed_attempts"],
+            context_stage_changed=bool(cc_model))
     for effort in ("high", "max"):
         settings = json.loads((repo / f"configs/settings-kimi{'-high' if effort == 'high' else ''}.json").read_text())
         settings["env"].update({"ANTHROPIC_BASE_URL": f'http://127.0.0.1:{runtime["bridge_port"]}',
             "API_TIMEOUT_MS": "29400000", "CLAUDE_CODE_MAX_OUTPUT_TOKENS": "128000",
             "CLAUDE_CODE_EXTRA_BODY": json.dumps({"max_tokens": 131072, "output_config": {"effort": effort}}),
             "HTTP_PROXY": proxy, "HTTPS_PROXY": proxy, "NO_PROXY": "127.0.0.1,localhost"})
+        if cc_model:
+            settings["model"] = cc_model
+            settings["env"].update({key: cc_model for key in (
+                "ANTHROPIC_MODEL", "ANTHROPIC_DEFAULT_HAIKU_MODEL", "ANTHROPIC_DEFAULT_SONNET_MODEL",
+                "ANTHROPIC_DEFAULT_OPUS_MODEL")})
+            settings["env"]["CLAUDE_CODE_AUTO_COMPACT_WINDOW"] = str(compact_window)
+            for key in ("DISABLE_AUTO_COMPACT", "DISABLE_COMPACT", "CLAUDE_CODE_DISABLE_1M_CONTEXT"):
+                settings["env"].pop(key, None)
         write_json(base / f"settings-formal-{effort}.json", settings)
     write_json(path, plan)
     record_host_resources(base)
@@ -253,6 +306,9 @@ def main():
     parser.add_argument("--proxy", default="http://127.0.0.1:31128")
     parser.add_argument("--node", type=Path)
     parser.add_argument("--uv-wheel", type=Path)
+    parser.add_argument("--cc-model")
+    parser.add_argument("--auto-compact-window", type=int)
+    parser.add_argument("--continue-checkpoint", type=Path)
     args = parser.parse_args()
     base = args.base.resolve()
     base.mkdir(parents=True, exist_ok=True)
@@ -261,7 +317,8 @@ def main():
     elif args.action == "wheels":
         wheels(base, args.proxy)
     elif args.action == "configure":
-        configure(base, args.proxy)
+        configure(base, args.proxy, cc_model=args.cc_model, compact_window=args.auto_compact_window,
+                  continuation_checkpoint=args.continue_checkpoint)
     elif args.action == "resources":
         record_host_resources(base)
     else:

@@ -1,0 +1,200 @@
+{
+  "schema_version": 2,
+  "checkpoint_at": 1794326605.6715958,
+  "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-1m-20261110-2355",
+  "raw_logs_survive_cleanup": false,
+  "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
+  "historical_completed_observations_preserved": 12,
+  "historical_administrative_interruptions_excluded": 2,
+  "external_proxy": "http://127.0.0.1:31128",
+  "local_bridge_and_cdp_direct": true,
+  "other_projects_in_scope": false,
+  "status": "restoring_environment",
+  "bridge_runtime": {
+    "started_at": 1794326501.5226843,
+    "source_head": "fa6050911e5a8dba50b33784649d1cf23d97e1a9",
+    "source_module_sha256": {
+      "nvplay_bridge.py": "537f857a142c8d4391d02837bab2d2123b2fe802185f785d34696dde1287856f",
+      "browser_upstream.py": "4527940480f77254813c53d850d16df919aa586e709bdb703a7e47552ed15925",
+      "browser_events.py": "9ca0a5b7d18edcde37bf19aef27ddf226b588f840f97b4b9df46fc08042daf29",
+      "stream_support.py": "f46b07b3cdf1e4cae0f409caf26c0a279bd57477f5259ee8bba045c14f95f602",
+      "responses_api.py": "da451613bf0a1c4aa12ef03effc4d5ffe1ea330fb48006f9d09925233f9580c6",
+      "responses_support.py": "ed907b22106ff58923efa5431c20422e59bfdeb9a719b0766969522e444f033e"
+    },
+    "configuration": {
+      "UPSTREAM_KIND": "browser",
+      "UPSTREAM_MODEL": "moonshotai/kimi-k3.1-pro",
+      "BROWSER_CDP_PORT": "9225",
+      "BROWSER_POOL_SIZE": "5",
+      "BROWSER_TIMEOUT": "28800",
+      "BROWSER_FIRST_BYTE_TIMEOUT": "3600",
+      "BROWSER_IDLE_TIMEOUT": "3600",
+      "BROWSER_MAX_TOKENS": "131072",
+      "BROWSER_FIXED_MAX_TOKENS": "131072",
+      "BROWSER_HTTP_5XX_RETRIES": "2",
+      "BROWSER_DEBUG_LOG": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-1m-20261110-2355/bridge-debug.jsonl"
+    },
+    "fixed_max_output_tokens": 131072,
+    "request_timeout_seconds": 28800,
+    "first_byte_timeout_seconds": 3600,
+    "idle_timeout_seconds": 3600,
+    "cdp_port": 9225,
+    "bridge_port": 8083,
+    "pid": 37175,
+    "health_at_start": {
+      "status": "ok",
+      "upstream_kind": "browser",
+      "upstream_url": "browser://cdp:9225",
+      "model": "moonshotai/kimi-k3.1-pro",
+      "cookie_present": false,
+      "captcha_present": false,
+      "tool_ids": "unique_per_invocation",
+      "loop_reminder_enabled": false,
+      "history_reasoning": "preserve",
+      "browser_output_tokens": {
+        "maximum": 131072,
+        "fixed": 131072
+      },
+      "browser_timeouts": {
+        "total_seconds": 28800,
+        "first_byte_seconds": 3600.0,
+        "idle_seconds": 3600.0
+      }
+    }
+  },
+  "downloads": {
+    "terminal-bench.tar.gz": {
+      "url": "https://api.github.com/repos/harbor-framework/terminal-bench/tarball/452bf305c6daa62fc59061d22133a7cbc7c1572e",
+      "sha256": "61530c06fc0069abc5917e386e888672e1a10950d40a061fa9c1daf52eb1935f",
+      "size": 454071321
+    },
+    "ubuntu-base.tar.gz": {
+      "url": "https://cdimage.ubuntu.com/ubuntu-base/releases/24.04.5/release/ubuntu-base-24.04.5-base-amd64.tar.gz",
+      "sha256": "e77b6f10c2590cef872b33ee9f635a0e3fd1f57fb074c0e52b5c7f56147a0c86",
+      "size": 30028293
+    },
+    "claude-code-2.1.110.tgz": {
+      "url": "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-2.1.110.tgz",
+      "sha256": "a9e68dbae2b27893bee13b019cff6417ac9db5947cbc209da1da86b895f76a58",
+      "size": 18646978
+    }
+  },
+  "controls": {},
+  "interrupted_attempts_excluded_from_grades": [],
+  "results": {
+    "generated_at": 1794326605.6719284,
+    "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
+    "totals": {},
+    "attempts": [],
+    "pending": []
+  },
+  "new_formal_attempts_planned": 30,
+  "new_formal_attempts_completed": 0,
+  "preserved_prior_attempts_completed": 0,
+  "combined_plan_positions_completed": 0,
+  "campaign": {
+    "controller_alive": false
+  },
+  "bridge_health": {
+    "status": "ok",
+    "model": "moonshotai/kimi-k3.1-pro",
+    "upstream_kind": "browser",
+    "history_reasoning": "preserve",
+    "browser_output_tokens": {
+      "maximum": 131072,
+      "fixed": 131072
+    },
+    "browser_timeouts": {
+      "total_seconds": 28800,
+      "first_byte_seconds": 3600.0,
+      "idle_seconds": 3600.0
+    },
+    "pool_states": {},
+    "recovering_tabs": []
+  },
+  "bridge_activity": {
+    "events_last_300s": {},
+    "active": [],
+    "recent_errors": [],
+    "recent_upstream_errors": [],
+    "recent_retries": []
+  },
+  "evidence_fingerprints": [
+    {
+      "path": "base-process.json",
+      "sha256": "7337cf726e0c486305fcd6e7f0f10deb1576817f8b9f80c55addaf9b42e4c3b9",
+      "size": 487
+    },
+    {
+      "path": "brave-process.json",
+      "sha256": "4f96b926904142627c2e25da5fae6a9284c7e7fb8bda7419b0357d9813d9f881",
+      "size": 685
+    },
+    {
+      "path": "bridge-monitor-process.json",
+      "sha256": "6707f5c651d2cfaad8b8dc46c1a01e0e88ccbd019b072425c00c4951074825a2",
+      "size": 345
+    },
+    {
+      "path": "bridge-runtime.json",
+      "sha256": "31d4b6a9888f10a379b86e42daf68ec34486efad95e72c63811f44f3ee9cac3c",
+      "size": 1954
+    },
+    {
+      "path": "bridge-server-process.json",
+      "sha256": "e19db4b9cebf52acd7190e6b5035bfe06d54554a7e8241f62073d76a5758cff9",
+      "size": 231
+    },
+    {
+      "path": "cdp-monitor-process.json",
+      "sha256": "4d72abb2563f986b668705361fc8b0ad69957c8cb7c41541d498189d99175618",
+      "size": 395
+    },
+    {
+      "path": "continuation-regression.log",
+      "sha256": "ad51de6dd2235222614a13af19d06c592da103f851712bb00704c82453c24bb7",
+      "size": 1581
+    },
+    {
+      "path": "download-manifest.json",
+      "sha256": "565e800fb5b901c8de31c2c835e870786d031edfa535950cc0cc88b97c3c8033",
+      "size": 747
+    },
+    {
+      "path": "downloads-process.json",
+      "sha256": "20b00db999b52cca96af319a2a150dc5595ebbf1c321dc8869ba8242f3fcff76",
+      "size": 256
+    },
+    {
+      "path": "full-regression.log",
+      "sha256": "59263c34bcfaecd44d95553e46b1496e5f5b25a56bcfbc981bded4a1839cd054",
+      "size": 2312
+    },
+    {
+      "path": "node-network-regression.log",
+      "sha256": "bc347cf073271949ddffaae4fec26fe66c81d5fdccf660db9aa2e409305cf1bd",
+      "size": 235
+    },
+    {
+      "path": "node-runtime-install-process.json",
+      "sha256": "6c26ca43e183215229c5d65f23ad37f5b72a167d29d9919d0d2b49677259bbf3",
+      "size": 171
+    },
+    {
+      "path": "resource-monitor-process.json",
+      "sha256": "e7cd923ad853da057594561962a182042a9ca0f48ec5ddcc548b2db6825e1680",
+      "size": 386
+    },
+    {
+      "path": "resource-monitor-state.json",
+      "sha256": "40dcd347d72c3d59d354032cfda0d7d255ba8aad6cf187fcc10a026d50aca894",
+      "size": 715
+    },
+    {
+      "path": "uv-download-process.json",
+      "sha256": "9cbbf5eaae52e9314c957f12d2d8c9d4d8ed636d5dd668599ef5e8cd803c14cc",
+      "size": 296
+    }
+  ],
+  "compressed_root_evidence": []
+}

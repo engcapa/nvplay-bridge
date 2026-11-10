@@ -23,6 +23,7 @@ def main():
     parser.add_argument("--resume", action="store_true")
     parser.add_argument("--recover-interrupted", action="store_true")
     parser.add_argument("--retry-controls", action="store_true")
+    parser.add_argument("--push-checkpoints", action="store_true")
     args = parser.parse_args()
     if os.geteuid() != 0:
         parser.error("native setup requires sudo; CC uses independent ordinary UIDs")
@@ -44,7 +45,7 @@ def main():
         write_json(base / "campaign-state.json", {"status": status, "updated_at": time.time(),
                    "pid": os.getpid(), "controller_identity": runner.process_identity(os.getpid()),
                    "stage": stage, "source_identity": evaluation.identity(stage), **details})
-        save(base, args.checkpoint_output.resolve(), health_url, commit=True)
+        save(base, args.checkpoint_output.resolve(), health_url, commit=True, push=args.push_checkpoints)
 
     try:
         for name in evaluation.plan["pilot_tasks"]:
@@ -67,26 +68,25 @@ def main():
         checkpoint("live_tools_validated")
         for root in list(completed_roots(base)):
             archive_root(root)
-        for repeat in range(1, formal["repeats_per_effort"] + 1):
-            for name in formal["tasks"]:
-                checkpoint("formal_running", task=name, repeat=repeat)
-                with ThreadPoolExecutor(max_workers=2) as pool:
-                    futures = []
-                    for effort in evaluation.plan["efforts"]:
-                        if args.resume and evaluation.resume_attempt(name, effort, stage, repeat,
-                                                                     budget, args.recover_interrupted):
-                            continue
-                        futures.append(pool.submit(evaluation.attempt, name, effort, stage, repeat,
-                                                   budget, allocate_uid(base)))
-                    for future in as_completed(futures):
-                        result = future.result()
-                        checkpoint("formal_running", task=name, repeat=repeat,
-                                   completed_effort=result["effort"], score=result["grade"]["score"])
-                        directory = base / "runs" / stage / f'{name}--{result["effort"]}--r{repeat}'
-                        for role in ("agent-root", "verifier-root"):
-                            root = directory / role
-                            if root.exists():
-                                archive_root(root)
+        for name, repeat, efforts in runner.attempt_batches(evaluation.plan, stage, formal["repeats_per_effort"]):
+            checkpoint("formal_running", task=name, repeat=repeat)
+            with ThreadPoolExecutor(max_workers=2) as pool:
+                futures = []
+                for effort in efforts:
+                    if args.resume and evaluation.resume_attempt(name, effort, stage, repeat,
+                                                                 budget, args.recover_interrupted):
+                        continue
+                    futures.append(pool.submit(evaluation.attempt, name, effort, stage, repeat,
+                                               budget, allocate_uid(base)))
+                for future in as_completed(futures):
+                    result = future.result()
+                    checkpoint("formal_running", task=name, repeat=repeat,
+                               completed_effort=result["effort"], score=result["grade"]["score"])
+                    directory = base / "runs" / stage / f'{name}--{result["effort"]}--r{repeat}'
+                    for role in ("agent-root", "verifier-root"):
+                        root = directory / role
+                        if root.exists():
+                            archive_root(root)
         checkpoint("formal_complete")
     except Exception as error:
         write_json(base / "campaign-error.json", {"at": time.time(), "error_type": type(error).__name__,
