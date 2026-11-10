@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794322883.9082458,
+  "checkpoint_at": 1794323004.2406192,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-resume-20261110-1647",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -541,7 +541,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794322884.0391352,
+    "generated_at": 1794323004.3720486,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-128k-fixed/28800/high": {
@@ -916,7 +916,7 @@
         "task": "batched-eval-parity",
         "effort": "max",
         "started_at": 1794315384.410672,
-        "elapsed_seconds": 7499.6,
+        "elapsed_seconds": 7619.9,
         "tool_calls": 54,
         "last_tool": "Bash"
       }
@@ -958,23 +958,23 @@
         "reasoning_effort": "max",
         "tab_id": "kpool=2",
         "counts": {
-          "thinking_chars": 466407,
+          "thinking_chars": 494687,
           "text_chars": 0,
           "tool_calls": 0
         },
         "usage": {
           "prompt_tokens": 172356,
-          "completion_tokens": 50803,
-          "total_tokens": 223159,
+          "completion_tokens": 53631,
+          "total_tokens": 225987,
           "prompt_tokens_details": {
             "cached_tokens": 171904
           },
           "completion_tokens_details": {
-            "reasoning_tokens": 50803
+            "reasoning_tokens": 53631
           }
         },
-        "age_seconds": 2439.1,
-        "activity_age_seconds": 2.2
+        "age_seconds": 2559.5,
+        "activity_age_seconds": 2.8
       }
     ],
     "recent_errors": [],
@@ -1134,7 +1134,7 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "67aecae329c74f60eeeea7a55f51916419700132d68bac7cbe8340786ae23ac0",
+      "sha256": "e9bb35d979a115808f69c14e80f78ab80f3bb2aaab876514df06a3a6f8a81864",
       "size": 787
     },
     {
