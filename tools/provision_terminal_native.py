@@ -31,6 +31,10 @@ DOWNLOADS = {
 PYTHONS = {"3.11": "3.11.18", "3.12": "3.12.16", "3.13": "3.13.18"}
 NODE_SHA256 = "53fb205ae78805130177e24bcb459a69a1518c8d98f8965f31d85aae7ea840fc"
 CLI_SHA256 = "cc686e832fdfb97841608875a918043db5d565a2110821b8fc4cd9fad12ea861"
+# The security index briefly advertised .7 before both dependency archives were
+# available. Keep the .6 family used by the archived benchmark together.
+APT_FIXED = [f"{name}=5.38.2-3.2ubuntu0.6" for name in
+             ("perl", "perl-base", "perl-modules-5.38", "libperl5.38t64")]
 
 
 def digest(path: Path) -> str:
@@ -99,7 +103,7 @@ def build_base(base: Path, proxy: str, node: Path, uv_wheel: Path):
            "-o", "Acquire::Languages=none"]
     checked(apt + ["update"], log, env=apt_env)
     checked(apt + ["install", "-y", "--no-install-recommends", "build-essential", "make", "patch",
-                   "git", "curl", "ca-certificates", "tmux", "file", "util-linux", "procps"], log, env=apt_env)
+                   "git", "curl", "ca-certificates", "tmux", "file", "util-linux", "procps", *APT_FIXED], log, env=apt_env)
     if not any(line.startswith("agent:") for line in (root / "etc/passwd").read_text().splitlines()):
         checked(["chroot", root, "useradd", "--uid", "1000", "--create-home", "--shell", "/bin/bash", "agent"], log)
     (root / "app").mkdir(exist_ok=True)
