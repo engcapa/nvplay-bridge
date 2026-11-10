@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794328087.3928459,
+  "checkpoint_at": 1794328114.7356844,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-1m-20261110-2355",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -552,8 +552,8 @@
     "host_memory_limit_bytes": "30064771072"
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794327963.168927,
-    "commit": "41d1f01a5bac65067903714df2475e77c8ffc666",
+    "attempted_at": 1794328087.4129987,
+    "commit": "560ea988315005fd817fbbf9264ac5491c7e3a91",
     "pushed": true,
     "returncode": 0
   },
@@ -930,7 +930,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794328087.394885,
+    "generated_at": 1794328114.737288,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
@@ -941,7 +941,9 @@
   "preserved_prior_attempts_completed": 5,
   "combined_plan_positions_completed": 5,
   "campaign": {
-    "controller_alive": false
+    "controller_alive": true,
+    "status": "preparing",
+    "task": "session-window-debug"
   },
   "status": "controls_validated",
   "bridge_health": {
@@ -997,6 +999,16 @@
       "size": 231
     },
     {
+      "path": "campaign-launch-process.json",
+      "sha256": "4cc125d03ef984a408cd85e8af4ccdd8ae2b63ec913547b2293cd2bd5c6c0f3f",
+      "size": 477
+    },
+    {
+      "path": "campaign-state.json",
+      "sha256": "1e8a2a5a4d031cd0eb59a06dba3f12a40b3791c7a89bcf438369f4c4116ba274",
+      "size": 3754
+    },
+    {
       "path": "cdp-monitor-process.json",
       "sha256": "4d72abb2563f986b668705361fc8b0ad69957c8cb7c41541d498189d99175618",
       "size": 395
@@ -1008,8 +1020,8 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "c8f6f65744d060204bc9a46a3027ca7d228298936251426051fd807b043442a3",
-      "size": 133
+      "sha256": "66213ab7e80d368e35db18d8bd8ee13680a19d781bb152ba8757d8145da676a8",
+      "size": 134
     },
     {
       "path": "checkpoint-process-before-wall-clock-update.json",
@@ -1153,7 +1165,7 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "679fd9ddbc965ac1d2bdb48af124540ac0bead60d6bd0962328a68fe9b8272d5",
+      "sha256": "e51f4785d323e40106a3e01f6ba8b92132d869dd3a01f04b61d6bc88e4a26469",
       "size": 717
     },
     {
