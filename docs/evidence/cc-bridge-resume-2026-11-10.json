@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794304379.6349158,
+  "checkpoint_at": 1794304499.6927009,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-resume-20261110-1647",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -541,7 +541,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794304379.6461868,
+    "generated_at": 1794304499.6981015,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
@@ -552,9 +552,9 @@
         "task": "session-window-debug",
         "effort": "high",
         "started_at": 1794304311.0699286,
-        "elapsed_seconds": 68.6,
-        "tool_calls": 9,
-        "last_tool": "Read"
+        "elapsed_seconds": 188.6,
+        "tool_calls": 10,
+        "last_tool": "Bash"
       },
       {
         "attempt": "runs/formal-128k-fixed/session-window-debug--max--r1",
@@ -562,9 +562,9 @@
         "task": "session-window-debug",
         "effort": "max",
         "started_at": 1794304311.0446827,
-        "elapsed_seconds": 68.6,
-        "tool_calls": 9,
-        "last_tool": "Read"
+        "elapsed_seconds": 188.7,
+        "tool_calls": 11,
+        "last_tool": "Bash"
       }
     ]
   },
@@ -586,60 +586,76 @@
       "idle_seconds": 3600.0
     },
     "pool_states": {
-      "busy": 2,
-      "ready": 3
+      "ready": 3,
+      "busy": 2
     },
     "recovering_tabs": []
   },
   "bridge_activity": {
     "events_last_300s": {
-      "request": 6,
-      "payload": 6,
-      "browser_start": 6,
-      "browser_tab": 6,
-      "browser_first_data": 5,
-      "browser_progress": 14,
-      "browser_first_content": 5,
-      "browser_buffer": 4,
-      "browser_pool_release": 4,
-      "browser_done": 4
+      "request": 9,
+      "payload": 9,
+      "browser_start": 9,
+      "browser_tab": 9,
+      "browser_first_data": 9,
+      "browser_progress": 57,
+      "browser_first_content": 9,
+      "browser_buffer": 7,
+      "browser_pool_release": 7,
+      "browser_done": 7
     },
     "active": [
       {
-        "id": "ad3bb671",
+        "id": "10d8300a",
         "retry_count": 0,
-        "phase": "browser_first_content",
+        "phase": "browser_progress",
         "attempt": 1,
         "reasoning_effort": "high",
-        "tab_id": "kpool=4",
+        "tab_id": "kpool=5",
         "counts": {
-          "thinking_chars": 0,
+          "thinking_chars": 15350,
           "text_chars": 0,
           "tool_calls": 0
         },
         "usage": {
-          "prompt_tokens": 11727,
-          "completion_tokens": 1,
-          "total_tokens": 11728,
+          "prompt_tokens": 11991,
+          "completion_tokens": 2978,
+          "total_tokens": 14969,
           "prompt_tokens_details": {
-            "cached_tokens": 0
+            "cached_tokens": 11648
           },
           "completion_tokens_details": {
-            "reasoning_tokens": 1
+            "reasoning_tokens": 2978
           }
         },
-        "age_seconds": 32.8,
-        "activity_age_seconds": 2.5
+        "age_seconds": 113.6,
+        "activity_age_seconds": 4.8
       },
       {
-        "id": "02b086e4",
+        "id": "c2268b54",
         "retry_count": 0,
-        "phase": "browser_tab",
+        "phase": "browser_progress",
         "attempt": 1,
         "reasoning_effort": "max",
-        "tab_id": "kpool=1",
-        "age_seconds": 0.5,
-        "activity_age_seconds": 0.5
+        "tab_id": "kpool=3",
+        "counts": {
+          "thinking_chars": 15128,
+          "text_chars": 0,
+          "tool_calls": 0
+        },
+        "usage": {
+          "prompt_tokens": 12068,
+          "completion_tokens": 2767,
+          "total_tokens": 14835,
+          "prompt_tokens_details": {
+            "cached_tokens": 11648
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 2767
+          }
+        },
+        "age_seconds": 96.8,
+        "activity_age_seconds": 4.2
       }
     ],
     "recent_errors": [],
@@ -811,6 +827,11 @@
       "path": "smoke-result.json",
       "sha256": "0c89327eb95e3f4a56b9e5d73b708bff6d4ba1f596e335eb390304c763ff525e",
       "size": 8592
+    },
+    {
+      "path": "summary.json",
+      "sha256": "351a2a41c32aca9ea68db0bf354c875f6dd5bf6d033aa6c3692c798cce01476c",
+      "size": 778
     },
     {
       "path": "uv-pypi.json",
