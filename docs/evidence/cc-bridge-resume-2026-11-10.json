@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794323244.8362586,
+  "checkpoint_at": 1794323365.1194665,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-resume-20261110-1647",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -541,7 +541,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794323244.9342408,
+    "generated_at": 1794323365.2543201,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-128k-fixed/28800/high": {
@@ -916,7 +916,7 @@
         "task": "batched-eval-parity",
         "effort": "max",
         "started_at": 1794315384.410672,
-        "elapsed_seconds": 7860.5,
+        "elapsed_seconds": 7980.8,
         "tool_calls": 54,
         "last_tool": "Bash"
       }
@@ -947,7 +947,7 @@
   },
   "bridge_activity": {
     "events_last_300s": {
-      "browser_progress": 57
+      "browser_progress": 58
     },
     "active": [
       {
@@ -958,23 +958,23 @@
         "reasoning_effort": "max",
         "tab_id": "kpool=2",
         "counts": {
-          "thinking_chars": 515627,
+          "thinking_chars": 532997,
           "text_chars": 0,
           "tool_calls": 0
         },
         "usage": {
           "prompt_tokens": 172356,
-          "completion_tokens": 55725,
-          "total_tokens": 228081,
+          "completion_tokens": 57462,
+          "total_tokens": 229818,
           "prompt_tokens_details": {
             "cached_tokens": 171904
           },
           "completion_tokens_details": {
-            "reasoning_tokens": 55725
+            "reasoning_tokens": 57462
           }
         },
-        "age_seconds": 2800.1,
-        "activity_age_seconds": 4.4
+        "age_seconds": 2920.3,
+        "activity_age_seconds": 0.7
       }
     ],
     "recent_errors": [],
@@ -1134,7 +1134,7 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "834b2752a3fa8f7626f76faa50e5d036bfaff5bfafae92a7375e1d2a5e6132fb",
+      "sha256": "7bb253ccd90e8c4b8a5495c96428238aa04f2b8e516327442f6013fa148d228d",
       "size": 787
     },
     {
