@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794326605.6715958,
+  "checkpoint_at": 1794326642.219262,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-1m-20261110-2355",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -60,7 +60,10 @@
         "first_byte_seconds": 3600.0,
         "idle_seconds": 3600.0
       }
-    }
+    },
+    "boot_id": "84bdf8c2-84f9-4339-9906-273d6191a66c",
+    "start_ticks": "196772",
+    "process_identity_observed_at": 1794326642.1575377
   },
   "downloads": {
     "terminal-bench.tar.gz": {
@@ -82,7 +85,7 @@
   "controls": {},
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794326605.6719284,
+    "generated_at": 1794326642.2196121,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
@@ -109,12 +112,31 @@
       "first_byte_seconds": 3600.0,
       "idle_seconds": 3600.0
     },
-    "pool_states": {},
+    "pool_states": {
+      "recovering": 1,
+      "pending": 4
+    },
     "recovering_tabs": []
   },
   "bridge_activity": {
-    "events_last_300s": {},
-    "active": [],
+    "events_last_300s": {
+      "request": 1,
+      "browser_output_limit_override": 1,
+      "payload": 1,
+      "browser_start": 1,
+      "pool_recovery_start": 1
+    },
+    "active": [
+      {
+        "id": "b36337f0",
+        "retry_count": 0,
+        "phase": "browser_start",
+        "attempt": 1,
+        "reasoning_effort": "low",
+        "age_seconds": 0.0,
+        "activity_age_seconds": 0.0
+      }
+    ],
     "recent_errors": [],
     "recent_upstream_errors": [],
     "recent_retries": []
@@ -127,18 +149,18 @@
     },
     {
       "path": "brave-process.json",
-      "sha256": "4f96b926904142627c2e25da5fae6a9284c7e7fb8bda7419b0357d9813d9f881",
-      "size": 685
+      "sha256": "383ad50f9ab77561b0b7e3916dd5751b255e96a50a1c27cb276d4fecf6c4575e",
+      "size": 818
     },
     {
       "path": "bridge-monitor-process.json",
-      "sha256": "6707f5c651d2cfaad8b8dc46c1a01e0e88ccbd019b072425c00c4951074825a2",
-      "size": 345
+      "sha256": "0048fc4f9146b17a39cc5cef110a7bb24574634fff49044d07fe8c57dcb81880",
+      "size": 479
     },
     {
       "path": "bridge-runtime.json",
-      "sha256": "31d4b6a9888f10a379b86e42daf68ec34486efad95e72c63811f44f3ee9cac3c",
-      "size": 1954
+      "sha256": "47fabcebf777b284a594248176f0d2306684dba112b6ca566228a6d31e333681",
+      "size": 2088
     },
     {
       "path": "bridge-server-process.json",
@@ -149,6 +171,11 @@
       "path": "cdp-monitor-process.json",
       "sha256": "4d72abb2563f986b668705361fc8b0ad69957c8cb7c41541d498189d99175618",
       "size": 395
+    },
+    {
+      "path": "checkpoint-process.json",
+      "sha256": "57124769947401756c042a52147b1f94aab6115fbf042ece04d4457b793ba131",
+      "size": 475
     },
     {
       "path": "continuation-regression.log",
@@ -182,12 +209,12 @@
     },
     {
       "path": "resource-monitor-process.json",
-      "sha256": "e7cd923ad853da057594561962a182042a9ca0f48ec5ddcc548b2db6825e1680",
-      "size": 386
+      "sha256": "283d09aa0b51afbf9992b59ca8f9c27e5b7758ec32d0554f7194810925db3333",
+      "size": 520
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "40dcd347d72c3d59d354032cfda0d7d255ba8aad6cf187fcc10a026d50aca894",
+      "sha256": "3361a493ae323f49d8cbcad41db840329fbaf8b311ad0060552b5f9fb881b9b9",
       "size": 715
     },
     {
