@@ -1,6 +1,10 @@
 {
-  "audited_at": 1794311740.2391214,
-  "scope": "Candidate scan of explicit tool inputs; not proof against dynamic behavior",
+  "audited_at": 1794314586.6658797,
+  "scope": "Candidate scan of explicit tool inputs; not proof against dynamic behavior; candidates require manual review",
+  "patterns": {
+    "hidden_or_host_path": "(?:/tests(?:/|\\b)|/oracle(?:/|\\b)|/solution(?:/|\\b)|/home/zhyhang(?:/|\\b)|terminal-bench|solution\\.sh)",
+    "external_retrieval": "(?:https?://|\\b(?:curl|wget|WebFetch|WebSearch)\\b|\\b(?:requests|httpx)\\.(?:get|post|request)\\s*\\(|urlopen\\s*\\()"
+  },
   "attempts": [
     {
       "attempt": "session-window-debug--high--r1",
@@ -11,7 +15,10 @@
         "Glob": 2,
         "Write": 2
       },
-      "candidate_count": 0
+      "candidate_count": 0,
+      "candidates": [],
+      "unparsed_json_lines": 0,
+      "source_sha256": "0b21a44ba1f3e7ee93da5c7cf164bbbbd2da7062c836636c94f347b9a4ccc563"
     },
     {
       "attempt": "session-window-debug--max--r1",
@@ -22,7 +29,10 @@
         "Edit": 36,
         "Write": 6
       },
-      "candidate_count": 0
+      "candidate_count": 0,
+      "candidates": [],
+      "unparsed_json_lines": 0,
+      "source_sha256": "18b85c194b67b260ec225e2c065b3d46732a8206f3a878380d0e40cd49eb2d11"
     }
   ]
 }
