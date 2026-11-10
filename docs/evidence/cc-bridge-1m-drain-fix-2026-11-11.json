@@ -474,5 +474,105 @@
     "checkpoint_tests_passed": 17,
     "target_stage": "formal-1m-720k-drain-v3",
     "rollout_result_will_be_written_to": "docs/evidence/cc-bridge-1m-drain-rollout-2026-11-11.json"
+  },
+  "finish_frame_then_reader_error_validation": [
+    {
+      "effort": "high",
+      "passed": true,
+      "results": [
+        {
+          "case": "pinned-node--complete-tool-with-finish",
+          "success": true,
+          "automatic_recovery": true,
+          "initial_incomplete_tool_executed": false,
+          "final_counter": 1,
+          "incomplete_response_counter": 0,
+          "observed_provider_limits": [
+            131072
+          ],
+          "coalesced_error_drains": [
+            {
+              "case": "pinned-node--complete-tool-with-finish",
+              "ts": 1794332140.6585994,
+              "data_chars": 619,
+              "done": true,
+              "status": 200
+            }
+          ]
+        }
+      ],
+      "identity": {
+        "cli_versions": {
+          "pinned-node": "2.1.110 (Claude Code)"
+        },
+        "probe_sha256": "1c0a924211dc23275fc6c485d5fa1af958a7997d245040a47112ac1b43b9feba",
+        "inference_sha256": {
+          "nvplay_bridge.py": "537f857a142c8d4391d02837bab2d2123b2fe802185f785d34696dde1287856f",
+          "browser_upstream.py": "44025b2a4b9b757c95537b4a4ecbdfb170755a8098274f5b9fc43ae4ab763517",
+          "browser_events.py": "9ca0a5b7d18edcde37bf19aef27ddf226b588f840f97b4b9df46fc08042daf29",
+          "stream_support.py": "f46b07b3cdf1e4cae0f409caf26c0a279bd57477f5259ee8bba045c14f95f602"
+        },
+        "fixed_max_tokens": 131072,
+        "nvidia_requests": 0,
+        "cc_model": "kimi-k3.1-pro[1m]",
+        "effort": "high",
+        "auto_compact_window": 720000,
+        "agent_timeout_seconds": null,
+        "coalesce_reader_error": true
+      },
+      "result_sha256": "53fe328ca910007a205fde61fb9bc590a730400f576a10e05aa50a7a74579412"
+    },
+    {
+      "effort": "max",
+      "passed": true,
+      "results": [
+        {
+          "case": "pinned-node--complete-tool-with-finish",
+          "success": true,
+          "automatic_recovery": true,
+          "initial_incomplete_tool_executed": false,
+          "final_counter": 1,
+          "incomplete_response_counter": 0,
+          "observed_provider_limits": [
+            131072
+          ],
+          "coalesced_error_drains": [
+            {
+              "case": "pinned-node--complete-tool-with-finish",
+              "ts": 1794332140.6359212,
+              "data_chars": 618,
+              "done": true,
+              "status": 200
+            }
+          ]
+        }
+      ],
+      "identity": {
+        "cli_versions": {
+          "pinned-node": "2.1.110 (Claude Code)"
+        },
+        "probe_sha256": "1c0a924211dc23275fc6c485d5fa1af958a7997d245040a47112ac1b43b9feba",
+        "inference_sha256": {
+          "nvplay_bridge.py": "537f857a142c8d4391d02837bab2d2123b2fe802185f785d34696dde1287856f",
+          "browser_upstream.py": "44025b2a4b9b757c95537b4a4ecbdfb170755a8098274f5b9fc43ae4ab763517",
+          "browser_events.py": "9ca0a5b7d18edcde37bf19aef27ddf226b588f840f97b4b9df46fc08042daf29",
+          "stream_support.py": "f46b07b3cdf1e4cae0f409caf26c0a279bd57477f5259ee8bba045c14f95f602"
+        },
+        "fixed_max_tokens": 131072,
+        "nvidia_requests": 0,
+        "cc_model": "kimi-k3.1-pro[1m]",
+        "effort": "max",
+        "auto_compact_window": 720000,
+        "agent_timeout_seconds": null,
+        "coalesce_reader_error": true
+      },
+      "result_sha256": "e5074f9ea12b2f0a46540abfdfe080c4d24b02d285adbb1cae3ef54968c6fcc9"
+    }
+  ],
+  "real_cc_local_fault_cases_passed": 10,
+  "transport_ready_full_regression": {
+    "passed": 216,
+    "log": "logs/eval-cc-1m-20261110-2355/transport-ready-full-regression.log",
+    "sha256": "c5746da464427b41f732f4ec7eb48ae1420151667a89c613b24b103d8da4e23d"
   }
 }

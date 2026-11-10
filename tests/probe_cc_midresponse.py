@@ -30,6 +30,7 @@ PAGE = b'''<!doctype html><meta charset=utf-8>
 document.querySelector('button').onclick=()=>fetch('/v2/predict/models/cc-fault-fixture',
 {method:'POST',body:'{}'}).then(r=>r.text()).catch(()=>{});</script>'''
 MARKER = "CC_BRIDGE_CONTROLLED_STREAM_OK"
+MODES = ("text", "thinking-only", "thinking-and-text", "complete-tool-args")
 active = {}
 fixture_events = []
 lock = threading.Lock()
@@ -61,7 +62,7 @@ class Fixture(BaseHTTPRequestHandler):
                          "description": "Controlled local counter"})}}]}
             has_result = any(message.get("role") == "tool" for message in request.get("messages", []))
             if broken:
-                if active["mode"] == "complete-tool-args":
+                if active["mode"] in ("complete-tool-args", "complete-tool-with-finish"):
                     delta = tool
                 elif active["mode"] in ("thinking-only", "thinking-and-text"):
                     delta = {"reasoning_content": "Controlled partial thinking. " * 24,
@@ -70,7 +71,8 @@ class Fixture(BaseHTTPRequestHandler):
                         del delta["content"]
                 else:
                     delta = {"content": "PARTIAL_CONTROLLED_TEXT"}
-                body = frame(delta)
+                body = (frame(delta, "tool_calls") + b"data: [DONE]\n\n"
+                        if active["mode"] == "complete-tool-with-finish" else frame(delta))
                 kind = "incomplete_" + active["mode"]
             elif has_result:
                 body = frame({"content": MARKER}, "stop") + b"data: [DONE]\n\n"
@@ -119,6 +121,7 @@ def main():
     parser.add_argument("--pinned-only", action="store_true")
     parser.add_argument("--model", default="kimi-k3.1-pro")
     parser.add_argument("--effort", choices=("low", "high", "max"), default="low")
+    parser.add_argument("--modes", nargs="+", choices=(*MODES, "complete-tool-with-finish"), default=MODES)
     parser.add_argument("--auto-compact-window", type=int)
     parser.add_argument("--unlimited-agent-wait", action="store_true")
     parser.add_argument("--coalesce-reader-error", action="store_true",
@@ -130,6 +133,8 @@ def main():
         parser.error("--pinned-only requires --pinned-cli")
     if args.auto_compact_window is not None and args.auto_compact_window <= 0:
         parser.error("auto-compaction window must be positive")
+    if len(set(args.modes)) != len(args.modes):
+        parser.error("duplicate fault modes")
     HERE = args.output.resolve()
     HERE.mkdir(parents=True, exist_ok=True)
     if (HERE / "result.json").exists() or any(HERE.glob("*/initial.jsonl")):
@@ -209,7 +214,7 @@ def main():
             "coalesce_reader_error": args.coalesce_reader_error})
         os.chdir(HERE)
         for flavor, cli in flavors.items():
-            for mode in ("text", "thinking-only", "thinking-and-text", "complete-tool-args"):
+            for mode in args.modes:
                 name = flavor + "--" + mode
                 out = HERE / name
                 out.mkdir()
@@ -293,7 +298,7 @@ def main():
         serving.join(2)
         write_json(HERE / "cdp-network.json", network)
         write_json(HERE / "fixture-events.json", fixture_events)
-    write_json(HERE / "result.json", {"success": len(rows) == 4 * len(flavors) and all(row["success"] for row in rows),
+    write_json(HERE / "result.json", {"success": len(rows) == len(args.modes) * len(flavors) and all(row["success"] for row in rows),
         "results": rows, "nvidia_requests": 0, "stage": "unscored", "provider": "synthetic local fixture",
         "limits": "Tests client/bridge protocol behavior; not a reproduction of NVIDIA root cause or a model quality evaluation."})
     if not all(row["success"] for row in rows):
