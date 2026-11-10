@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794300931.2025151,
+  "checkpoint_at": 1794301051.2238662,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-resume-20261110-1647",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -42,9 +42,55 @@
     "bridge_port": 8083,
     "pid": 70085
   },
+  "wheels": {
+    "iniconfig-2.3.1-py3-none-any.whl": {
+      "sha256": "9121e2c1fdb355232495be3194c8dfe87ccc2d5dee45947b78e68f499790d7a7",
+      "size": 7552
+    },
+    "numpy-1.26.4-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl": {
+      "sha256": "666dbfb6ec68962c033a450943ded891bed2d54e6755e35e5835d63f4f6931d5",
+      "size": 18252005
+    },
+    "numpy-1.26.4-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl": {
+      "sha256": "675d61ffbfa78604709862923189bad94014bef562cc35cf61d3a07bba02a7ed",
+      "size": 17950613
+    },
+    "numpy-2.1.3-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl": {
+      "sha256": "2312b2aa89e1f43ecea6da6ea9a810d06aae08321609d8dc0d0eda6d946a541b",
+      "size": 16043185
+    },
+    "packaging-26.3-py3-none-any.whl": {
+      "sha256": "d7193f7c8e4e93f444fde0262bf90af30e16fa0ad0ad44cb553c87339b23cd1c",
+      "size": 129956
+    },
+    "pluggy-1.7.0-py3-none-any.whl": {
+      "sha256": "7dd7b0d8832ba3cb632c306926ded123429211b83641b35dc5c41ad2d34f9bec",
+      "size": 27082
+    },
+    "pygments-2.21.0-py3-none-any.whl": {
+      "sha256": "2363c69b61c4a97c838da3b130dcd6468f4848992b21a82f2a63ec34377137d9",
+      "size": 1250147
+    },
+    "pytest-9.1.1-py3-none-any.whl": {
+      "sha256": "37a86b45efb9a47a61a36449063e8e18d0cab3161329fc099eb21783169c4f0c",
+      "size": 386536
+    },
+    "pytest_json_ctrf-0.5.2-py3-none-any.whl": {
+      "sha256": "a427205bf624a1d85ae807aa20f30ddd194699a9621a13178f766179658d9607",
+      "size": 7397
+    },
+    "scipy-1.11.4-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl": {
+      "sha256": "ad669df80528aeca5f557712102538f4f37e503f0c5b9541655016dd0932ca79",
+      "size": 35777534
+    },
+    "scipy-1.14.1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl": {
+      "sha256": "8f9ea80f2e65bdaa0b7627fb00cbeb2daf163caa015e59b7516395fe3bd1e066",
+      "size": 40849331
+    }
+  },
   "controls": {},
   "results": {
-    "generated_at": 1794300931.2030423,
+    "generated_at": 1794301051.224733,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
@@ -72,22 +118,7 @@
     "recovering_tabs": []
   },
   "bridge_activity": {
-    "events_last_300s": {
-      "request": 1,
-      "payload": 1,
-      "browser_start": 1,
-      "pool_recovery_start": 5,
-      "pool_activation": 5,
-      "pool_page_ready": 5,
-      "pool_ready": 5,
-      "browser_tab": 1,
-      "browser_first_data": 1,
-      "browser_progress": 1,
-      "browser_first_content": 1,
-      "browser_buffer": 1,
-      "browser_pool_release": 1,
-      "browser_done": 1
-    },
+    "events_last_300s": {},
     "active": [],
     "recent_errors": [],
     "recent_upstream_errors": [],
@@ -130,9 +161,19 @@
       "size": 336
     },
     {
+      "path": "recovery-validation.log",
+      "sha256": "9b0c0200cfd64a93fa478d565879e2922e2ef66a0497fe34193cb94da53a037e",
+      "size": 417
+    },
+    {
       "path": "uv-pypi.json",
       "sha256": "d76968f28f0192acb52316a9718b613fea587ca38c55175d1559d1c9a01e2a13",
       "size": 5096977
+    },
+    {
+      "path": "wheel-manifest.json",
+      "sha256": "d06171c37e88dc2d81d6bced06b86d02157fd6716e61c5d04aeaad68b8fc1daa",
+      "size": 1809
     }
   ]
 }
