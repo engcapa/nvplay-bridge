@@ -1,0 +1,27 @@
+{
+  "verified_at": 1794309826.2935863,
+  "fixture": "Copies of the two completed session-window attempts, control metadata, and live campaign state; pending directories omitted to reproduce the archival gap",
+  "live_runs_modified": false,
+  "original_status": "controls_validated",
+  "fixed_status": "formal_running",
+  "live_controller_identity_confirmed": true,
+  "score_and_end_to_end_rows_unchanged": true,
+  "rows": [
+    {
+      "task": "session-window-debug",
+      "effort": "high",
+      "artifact_score": 1,
+      "end_to_end_success": true
+    },
+    {
+      "task": "session-window-debug",
+      "effort": "max",
+      "artifact_score": 0,
+      "end_to_end_success": false
+    }
+  ],
+  "regression_tests_passed": 33,
+  "deployment": "Isolated worktree only; apply after the active campaign controller safely exits",
+  "fix_commit": "939caca92ae517362e1f65a60a9bcb839c0c7491",
+  "fix_branch": "fix/native-checkpoint-between-pairs-20261110"
+}
