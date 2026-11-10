@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794309544.458598,
+  "checkpoint_at": 1794309664.5969424,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-resume-20261110-1647",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -541,7 +541,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794309544.4906137,
+    "generated_at": 1794309664.6299393,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-128k-fixed/28800/high": {
@@ -756,7 +756,7 @@
         "task": "embedding-drift-monitor",
         "effort": "high",
         "started_at": 1794309436.7690861,
-        "elapsed_seconds": 107.7,
+        "elapsed_seconds": 227.9,
         "tool_calls": 16,
         "last_tool": "Bash"
       },
@@ -766,8 +766,8 @@
         "task": "embedding-drift-monitor",
         "effort": "max",
         "started_at": 1794309436.757663,
-        "elapsed_seconds": 107.7,
-        "tool_calls": 13,
+        "elapsed_seconds": 227.9,
+        "tool_calls": 14,
         "last_tool": "Bash"
       }
     ]
@@ -797,53 +797,69 @@
   },
   "bridge_activity": {
     "events_last_300s": {
-      "browser_progress": 42,
+      "request": 12,
+      "payload": 12,
+      "browser_start": 12,
+      "browser_tab": 12,
+      "browser_first_data": 12,
+      "browser_first_content": 12,
+      "browser_progress": 77,
       "browser_buffer": 10,
       "browser_pool_release": 10,
-      "browser_done": 10,
-      "request": 11,
-      "payload": 11,
-      "browser_start": 11,
-      "browser_tab": 11,
-      "browser_first_data": 10,
-      "browser_first_content": 10
+      "browser_done": 10
     },
     "active": [
       {
-        "id": "b36dc0ef",
+        "id": "39a95728",
         "retry_count": 0,
         "phase": "browser_progress",
         "attempt": 1,
-        "reasoning_effort": "max",
-        "tab_id": "kpool=2",
+        "reasoning_effort": "high",
+        "tab_id": "kpool=1",
         "counts": {
-          "thinking_chars": 3479,
+          "thinking_chars": 13739,
           "text_chars": 0,
           "tool_calls": 0
         },
         "usage": {
-          "prompt_tokens": 14473,
-          "completion_tokens": 754,
-          "total_tokens": 15227,
+          "prompt_tokens": 14649,
+          "completion_tokens": 3137,
+          "total_tokens": 17786,
           "prompt_tokens_details": {
-            "cached_tokens": 13184
+            "cached_tokens": 12544
           },
           "completion_tokens_details": {
-            "reasoning_tokens": 754
+            "reasoning_tokens": 3137
           }
         },
-        "age_seconds": 21.6,
-        "activity_age_seconds": 1.2
+        "age_seconds": 120.9,
+        "activity_age_seconds": 3.1
       },
       {
-        "id": "39a95728",
+        "id": "72773755",
         "retry_count": 0,
-        "phase": "browser_tab",
+        "phase": "browser_progress",
         "attempt": 1,
-        "reasoning_effort": "high",
-        "tab_id": "kpool=1",
-        "age_seconds": 0.7,
-        "activity_age_seconds": 0.7
+        "reasoning_effort": "max",
+        "tab_id": "kpool=4",
+        "counts": {
+          "thinking_chars": 8386,
+          "text_chars": 0,
+          "tool_calls": 0
+        },
+        "usage": {
+          "prompt_tokens": 17103,
+          "completion_tokens": 1732,
+          "total_tokens": 18835,
+          "prompt_tokens_details": {
+            "cached_tokens": 14464
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 1732
+          }
+        },
+        "age_seconds": 74.6,
+        "activity_age_seconds": 0.8
       }
     ],
     "recent_errors": [],
@@ -988,8 +1004,8 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "794a31a8bf66b4879c394fd705a8de005a3c63ee8b2fa91871ff0b09fde38242",
-      "size": 791
+      "sha256": "22b83a41431a8eb37040b04a0bf5162e64d40684b603dcb3c9dbf14601e02d1d",
+      "size": 790
     },
     {
       "path": "restoration-regression.log",
