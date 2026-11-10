@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794312787.4183757,
+  "checkpoint_at": 1794312907.5420957,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-resume-20261110-1647",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -541,7 +541,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794312787.4599073,
+    "generated_at": 1794312907.5786145,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-128k-fixed/28800/high": {
@@ -756,9 +756,9 @@
         "task": "embedding-drift-monitor",
         "effort": "high",
         "started_at": 1794309436.7690861,
-        "elapsed_seconds": 3350.7,
-        "tool_calls": 75,
-        "last_tool": "Bash"
+        "elapsed_seconds": 3470.8,
+        "tool_calls": 76,
+        "last_tool": "Edit"
       },
       {
         "attempt": "runs/formal-128k-fixed/embedding-drift-monitor--max--r1",
@@ -766,9 +766,9 @@
         "task": "embedding-drift-monitor",
         "effort": "max",
         "started_at": 1794309436.757663,
-        "elapsed_seconds": 3350.7,
-        "tool_calls": 62,
-        "last_tool": "Edit"
+        "elapsed_seconds": 3470.8,
+        "tool_calls": 65,
+        "last_tool": "Bash"
       }
     ]
   },
@@ -790,60 +790,76 @@
       "idle_seconds": 3600.0
     },
     "pool_states": {
-      "ready": 3,
-      "busy": 2
+      "busy": 2,
+      "ready": 3
     },
     "recovering_tabs": []
   },
   "bridge_activity": {
     "events_last_300s": {
-      "browser_progress": 98,
-      "browser_buffer": 8,
-      "browser_pool_release": 8,
-      "browser_done": 8,
-      "request": 8,
-      "payload": 8,
-      "browser_start": 8,
-      "browser_tab": 8,
-      "browser_first_data": 7,
-      "browser_first_content": 7
+      "browser_progress": 95,
+      "browser_buffer": 11,
+      "browser_pool_release": 11,
+      "browser_done": 11,
+      "request": 11,
+      "payload": 11,
+      "browser_start": 11,
+      "browser_tab": 11,
+      "browser_first_data": 11,
+      "browser_first_content": 11
     },
     "active": [
       {
-        "id": "d482d6ba",
+        "id": "81a468f5",
         "retry_count": 0,
         "phase": "browser_progress",
         "attempt": 1,
         "reasoning_effort": "high",
-        "tab_id": "kpool=4",
+        "tab_id": "kpool=1",
         "counts": {
-          "thinking_chars": 14500,
+          "thinking_chars": 1950,
           "text_chars": 0,
           "tool_calls": 0
         },
         "usage": {
-          "prompt_tokens": 78756,
-          "completion_tokens": 3848,
-          "total_tokens": 82604,
+          "prompt_tokens": 84109,
+          "completion_tokens": 498,
+          "total_tokens": 84607,
           "prompt_tokens_details": {
-            "cached_tokens": 76288
+            "cached_tokens": 78720
           },
           "completion_tokens_details": {
-            "reasoning_tokens": 3848
+            "reasoning_tokens": 498
           }
         },
-        "age_seconds": 170.9,
-        "activity_age_seconds": 3.0
+        "age_seconds": 29.2,
+        "activity_age_seconds": 0.7
       },
       {
-        "id": "6ee25054",
+        "id": "08edd84b",
         "retry_count": 0,
-        "phase": "browser_tab",
+        "phase": "browser_progress",
         "attempt": 1,
         "reasoning_effort": "max",
         "tab_id": "kpool=3",
-        "age_seconds": 0.7,
-        "activity_age_seconds": 0.6
+        "counts": {
+          "thinking_chars": 2463,
+          "text_chars": 0,
+          "tool_calls": 0
+        },
+        "usage": {
+          "prompt_tokens": 87150,
+          "completion_tokens": 453,
+          "total_tokens": 87603,
+          "prompt_tokens_details": {
+            "cached_tokens": 86016
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 453
+          }
+        },
+        "age_seconds": 24.4,
+        "activity_age_seconds": 0.2
       }
     ],
     "recent_errors": [],
@@ -998,7 +1014,7 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "fc99d6786737a156b932b98a938c8d1c17b1b4f7d513b6aa366f0d8f9c8c1f77",
+      "sha256": "ad4c10fde570591dc7552062b847ff74a8b02f6065aa8a1ff2df15d63707f139",
       "size": 791
     },
     {
