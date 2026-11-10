@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794350704.3645947,
+  "checkpoint_at": 1794350707.288599,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-1m-20261110-2355",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -789,8 +789,8 @@
     "host_memory_limit_bytes": "30064771072"
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794350701.0872393,
-    "commit": "ad0ccc18d22dc4cddecdde91e40b61278cde7aa3",
+    "attempted_at": 1794350704.4139135,
+    "commit": "b32f738bad75c6a2a774adf56fbdd00b237e3ce8",
     "pushed": true,
     "returncode": 0
   },
@@ -1167,7 +1167,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794350704.3733003,
+    "generated_at": 1794350707.2972152,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-1m-720k/28800/max": {
@@ -1279,8 +1279,8 @@
   "combined_plan_positions_completed": 6,
   "campaign": {
     "controller_alive": true,
-    "status": "control_validated",
-    "task": "batched-eval-parity"
+    "status": "validating_controls",
+    "task": "mvcc-lsm-compaction"
   },
   "transport_transition": {
     "status": "remaining_campaign_started",
@@ -1374,8 +1374,8 @@
     },
     {
       "path": "campaign-state.json",
-      "sha256": "c1fa30d875090be49e5e255fd023f71c84885291ed16506e588973e465ffe437",
-      "size": 3823
+      "sha256": "eea2708ed594013b41456ef3229dbd9909711c1fec0c25cbf6bf7c9d1968f88f",
+      "size": 3825
     },
     {
       "path": "cdp-monitor-process.json",
@@ -1389,7 +1389,7 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "74af23dea386e11d79e7903320293be450af736793fc9ffee1bc06d118463582",
+      "sha256": "191d757e3f76cb4a004c9d2b8dc99a687cf72c28ca69f913cd954a0cd065a379",
       "size": 134
     },
     {
@@ -1594,8 +1594,8 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "d29d95bd8b9b3b8d9dfb5a87561aef001dde61903909e7c2fe8a6981b51ea10a",
-      "size": 802
+      "sha256": "ccbbe57e5c53d77221a5a60def963ecc81a2b2bead223782f2d5261d184b3b90",
+      "size": 810
     },
     {
       "path": "runs/formal-1m-720k/batched-eval-parity--max--r1/artifacts.json",
