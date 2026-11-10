@@ -1,0 +1,119 @@
+{
+  "observed_at": 1794318009.3260574,
+  "scope": "Selected real requests; ongoing usage is partial and excluded from successful duration metrics",
+  "source_prefix_bytes": 2118738,
+  "source_prefix_sha256": "96262840b1581d032513555aa93429410b1bc6bf106bc550f84c50d5f58776b2",
+  "requests": [
+    {
+      "request_id": "2cff6c0b",
+      "complete": true,
+      "counted_as_successful_request": true,
+      "start": {
+        "event": "browser_start",
+        "id": "2cff6c0b",
+        "ts": 1794315717.0184703,
+        "attempt": 1,
+        "reasoning_effort": "high",
+        "max_tokens": 131072,
+        "sec": 0.0
+      },
+      "latest_observation": {
+        "event": "browser_done",
+        "id": "2cff6c0b",
+        "ts": 1794316429.107423,
+        "attempt": 1,
+        "sec": 712.089,
+        "counts": {
+          "thinking_chars": 50178,
+          "text_chars": 215,
+          "tool_calls": 1
+        },
+        "usage": {
+          "prompt_tokens": 33473,
+          "completion_tokens": 10783,
+          "total_tokens": 44256,
+          "prompt_tokens_details": {
+            "cached_tokens": 9472
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 10444
+          }
+        }
+      }
+    },
+    {
+      "request_id": "30adc53e",
+      "complete": true,
+      "counted_as_successful_request": true,
+      "start": {
+        "event": "browser_start",
+        "id": "30adc53e",
+        "ts": 1794316467.3550804,
+        "attempt": 1,
+        "reasoning_effort": "high",
+        "max_tokens": 131072,
+        "sec": 0.0
+      },
+      "latest_observation": {
+        "event": "browser_done",
+        "id": "30adc53e",
+        "ts": 1794317392.5470016,
+        "attempt": 1,
+        "sec": 925.192,
+        "counts": {
+          "thinking_chars": 109725,
+          "text_chars": 0,
+          "tool_calls": 1
+        },
+        "usage": {
+          "prompt_tokens": 45157,
+          "completion_tokens": 22569,
+          "total_tokens": 67726,
+          "prompt_tokens_details": {
+            "cached_tokens": 44672
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 22569
+          }
+        }
+      }
+    },
+    {
+      "request_id": "058834ab",
+      "complete": false,
+      "counted_as_successful_request": false,
+      "start": {
+        "event": "browser_start",
+        "id": "058834ab",
+        "ts": 1794316524.2109494,
+        "attempt": 1,
+        "reasoning_effort": "max",
+        "max_tokens": 131072,
+        "sec": 0.0
+      },
+      "latest_observation": {
+        "event": "browser_progress",
+        "id": "058834ab",
+        "ts": 1794318005.1519022,
+        "attempt": 1,
+        "sec": 1480.941,
+        "counts": {
+          "thinking_chars": 220051,
+          "text_chars": 0,
+          "tool_calls": 0
+        },
+        "usage": {
+          "prompt_tokens": 71025,
+          "completion_tokens": 45174,
+          "total_tokens": 116199,
+          "prompt_tokens_details": {
+            "cached_tokens": 70656
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 45174
+          }
+        }
+      }
+    }
+  ]
+}
