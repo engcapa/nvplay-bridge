@@ -40,6 +40,24 @@ class NativeEvaluationTests(unittest.TestCase):
             copy_artifact(agent, verifier, "/app/code/secret")
         self.assertFalse(verifier.exists())
 
+    def test_cloning_a_base_alias_never_mutates_the_original_root(self):
+        source, alias, target = (self.root / name for name in ("source", "alias", "target"))
+        source.mkdir()
+        (source / "code.py").write_text("original")
+        alias.symlink_to(source, target_is_directory=True)
+        clone_root(alias, target)
+        self.assertFalse(target.is_symlink())
+        (target / "code.py").write_text("changed")
+        self.assertEqual((source / "code.py").read_text(), "original")
+        self.assertNotEqual((source / "code.py").stat().st_ino, (target / "code.py").stat().st_ino)
+
+    def test_clone_refuses_a_dangling_destination_alias(self):
+        source, target = self.root / "source", self.root / "target"
+        source.mkdir()
+        target.symlink_to(self.root / "missing")
+        with self.assertRaises(FileExistsError):
+            clone_root(source, target)
+
     def test_artifact_rejects_nested_link_before_copy(self):
         agent, verifier = self.root / "agent", self.root / "verifier"
         (agent / "app").mkdir(parents=True)

@@ -1,6 +1,6 @@
 {
   "recorded_at": 1794330205.6922045,
-  "status": "offline_fix_passed_real_cc_validation_running",
+  "status": "real_cc_local_fault_validation_passed_live_smoke_base_rebuilding",
   "incident_reference": "docs/evidence/cc-bridge-1m-idle-observation-2026-11-11.json",
   "observed_incident_root_cause_established": false,
   "observed_incident_data_loss_established": false,
@@ -49,5 +49,232 @@
     "scored_attempts_affected": 0,
     "evidence_preserved": true,
     "rerun_directory": "logs/eval-cc-1m-20261110-2355/drain-fix-cc-high-v2"
+  },
+  "real_cc_fault_validation": [
+    {
+      "effort": "high",
+      "passed": true,
+      "cases": [
+        {
+          "case": "pinned-node--text",
+          "success": true,
+          "automatic_recovery": true,
+          "initial_incomplete_tool_executed": false,
+          "final_counter": 1,
+          "incomplete_response_counter": 0,
+          "observed_provider_limits": [
+            131072
+          ],
+          "coalesced_error_drains": [
+            {
+              "case": "pinned-node--text",
+              "ts": 1794330255.5530105,
+              "data_chars": 107,
+              "done": true,
+              "status": 200
+            }
+          ]
+        },
+        {
+          "case": "pinned-node--thinking-only",
+          "success": true,
+          "automatic_recovery": true,
+          "initial_incomplete_tool_executed": false,
+          "final_counter": 1,
+          "incomplete_response_counter": 0,
+          "observed_provider_limits": [
+            131072
+          ],
+          "coalesced_error_drains": [
+            {
+              "case": "pinned-node--thinking-only",
+              "ts": 1794330262.7288222,
+              "data_chars": 790,
+              "done": true,
+              "status": 200
+            }
+          ]
+        },
+        {
+          "case": "pinned-node--thinking-and-text",
+          "success": true,
+          "automatic_recovery": false,
+          "initial_incomplete_tool_executed": false,
+          "final_counter": 1,
+          "incomplete_response_counter": 0,
+          "observed_provider_limits": [
+            131072
+          ],
+          "coalesced_error_drains": [
+            {
+              "case": "pinned-node--thinking-and-text",
+              "ts": 1794330269.8979194,
+              "data_chars": 828,
+              "done": true,
+              "status": 200
+            }
+          ]
+        },
+        {
+          "case": "pinned-node--complete-tool-args",
+          "success": true,
+          "automatic_recovery": true,
+          "initial_incomplete_tool_executed": false,
+          "final_counter": 1,
+          "incomplete_response_counter": 0,
+          "observed_provider_limits": [
+            131072
+          ],
+          "coalesced_error_drains": [
+            {
+              "case": "pinned-node--complete-tool-args",
+              "ts": 1794330277.95646,
+              "data_chars": 589,
+              "done": true,
+              "status": 200
+            }
+          ]
+        }
+      ],
+      "identity": {
+        "cli_versions": {
+          "pinned-node": "2.1.110 (Claude Code)"
+        },
+        "probe_sha256": "568f826b3b1688bba7eebdd981ae753a68a0df121c4ae6a14d31bfca37fdc758",
+        "inference_sha256": {
+          "nvplay_bridge.py": "537f857a142c8d4391d02837bab2d2123b2fe802185f785d34696dde1287856f",
+          "browser_upstream.py": "44025b2a4b9b757c95537b4a4ecbdfb170755a8098274f5b9fc43ae4ab763517",
+          "browser_events.py": "9ca0a5b7d18edcde37bf19aef27ddf226b588f840f97b4b9df46fc08042daf29",
+          "stream_support.py": "f46b07b3cdf1e4cae0f409caf26c0a279bd57477f5259ee8bba045c14f95f602"
+        },
+        "fixed_max_tokens": 131072,
+        "nvidia_requests": 0,
+        "cc_model": "kimi-k3.1-pro[1m]",
+        "effort": "high",
+        "auto_compact_window": 720000,
+        "agent_timeout_seconds": null,
+        "coalesce_reader_error": true
+      },
+      "result_sha256": "acf5e033b5768366394033fa369ba923a011fbf6ebfa3ba78885549ace601a10"
+    },
+    {
+      "effort": "max",
+      "passed": true,
+      "cases": [
+        {
+          "case": "pinned-node--text",
+          "success": true,
+          "automatic_recovery": true,
+          "initial_incomplete_tool_executed": false,
+          "final_counter": 1,
+          "incomplete_response_counter": 0,
+          "observed_provider_limits": [
+            131072
+          ],
+          "coalesced_error_drains": [
+            {
+              "case": "pinned-node--text",
+              "ts": 1794330332.9864976,
+              "data_chars": 107,
+              "done": true,
+              "status": 200
+            }
+          ]
+        },
+        {
+          "case": "pinned-node--thinking-only",
+          "success": true,
+          "automatic_recovery": true,
+          "initial_incomplete_tool_executed": false,
+          "final_counter": 1,
+          "incomplete_response_counter": 0,
+          "observed_provider_limits": [
+            131072
+          ],
+          "coalesced_error_drains": [
+            {
+              "case": "pinned-node--thinking-only",
+              "ts": 1794330340.1933827,
+              "data_chars": 790,
+              "done": true,
+              "status": 200
+            }
+          ]
+        },
+        {
+          "case": "pinned-node--thinking-and-text",
+          "success": true,
+          "automatic_recovery": false,
+          "initial_incomplete_tool_executed": false,
+          "final_counter": 1,
+          "incomplete_response_counter": 0,
+          "observed_provider_limits": [
+            131072
+          ],
+          "coalesced_error_drains": [
+            {
+              "case": "pinned-node--thinking-and-text",
+              "ts": 1794330347.3425663,
+              "data_chars": 828,
+              "done": true,
+              "status": 200
+            }
+          ]
+        },
+        {
+          "case": "pinned-node--complete-tool-args",
+          "success": true,
+          "automatic_recovery": true,
+          "initial_incomplete_tool_executed": false,
+          "final_counter": 1,
+          "incomplete_response_counter": 0,
+          "observed_provider_limits": [
+            131072
+          ],
+          "coalesced_error_drains": [
+            {
+              "case": "pinned-node--complete-tool-args",
+              "ts": 1794330355.4070334,
+              "data_chars": 585,
+              "done": true,
+              "status": 200
+            }
+          ]
+        }
+      ],
+      "identity": {
+        "cli_versions": {
+          "pinned-node": "2.1.110 (Claude Code)"
+        },
+        "probe_sha256": "568f826b3b1688bba7eebdd981ae753a68a0df121c4ae6a14d31bfca37fdc758",
+        "inference_sha256": {
+          "nvplay_bridge.py": "537f857a142c8d4391d02837bab2d2123b2fe802185f785d34696dde1287856f",
+          "browser_upstream.py": "44025b2a4b9b757c95537b4a4ecbdfb170755a8098274f5b9fc43ae4ab763517",
+          "browser_events.py": "9ca0a5b7d18edcde37bf19aef27ddf226b588f840f97b4b9df46fc08042daf29",
+          "stream_support.py": "f46b07b3cdf1e4cae0f409caf26c0a279bd57477f5259ee8bba045c14f95f602"
+        },
+        "fixed_max_tokens": 131072,
+        "nvidia_requests": 0,
+        "cc_model": "kimi-k3.1-pro[1m]",
+        "effort": "max",
+        "auto_compact_window": 720000,
+        "agent_timeout_seconds": null,
+        "coalesce_reader_error": true
+      },
+      "result_sha256": "9b6a8656e4f9bda0146628f84ca4351c4d94de83c2e7401e2ede03aa8ed5c359"
+    }
+  ],
+  "native_clone_setup_incident": {
+    "recorded_at": 1794330571.3107002,
+    "status": "rebuilding_base_before_retest",
+    "cause": "Validation setup incorrectly reused a directory symlink as a clone source. cp -a copied the alias itself; smoke setup mutated the shared base.",
+    "scored_attempt_affected": false,
+    "all_scored_templates_are_independent_directories": true,
+    "rejected_validation": "logs/eval-cc-1m-20261110-2355/drain-fix-live",
+    "rejected_base": "logs/eval-cc-1m-20261110-2355/rejected-base-alias-smoke-20261111-0108",
+    "fix": "Resolve the source root before copying; reject existing or dangling destination links. Internal rootfs symlinks remain preserved.",
+    "targeted_tests_passed": 11,
+    "new_regressions": 2,
+    "base_must_be_rebuilt_and_version_checked": true
   }
 }

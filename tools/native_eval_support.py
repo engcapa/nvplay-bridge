@@ -30,8 +30,13 @@ def file_hashes(root: Path) -> dict[str, str]:
 
 
 def clone_root(source: Path, target: Path) -> None:
-    if target.exists():
+    if target.exists() or target.is_symlink():
         raise FileExistsError(target)
+    # cp -a preserves a source symlink itself. Resolve the root first so a
+    # caller using a base alias still receives an independent filesystem.
+    source = source.resolve(strict=True)
+    if not source.is_dir():
+        raise NotADirectoryError(source)
     target.parent.mkdir(parents=True, exist_ok=True)
     # Reflinks preserve independent inodes; hard links could let a verifier's
     # package installation or a writable file corrupt another attempt.
