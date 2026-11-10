@@ -1,0 +1,39 @@
+{
+  "recorded_at": 1794331890.9530442,
+  "status": "pending_long_response_observation_not_a_grade",
+  "request_id": "52ce272d",
+  "stage": "formal-1m-720k",
+  "task": "batched-eval-parity",
+  "effort": "max",
+  "source_head": "fa6050911e5a8dba50b33784649d1cf23d97e1a9",
+  "request_max_tokens": 131072,
+  "observed_partial_usage": {
+    "prompt_tokens": 75996,
+    "completion_tokens": 35140,
+    "total_tokens": 111136,
+    "prompt_tokens_details": {
+      "cached_tokens": 55552
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 35140
+    }
+  },
+  "latest_progress_at": 1794331888.1562996,
+  "elapsed_seconds": 1589.855,
+  "counts": {
+    "thinking_chars": 165804,
+    "text_chars": 0,
+    "tool_calls": 0
+  },
+  "completion_tokens_exceed_32768": true,
+  "entire_131072_output_demonstrated": false,
+  "context_capacity_demonstrated": false,
+  "upstream_root_cause_claimed": false,
+  "agent_signalled": false,
+  "grade": null,
+  "log_prefix": {
+    "path": "logs/eval-cc-1m-20261110-2355/bridge-debug.jsonl",
+    "bytes": 239888,
+    "sha256": "89bbb181442c706f522c2cd1eea411340ffb8ff645f017065a96f49afd0b5eb5"
+  }
+}

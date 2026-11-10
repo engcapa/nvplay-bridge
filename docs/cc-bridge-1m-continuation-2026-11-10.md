@@ -49,3 +49,5 @@
 01:27 新增持久控制器 `tools/advance_terminal_native_transport.py`，等待当前控制器自然结束且没有未完成 agent/bridge 请求，先提交推送终态、复核并验证归档；核对待部署六模块与真实烟测版本一致，再切换服务并在实际部署上重做 high/max 工具闭环。通过后将未完成位置转入 `formal-1m-720k-drain-v3`，旧结果原阶段保留，自动启动剩余 campaign；部署烟测期间也继续每 120 秒提交推送，不设置 CC 会话截止。四项计划位置回归和 17 项 checkpoint 专项通过。若中途失败，会保留现场并拒绝盲目覆盖重跑；不向在途 CC 发信号。
 
 控制器命令：`sudo -n python3 -u tools/advance_terminal_native_transport.py --base logs/eval-cc-1m-20261110-2355 --validated-smoke logs/eval-cc-1m-20261110-2355/drain-fix-live-v2 --checkpoint-output docs/evidence/cc-bridge-1m-2026-11-10.json --evidence-output docs/evidence/cc-bridge-1m-drain-rollout-2026-11-11.json --from-stage formal-1m-720k --to-stage formal-1m-720k-drain-v3`。启动前先查看 `transport-transition-process.json` 的 boot/start 身份，不能并行启动第二份。若已进入部署边界或存在 `transport-transition-complete.json`，先核对实际服务与现有 campaign；脚本不会自动重放部分部署或已完成转换。原目录被清空时，按最新持久协议、成绩和剩余位置重新构建，不能直接使用这些 PID 或假设原始证据仍在。
+
+01:31 在途 max 请求 `52ce272d` 的上游报告部分输出用量已超过 32,768 token，均为推理，且持续有新增数据；请求输出上限为 131072。该观察支持实际生成可超过旧 32K 输出规模，但尚未完成，不能当作成绩、完整 128K 输出或 1M 输入容量验证。已保存 [长响应观察](evidence/cc-bridge-1m-long-response-2026-11-11.json) 及原始日志前缀摘要。
