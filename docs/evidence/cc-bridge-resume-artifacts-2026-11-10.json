@@ -1,6 +1,46 @@
 {
-  "reviewed_at": 1794309371.158081,
+  "reviewed_at": 1794314772.2428823,
   "attempts": [
+    {
+      "attempt": "runs/formal-128k-fixed/embedding-drift-monitor--high--r1",
+      "task": "embedding-drift-monitor",
+      "control": null,
+      "effort": "high",
+      "repeat": 1,
+      "artifact_score": 1,
+      "infrastructure_error": null,
+      "changed_original_files": [
+        "app/drift_monitor/alert.py",
+        "app/drift_monitor/calibration.py",
+        "app/drift_monitor/distance.py",
+        "app/drift_monitor/monitor.py",
+        "app/drift_monitor/normalize.py",
+        "app/drift_monitor/statistical_tests.py",
+        "app/drift_monitor/windowing.py"
+      ],
+      "added_files": [
+        "app/drift_monitor/__pycache__/__init__.cpython-312.pyc",
+        "app/drift_monitor/__pycache__/__main__.cpython-312.pyc",
+        "app/drift_monitor/__pycache__/alert.cpython-312.pyc",
+        "app/drift_monitor/__pycache__/calibration.cpython-312.pyc",
+        "app/drift_monitor/__pycache__/distance.cpython-312.pyc",
+        "app/drift_monitor/__pycache__/monitor.cpython-312.pyc",
+        "app/drift_monitor/__pycache__/normalize.cpython-312.pyc",
+        "app/drift_monitor/__pycache__/statistical_tests.cpython-312.pyc",
+        "app/drift_monitor/__pycache__/windowing.cpython-312.pyc"
+      ],
+      "removed_original_files": [],
+      "declared_read_only_files_unchanged": {},
+      "read_only_check_scope": "not checked",
+      "artifact_errors_present": false,
+      "verifier": {
+        "test_count": 11,
+        "statuses": {
+          "passed": 11
+        },
+        "sha256": "b312bc3b886f3ef7a23130e406f863ce5646c0c87cae5d09097a6b6dd1d01dd8"
+      }
+    },
     {
       "attempt": "runs/formal-128k-fixed/session-window-debug--high--r1",
       "task": "session-window-debug",
