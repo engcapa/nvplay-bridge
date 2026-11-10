@@ -56,9 +56,13 @@ sudo -n python3 tools/eval_terminal_native.py run --base logs/<run> --stage form
 
 正式 bridge 使用 `BROWSER_TIMEOUT=28800`，CC 使用 `API_TIMEOUT_MS=29400000`，避免旧的一小时请求上限先于八小时 agent 预算结束长响应。正式开始前还需执行真实上游工具烟测，并从 `browser_start.max_tokens` 验证实际下发。提高输出上限不要求模型必须输出到上限；试跑与正式阶段不能合并计算。
 
+在计划的 `formal_native_subset` 中冻结 `max_output_tokens`、`cc_output_environment_tokens`、`cc_api_timeout_ms` 后，运行器会核对正式设置文件；输出上限、effort 或客户端超时不一致会拒绝运行。每个 attempt 的 `request-protocol.json` 保存最终设置摘要和实际预算。bridge 重启后，将实际 PID、源码提交、模块摘要与超时记入 `bridge_runtime_by_stage`，避免用工具仓库最新提交冒充在途服务版本。
+
 ## 结果与限制
 
 `result.json` 保存客户端结束状态、原始判分、超时、实际请求 effort、重试、错误和 token 用量；`identity.json` 记录运行器源文件摘要和版本。报告同时给出产物通过率和包含基础设施失败的端到端通过率，并按 stage、预算、effort 分组。未发出模型请求、判分器超时、奖励文件缺失或奖励与退出码矛盾均不能伪装成模型得分。
+
+运行器进程初始化时冻结源码摘要、工具仓库提交及工作区状态。后续 attempt 前如果运行器或支持文件的磁盘内容发生变化，拒绝继续，需启动新进程；已加载代码不能被后来的文件编辑重新标记。实际 bridge 运行版本与评测工具版本分别记录。传输错误还区分已经交付 thinking/正文/工具内容与尚未交付内容，缺少该字段的旧日志不猜测分类。
 
 汇总器还按 request ID 读取本机桥接元数据，统计全部上游 HTTP 错误，包括重试耗尽的最后一次错误；每次失败尝试从该 attempt 的 `browser_start` 计算到 `browser_http_error`，避免将累计请求年龄重复相加。此值包含本地标签准备、上游排队与等待响应、受限的错误正文收集，不包含之后的清理和退避；它既不是纯上游排队时间，也不是纯桥接开销。成功请求的总时长可能包含此前失败尝试，不能再与失败尝试耗时相加。缺少原始元数据或 request ID 时标为未知，不将其记为零错误。
 

@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import argparse
 from concurrent.futures import ThreadPoolExecutor
+from copy import deepcopy
 import hashlib
 import json
 import os
@@ -25,6 +26,9 @@ from native_eval_support import (
     allocate_uid, bridge_activity, cc_result, clone_root, copy_artifact, copy_tree,
     file_hashes, reward_result, run_logged, select_python, shell_command, write_json,
 )
+
+
+TOOLING_SOURCES = (Path(__file__).resolve(), Path(__file__).with_name("native_eval_support.py").resolve())
 
 
 RECIPES = {
@@ -95,20 +99,49 @@ class Evaluation:
         self.base = base.resolve()
         self.plan = json.loads((self.base / "evaluation-plan.json").read_text())
         self.dataset = self.base / "terminal-bench/tasks"
+        self._source_identity = {
+            "identity_version": 2,
+            "bridge_head": self.plan["bridge_source_head"],
+            "tooling_repository_head": subprocess.check_output(
+                ["git", "rev-parse", "HEAD"], text=True).strip(),
+            "tooling_worktree_status": subprocess.check_output(
+                ["git", "status", "--porcelain=v1", "--untracked-files=normal"], text=True).splitlines(),
+            "runner_sha256": self._tooling_hashes(),
+            "cc_version": self.plan["cc_version"],
+            "dataset_commit": self.plan["source_commit"],
+        }
 
-    def identity(self) -> dict:
-        """Record actual executable/source identities, including dirty tooling."""
-        scripts = [Path(__file__).resolve(), Path(__file__).with_name("native_eval_support.py").resolve()]
-        return {"bridge_head": subprocess.check_output(
-                    ["git", "rev-parse", "HEAD"], text=True).strip(),
-                "bridge_dirty": subprocess.check_output(
-                    ["git", "diff", "--name-only"], text=True).splitlines(),
-                "runner_sha256": {p.name: hashlib.sha256(p.read_bytes()).hexdigest() for p in scripts},
-                "cc_version": self.plan["cc_version"],
-                "dataset_commit": self.plan["source_commit"]}
+    def _tooling_hashes(self) -> dict:
+        return {path.name: hashlib.sha256(path.read_bytes()).hexdigest() for path in TOOLING_SOURCES}
+
+    def identity(self, stage: str | None = None) -> dict:
+        """Keep the process's initial source identity; refuse later source changes."""
+        if self._tooling_hashes() != self._source_identity["runner_sha256"]:
+            raise RuntimeError("runner source changed after initialization; start a new process before another attempt")
+        identity = deepcopy(self._source_identity)
+        runtime = self.plan.get("bridge_runtime_by_stage", {}).get(stage)
+        if runtime:
+            identity["bridge_head"] = runtime["source_head"]
+            identity["bridge_runtime"] = deepcopy(runtime)
+        return identity
 
     def task(self, name: str) -> dict:
         return tomllib.loads((self.dataset / name / "task.toml").read_text())
+
+    def request_settings(self, effort: str, stage: str) -> dict:
+        formal = self.plan.get("formal_native_subset", {}) if stage == "formal" else {}
+        explicit_output = formal.get("max_output_tokens")
+        prefix = "settings-formal" if explicit_output else "settings"
+        settings = json.loads((self.base / f"{prefix}-{effort}.json").read_text())
+        if explicit_output:
+            env = settings.get("env", {})
+            extra = json.loads(env.get("CLAUDE_CODE_EXTRA_BODY", "{}"))
+            if (extra.get("max_tokens") != explicit_output
+                    or extra.get("output_config", {}).get("effort") != effort
+                    or env.get("CLAUDE_CODE_MAX_OUTPUT_TOKENS") != str(formal["cc_output_environment_tokens"])
+                    or env.get("API_TIMEOUT_MS") != str(formal["cc_api_timeout_ms"])):
+                raise ValueError("formal request settings do not match the frozen output/effort/timeout protocol")
+        return settings
 
     def verify_source(self, name: str) -> None:
         if file_hashes(self.dataset / name) != self.plan["task_identities"][name]:
@@ -259,6 +292,8 @@ class Evaluation:
 
     def attempt(self, name: str, effort: str, stage: str, repeat: int,
                 budget: int, uid: int) -> dict:
+        identity = self.identity(stage)
+        settings = self.request_settings(effort, stage)
         self.verify_source(name)
         controls = json.loads((self.base / "controls" / name / "result.json").read_text())
         if not controls["valid"]:
@@ -268,7 +303,7 @@ class Evaluation:
             # Never silently rerun failed/incomplete attempts or overwrite evidence.
             raise FileExistsError(output)
         output.mkdir(parents=True)
-        write_json(output / "identity.json", self.identity())
+        write_json(output / "identity.json", identity)
         root = output / "agent-root"
         clone_root(self.base / "templates" / name / "agent", root)
         home = root / "home/agent"
@@ -280,10 +315,15 @@ class Evaluation:
         group.write_text(group.read_text().replace("agent:x:1000:", f"agent:x:{uid}:"))
         config = root / "eval"
         config.mkdir()
-        settings = json.loads((self.base / f"settings-{effort}.json").read_text())
         settings["env"].update(DISABLE_AUTOUPDATER="1", DISABLE_AUTO_COMPACT="1",
                                CLAUDE_CODE_DISABLE_AUTO_MEMORY="1")
         write_json(config / "settings.json", settings)
+        write_json(output / "request-protocol.json", {
+            "settings_sha256": hashlib.sha256((config / "settings.json").read_bytes()).hexdigest(),
+            "cc_output_environment_tokens": settings["env"].get("CLAUDE_CODE_MAX_OUTPUT_TOKENS"),
+            "extra_body": json.loads(settings["env"].get("CLAUDE_CODE_EXTRA_BODY", "{}")),
+            "cc_api_timeout_ms": settings["env"].get("API_TIMEOUT_MS"),
+            "agent_budget_seconds": budget})
         write_json(config / "mcp.json", {"mcpServers": {}})
         (config / "instruction.md").write_bytes((self.dataset / name / "instruction.md").read_bytes())
         args = ["claude", "-p", "--output-format", "stream-json", "--verbose",
@@ -323,7 +363,7 @@ class Evaluation:
             infra = "no_model_request_dispatched"
         result = {"task": name, "effort": effort, "stage": stage, "repeat": repeat,
                   "budget_seconds": budget, "agent": process, "cc": client, "grade": grade,
-                  "bridge": telemetry, "source_head": self.plan["bridge_source_head"],
+                  "bridge": telemetry, "source_head": identity["bridge_head"],
                   "infrastructure_error": infra,
                   "end_to_end_success": grade["score"] == 1 and process["exit_code"] == 0
                   and bool(client) and not client["is_error"] and not process["timed_out"] and not infra}

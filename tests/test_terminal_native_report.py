@@ -85,6 +85,8 @@ class NativeReportTests(unittest.TestCase):
                         {**sample, "budget_seconds": 28800,
                          "bridge": {**sample["bridge"], "retries": [{"id": "a", "status": 500},
                                                                     {"id": "b", "status": 500}],
+                                    "errors": [{"id": "c", "committed": True},
+                                               {"id": "d", "committed": False}],
                                     "cancelled": [{"id": "b"}]}}]
             for index, data in enumerate(variants):
                 directory = root / "runs/pilot" / str(index)
@@ -102,7 +104,9 @@ class NativeReportTests(unittest.TestCase):
             self.assertEqual(small["usage"]["prompt_tokens"], 40)
             self.assertEqual(report["totals"]["pilot/28800/high"]["attempts"], 1)
             retry = report["totals"]["pilot/28800/high"]
-            self.assertEqual(retry["bridge_errors"], 0)
+            self.assertEqual(retry["bridge_errors"], 2)
+            self.assertEqual(retry["bridge_errors_after_content"], 1)
+            self.assertEqual(retry["bridge_errors_before_content"], 1)
             self.assertEqual(retry["http_failures_retried"], 2)
             self.assertEqual(retry["requests_recovered_after_retry"], 1)
             self.assertEqual(retry["cancelled_requests"], 1)

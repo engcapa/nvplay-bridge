@@ -117,6 +117,10 @@ def summarize(base: Path) -> dict:
                "logical_requests": data["bridge"]["logical_requests"],
                "upstream_attempts": data["bridge"]["upstream_attempts"],
                "bridge_errors": len(data["bridge"]["errors"]),
+               "bridge_errors_after_content": sum(event.get("committed") is True
+                                                   for event in data["bridge"]["errors"]),
+               "bridge_errors_before_content": sum(event.get("committed") is False
+                                                    for event in data["bridge"]["errors"]),
                "bridge_retries": len(data["bridge"]["retries"]),
                "http_failures_retried": sum(isinstance(event.get("status"), int) and event["status"] >= 400
                                             for event in data["bridge"]["retries"]),
@@ -143,6 +147,8 @@ def summarize(base: Path) -> dict:
                        "agent_seconds": round(sum(row["agent_seconds"] for row in attempts), 3),
                        "logical_requests": sum(row["logical_requests"] for row in attempts),
                        "bridge_errors": sum(row["bridge_errors"] for row in attempts),
+                       "bridge_errors_after_content": sum(row["bridge_errors_after_content"] for row in attempts),
+                       "bridge_errors_before_content": sum(row["bridge_errors_before_content"] for row in attempts),
                        "bridge_retries": sum(row["bridge_retries"] for row in attempts),
                        "http_failures_retried": sum(row["http_failures_retried"] for row in attempts),
                        "requests_recovered_after_retry": sum(row["requests_recovered_after_retry"] for row in attempts),
