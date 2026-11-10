@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794326765.7806048,
+  "checkpoint_at": 1794326889.0292714,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-1m-20261110-2355",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -465,15 +465,15 @@
     "host_memory_limit_bytes": "30064771072"
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794326642.2398093,
-    "commit": "a8dd34ddb353660241f450d35aaee1e5fb993b69",
+    "attempted_at": 1794326765.8070297,
+    "commit": "74fce2bfb9b1207d0de72facd95bfed7edb8edcf",
     "pushed": true,
     "returncode": 0
   },
   "controls": {},
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794326765.7819347,
+    "generated_at": 1794326889.0301406,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
@@ -532,7 +532,7 @@
   "evidence_fingerprints": [
     {
       "path": "base-process.json",
-      "sha256": "7337cf726e0c486305fcd6e7f0f10deb1576817f8b9f80c55addaf9b42e4c3b9",
+      "sha256": "dc12577a129239e7a9164de22e41ee0e490069c86b94815a594a5a206f562892",
       "size": 487
     },
     {
@@ -567,7 +567,7 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "73122507a4668b94beef027d46fb40dbe4d9f9d9afc0d497b436404e5835b960",
+      "sha256": "2de93659b03cdcaa79f45918c5cf5bce593fdd05b36e044b57bd01e9b812f472",
       "size": 134
     },
     {
@@ -616,6 +616,11 @@
       "size": 171
     },
     {
+      "path": "provision-fix-regression.log",
+      "sha256": "a6707d4eff38012da33ddc34bc6dc076a3b17151cfc9aef223c8790cbe64c3da",
+      "size": 100
+    },
+    {
       "path": "readiness-response.json",
       "sha256": "31d335f8aa5f273ffd6e391e16e1d9dff2aaaf0e503919995a2ab7a7de244a29",
       "size": 433
@@ -632,7 +637,7 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "f6a86911f9c0c667b8b9c11ed609d049656d77198d70cd74bc76da9994aba677",
+      "sha256": "940c96f3afaeda4561409d5f653667a3598e355b4570328950c47e50cb1b04e6",
       "size": 716
     },
     {
@@ -649,6 +654,11 @@
       "path": "uv-download-process.json",
       "sha256": "9cbbf5eaae52e9314c957f12d2d8c9d4d8ed636d5dd668599ef5e8cd803c14cc",
       "size": 296
+    },
+    {
+      "path": "wheels-process.json",
+      "sha256": "023137fce4896275c068848978755c3359616d12f75de6238e0ed0ea196786e1",
+      "size": 243
     }
   ],
   "compressed_root_evidence": []
