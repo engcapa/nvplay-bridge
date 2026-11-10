@@ -23,5 +23,14 @@
   "regression_tests_passed": 33,
   "deployment": "Isolated worktree only; apply after the active campaign controller safely exits",
   "fix_commit": "939caca92ae517362e1f65a60a9bcb839c0c7491",
-  "fix_branch": "fix/native-checkpoint-between-pairs-20261110"
+  "fix_branch": "fix/native-checkpoint-between-pairs-20261110",
+  "deployment_update": {
+    "at": 1794322350.4354284,
+    "applied_to_main_commit": "389afc3",
+    "reason": "User requested pause after current batched-eval-parity pair for container reboot",
+    "loaded_campaign_code": "unchanged old process; both already-started attempts continue naturally",
+    "boundary_stop": "existing runner source guard will reject checkpoint/next pair and ThreadPoolExecutor waits for both existing attempts",
+    "regression_tests_passed_after_cherry_pick": 33,
+    "new_checkpoint_process_validation": "pending after both attempts finish"
+  }
 }
