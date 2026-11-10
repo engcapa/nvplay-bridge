@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794320958.8447404,
+  "checkpoint_at": 1794321079.1387112,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-resume-20261110-1647",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -541,7 +541,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794320958.9705126,
+    "generated_at": 1794321079.2577796,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-128k-fixed/28800/high": {
@@ -862,8 +862,8 @@
         "task": "batched-eval-parity",
         "effort": "high",
         "started_at": 1794315384.4192412,
-        "elapsed_seconds": 5574.5,
-        "tool_calls": 74,
+        "elapsed_seconds": 5694.8,
+        "tool_calls": 76,
         "last_tool": "Bash"
       },
       {
@@ -872,7 +872,7 @@
         "task": "batched-eval-parity",
         "effort": "max",
         "started_at": 1794315384.410672,
-        "elapsed_seconds": 5574.5,
+        "elapsed_seconds": 5694.8,
         "tool_calls": 54,
         "last_tool": "Bash"
       }
@@ -896,28 +896,23 @@
       "idle_seconds": 3600.0
     },
     "pool_states": {
-      "ready": 3,
-      "busy": 2
+      "busy": 2,
+      "ready": 3
     },
     "recovering_tabs": []
   },
   "bridge_activity": {
     "events_last_300s": {
-      "browser_progress": 104,
-      "browser_buffer": 2,
+      "browser_progress": 109,
+      "browser_first_data": 4,
+      "browser_first_content": 4,
+      "browser_buffer": 3,
       "browser_pool_release": 3,
-      "browser_done": 2,
-      "request": 2,
-      "payload": 2,
-      "browser_start": 2,
-      "browser_prepare_retry": 1,
-      "pool_recovery_start": 1,
-      "browser_tab": 2,
-      "pool_activation": 2,
-      "pool_page_ready": 1,
-      "pool_ready": 1,
-      "browser_first_data": 2,
-      "browser_first_content": 2
+      "browser_done": 3,
+      "request": 3,
+      "payload": 3,
+      "browser_start": 3,
+      "browser_tab": 3
     },
     "active": [
       {
@@ -928,49 +923,49 @@
         "reasoning_effort": "max",
         "tab_id": "kpool=2",
         "counts": {
-          "thinking_chars": 50197,
+          "thinking_chars": 64917,
           "text_chars": 0,
           "tool_calls": 0
         },
         "usage": {
           "prompt_tokens": 172356,
-          "completion_tokens": 9182,
-          "total_tokens": 181538,
+          "completion_tokens": 10654,
+          "total_tokens": 183010,
           "prompt_tokens_details": {
             "cached_tokens": 171904
           },
           "completion_tokens_details": {
-            "reasoning_tokens": 9182
+            "reasoning_tokens": 10654
           }
         },
-        "age_seconds": 514.1,
-        "activity_age_seconds": 4.2
+        "age_seconds": 634.4,
+        "activity_age_seconds": 1.7
       },
       {
-        "id": "bf144614",
+        "id": "f3350e38",
         "retry_count": 0,
         "phase": "browser_progress",
         "attempt": 1,
         "reasoning_effort": "high",
-        "tab_id": "kpool=5",
+        "tab_id": "kpool=1",
         "counts": {
-          "thinking_chars": 1846,
-          "text_chars": 0,
+          "thinking_chars": 2810,
+          "text_chars": 147,
           "tool_calls": 0
         },
         "usage": {
-          "prompt_tokens": 154368,
-          "completion_tokens": 1186,
-          "total_tokens": 155554,
+          "prompt_tokens": 157705,
+          "completion_tokens": 708,
+          "total_tokens": 158413,
           "prompt_tokens_details": {
-            "cached_tokens": 152064
+            "cached_tokens": 155904
           },
           "completion_tokens_details": {
-            "reasoning_tokens": 1186
+            "reasoning_tokens": 599
           }
         },
-        "age_seconds": 56.0,
-        "activity_age_seconds": 4.7
+        "age_seconds": 45.3,
+        "activity_age_seconds": -0.1
       }
     ],
     "recent_errors": [],
@@ -1125,7 +1120,7 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "a60ffeffa72c50115f802a4636f2bc1cf4d9369214683f3a06a463f342da71bb",
+      "sha256": "89e01bca35fbfd9008828aeb496f4fd6f38fa97c02dd5dc6fc37a17e6509edcf",
       "size": 787
     },
     {
