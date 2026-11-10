@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794301858.45186,
+  "checkpoint_at": 1794301972.4755836,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-resume-20261110-1647",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -260,7 +260,7 @@
   "controls": {},
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794301858.4530444,
+    "generated_at": 1794301972.4770179,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
@@ -315,6 +315,11 @@
       "path": "bridge-runtime.json",
       "sha256": "350d1b38b72eccd07c49df7768630e2610abd594e4b593f64422fd3c9701c917",
       "size": 1409
+    },
+    {
+      "path": "campaign-validation.log",
+      "sha256": "ee893a2c938ec19ccab5f12f8a4a73a1362fba67f7619e08e33d4149f705683e",
+      "size": 494
     },
     {
       "path": "cdp-observer-process.json",
