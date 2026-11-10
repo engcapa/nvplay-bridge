@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794327387.6390302,
+  "checkpoint_at": 1794327510.8933861,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-1m-20261110-2355",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -550,8 +550,8 @@
     "host_memory_limit_bytes": "30064771072"
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794327262.3132043,
-    "commit": "a258c0a5b28406d9cc16684cbd6de653ad0d3362",
+    "attempted_at": 1794327387.6711006,
+    "commit": "d8c0234e0b8e73e9ad701e2061f808a8b3979883",
     "pushed": true,
     "returncode": 0
   },
@@ -869,10 +869,33 @@
       }
     ]
   },
-  "controls": {},
+  "controls": {
+    "embedding-drift-monitor": {
+      "valid": true,
+      "baseline": {
+        "score": 0,
+        "infrastructure_error": null
+      },
+      "oracle": {
+        "score": 1,
+        "infrastructure_error": null
+      }
+    },
+    "session-window-debug": {
+      "valid": true,
+      "baseline": {
+        "score": 0,
+        "infrastructure_error": null
+      },
+      "oracle": {
+        "score": 1,
+        "infrastructure_error": null
+      }
+    }
+  },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794327387.6408613,
+    "generated_at": 1794327510.895042,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
@@ -885,7 +908,7 @@
   "campaign": {
     "controller_alive": false
   },
-  "status": "preparing_environment",
+  "status": "validating_controls",
   "bridge_health": {
     "status": "ok",
     "model": "moonshotai/kimi-k3.1-pro",
@@ -961,7 +984,7 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "4c32d4ed0d3546364684a786ad0b048606986aa9354ce7f40ee59b3f5a4abbcb",
+      "sha256": "095fd11a9f0cfb2f6f550514aa16441d420335285a24de2b0d59cb087f49e5c4",
       "size": 134
     },
     {
@@ -973,6 +996,21 @@
       "path": "continuation-regression.log",
       "sha256": "ad51de6dd2235222614a13af19d06c592da103f851712bb00704c82453c24bb7",
       "size": 1581
+    },
+    {
+      "path": "controls/embedding-drift-monitor/result.json",
+      "sha256": "49e2e6301ceef488af59fb478fb657bcf56b47cb01c93f0e42dcba3244f92db5",
+      "size": 528
+    },
+    {
+      "path": "controls/session-window-debug/result.json",
+      "sha256": "be8724b660f388482e57df48459bca37562530f919c30bdb7c16f7c2c82380ee",
+      "size": 526
+    },
+    {
+      "path": "controls-process.json",
+      "sha256": "492715fb36cb5635416a1c2e0089b86882b90d610a20159cc9a7cf4e40a159e5",
+      "size": 342
     },
     {
       "path": "download-manifest.json",
@@ -998,6 +1036,16 @@
       "path": "host-resources.json",
       "sha256": "a6ceae8071bb20a35edab0c629b4808392f2827d08f0e11f8a3eec9abbbe8833",
       "size": 704
+    },
+    {
+      "path": "initial-archive-process.json",
+      "sha256": "8c90296858a82288c8098951d3c970216d1e9c8bfe797dc05e7701d1531ed207",
+      "size": 335
+    },
+    {
+      "path": "isolation-audit.json",
+      "sha256": "4d77392ec8d63cc603029326474fe1089a4c741f5dcd424d2304b69daeb84bd5",
+      "size": 2340
     },
     {
       "path": "native-base-manifest.json",
@@ -1061,8 +1109,8 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "d48fd7d56d4ba58e017ee1d747eabbd833b06697a70723a4fd7324d476149a0b",
-      "size": 717
+      "sha256": "6dc300bb681cf6640df9168d5b23d1d81157e19c7aef739a477f577ad5d027c8",
+      "size": 708
     },
     {
       "path": "settings-formal-high.json",
@@ -1100,5 +1148,16 @@
       "size": 243
     }
   ],
-  "compressed_root_evidence": []
+  "compressed_root_evidence": [
+    {
+      "directory": "controls/embedding-drift-monitor/baseline",
+      "archived_at": 1794327501.1365619,
+      "root": "agent-root",
+      "archive": "agent-root.tar.gz",
+      "sha256": "0512ab3961db48e38cabb2346362becbcacce84945fc3203de10e139a537fbf3",
+      "bytes": 555068608,
+      "tar_compare_passed_before_reclaim": true,
+      "restore": "sudo tar -xpf agent-root.tar.gz -C ."
+    }
+  ]
 }
