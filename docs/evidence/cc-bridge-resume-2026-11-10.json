@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794317472.5602598,
+  "checkpoint_at": 1794317592.7380974,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-resume-20261110-1647",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -541,7 +541,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794317472.6514862,
+    "generated_at": 1794317592.7933388,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-128k-fixed/28800/high": {
@@ -862,8 +862,8 @@
         "task": "batched-eval-parity",
         "effort": "high",
         "started_at": 1794315384.4192412,
-        "elapsed_seconds": 2088.2,
-        "tool_calls": 31,
+        "elapsed_seconds": 2208.4,
+        "tool_calls": 32,
         "last_tool": "Write"
       },
       {
@@ -872,7 +872,7 @@
         "task": "batched-eval-parity",
         "effort": "max",
         "started_at": 1794315384.410672,
-        "elapsed_seconds": 2088.2,
+        "elapsed_seconds": 2208.4,
         "tool_calls": 45,
         "last_tool": "Bash"
       }
@@ -896,23 +896,23 @@
       "idle_seconds": 3600.0
     },
     "pool_states": {
-      "ready": 3,
-      "busy": 2
+      "busy": 2,
+      "ready": 3
     },
     "recovering_tabs": []
   },
   "bridge_activity": {
     "events_last_300s": {
-      "browser_progress": 116,
-      "browser_buffer": 2,
-      "browser_pool_release": 2,
-      "browser_done": 2,
-      "request": 2,
-      "payload": 2,
-      "browser_start": 2,
-      "browser_tab": 2,
-      "browser_first_data": 2,
-      "browser_first_content": 2
+      "browser_progress": 114,
+      "browser_buffer": 3,
+      "browser_pool_release": 3,
+      "browser_done": 3,
+      "request": 3,
+      "payload": 3,
+      "browser_start": 3,
+      "browser_tab": 3,
+      "browser_first_data": 3,
+      "browser_first_content": 3
     },
     "active": [
       {
@@ -923,49 +923,49 @@
         "reasoning_effort": "max",
         "tab_id": "kpool=4",
         "counts": {
-          "thinking_chars": 141227,
+          "thinking_chars": 162156,
           "text_chars": 0,
           "tool_calls": 0
         },
         "usage": {
           "prompt_tokens": 71025,
-          "completion_tokens": 28981,
-          "total_tokens": 100006,
+          "completion_tokens": 33183,
+          "total_tokens": 104208,
           "prompt_tokens_details": {
             "cached_tokens": 70656
           },
           "completion_tokens_details": {
-            "reasoning_tokens": 28981
+            "reasoning_tokens": 33183
           }
         },
-        "age_seconds": 948.3,
-        "activity_age_seconds": 2.6
+        "age_seconds": 1068.5,
+        "activity_age_seconds": 0.8
       },
       {
-        "id": "aa7e9fbd",
+        "id": "53202d6c",
         "retry_count": 0,
-        "phase": "browser_first_content",
+        "phase": "browser_progress",
         "attempt": 1,
         "reasoning_effort": "high",
-        "tab_id": "kpool=5",
+        "tab_id": "kpool=1",
         "counts": {
-          "thinking_chars": 0,
+          "thinking_chars": 412,
           "text_chars": 0,
           "tool_calls": 0
         },
         "usage": {
-          "prompt_tokens": 69530,
-          "completion_tokens": 1,
-          "total_tokens": 69531,
+          "prompt_tokens": 72605,
+          "completion_tokens": 74,
+          "total_tokens": 72679,
           "prompt_tokens_details": {
-            "cached_tokens": 67712
+            "cached_tokens": 69504
           },
           "completion_tokens_details": {
-            "reasoning_tokens": 1
+            "reasoning_tokens": 74
           }
         },
-        "age_seconds": 6.6,
-        "activity_age_seconds": 1.2
+        "age_seconds": 19.7,
+        "activity_age_seconds": 3.7
       }
     ],
     "recent_errors": [],
@@ -1120,7 +1120,7 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "e5c55c6b747c32f088bad26b21673f85b1e4b95b0f9ad5d3ee3e80fea6580efb",
+      "sha256": "52a328e0a84484c03b29daf8514785a15819d656d2518231189c8d86a0504f8d",
       "size": 787
     },
     {
