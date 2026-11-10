@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794303659.274078,
+  "checkpoint_at": 1794303724.5235581,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-resume-20261110-1647",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -505,6 +505,17 @@
         "infrastructure_error": null
       }
     },
+    "mvcc-lsm-compaction": {
+      "valid": true,
+      "baseline": {
+        "score": 0,
+        "infrastructure_error": null
+      },
+      "oracle": {
+        "score": 1,
+        "infrastructure_error": null
+      }
+    },
     "session-window-debug": {
       "valid": true,
       "baseline": {
@@ -519,7 +530,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794303659.2758741,
+    "generated_at": 1794303724.5247178,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
@@ -582,8 +593,8 @@
     },
     {
       "path": "campaign-state.json",
-      "sha256": "c82e07e46aa3508b1c9c05dec00bb7e64bb500b72d2dc892f2d6a56cecc25aee",
-      "size": 2864
+      "sha256": "c65b2a0ae4c22a3b4f5575ea719c3c61d7b98125c365d9dd2322ae3e3a140934",
+      "size": 2862
     },
     {
       "path": "campaign-validation.log",
@@ -609,6 +620,11 @@
       "path": "controls/embedding-drift-monitor/result.json",
       "sha256": "0b4b705de594fd99023b1efe84857afeb7fe125bf0a773912f4eadf8de476201",
       "size": 529
+    },
+    {
+      "path": "controls/mvcc-lsm-compaction/result.json",
+      "sha256": "8b7e17596d1898915dd33fb8916bb05aca24aa318e7e1785aa75bf97f696bbbc",
+      "size": 531
     },
     {
       "path": "controls/session-window-debug/result.json",
