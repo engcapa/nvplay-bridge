@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794309423.5619955,
+  "checkpoint_at": 1794309544.458598,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-resume-20261110-1647",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -541,7 +541,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794309423.5903635,
+    "generated_at": 1794309544.4906137,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-128k-fixed/28800/high": {
@@ -752,13 +752,23 @@
     "pending": [
       {
         "attempt": "runs/formal-128k-fixed/embedding-drift-monitor--high--r1",
-        "tool_calls": 0,
-        "last_tool": null
+        "status": "agent_running",
+        "task": "embedding-drift-monitor",
+        "effort": "high",
+        "started_at": 1794309436.7690861,
+        "elapsed_seconds": 107.7,
+        "tool_calls": 16,
+        "last_tool": "Bash"
       },
       {
         "attempt": "runs/formal-128k-fixed/embedding-drift-monitor--max--r1",
-        "tool_calls": 0,
-        "last_tool": null
+        "status": "agent_running",
+        "task": "embedding-drift-monitor",
+        "effort": "max",
+        "started_at": 1794309436.757663,
+        "elapsed_seconds": 107.7,
+        "tool_calls": 13,
+        "last_tool": "Bash"
       }
     ]
   },
@@ -780,24 +790,62 @@
       "idle_seconds": 3600.0
     },
     "pool_states": {
-      "ready": 5
+      "busy": 2,
+      "ready": 3
     },
     "recovering_tabs": []
   },
   "bridge_activity": {
     "events_last_300s": {
-      "browser_progress": 31,
-      "browser_buffer": 3,
-      "browser_pool_release": 3,
-      "browser_done": 3,
-      "request": 2,
-      "payload": 2,
-      "browser_start": 2,
-      "browser_tab": 2,
-      "browser_first_data": 2,
-      "browser_first_content": 2
+      "browser_progress": 42,
+      "browser_buffer": 10,
+      "browser_pool_release": 10,
+      "browser_done": 10,
+      "request": 11,
+      "payload": 11,
+      "browser_start": 11,
+      "browser_tab": 11,
+      "browser_first_data": 10,
+      "browser_first_content": 10
     },
-    "active": [],
+    "active": [
+      {
+        "id": "b36dc0ef",
+        "retry_count": 0,
+        "phase": "browser_progress",
+        "attempt": 1,
+        "reasoning_effort": "max",
+        "tab_id": "kpool=2",
+        "counts": {
+          "thinking_chars": 3479,
+          "text_chars": 0,
+          "tool_calls": 0
+        },
+        "usage": {
+          "prompt_tokens": 14473,
+          "completion_tokens": 754,
+          "total_tokens": 15227,
+          "prompt_tokens_details": {
+            "cached_tokens": 13184
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 754
+          }
+        },
+        "age_seconds": 21.6,
+        "activity_age_seconds": 1.2
+      },
+      {
+        "id": "39a95728",
+        "retry_count": 0,
+        "phase": "browser_tab",
+        "attempt": 1,
+        "reasoning_effort": "high",
+        "tab_id": "kpool=1",
+        "age_seconds": 0.7,
+        "activity_age_seconds": 0.7
+      }
+    ],
     "recent_errors": [],
     "recent_upstream_errors": [],
     "recent_retries": []
@@ -940,7 +988,7 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "5d16d0c0193d4a7e139be9f98807df9f36aeefe28d15256066b7d9f68ac35704",
+      "sha256": "794a31a8bf66b4879c394fd705a8de005a3c63ee8b2fa91871ff0b09fde38242",
       "size": 791
     },
     {
@@ -954,9 +1002,19 @@
       "size": 2828
     },
     {
+      "path": "runs/formal-128k-fixed/embedding-drift-monitor--high--r1/request-protocol.json",
+      "sha256": "2710293349ef350bc1757cd82bea93a92c8b4dbf6e42dd3da348f325c3155dac",
+      "size": 803
+    },
+    {
       "path": "runs/formal-128k-fixed/embedding-drift-monitor--max--r1/identity.json",
       "sha256": "bad9d330d8c22dfb311f7e954c89d468348ab4d2036006cc8feff3ed979c2b91",
       "size": 2828
+    },
+    {
+      "path": "runs/formal-128k-fixed/embedding-drift-monitor--max--r1/request-protocol.json",
+      "sha256": "15feb065d6acbc4f0a37d99104142e0a23b0a221b482332cb24be854521974dc",
+      "size": 802
     },
     {
       "path": "runs/formal-128k-fixed/session-window-debug--high--r1/artifacts.json",
