@@ -26,6 +26,23 @@ exec /usr/local/bin/node /opt/claude-code-2.1.110/package/cli.js "$@"
 
 需要先在普通 UID 下完成一次实际 Bash/文件操作烟测；`claude --version` 成功不能证明工具调用可用。基座及每题安装日志应保存版本、包清单和文件摘要。托管 Python 的包安装只修改任务自己的副本，不修改 host Python。
 
+## 可提交的环境重建与持续检查点
+
+`tools/provision_terminal_native.py` 将下载校验、原生基座与离线 wheel 准备保存在源码中。Ubuntu 与数据集、官方 CC 包、CC CLI 和 Node 二进制均检查固定 SHA256；Python 使用确切补丁版本。apt 包及 wheel 的实际版本和摘要另存 manifest，不假设软件源与上一轮完全相同。
+
+```sh
+python3 tools/provision_terminal_native.py downloads --base logs/<run>
+HTTPS_PROXY=http://127.0.0.1:31128 python3 -m pip download --no-deps --only-binary=:all: --dest logs/<run>/downloads uv==0.13.7
+sudo -n python3 tools/provision_terminal_native.py base --base logs/<run> --node /path/to/node-v24.13.0 --uv-wheel logs/<run>/downloads/uv-0.13.7-py3-none-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+python3 tools/provision_terminal_native.py wheels --base logs/<run>
+python3 tools/start_terminal_native_services.py --base logs/<run> --brave .brave/brave
+python3 tools/checkpoint_terminal_native.py --base logs/<run> --output docs/evidence/<checkpoint>.json --interval 120 --commit
+```
+
+服务启动器拒绝占用已有端口，显式使用外网代理和八小时、128K 配置；它不替换正在工作的服务。首次工具烟测创建标签池后，另启动 `tools/monitor_cdp_network.py` 持续观测网络终态。checkpoint 仅归档协议、版本、统计、产物摘要及证据哈希，隐藏 CC 正文和错误响应正文；`--commit` 每次只提交指定检查点文件。
+
+运行器 `run --resume` 保留所有已完成结果，包括失败；协议不符会拒绝续跑。容器重启后可显式使用 `--resume --recover-interrupted`：只有原控制器和 agent 均已停止，才将未完成目录移入 `runs-interrupted/`，记为 `score=null` 并排除模型判分，然后使用新会话重跑对应计划位置。原日志不覆盖。PID 身份同时检查 boot ID 和进程起始时刻，避免重启后误认复用 PID。恢复时仍需重新启动服务、记录实际服务身份并完成必要烟测。
+
 ## 执行顺序
 
 把固定 tarball 放入 `logs/<run>/terminal-bench.tar.gz`，解压到 `logs/<run>/terminal-bench/`。启动自己的 bridge 和持续监控，再准备 `settings-high.json`、`settings-max.json`，其中包含所用 bridge 地址、模型和对应 `output_config.effort`。这些本机配置不提交 Git。

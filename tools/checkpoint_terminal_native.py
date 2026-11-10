@@ -72,6 +72,8 @@ def collect(base: Path, health_url: str) -> dict:
             mode: {key: data.get(mode, {}).get(key) for key in ("score", "infrastructure_error")}
             for mode in ("baseline", "oracle")}}
     result["controls"] = controls
+    result["interrupted_attempts_excluded_from_grades"] = [
+        json.loads(path.read_text()) for path in sorted((base / "runs-interrupted").glob("*/*/interruption.json"))]
     report = summarize(base)
     result["results"] = report
     expected = len(result.get("protocol", {}).get("pilot_tasks", [])) * 2 * result.get("protocol", {}).get("formal_repeats", 3)

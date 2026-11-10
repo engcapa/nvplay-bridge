@@ -39,6 +39,18 @@ def network_tree_identity(directory: Path) -> dict:
     return {"tree_sha256": hashlib.sha256(encoded).hexdigest(), "files": len(files)}
 
 
+def process_identity(pid: int) -> dict | None:
+    """Distinguish a live owner from a recycled PID, including after a reboot."""
+    try:
+        fields = Path(f"/proc/{pid}/stat").read_text().rsplit(")", 1)[1].split()
+        if fields[0] == "Z":
+            return None
+        return {"pid": pid, "boot_id": Path("/proc/sys/kernel/random/boot_id").read_text().strip(),
+                "start_ticks": fields[19]}
+    except (OSError, IndexError):
+        return None
+
+
 RECIPES = {
     "session-window-debug": {"python": "3.12", "copies": {"app": "app/app"}},
     "wal-recovery-ordering": {"python": "3.13", "copies": {"app": "app"},
@@ -170,6 +182,61 @@ class Evaluation:
             raise RuntimeError("CC network adapter differs from the frozen installed tree")
         return {**actual, "require": "/opt/cc-node-runtime/timeout.cjs",
                 "cli": "/opt/claude-code-2.1.110/package/cli.js"}
+
+    def resume_attempt(self, name: str, effort: str, stage: str, repeat: int,
+                       budget: int, recover_interrupted: bool = False) -> bool:
+        """Keep all completed outcomes; explicitly archive dead, incomplete attempts."""
+        output = self.base / "runs" / stage / f"{name}--{effort}--r{repeat}"
+        if not output.exists():
+            return False
+        self.verify_source(name)
+        result_path = output / "result.json"
+        if result_path.exists():
+            result = json.loads(result_path.read_text())
+            expected = {"task": name, "effort": effort, "stage": stage,
+                        "repeat": repeat, "budget_seconds": budget}
+            if any(result.get(key) != value for key, value in expected.items()):
+                raise RuntimeError(f"completed attempt does not match resumed protocol: {output}")
+            if not isinstance(result.get("agent"), dict) or not isinstance(result.get("grade"), dict):
+                raise RuntimeError(f"completed attempt has no process/grade evidence: {output}")
+            print(json.dumps({"attempt_preserved": name, "effort": effort, "repeat": repeat,
+                              "score": result["grade"].get("score")}), flush=True)
+            return True
+        if not recover_interrupted:
+            raise RuntimeError(f"incomplete attempt requires --recover-interrupted: {output}")
+        owner_path = output / "owner.json"
+        if owner_path.exists():
+            owner = json.loads(owner_path.read_text())
+            if process_identity(owner["pid"]) == owner:
+                raise RuntimeError(f"incomplete attempt still has a live controller: {output}")
+        state_path = output / "agent-state.json"
+        if state_path.exists():
+            state = json.loads(state_path.read_text())
+            for argument in state.get("command", []):
+                if argument.startswith("--userspec="):
+                    uid = int(argument.split("=", 1)[1].split(":", 1)[0])
+                    # Never archive a still-running orphan, and never kill it here.
+                    for proc in Path("/proc").iterdir():
+                        if not proc.name.isdigit():
+                            continue
+                        try:
+                            if any(line.startswith("Uid:") and int(line.split()[1]) == uid
+                                   for line in (proc / "status").read_text().splitlines()):
+                                raise RuntimeError(f"incomplete attempt still has a live agent UID {uid}: {output}")
+                        except OSError:
+                            continue
+        archive = self.base / "runs-interrupted" / stage / f"{output.name}--{time.time_ns()}"
+        archive.parent.mkdir(parents=True, exist_ok=True)
+        output.rename(archive)
+        write_json(archive / "interruption.json", {
+            "status": "administratively_interrupted", "score": None,
+            "excluded_from_model_grades": True, "recorded_at": time.time(),
+            "reason": "explicit recovery of an incomplete attempt after its controller and agent stopped",
+            "task": name, "effort": effort, "stage": stage, "repeat": repeat,
+            "original_attempt": str(output.relative_to(self.base)),
+            "archive": str(archive.relative_to(self.base))})
+        print(json.dumps({"interrupted_attempt_archived": str(archive)}), flush=True)
+        return False
 
     def install(self, root: Path, packages: list[str], log: Path) -> None:
         if not packages:
@@ -330,6 +397,7 @@ class Evaluation:
             # Never silently rerun failed/incomplete attempts or overwrite evidence.
             raise FileExistsError(output)
         output.mkdir(parents=True)
+        write_json(output / "owner.json", process_identity(os.getpid()))
         write_json(output / "identity.json", identity)
         root = output / "agent-root"
         clone_root(self.base / "templates" / name / "agent", root)
@@ -423,6 +491,10 @@ def main() -> None:
     parser.add_argument("--budget", type=int, default=1800)
     parser.add_argument("--retry-controls", action="store_true",
                         help="preserve rejected/incomplete controls and repeat after an environment fix")
+    parser.add_argument("--resume", action="store_true",
+                        help="preserve every completed outcome and continue only missing attempts")
+    parser.add_argument("--recover-interrupted", action="store_true",
+                        help="with --resume, archive dead incomplete attempts as ungraded administrative interruptions")
     args = parser.parse_args()
     if not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_.-]*", args.stage):
         parser.error("stage must be a simple directory name")
@@ -430,6 +502,10 @@ def main() -> None:
         parser.error("repeat count and time budget must be positive")
     if args.retry_controls and args.action != "controls":
         parser.error("--retry-controls applies only to controls")
+    if (args.resume or args.recover_interrupted) and args.action != "run":
+        parser.error("resume options apply only to run")
+    if args.recover_interrupted and not args.resume:
+        parser.error("--recover-interrupted requires --resume")
     if args.action == "init":
         initialize_plan(args.base.resolve(), args.tasks or DEFAULT_PILOT)
         return
@@ -451,6 +527,9 @@ def main() -> None:
                 with ThreadPoolExecutor(max_workers=2) as pool:
                     futures = []
                     for effort in ("high", "max"):
+                        if args.resume and evaluation.resume_attempt(name, effort, args.stage, repeat,
+                                                                     args.budget, args.recover_interrupted):
+                            continue
                         uid = allocate_uid(evaluation.base)
                         futures.append(pool.submit(evaluation.attempt, name, effort,
                                                    args.stage, repeat, args.budget, uid))
