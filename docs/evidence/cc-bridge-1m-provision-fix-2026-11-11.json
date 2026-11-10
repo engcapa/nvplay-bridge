@@ -15,5 +15,35 @@
     "bytes": 5255,
     "sha256": "e58bec349baaac4fc219bb4f7b923fdb8c8eae6d0fef675e6de3205608fc5506"
   },
-  "runtime_rebuild_status": "in_progress"
+  "runtime_rebuild_status": "complete",
+  "fixed_archives": {
+    "perl=5.38.2-3.2ubuntu0.6": {
+      "filename": "perl_5.38.2-3.2ubuntu0.6_amd64.deb",
+      "sha256": "1a2341674a1c69e3247537ab243dc3d5878b74a39a696964232e1a4f5a27502d",
+      "verification_basis": "archived_authenticated_apt_index_sha256"
+    },
+    "perl-base=5.38.2-3.2ubuntu0.6": {
+      "filename": "perl-base_5.38.2-3.2ubuntu0.6_amd64.deb",
+      "sha256": "50e1b2c2646387a94664fbea144af1d1b16cf6e0778426baa198166ca3246697",
+      "verification_basis": "archived_authenticated_apt_index_sha256"
+    },
+    "perl-modules-5.38=5.38.2-3.2ubuntu0.6": {
+      "filename": "perl-modules-5.38_5.38.2-3.2ubuntu0.6_all.deb",
+      "sha256": "9c4c90145209d4f85be9255417008e8decb9cd5d189f446fd39ad096e31199cf",
+      "verification_basis": "archived_authenticated_apt_index_sha256"
+    },
+    "libperl5.38t64=5.38.2-3.2ubuntu0.6": {
+      "filename": "libperl5.38t64_5.38.2-3.2ubuntu0.6_amd64.deb",
+      "sha256": "e9e5ac9a657e0cacf5f0de977c1573c696ee74515d5136c4e9a0ce9467d32ae7",
+      "verification_basis": "archived_authenticated_apt_index_sha256"
+    }
+  },
+  "package_changes_from_previous": {},
+  "base_identity_match": {
+    "cc_cli_sha256": true,
+    "node_sha256": true,
+    "rootfs_sha256": true,
+    "managed_python": true,
+    "uv_wheel_sha256": true
+  }
 }
