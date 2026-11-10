@@ -33,3 +33,5 @@
 恢复新阶段的运行命令：`sudo -n python3 tools/run_terminal_native_campaign.py --base logs/eval-cc-1m-20261110-2355 --checkpoint-output docs/evidence/cc-bridge-1m-2026-11-10.json --push-checkpoints`。若控制器停止且原始运行目录仍在，用同一命令追加 `--resume --recover-interrupted`；重新启动服务并记录实际身份后再恢复。若目录被清空，按最新提交的结果、协议和未完成位置重建，不能将旧终态或产物视为仍然可用。
 
 **00:36:06 新阶段首个计分会话 `batched-eval-parity` max / r1 已启动**，独立 UID 20002。22 份对照/烟测 rootfs 全部压缩、tar compare 与 SHA256 校验后归档。实际请求协议及 agent 设置已核对：模型 `kimi-k3.1-pro[1m]`、启用自动压缩、窗口 720000、输出环境值 128000、请求 131072、API 29400000ms、会话墙钟截止为 null；首个实际上游请求为 max、131072。真实部署与控制器冻结身份见 [正式启动证据](evidence/cc-bridge-1m-protocol-2026-11-11.json)。启动后已执行工具，尚未完成或判分；结果以持续检查点为准。
+
+00:48 观察到 max 的请求 `73447fc8` 在已输出部分推理后长时间无新增语义进度。最后部分用量为输入 53,654、输出 4,468（均为推理）；CDP 显示 HTTP 200/h2，尚无 loadingFinished 或 loadingFailed。独立只读 CDP 观察 45 秒，没有收到该请求的 dataReceived/终态事件。CC 保持运行，未取消请求或改动等待策略；这只是未完成请求的等待观察，不能据此判定 bridge 缺陷、上游根因或模型得分。选定事件及原始日志前缀摘要见 [等待证据](evidence/cc-bridge-1m-idle-observation-2026-11-11.json)，后续终态将另行追加。

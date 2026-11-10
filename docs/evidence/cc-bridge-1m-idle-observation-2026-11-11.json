@@ -1,0 +1,201 @@
+{
+  "recorded_at": 1794329365.8784719,
+  "status": "pending_observation_not_a_completed_failure",
+  "root_cause_established": false,
+  "request_id": "73447fc8",
+  "request_age_seconds": 544.898,
+  "semantic_progress_age_seconds": 13.395,
+  "latest_observed_usage_is_partial": true,
+  "latest_observed_usage": {
+    "prompt_tokens": 53654,
+    "completion_tokens": 4512,
+    "total_tokens": 58166,
+    "prompt_tokens_details": {
+      "cached_tokens": 45056
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 4512
+    }
+  },
+  "selected_bridge_events": [
+    {
+      "event": "browser_start",
+      "ts": 1794328820.980317,
+      "id": "73447fc8",
+      "attempt": 1,
+      "reasoning_effort": "max",
+      "sec": 0.0,
+      "max_tokens": 131072
+    },
+    {
+      "event": "browser_tab",
+      "ts": 1794328821.0958803,
+      "id": "73447fc8",
+      "attempt": 1,
+      "sec": 0.116
+    },
+    {
+      "event": "browser_first_data",
+      "ts": 1794328840.5999293,
+      "id": "73447fc8",
+      "attempt": 1,
+      "sec": 19.62
+    },
+    {
+      "event": "browser_first_content",
+      "ts": 1794328840.6004539,
+      "id": "73447fc8",
+      "attempt": 1,
+      "sec": 19.62
+    },
+    {
+      "event": "browser_abort",
+      "ts": 1794329352.377455,
+      "id": "73447fc8",
+      "attempt": 1,
+      "sec": 531.397
+    },
+    {
+      "event": "browser_buffer",
+      "ts": 1794329352.395691,
+      "id": "73447fc8",
+      "attempt": 1,
+      "sec": 531.415
+    },
+    {
+      "event": "browser_pool_release",
+      "ts": 1794329352.3957705,
+      "id": "73447fc8",
+      "attempt": 1,
+      "sec": 531.415
+    },
+    {
+      "event": "browser_error",
+      "ts": 1794329352.4836097,
+      "id": "73447fc8",
+      "attempt": 1,
+      "status": 502,
+      "sec": 531.503,
+      "committed": true,
+      "counts": {
+        "thinking_chars": 22769,
+        "text_chars": 0,
+        "tool_calls": 0
+      },
+      "usage": {
+        "prompt_tokens": 53654,
+        "completion_tokens": 4512,
+        "total_tokens": 58166,
+        "prompt_tokens_details": {
+          "cached_tokens": 45056
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 4512
+        }
+      },
+      "error_sha256": "40386fb42330c97fa67867b4d37b7373d52568469d217975ca46c269a2be0bbe"
+    },
+    {
+      "event": "browser_error",
+      "ts": 1794329352.4836097,
+      "id": "73447fc8",
+      "attempt": 1,
+      "status": 502,
+      "sec": 531.503,
+      "committed": true,
+      "counts": {
+        "thinking_chars": 22769,
+        "text_chars": 0,
+        "tool_calls": 0
+      },
+      "usage": {
+        "prompt_tokens": 53654,
+        "completion_tokens": 4512,
+        "total_tokens": 58166,
+        "prompt_tokens_details": {
+          "cached_tokens": 45056
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 4512
+        }
+      },
+      "error_sha256": "40386fb42330c97fa67867b4d37b7373d52568469d217975ca46c269a2be0bbe"
+    }
+  ],
+  "cdp_events": [
+    {
+      "ts": 1794328824.5368233,
+      "event": "prediction_request",
+      "cdp_request_id": "40351.504",
+      "method": "POST",
+      "target_id": "989A41C6D7B9110BA2E0CC6F6704D9C5"
+    },
+    {
+      "ts": 1794328840.52488,
+      "event": "prediction_response",
+      "cdp_request_id": "40351.504",
+      "status": 200,
+      "protocol": "h2",
+      "mimeType": "text/event-stream",
+      "target_id": "989A41C6D7B9110BA2E0CC6F6704D9C5"
+    },
+    {
+      "ts": 1794329352.326289,
+      "cdp_request_id": "40351.504",
+      "status": 200,
+      "protocol": "h2",
+      "mimeType": "text/event-stream",
+      "elapsed_seconds": 527.946,
+      "event": "prediction_failed",
+      "errorText": "net::ERR_CONNECTION_CLOSED",
+      "canceled": false,
+      "target_id": "989A41C6D7B9110BA2E0CC6F6704D9C5"
+    }
+  ],
+  "independent_45_second_probe": {
+    "started_at": 1794329219.0967326,
+    "finished_at": 1794329264.2929072,
+    "request_id": "40351.504",
+    "bridge_request_id": "73447fc8",
+    "target_id": "989A41C6D7B9110BA2E0CC6F6704D9C5",
+    "events": [],
+    "received_bytes": 0,
+    "observer_only": true,
+    "upstream_request_cancelled_by_probe": false
+  },
+  "agent_cancelled": false,
+  "model_grade": null,
+  "bridge_health": {
+    "status": "ok",
+    "browser_output_tokens": {
+      "maximum": 131072,
+      "fixed": 131072
+    },
+    "browser_timeouts": {
+      "total_seconds": 28800,
+      "first_byte_seconds": 3600.0,
+      "idle_seconds": 3600.0
+    },
+    "browser_pool": {
+      "size": 5,
+      "tabs": {
+        "kpool=1": "ready",
+        "kpool=2": "ready",
+        "kpool=3": "ready",
+        "kpool=4": "busy",
+        "kpool=5": "ready"
+      },
+      "errors": {}
+    }
+  },
+  "original_log_prefixes": {
+    "bridge-debug.jsonl": {
+      "bytes": 59235,
+      "sha256": "e08278588387de9349e992695bb5a493f34a155dac833ff85838d95bcfd6214a"
+    },
+    "cdp-network.jsonl": {
+      "bytes": 8737,
+      "sha256": "915cb7bb926d6b858985c3f283658de6f36cc0186b3b1d3f04186682619cbacb"
+    }
+  }
+}
