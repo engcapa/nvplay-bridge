@@ -1,6 +1,6 @@
 {
   "recorded_at": 1794329365.8784719,
-  "status": "pending_observation_not_a_completed_failure",
+  "status": "request_failed_cc_attempt_continues",
   "root_cause_established": false,
   "request_id": "73447fc8",
   "request_age_seconds": 544.898,
@@ -196,6 +196,84 @@
     "cdp-network.jsonl": {
       "bytes": 8737,
       "sha256": "915cb7bb926d6b858985c3f283658de6f36cc0186b3b1d3f04186682619cbacb"
+    }
+  },
+  "initial_snapshot_label_correction": {
+    "previous_status": "pending_observation_not_a_completed_failure",
+    "reason": "request reached its terminal state during snapshot collection; the terminal event was already included, but the top-level pending label was stale",
+    "corrected_at": 1794329730.3288064
+  },
+  "terminal_observation": {
+    "at": 1794329730.328807,
+    "bridge": {
+      "event": "browser_error",
+      "ts": 1794329352.4836097,
+      "id": "73447fc8",
+      "attempt": 1,
+      "status": 502,
+      "sec": 531.503,
+      "committed": true,
+      "counts": {
+        "thinking_chars": 22769,
+        "text_chars": 0,
+        "tool_calls": 0
+      },
+      "usage": {
+        "prompt_tokens": 53654,
+        "completion_tokens": 4512,
+        "total_tokens": 58166,
+        "prompt_tokens_details": {
+          "cached_tokens": 45056
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 4512
+        }
+      },
+      "error_sha256": "40386fb42330c97fa67867b4d37b7373d52568469d217975ca46c269a2be0bbe"
+    },
+    "cdp": [
+      {
+        "ts": 1794328824.5368233,
+        "event": "prediction_request",
+        "cdp_request_id": "40351.504",
+        "method": "POST",
+        "target_id": "989A41C6D7B9110BA2E0CC6F6704D9C5"
+      },
+      {
+        "ts": 1794328840.52488,
+        "event": "prediction_response",
+        "cdp_request_id": "40351.504",
+        "status": 200,
+        "protocol": "h2",
+        "mimeType": "text/event-stream",
+        "target_id": "989A41C6D7B9110BA2E0CC6F6704D9C5"
+      },
+      {
+        "ts": 1794329352.326289,
+        "cdp_request_id": "40351.504",
+        "status": 200,
+        "protocol": "h2",
+        "mimeType": "text/event-stream",
+        "elapsed_seconds": 527.946,
+        "event": "prediction_failed",
+        "errorText": "net::ERR_CONNECTION_CLOSED",
+        "canceled": false,
+        "target_id": "989A41C6D7B9110BA2E0CC6F6704D9C5"
+      }
+    ],
+    "root_cause_established": false,
+    "configured_wait_timeout_fired": false,
+    "upstream_cancelled_by_operator": false,
+    "client_continued_with_fresh_requests": true,
+    "original_log_prefixes": {
+      "bridge-debug.jsonl": {
+        "bytes": 85771,
+        "sha256": "e0c18e7ae934037144047a6f6a01a4ee7ab963f35cab7e19cd5ce7b75ec13b16"
+      },
+      "cdp-network.jsonl": {
+        "bytes": 9559,
+        "sha256": "941141f37d3625a37d150c98ab4cf7be2e69fde42ed6515183f71be5566bd9a5"
+      }
     }
   }
 }
