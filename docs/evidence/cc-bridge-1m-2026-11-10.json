@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794328137.6138265,
+  "checkpoint_at": 1794328211.2363276,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-1m-20261110-2355",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -552,8 +552,8 @@
     "host_memory_limit_bytes": "30064771072"
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794328133.8764124,
-    "commit": "f45dd61e7c34acab9837ee7282320ede734499ae",
+    "attempted_at": 1794328137.6437194,
+    "commit": "e2e1d5aaf96bc7b68bd7325e5bff4701612059ef",
     "pushed": true,
     "returncode": 0
   },
@@ -930,7 +930,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794328137.6155922,
+    "generated_at": 1794328211.2377574,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
@@ -1020,7 +1020,7 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "5ca8ff2381e23f02ce4ef00fcbe9e7a7d7c350421e0a53ceca992d1a538bfaf3",
+      "sha256": "e8836f4f17c99534ee3c1058aedd350515308a9281586642f868d34d5e58029d",
       "size": 134
     },
     {
@@ -1037,6 +1037,11 @@
       "path": "continuation-regression.log",
       "sha256": "ad51de6dd2235222614a13af19d06c592da103f851712bb00704c82453c24bb7",
       "size": 1581
+    },
+    {
+      "path": "control-artifact-review.json",
+      "sha256": "b0691b57e8efed10c660b3c695549b524874f3ac74f164a8ddce0d3d073af8f0",
+      "size": 7647
     },
     {
       "path": "controls/batched-eval-parity/result.json",
@@ -1165,8 +1170,8 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "e51f4785d323e40106a3e01f6ba8b92132d869dd3a01f04b61d6bc88e4a26469",
-      "size": 717
+      "sha256": "92632d89e395822a166484adb17059904392de4303acbc4a6224c8e557259328",
+      "size": 808
     },
     {
       "path": "settings-formal-high.json",
@@ -1215,6 +1220,26 @@
     }
   ],
   "compressed_root_evidence": [
+    {
+      "directory": "controls/batched-eval-parity/baseline",
+      "archived_at": 1794328174.1595016,
+      "root": "agent-root",
+      "archive": "agent-root.tar.gz",
+      "sha256": "eae85c9c06578eaba0e91ec2cb7198db680e884552c26db26b5ce819b9669eb4",
+      "bytes": 507771288,
+      "tar_compare_passed_before_reclaim": true,
+      "restore": "sudo tar -xpf agent-root.tar.gz -C ."
+    },
+    {
+      "directory": "controls/batched-eval-parity/baseline",
+      "archived_at": 1794328207.3502097,
+      "root": "verifier-root",
+      "archive": "verifier-root.tar.gz",
+      "sha256": "cd9c5f67aba3590a6359bbcf219229597606f25e07567503efee183ec700baef",
+      "bytes": 513262970,
+      "tar_compare_passed_before_reclaim": true,
+      "restore": "sudo tar -xpf verifier-root.tar.gz -C ."
+    },
     {
       "directory": "controls/embedding-drift-monitor/baseline",
       "archived_at": 1794327501.1365619,
