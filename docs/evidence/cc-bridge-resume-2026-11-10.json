@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794302458.7142189,
+  "checkpoint_at": 1794302578.7659411,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-resume-20261110-1647",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -505,7 +505,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794302458.7155678,
+    "generated_at": 1794302578.7677612,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
@@ -534,18 +534,7 @@
     "recovering_tabs": []
   },
   "bridge_activity": {
-    "events_last_300s": {
-      "request": 4,
-      "payload": 4,
-      "browser_start": 4,
-      "browser_tab": 4,
-      "browser_first_data": 4,
-      "browser_progress": 7,
-      "browser_first_content": 4,
-      "browser_buffer": 4,
-      "browser_pool_release": 4,
-      "browser_done": 4
-    },
+    "events_last_300s": {},
     "active": [],
     "recent_errors": [],
     "recent_upstream_errors": [],
@@ -701,6 +690,26 @@
       "archive": "agent-root.tar.gz",
       "sha256": "273109a236a5669add3488dff508c974cdfcf75b012eb5ebe376abcf17e3daf3",
       "bytes": 555103494,
+      "tar_compare_passed_before_reclaim": true,
+      "restore": "sudo tar -xpf agent-root.tar.gz -C ."
+    },
+    {
+      "directory": "controls/embedding-drift-monitor/baseline",
+      "archived_at": 1794302500.9432175,
+      "root": "verifier-root",
+      "archive": "verifier-root.tar.gz",
+      "sha256": "249c8f708482c5a2d020c67700da644ef4705fa0258876e7551b1ed8bc00f115",
+      "bytes": 564549979,
+      "tar_compare_passed_before_reclaim": true,
+      "restore": "sudo tar -xpf verifier-root.tar.gz -C ."
+    },
+    {
+      "directory": "controls/embedding-drift-monitor/oracle",
+      "archived_at": 1794302564.5889168,
+      "root": "agent-root",
+      "archive": "agent-root.tar.gz",
+      "sha256": "cc06e1e582b546403114080d8c061086cd4d3716e99b70229354bc547f157de2",
+      "bytes": 555104055,
       "tar_compare_passed_before_reclaim": true,
       "restore": "sudo tar -xpf agent-root.tar.gz -C ."
     },
