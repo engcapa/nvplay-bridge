@@ -1,15 +1,128 @@
 {
-  "schema_version": 1,
-  "status": "restoring_environment",
-  "resumed_at": "2026-11-10T16:47:00+08:00",
-  "run_directory": "logs/eval-cc-resume-20261110-1647",
+  "schema_version": 2,
+  "checkpoint_at": 1794300794.0766191,
+  "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-resume-20261110-1647",
+  "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
   "historical_completed_observations_preserved": 12,
   "historical_administrative_interruptions_excluded": 2,
-  "new_formal_attempts_planned": 30,
-  "new_formal_attempts_completed": 0,
   "external_proxy": "http://127.0.0.1:31128",
   "local_bridge_and_cdp_direct": true,
   "other_projects_in_scope": false,
-  "raw_logs_survive_cleanup": false
+  "status": "restoring_environment",
+  "bridge_runtime": {
+    "started_at": 1794300598.196055,
+    "source_head": "508a582197501490ff84c781f2bd40af187c2aa5",
+    "source_module_sha256": {
+      "nvplay_bridge.py": "537f857a142c8d4391d02837bab2d2123b2fe802185f785d34696dde1287856f",
+      "browser_upstream.py": "4527940480f77254813c53d850d16df919aa586e709bdb703a7e47552ed15925",
+      "browser_events.py": "9ca0a5b7d18edcde37bf19aef27ddf226b588f840f97b4b9df46fc08042daf29",
+      "stream_support.py": "f46b07b3cdf1e4cae0f409caf26c0a279bd57477f5259ee8bba045c14f95f602",
+      "responses_api.py": "da451613bf0a1c4aa12ef03effc4d5ffe1ea330fb48006f9d09925233f9580c6",
+      "responses_support.py": "ed907b22106ff58923efa5431c20422e59bfdeb9a719b0766969522e444f033e"
+    },
+    "configuration": {
+      "UPSTREAM_KIND": "browser",
+      "UPSTREAM_MODEL": "moonshotai/kimi-k3.1-pro",
+      "BROWSER_CDP_PORT": "9225",
+      "BROWSER_POOL_SIZE": "5",
+      "BROWSER_TIMEOUT": "28800",
+      "BROWSER_FIRST_BYTE_TIMEOUT": "3600",
+      "BROWSER_IDLE_TIMEOUT": "3600",
+      "BROWSER_MAX_TOKENS": "131072",
+      "BROWSER_FIXED_MAX_TOKENS": "131072",
+      "BROWSER_HTTP_5XX_RETRIES": "2",
+      "BROWSER_DEBUG_LOG": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-resume-20261110-1647/bridge-debug.jsonl"
+    },
+    "fixed_max_output_tokens": 131072,
+    "request_timeout_seconds": 28800,
+    "first_byte_timeout_seconds": 3600,
+    "idle_timeout_seconds": 3600,
+    "cdp_port": 9225,
+    "bridge_port": 8083,
+    "pid": 70085
+  },
+  "controls": {},
+  "results": {
+    "generated_at": 1794300794.0772505,
+    "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
+    "totals": {},
+    "attempts": [],
+    "pending": []
+  },
+  "new_formal_attempts_planned": 30,
+  "new_formal_attempts_completed": 0,
+  "bridge_health": {
+    "status": "ok",
+    "model": "moonshotai/kimi-k3.1-pro",
+    "upstream_kind": "browser",
+    "history_reasoning": "preserve",
+    "browser_output_tokens": {
+      "maximum": 131072,
+      "fixed": 131072
+    },
+    "browser_timeouts": {
+      "total_seconds": 28800,
+      "first_byte_seconds": 3600.0,
+      "idle_seconds": 3600.0
+    },
+    "pool_states": {
+      "ready": 5
+    },
+    "recovering_tabs": []
+  },
+  "bridge_activity": {
+    "events_last_300s": {
+      "request": 1,
+      "payload": 1,
+      "browser_start": 1,
+      "pool_recovery_start": 5,
+      "pool_activation": 5,
+      "pool_page_ready": 5,
+      "pool_ready": 5,
+      "browser_tab": 1,
+      "browser_first_data": 1,
+      "browser_progress": 1,
+      "browser_first_content": 1,
+      "browser_buffer": 1,
+      "browser_pool_release": 1,
+      "browser_done": 1
+    },
+    "active": [],
+    "recent_errors": [],
+    "recent_upstream_errors": [],
+    "recent_retries": []
+  },
+  "evidence_fingerprints": [
+    {
+      "path": "baseline-regression.log",
+      "sha256": "38c203a02bac73fdbf19488bfb40ac28eabf7a259fe644b4fc73f6b351dae46f",
+      "size": 946
+    },
+    {
+      "path": "brave-process.json",
+      "sha256": "f57a47888ffedcf961d1364c7b3f5db9ae75439f7acd45ba696c2d4504b1ad8d",
+      "size": 654
+    },
+    {
+      "path": "bridge-monitor-process.json",
+      "sha256": "ef0aee30a5c3b7643f24094bf20bb9922db58261fed9195e2dbb0155096adb68",
+      "size": 19
+    },
+    {
+      "path": "bridge-runtime.json",
+      "sha256": "350d1b38b72eccd07c49df7768630e2610abd594e4b593f64422fd3c9701c917",
+      "size": 1409
+    },
+    {
+      "path": "readiness-response.json",
+      "sha256": "281aea4cc3dd170f982344b51999e4a86eddce5473b69fd1d5c14245641b30e0",
+      "size": 336
+    },
+    {
+      "path": "uv-pypi.json",
+      "sha256": "d76968f28f0192acb52316a9718b613fea587ca38c55175d1559d1c9a01e2a13",
+      "size": 5096977
+    }
+  ]
 }
