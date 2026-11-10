@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794307021.3723407,
+  "checkpoint_at": 1794307061.4136415,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-resume-20261110-1647",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -541,7 +541,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794307021.3977728,
+    "generated_at": 1794307061.4416847,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
@@ -552,9 +552,9 @@
         "task": "session-window-debug",
         "effort": "high",
         "started_at": 1794304311.0699286,
-        "elapsed_seconds": 2710.3,
-        "tool_calls": 48,
-        "last_tool": "Edit"
+        "elapsed_seconds": 2750.4,
+        "tool_calls": 49,
+        "last_tool": "Bash"
       },
       {
         "attempt": "runs/formal-128k-fixed/session-window-debug--max--r1",
@@ -562,7 +562,7 @@
         "task": "session-window-debug",
         "effort": "max",
         "started_at": 1794304311.0446827,
-        "elapsed_seconds": 2710.3,
+        "elapsed_seconds": 2750.4,
         "tool_calls": 53,
         "last_tool": "Read"
       }
@@ -586,49 +586,88 @@
       "idle_seconds": 3600.0
     },
     "pool_states": {
-      "ready": 3,
-      "busy": 2
+      "busy": 2,
+      "ready": 3
     },
     "recovering_tabs": []
   },
   "bridge_activity": {
     "events_last_300s": {
-      "browser_progress": 86,
-      "browser_buffer": 9,
-      "browser_pool_release": 9,
+      "browser_progress": 75,
+      "browser_buffer": 10,
+      "browser_pool_release": 10,
       "browser_done": 9,
       "request": 9,
       "payload": 9,
-      "browser_start": 9,
-      "browser_tab": 9,
+      "browser_start": 10,
+      "browser_tab": 10,
       "browser_first_data": 7,
-      "browser_first_content": 7
+      "browser_first_content": 7,
+      "browser_http_error": 1,
+      "browser_abort": 1,
+      "pool_recovery_start": 1,
+      "upstream_retry": 1,
+      "pool_activation": 2,
+      "pool_page_ready": 1,
+      "pool_ready": 1
     },
     "active": [
       {
-        "id": "1bf5c3bd",
+        "id": "4b036414",
+        "retry_count": 1,
+        "reasoning_effort": "max",
+        "last_retry": {
+          "reason": "nvidia_pool_acquire_timeout",
+          "status": 500,
+          "delay": 5.285
+        },
+        "phase": "browser_tab",
+        "attempt": 2,
+        "tab_id": "kpool=1",
+        "age_seconds": 64.6,
+        "activity_age_seconds": 10.1
+      },
+      {
+        "id": "b448ac80",
         "retry_count": 0,
         "phase": "browser_tab",
         "attempt": 1,
         "reasoning_effort": "high",
-        "tab_id": "kpool=4",
-        "age_seconds": 27.6,
-        "activity_age_seconds": 27.6
-      },
-      {
-        "id": "4b036414",
-        "retry_count": 0,
-        "phase": "browser_tab",
-        "attempt": 1,
-        "reasoning_effort": "max",
-        "tab_id": "kpool=5",
-        "age_seconds": 24.6,
-        "activity_age_seconds": 24.4
+        "tab_id": "kpool=3",
+        "age_seconds": 1.9,
+        "activity_age_seconds": 1.8
       }
     ],
     "recent_errors": [],
-    "recent_upstream_errors": [],
-    "recent_retries": []
+    "recent_upstream_errors": [
+      {
+        "event": "browser_http_error",
+        "ts": 1794307045.9363027,
+        "id": "4b036414",
+        "attempt": 1,
+        "reasoning_effort": "max",
+        "status": 500,
+        "sec": 49.127
+      }
+    ],
+    "recent_retries": [
+      {
+        "event": "upstream_retry",
+        "ts": 1794307046.0326605,
+        "id": "4b036414",
+        "attempt": 1,
+        "reasoning_effort": "max",
+        "status": 500,
+        "sec": 49.224,
+        "counts": {
+          "thinking_chars": 0,
+          "text_chars": 0,
+          "tool_calls": 0
+        },
+        "usage": {},
+        "error_sha256": "c0c7c81a82584266f4c648dfdf96793a96b19a92dd951f2aada7e0327ab2c75c"
+      }
+    ]
   },
   "evidence_fingerprints": [
     {
@@ -758,7 +797,7 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "3175466f964a677a1f9515e9450c79f374b8db9865a151fb6b3c1c5ac144e689",
+      "sha256": "94f5ab545b9e4c5dc4ab76010e1ea32b3b7c91c47442326bfac3bfb67da34dd4",
       "size": 787
     },
     {
