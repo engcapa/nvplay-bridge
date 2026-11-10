@@ -1,0 +1,67 @@
+{
+  "audited_at": 1794302733.778931,
+  "passed": true,
+  "tasks": [
+    {
+      "task": "session-window-debug",
+      "input_files": 8,
+      "original_input_files_match": true,
+      "hidden_roots_absent_from_agent": true,
+      "fresh_cc_home": true,
+      "verifier_has_tests": true,
+      "agent_and_verifier_distinct_directories": true,
+      "agent_proc_empty": true,
+      "input_manifest_sha256": "45296fec25d9815ff643d75ad30a91ea2d25e642543c569d36b52ea9c4c356ec",
+      "passed": true
+    },
+    {
+      "task": "embedding-drift-monitor",
+      "input_files": 14,
+      "original_input_files_match": true,
+      "hidden_roots_absent_from_agent": true,
+      "fresh_cc_home": true,
+      "verifier_has_tests": true,
+      "agent_and_verifier_distinct_directories": true,
+      "agent_proc_empty": true,
+      "input_manifest_sha256": "102d1027cdb7abd9d8f187b4e3f79c382f3c8ec6dd277f14e852da7fb5803c18",
+      "passed": true
+    },
+    {
+      "task": "batched-eval-parity",
+      "input_files": 22,
+      "original_input_files_match": true,
+      "hidden_roots_absent_from_agent": true,
+      "fresh_cc_home": true,
+      "verifier_has_tests": true,
+      "agent_and_verifier_distinct_directories": true,
+      "agent_proc_empty": true,
+      "input_manifest_sha256": "5cb3c35058fa04b99b755b8d1978668c48efd5aeb93a98e7a13c9a55b7f81a6c",
+      "passed": true
+    },
+    {
+      "task": "mvcc-lsm-compaction",
+      "input_files": 14,
+      "original_input_files_match": true,
+      "hidden_roots_absent_from_agent": true,
+      "fresh_cc_home": true,
+      "verifier_has_tests": true,
+      "agent_and_verifier_distinct_directories": true,
+      "agent_proc_empty": true,
+      "input_manifest_sha256": "26490725f3e2a17e082ece6d7542f6acbc1f3ddf846a6fef6b7c64fe35e58286",
+      "passed": true
+    },
+    {
+      "task": "ks-solver-cpp",
+      "input_files": 1,
+      "original_input_files_match": true,
+      "hidden_roots_absent_from_agent": true,
+      "fresh_cc_home": true,
+      "verifier_has_tests": true,
+      "agent_and_verifier_distinct_directories": true,
+      "agent_proc_empty": true,
+      "input_manifest_sha256": "84bffbc4709aee0f8d8fbd61f9616b18ebd2776f4d8866e048ad1d8b38851bca",
+      "passed": true
+    }
+  ],
+  "scope": "prepared templates and pinned task inputs; runtime UID allocation is recorded per attempt"
+}
