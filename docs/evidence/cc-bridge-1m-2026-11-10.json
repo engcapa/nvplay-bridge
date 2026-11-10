@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794326889.0292714,
+  "checkpoint_at": 1794327014.5705361,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-1m-20261110-2355",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -391,6 +391,52 @@
       "size": 18646978
     }
   },
+  "wheels": {
+    "iniconfig-2.3.1-py3-none-any.whl": {
+      "sha256": "9121e2c1fdb355232495be3194c8dfe87ccc2d5dee45947b78e68f499790d7a7",
+      "size": 7552
+    },
+    "numpy-1.26.4-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl": {
+      "sha256": "666dbfb6ec68962c033a450943ded891bed2d54e6755e35e5835d63f4f6931d5",
+      "size": 18252005
+    },
+    "numpy-1.26.4-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl": {
+      "sha256": "675d61ffbfa78604709862923189bad94014bef562cc35cf61d3a07bba02a7ed",
+      "size": 17950613
+    },
+    "numpy-2.1.3-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl": {
+      "sha256": "2312b2aa89e1f43ecea6da6ea9a810d06aae08321609d8dc0d0eda6d946a541b",
+      "size": 16043185
+    },
+    "packaging-26.3-py3-none-any.whl": {
+      "sha256": "d7193f7c8e4e93f444fde0262bf90af30e16fa0ad0ad44cb553c87339b23cd1c",
+      "size": 129956
+    },
+    "pluggy-1.7.0-py3-none-any.whl": {
+      "sha256": "7dd7b0d8832ba3cb632c306926ded123429211b83641b35dc5c41ad2d34f9bec",
+      "size": 27082
+    },
+    "pygments-2.21.0-py3-none-any.whl": {
+      "sha256": "2363c69b61c4a97c838da3b130dcd6468f4848992b21a82f2a63ec34377137d9",
+      "size": 1250147
+    },
+    "pytest-9.1.1-py3-none-any.whl": {
+      "sha256": "37a86b45efb9a47a61a36449063e8e18d0cab3161329fc099eb21783169c4f0c",
+      "size": 386536
+    },
+    "pytest_json_ctrf-0.5.2-py3-none-any.whl": {
+      "sha256": "a427205bf624a1d85ae807aa20f30ddd194699a9621a13178f766179658d9607",
+      "size": 7397
+    },
+    "scipy-1.11.4-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl": {
+      "sha256": "ad669df80528aeca5f557712102538f4f37e503f0c5b9541655016dd0932ca79",
+      "size": 35777534
+    },
+    "scipy-1.14.1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl": {
+      "sha256": "8f9ea80f2e65bdaa0b7627fb00cbeb2daf163caa015e59b7516395fe3bd1e066",
+      "size": 40849331
+    }
+  },
   "host_resources": {
     "recorded_at": 1794326675.3561845,
     "cpu_affinity": [
@@ -465,15 +511,15 @@
     "host_memory_limit_bytes": "30064771072"
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794326765.8070297,
-    "commit": "74fce2bfb9b1207d0de72facd95bfed7edb8edcf",
+    "attempted_at": 1794326889.0445826,
+    "commit": "52833f08429b96e2a5c9353ac7a92be4bf2af2a7",
     "pushed": true,
     "returncode": 0
   },
   "controls": {},
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794326889.0301406,
+    "generated_at": 1794327014.571322,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
@@ -507,23 +553,7 @@
     "recovering_tabs": []
   },
   "bridge_activity": {
-    "events_last_300s": {
-      "request": 1,
-      "browser_output_limit_override": 1,
-      "payload": 1,
-      "browser_start": 1,
-      "pool_recovery_start": 5,
-      "pool_activation": 7,
-      "pool_page_ready": 5,
-      "pool_ready": 5,
-      "browser_tab": 1,
-      "browser_first_data": 1,
-      "browser_progress": 1,
-      "browser_first_content": 1,
-      "browser_buffer": 1,
-      "browser_pool_release": 1,
-      "browser_done": 1
-    },
+    "events_last_300s": {},
     "active": [],
     "recent_errors": [],
     "recent_upstream_errors": [],
@@ -567,7 +597,7 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "2de93659b03cdcaa79f45918c5cf5bce593fdd05b36e044b57bd01e9b812f472",
+      "sha256": "9a450ec047da0cf39cea2c9b17266d97251f9d340384d9a764c48cb2fe93e73f",
       "size": 134
     },
     {
@@ -637,8 +667,8 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "940c96f3afaeda4561409d5f653667a3598e355b4570328950c47e50cb1b04e6",
-      "size": 716
+      "sha256": "c97eca074524d724d66dffa3eab493458c19c343a71c2fa72a7c00bd7f982b45",
+      "size": 717
     },
     {
       "path": "settings-formal-high.json",
@@ -654,6 +684,11 @@
       "path": "uv-download-process.json",
       "sha256": "9cbbf5eaae52e9314c957f12d2d8c9d4d8ed636d5dd668599ef5e8cd803c14cc",
       "size": 296
+    },
+    {
+      "path": "wheel-manifest.json",
+      "sha256": "d06171c37e88dc2d81d6bced06b86d02157fd6716e61c5d04aeaad68b8fc1daa",
+      "size": 1809
     },
     {
       "path": "wheels-process.json",
