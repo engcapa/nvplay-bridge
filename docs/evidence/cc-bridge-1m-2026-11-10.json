@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794328531.9055142,
+  "checkpoint_at": 1794328534.9602234,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-1m-20261110-2355",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -552,8 +552,8 @@
     "host_memory_limit_bytes": "30064771072"
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794328527.8289514,
-    "commit": "5d8b652a36df9cd065b3534711badf6c34f10ece",
+    "attempted_at": 1794328531.9333045,
+    "commit": "e270ef162c8bb18069639cf17735a6895e12b67b",
     "pushed": true,
     "returncode": 0
   },
@@ -930,7 +930,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794328531.9068003,
+    "generated_at": 1794328534.9615126,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
@@ -942,7 +942,7 @@
   "combined_plan_positions_completed": 5,
   "campaign": {
     "controller_alive": true,
-    "status": "validating_controls",
+    "status": "control_validated",
     "task": "batched-eval-parity"
   },
   "status": "controls_validated",
@@ -1005,8 +1005,8 @@
     },
     {
       "path": "campaign-state.json",
-      "sha256": "0e4f4d6acab54c1abe38a17a9789cb2641d24d9130c56b0b3fa58de70d4c35de",
-      "size": 3764
+      "sha256": "d6c6ebf1e0c62133c9bf7d17caf0fdfa33fe3e40c822713078ee0f267d655157",
+      "size": 3762
     },
     {
       "path": "cdp-monitor-process.json",
@@ -1020,7 +1020,7 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "03f914b0aa87e4b78956f2bced9615d7b3317b077573a6328077549937dc4b6e",
+      "sha256": "56f08b2c898c0e9c8dc7aeebc151357b7cde45adb695cd9a8c9394992a0084f8",
       "size": 134
     },
     {
@@ -1170,8 +1170,8 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "a5d17a79528a005950d7ce05020ee94df871ef58de287482d75e633a7063123a",
-      "size": 807
+      "sha256": "8ffe2e51aa97cd563d24decff9f809ade00a1e69217e77d747e58252bdee6762",
+      "size": 808
     },
     {
       "path": "settings-formal-high.json",
