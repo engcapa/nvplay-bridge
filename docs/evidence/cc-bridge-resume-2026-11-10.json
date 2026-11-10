@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794303141.361186,
+  "checkpoint_at": 1794303172.8751345,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-resume-20261110-1647",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -244,7 +244,7 @@
     }
   },
   "host_resources": {
-    "recorded_at": 1794301610.0209613,
+    "recorded_at": 1794303172.7429948,
     "cpu_affinity": [
       0,
       1,
@@ -255,7 +255,10 @@
       6,
       7
     ],
-    "docker_processes_started": 0
+    "docker_processes_started": 0,
+    "host_cpu_quota": "800000",
+    "host_cpu_period": "100000",
+    "host_memory_limit_bytes": "34359738368"
   },
   "smoke": {
     "recorded_at": 1794302236.867496,
@@ -516,7 +519,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794303141.3627703,
+    "generated_at": 1794303172.8772967,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
@@ -624,8 +627,8 @@
     },
     {
       "path": "host-resources.json",
-      "sha256": "890aa10763f7ecc1825d0739a95a7b26f81fe41443925026b2fc5d142aab16bb",
-      "size": 153
+      "sha256": "0e10a8e31c57b4bbe4de58aad3039351abe6a9ff22c3bc5a2b36bafbf045a944",
+      "size": 258
     },
     {
       "path": "native-base-manifest.json",
