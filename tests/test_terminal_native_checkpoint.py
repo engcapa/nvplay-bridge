@@ -156,6 +156,21 @@ class NativeCheckpointTests(unittest.TestCase):
         self.assertEqual(result["combined_plan_positions_completed"], 6)
         self.assertEqual(result["status"], "formal_complete")
 
+    def test_transport_transition_keeps_completed_local_slots_and_protocol(self):
+        plan = json.loads((self.base / "evaluation-plan.json").read_text())
+        previous = {"task": "fixture", "repeat": 1, "effort": "max", "stage": "before-fix"}
+        plan.update(formal_native_subset={"schedule": [{}, {}], "preserved_local_schedule": [previous]},
+                    continuation={"preserved_completed_attempts": 4},
+                    protocol_history=[{"stage": "before-fix", "schedule": [previous]}])
+        (self.base / "evaluation-plan.json").write_text(json.dumps(plan))
+        for completed, expected_status in ((1, "formal_incomplete"), (3, "formal_complete")):
+            with self.subTest(completed=completed), self.partial_report(count=completed):
+                result = self.collect()
+            self.assertEqual(result["new_formal_attempts_planned"], 3)
+            self.assertEqual(result["combined_plan_positions_completed"], 4 + completed)
+            self.assertEqual(result["status"], expected_status)
+            self.assertEqual(result["protocol"]["protocol_history"], plan["protocol_history"])
+
 
 class CheckpointPushTests(unittest.TestCase):
     def setUp(self):

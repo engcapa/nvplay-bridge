@@ -166,7 +166,7 @@ def main():
 
         def evaluated(expression, timeout=5):
             state = original_eval(expression, timeout)
-            if "__bridgeDrain" in expression and state.get("error"):
+            if expression.startswith("window.__bridgeDrain(") and state.get("error"):
                 drains.append({"case": active.get("name"), "ts": time.time(),
                                "data_chars": len(state.get("data") or ""),
                                "done": state.get("done"), "status": state.get("status")})

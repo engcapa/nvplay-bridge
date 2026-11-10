@@ -73,7 +73,7 @@ def collect(base: Path, health_url: str) -> dict:
         result["protocol"] = {key: plan[key] for key in (
             "source_commit", "source_archive_sha256", "cc_version", "model", "efforts", "pilot_tasks",
             "formal_repeats", "formal_task_budget_seconds", "formal_native_subset",
-            "restart_relationship", "bridge_runtime_by_stage", "continuation") if key in plan}
+            "restart_relationship", "bridge_runtime_by_stage", "continuation", "protocol_history") if key in plan}
         result["task_manifest_sha256"] = {
             task: hashlib.sha256(json.dumps(files, sort_keys=True).encode()).hexdigest()
             for task, files in plan.get("task_identities", {}).items()}
@@ -103,7 +103,10 @@ def collect(base: Path, health_url: str) -> dict:
     protocol = result.get("protocol", {})
     formal = protocol.get("formal_native_subset", {})
     schedule = formal.get("schedule")
-    expected = (len(schedule) if schedule is not None else
+    # A transport fix may move the remaining slots to a new stage. Keep the
+    # completed local slots in the total without scheduling them again.
+    preserved = formal.get("preserved_local_schedule", [])
+    expected = (len(schedule) + len(preserved) if schedule is not None else
                 len(protocol.get("pilot_tasks", [])) * 2 * protocol.get("formal_repeats", 3))
     result["new_formal_attempts_planned"] = expected or 30
     result["new_formal_attempts_completed"] = len(report["attempts"])

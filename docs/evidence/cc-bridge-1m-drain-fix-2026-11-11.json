@@ -33,5 +33,21 @@
       "size": 2395,
       "sha256": "2bf78f8833fd0bdc58aeebb979eb19cd710a1c11469ccbc933d66756c9337f58"
     }
-  ]
+  ],
+  "planned_protocol_transition": {
+    "recorded_at": 1794330288.6906347,
+    "current_agent_must_finish_naturally": true,
+    "mechanism": "Checkpoint protocol code now retains prior local slots across transport stages. The running campaign source guard will refuse its next checkpoint after result.json is written. No CC process is signalled.",
+    "remaining_positions_move_to_distinct_stage": true,
+    "preserve_completed_results_and_failures": true,
+    "resume_only_after_artifact_review_archival_and_live_validation": true
+  },
+  "real_cc_probe_setup_failure": {
+    "run_directory": "logs/eval-cc-1m-20261110-2355/drain-fix-cc-high",
+    "reason": "New drain observer matched the PATCH_JS source string and attempted dictionary access on its installed-string return value. Fixed predicate to match only a drain invocation.",
+    "provider_requests": 0,
+    "scored_attempts_affected": 0,
+    "evidence_preserved": true,
+    "rerun_directory": "logs/eval-cc-1m-20261110-2355/drain-fix-cc-high-v2"
+  }
 }
