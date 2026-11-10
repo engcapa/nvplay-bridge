@@ -1,0 +1,55 @@
+{
+  "passed": true,
+  "efforts": [
+    {
+      "effort": "high",
+      "passed": true,
+      "uid": 20000,
+      "reported_context_windows": [
+        1000000
+      ],
+      "cc_launch_configuration": {
+        "model": "kimi-k3.1-pro[1m]",
+        "automatic_compaction_enabled": true,
+        "auto_compact_window_tokens": 720000
+      },
+      "seconds": 50.079,
+      "logical_requests": 3,
+      "actual_efforts": [
+        "high"
+      ],
+      "actual_output_limits": [
+        131072
+      ],
+      "errors": 0,
+      "retries": 0,
+      "unfinished": [],
+      "system_sha256sum_matches": true
+    },
+    {
+      "effort": "max",
+      "passed": true,
+      "uid": 20001,
+      "reported_context_windows": [
+        1000000
+      ],
+      "cc_launch_configuration": {
+        "model": "kimi-k3.1-pro[1m]",
+        "automatic_compaction_enabled": true,
+        "auto_compact_window_tokens": 720000
+      },
+      "seconds": 45.501,
+      "logical_requests": 3,
+      "actual_efforts": [
+        "max"
+      ],
+      "actual_output_limits": [
+        131072
+      ],
+      "errors": 0,
+      "retries": 0,
+      "unfinished": [],
+      "system_sha256sum_matches": true
+    }
+  ]
+}
