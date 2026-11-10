@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794329202.3825183,
+  "checkpoint_at": 1794329325.9329104,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-1m-20261110-2355",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -552,8 +552,8 @@
     "host_memory_limit_bytes": "30064771072"
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794329079.1097217,
-    "commit": "40c085790d8d11e7b4c6788a882a4db2c89c9ba5",
+    "attempted_at": 1794329202.4104514,
+    "commit": "b210ba6462f3c47e6b0b73d9e7c421d8b57e0709",
     "pushed": true,
     "returncode": 0
   },
@@ -930,7 +930,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794329202.3872464,
+    "generated_at": 1794329325.9380713,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
@@ -941,7 +941,7 @@
         "task": "batched-eval-parity",
         "effort": "max",
         "started_at": 1794328566.7493997,
-        "elapsed_seconds": 635.6,
+        "elapsed_seconds": 759.2,
         "tool_calls": 28,
         "last_tool": "Bash"
       }
@@ -979,9 +979,7 @@
     "recovering_tabs": []
   },
   "bridge_activity": {
-    "events_last_300s": {
-      "browser_progress": 24
-    },
+    "events_last_300s": {},
     "active": [
       {
         "id": "73447fc8",
@@ -1006,8 +1004,8 @@
             "reasoning_tokens": 4468
           }
         },
-        "age_seconds": 381.4,
-        "activity_age_seconds": 178.4
+        "age_seconds": 505.0,
+        "activity_age_seconds": 302.0
       }
     ],
     "recent_errors": [],
@@ -1062,7 +1060,7 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "c6dea8d8a7aa65e936fa66832492a2cf340ffdb3b9491014682dac3976234a62",
+      "sha256": "976a181384768e7e12a0e18c2cfa90ba2c6426c511ee6803964b4726e9810dd5",
       "size": 134
     },
     {
@@ -1141,6 +1139,11 @@
       "size": 704
     },
     {
+      "path": "idle-network-probe-1.json",
+      "sha256": "495fb450165212673e75f15c0913ec85cbeea7f0c345697107ae43c3a35c61de",
+      "size": 303
+    },
+    {
       "path": "initial-archive-process.json",
       "sha256": "8c90296858a82288c8098951d3c970216d1e9c8bfe797dc05e7701d1531ed207",
       "size": 335
@@ -1212,8 +1215,8 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "01f48420d8dc6d1114811bbb56467fdf89d3a5d9aa7007187390430821a7353f",
-      "size": 822
+      "sha256": "0ae1bf1126d9ecbdb052881d488f04844bfbb70a212b46e43e852ad3b742e13a",
+      "size": 821
     },
     {
       "path": "runs/formal-1m-720k/batched-eval-parity--max--r1/identity.json",
