@@ -21,9 +21,9 @@ def read_json(path: Path) -> dict:
 
 
 def observe(base: Path, checkpoint: Path | None, health_url: str, lookback: float) -> dict:
-    now = time.time()
     report = summarize(base)
     records = LogTail(base / "bridge-debug.jsonl").read()
+    now = time.time()
     bridge = snapshot(records, now=now, since=now - lookback)
     preparation = [row for row in records if row.get("event") == "browser_prepare_retry"
                    and row.get("ts", 0) >= now - lookback]
