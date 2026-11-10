@@ -187,6 +187,20 @@ def wheels(base: Path, proxy: str):
                                              for path in sorted(cache.glob("*.whl"))})
 
 
+def record_host_resources(base: Path):
+    resources = {"recorded_at": time.time(), "cpu_affinity": sorted(os.sched_getaffinity(0)),
+                 "docker_processes_started": 0}
+    paths = {"cpu.max": "/sys/fs/cgroup/cpu.max", "memory.max": "/sys/fs/cgroup/memory.max",
+             "host_cpu_quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+             "host_cpu_period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us",
+             "host_memory_limit_bytes": "/sys/fs/cgroup/memory/memory.limit_in_bytes"}
+    for name, source in paths.items():
+        source = Path(source)
+        if source.exists():
+            resources[name] = source.read_text().strip()
+    write_json(base / "host-resources.json", resources)
+
+
 def configure(base: Path, proxy: str):
     from copy import deepcopy
     from eval_terminal_native import DEFAULT_PILOT, NODE_NETWORK_DIRECTORY, initialize_plan, network_tree_identity
@@ -229,18 +243,12 @@ def configure(base: Path, proxy: str):
             "HTTP_PROXY": proxy, "HTTPS_PROXY": proxy, "NO_PROXY": "127.0.0.1,localhost"})
         write_json(base / f"settings-formal-{effort}.json", settings)
     write_json(path, plan)
-    resources = {"recorded_at": time.time(), "cpu_affinity": sorted(os.sched_getaffinity(0)),
-                 "docker_processes_started": 0}
-    for name in ("cpu.max", "memory.max"):
-        source = Path("/sys/fs/cgroup") / name
-        if source.exists():
-            resources[name] = source.read_text().strip()
-    write_json(base / "host-resources.json", resources)
+    record_host_resources(base)
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("action", choices=("downloads", "base", "wheels", "configure"))
+    parser.add_argument("action", choices=("downloads", "base", "wheels", "configure", "resources"))
     parser.add_argument("--base", type=Path, required=True)
     parser.add_argument("--proxy", default="http://127.0.0.1:31128")
     parser.add_argument("--node", type=Path)
@@ -254,6 +262,8 @@ def main():
         wheels(base, args.proxy)
     elif args.action == "configure":
         configure(base, args.proxy)
+    elif args.action == "resources":
+        record_host_resources(base)
     else:
         if not args.node or not args.uv_wheel:
             parser.error("base requires --node and --uv-wheel")
