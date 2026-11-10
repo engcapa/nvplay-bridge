@@ -1,5 +1,5 @@
 {
-  "reviewed_at": 1794314772.2428823,
+  "reviewed_at": 1794315341.4027836,
   "attempts": [
     {
       "attempt": "runs/formal-128k-fixed/embedding-drift-monitor--high--r1",
@@ -39,6 +39,36 @@
           "passed": 11
         },
         "sha256": "b312bc3b886f3ef7a23130e406f863ce5646c0c87cae5d09097a6b6dd1d01dd8"
+      }
+    },
+    {
+      "attempt": "runs/formal-128k-fixed/embedding-drift-monitor--max--r1",
+      "task": "embedding-drift-monitor",
+      "control": null,
+      "effort": "max",
+      "repeat": 1,
+      "artifact_score": 1,
+      "infrastructure_error": null,
+      "changed_original_files": [
+        "app/drift_monitor/alert.py",
+        "app/drift_monitor/calibration.py",
+        "app/drift_monitor/distance.py",
+        "app/drift_monitor/monitor.py",
+        "app/drift_monitor/normalize.py",
+        "app/drift_monitor/statistical_tests.py",
+        "app/drift_monitor/windowing.py"
+      ],
+      "added_files": [],
+      "removed_original_files": [],
+      "declared_read_only_files_unchanged": {},
+      "read_only_check_scope": "not checked",
+      "artifact_errors_present": false,
+      "verifier": {
+        "test_count": 11,
+        "statuses": {
+          "passed": 11
+        },
+        "sha256": "de542b6e89b879e4e3407545f2a888e702703c11f40d123436394d14451b00d3"
       }
     },
     {

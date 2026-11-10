@@ -1,5 +1,5 @@
 {
-  "audited_at": 1794314772.251424,
+  "audited_at": 1794315341.468146,
   "scope": "Candidate scan of explicit tool inputs; not proof against dynamic behavior; candidates require manual review",
   "patterns": {
     "hidden_or_host_path": "(?:/tests(?:/|\\b)|/oracle(?:/|\\b)|/solution(?:/|\\b)|/home/zhyhang(?:/|\\b)|terminal-bench|solution\\.sh)",
@@ -20,6 +20,20 @@
       "candidates": [],
       "unparsed_json_lines": 0,
       "source_sha256": "6f41ec4c6b22b3fd9cf230ee5e44cc2c9cf421c21041bb6c6d7c8ed7672fb01d"
+    },
+    {
+      "attempt": "embedding-drift-monitor--max--r1",
+      "tool_counts": {
+        "Bash": 25,
+        "Read": 22,
+        "Write": 9,
+        "Edit": 32,
+        "Glob": 2
+      },
+      "candidate_count": 0,
+      "candidates": [],
+      "unparsed_json_lines": 0,
+      "source_sha256": "b40f8a6781066e3ff2a8c3437d9681988c44557319dca7699e8387283e26e6f7"
     },
     {
       "attempt": "session-window-debug--high--r1",
