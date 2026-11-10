@@ -1,0 +1,19 @@
+{
+  "recorded_at": 1794326872.735346,
+  "issue": "removed_pinned_apt_version_caused_unhandled_missing_filename",
+  "initial_failure_type": "KeyError",
+  "initial_failure_field": "Filename",
+  "required_perl_version": "5.38.2-3.2ubuntu0.6",
+  "current_index_candidate": "5.38.2-3.2ubuntu0.7",
+  "fix": "select full current index stanza or archived authenticated SHA256, download original .6 archives, verify package/version and install explicit local archives",
+  "pin_relaxed": false,
+  "regression": {
+    "passed": 2,
+    "log_sha256": "a6707d4eff38012da33ddc34bc6dc076a3b17151cfc9aef223c8790cbe64c3da"
+  },
+  "initial_controller_log_prefix": {
+    "bytes": 5255,
+    "sha256": "e58bec349baaac4fc219bb4f7b923fdb8c8eae6d0fef675e6de3205608fc5506"
+  },
+  "runtime_rebuild_status": "in_progress"
+}

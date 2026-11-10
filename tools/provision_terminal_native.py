@@ -37,6 +37,22 @@ APT_FIXED = [f"{name}=5.38.2-3.2ubuntu0.6" for name in
              ("perl", "perl-base", "perl-modules-5.38", "libperl5.38t64")]
 
 
+def fixed_apt_archive(package: str, description: str, archived: dict) -> dict:
+    """An old package can disappear from current indexes without changing our pin."""
+    name, version = package.split("=", 1)
+    for stanza in description.split("\n\n"):
+        fields = dict(line.split(": ", 1) for line in stanza.splitlines() if ": " in line)
+        if (fields.get("Package") == name and fields.get("Version") == version
+                and fields.get("Filename") and fields.get("SHA256")):
+            return {"filename": fields["Filename"], "sha256": fields["SHA256"],
+                    "verification_basis": "current_authenticated_apt_index"}
+    previous = archived.get(package)
+    if not previous or not previous.get("filename") or not previous.get("sha256"):
+        raise ValueError(f"pinned APT package missing from both current index and archived checksums: {package}")
+    return {"filename": "pool/main/p/perl/" + Path(previous["filename"]).name,
+            "sha256": previous["sha256"], "verification_basis": "archived_authenticated_apt_index_sha256"}
+
+
 def digest(path: Path) -> str:
     with path.open("rb") as stream:
         return hashlib.file_digest(stream, "sha256").hexdigest()
@@ -103,21 +119,30 @@ def build_base(base: Path, proxy: str, node: Path, uv_wheel: Path):
            "-o", "Acquire::Languages=none"]
     checked(apt + ["update"], log, env=apt_env)
     fixed_archives = {}
+    archive_manifest = json.loads((Path(__file__).resolve().parents[1]
+        / "docs/evidence/cc-bridge-resume-2026-11-10.json").read_text())["native_environment"]["fixed_apt_archives"]
     for package in APT_FIXED:
         description = subprocess.check_output(["chroot", root, "apt-cache", "show", package], text=True)
-        fields = dict(line.split(": ", 1) for line in description.split("\n\n", 1)[0].splitlines() if ": " in line)
-        target = root / "var/cache/apt/archives" / Path(fields["Filename"]).name
-        if not target.exists() or digest(target) != fields["SHA256"]:
+        fields = fixed_apt_archive(package, description, archive_manifest)
+        target = root / "var/cache/apt/archives" / Path(fields["filename"]).name
+        if not target.exists() or digest(target) != fields["sha256"]:
             temporary = target.with_suffix(".deb.part")
             checked(["curl", "--proxy", proxy, "--connect-timeout", "30", "--max-time", "600", "--retry", "4",
                      "--fail", "--location", "--silent", "--show-error", "--output", temporary,
-                     "https://archive.ubuntu.com/ubuntu/" + fields["Filename"]], log)
-            if digest(temporary) != fields["SHA256"]:
+                     "https://archive.ubuntu.com/ubuntu/" + fields["filename"]], log)
+            if digest(temporary) != fields["sha256"]:
                 raise ValueError(f"APT archive differs from authenticated index: {package}")
             temporary.rename(target)
-        fixed_archives[package] = {"filename": target.name, "sha256": fields["SHA256"]}
+        actual = subprocess.check_output(["chroot", root, "dpkg-deb", "--show",
+            "--showformat=${Package}=${Version}", "/var/cache/apt/archives/" + target.name], text=True)
+        if actual != package:
+            raise ValueError(f"downloaded APT package has unexpected identity: {package}")
+        fixed_archives[package] = {"filename": target.name, "sha256": fields["sha256"],
+                                   "verification_basis": fields["verification_basis"]}
     checked(apt + ["install", "-y", "--no-install-recommends", "build-essential", "make", "patch",
-                   "git", "curl", "ca-certificates", "tmux", "file", "util-linux", "procps", *APT_FIXED], log, env=apt_env)
+                   "git", "curl", "ca-certificates", "tmux", "file", "util-linux", "procps",
+                   *("/var/cache/apt/archives/" + item["filename"] for item in fixed_archives.values())],
+            log, env=apt_env)
     if not any(line.startswith("agent:") for line in (root / "etc/passwd").read_text().splitlines()):
         checked(["chroot", root, "useradd", "--uid", "1000", "--create-home", "--shell", "/bin/bash", "agent"], log)
     (root / "app").mkdir(exist_ok=True)
