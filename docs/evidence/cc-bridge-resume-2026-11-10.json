@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794315297.3416126,
+  "checkpoint_at": 1794315310.1633656,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-resume-20261110-1647",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -541,7 +541,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794315297.3842497,
+    "generated_at": 1794315310.2081254,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-128k-fixed/28800/high": {
@@ -881,7 +881,7 @@
   },
   "bridge_activity": {
     "events_last_300s": {
-      "browser_progress": 44,
+      "browser_progress": 42,
       "browser_buffer": 1,
       "browser_pool_release": 1,
       "browser_done": 1
@@ -1039,8 +1039,8 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "aa37d1f6b720c18c325e0b3d324a0a386e3162084f29d716d22df6e25068b44e",
-      "size": 790
+      "sha256": "5e282f6c48f528edcbdc779b1e1c1c2cb2f21af1e57885aec671bc42d095d6ba",
+      "size": 791
     },
     {
       "path": "restoration-regression.log",
