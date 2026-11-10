@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794304282.3760033,
+  "checkpoint_at": 1794304363.9732022,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-resume-20261110-1647",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -541,15 +541,36 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794304282.3772044,
+    "generated_at": 1794304363.97685,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
-    "pending": []
+    "pending": [
+      {
+        "attempt": "runs/formal-128k-fixed/session-window-debug--high--r1",
+        "status": "agent_running",
+        "task": "session-window-debug",
+        "effort": "high",
+        "started_at": 1794304311.0699286,
+        "elapsed_seconds": 52.9,
+        "tool_calls": 9,
+        "last_tool": "Read"
+      },
+      {
+        "attempt": "runs/formal-128k-fixed/session-window-debug--max--r1",
+        "status": "agent_running",
+        "task": "session-window-debug",
+        "effort": "max",
+        "started_at": 1794304311.0446827,
+        "elapsed_seconds": 52.9,
+        "tool_calls": 1,
+        "last_tool": "Bash"
+      }
+    ]
   },
   "new_formal_attempts_planned": 30,
   "new_formal_attempts_completed": 0,
-  "status": "controls_validated",
+  "status": "formal_running",
   "bridge_health": {
     "status": "ok",
     "model": "moonshotai/kimi-k3.1-pro",
@@ -565,13 +586,62 @@
       "idle_seconds": 3600.0
     },
     "pool_states": {
-      "ready": 5
+      "ready": 3,
+      "busy": 2
     },
     "recovering_tabs": []
   },
   "bridge_activity": {
-    "events_last_300s": {},
-    "active": [],
+    "events_last_300s": {
+      "request": 5,
+      "payload": 5,
+      "browser_start": 5,
+      "browser_tab": 5,
+      "browser_first_data": 4,
+      "browser_progress": 10,
+      "browser_first_content": 4,
+      "browser_buffer": 3,
+      "browser_pool_release": 3,
+      "browser_done": 3
+    },
+    "active": [
+      {
+        "id": "f7aff19f",
+        "retry_count": 0,
+        "phase": "browser_progress",
+        "attempt": 1,
+        "reasoning_effort": "max",
+        "tab_id": "kpool=3",
+        "counts": {
+          "thinking_chars": 37,
+          "text_chars": 0,
+          "tool_calls": 3
+        },
+        "usage": {
+          "prompt_tokens": 8224,
+          "completion_tokens": 139,
+          "total_tokens": 8363,
+          "prompt_tokens_details": {
+            "cached_tokens": 7808
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 63
+          }
+        },
+        "age_seconds": 30.2,
+        "activity_age_seconds": 1.6
+      },
+      {
+        "id": "ad3bb671",
+        "retry_count": 0,
+        "phase": "browser_tab",
+        "attempt": 1,
+        "reasoning_effort": "high",
+        "tab_id": "kpool=4",
+        "age_seconds": 17.1,
+        "activity_age_seconds": 17.1
+      }
+    ],
     "recent_errors": [],
     "recent_upstream_errors": [],
     "recent_retries": []
@@ -674,7 +744,7 @@
     },
     {
       "path": "next-uid.json",
-      "sha256": "6374f76111c1a8827aa7e1fbc749fbe6cfc6c483a496eb3d17405e3f6f9bd025",
+      "sha256": "58feef9701da76fc0b24d067b20dee159ce205089ba27d5a6e381622ec9fd49f",
       "size": 20
     },
     {
@@ -701,6 +771,26 @@
       "path": "restoration-regression.log",
       "sha256": "2fa3cf9cd317a05c8d0a703d84abc0a9bf94685c5ea7a72e2ab929694daabe6f",
       "size": 1223
+    },
+    {
+      "path": "runs/formal-128k-fixed/session-window-debug--high--r1/identity.json",
+      "sha256": "bad9d330d8c22dfb311f7e954c89d468348ab4d2036006cc8feff3ed979c2b91",
+      "size": 2828
+    },
+    {
+      "path": "runs/formal-128k-fixed/session-window-debug--high--r1/request-protocol.json",
+      "sha256": "2710293349ef350bc1757cd82bea93a92c8b4dbf6e42dd3da348f325c3155dac",
+      "size": 803
+    },
+    {
+      "path": "runs/formal-128k-fixed/session-window-debug--max--r1/identity.json",
+      "sha256": "bad9d330d8c22dfb311f7e954c89d468348ab4d2036006cc8feff3ed979c2b91",
+      "size": 2828
+    },
+    {
+      "path": "runs/formal-128k-fixed/session-window-debug--max--r1/request-protocol.json",
+      "sha256": "15feb065d6acbc4f0a37d99104142e0a23b0a221b482332cb24be854521974dc",
+      "size": 802
     },
     {
       "path": "settings-formal-high.json",
