@@ -59,6 +59,59 @@ class NativeCheckpointTests(unittest.TestCase):
         (control / "result.json").write_text('{"valid":false,"baseline":{"score":0},"oracle":{"score":0}}')
         self.assertEqual(self.collect()["status"], "validating_controls")
 
+    def campaign(self, identity=True):
+        owner = {"pid": 42, "boot_id": "boot", "start_ticks": "123"}
+        state = {"status": "formal_running", "pid": 42, "task": "fixture", "repeat": 1,
+                 "source_identity": {"private": "PRIVATE_CONTROLLER_FIELD"}}
+        if identity:
+            state["controller_identity"] = owner
+        (self.base / "campaign-state.json").write_text(json.dumps(state))
+        return owner
+
+    def partial_report(self, count=2):
+        return patch("checkpoint_terminal_native.summarize", return_value={
+            "attempts": [{"artifact_score": index % 2} for index in range(count)], "pending": [], "totals": {}})
+
+    def test_between_pairs_keeps_formal_status_and_finished_failure(self):
+        owner = self.campaign()
+        with self.partial_report(), patch("checkpoint_terminal_native.process_identity", return_value=owner):
+            result = self.collect()
+        self.assertEqual(result["status"], "formal_running")
+        self.assertEqual(result["new_formal_attempts_completed"], 2)
+        self.assertEqual(result["results"]["attempts"][0]["artifact_score"], 0)
+        self.assertTrue(result["campaign"]["controller_alive"])
+        self.assertNotIn("PRIVATE_CONTROLLER_FIELD", json.dumps(result))
+
+    def test_first_pair_before_attempt_creation_is_formal_running(self):
+        owner = self.campaign()
+        with self.partial_report(count=0), patch("checkpoint_terminal_native.process_identity", return_value=owner):
+            self.assertEqual(self.collect()["status"], "formal_running")
+
+    def test_old_controller_uses_saved_attempt_boot_and_start_identity(self):
+        owner = self.campaign(identity=False)
+        attempt = self.base / "runs/formal/fixture--high--r1"
+        attempt.mkdir(parents=True)
+        (attempt / "owner.json").write_text(json.dumps(owner))
+        with self.partial_report(), patch("checkpoint_terminal_native.process_identity", return_value=owner):
+            self.assertEqual(self.collect()["status"], "formal_running")
+
+    def test_dead_rebooted_or_recycled_controller_cannot_claim_active(self):
+        owner = self.campaign()
+        for actual in (None, {**owner, "boot_id": "new-boot"}, {**owner, "start_ticks": "999"}):
+            with self.subTest(actual=actual), self.partial_report(), patch(
+                    "checkpoint_terminal_native.process_identity", return_value=actual):
+                result = self.collect()
+            self.assertEqual(result["status"], "formal_incomplete")
+            self.assertFalse(result["campaign"]["controller_alive"])
+
+    def test_partial_results_without_campaign_are_not_controls_only(self):
+        with self.partial_report():
+            self.assertEqual(self.collect()["status"], "formal_incomplete")
+
+    def test_all_finished_results_remain_complete_after_controller_exit(self):
+        with self.partial_report(count=6):
+            self.assertEqual(self.collect()["status"], "formal_complete")
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -14,6 +14,7 @@ import subprocess
 import time
 import urllib.request
 
+from eval_terminal_native import process_identity
 from monitor_bridge import LogTail, snapshot
 from native_eval_support import write_json
 from report_terminal_native import summarize
@@ -35,6 +36,25 @@ def event_summary(event: dict) -> dict:
     if event.get("error"):
         result["error_sha256"] = hashlib.sha256(str(event["error"]).encode()).hexdigest()
     return result
+
+
+def campaign_progress(base: Path) -> dict:
+    state = base / "campaign-state.json"
+    if not state.is_file():
+        return {"controller_alive": False}
+    data = json.loads(state.read_text())
+    pid = data.get("pid")
+    actual = process_identity(pid) if isinstance(pid, int) and pid > 0 else None
+    expected = data.get("controller_identity")
+    if expected is None and actual is not None:
+        # Earlier controllers saved their boot/start identity on each attempt.
+        for path in sorted((base / "runs").glob("*/*/owner.json")):
+            owner = json.loads(path.read_text())
+            if owner == actual:
+                expected = owner
+                break
+    return {"controller_alive": actual is not None and actual == expected,
+            **{key: data[key] for key in ("status", "task", "repeat") if key in data}}
 
 
 def collect(base: Path, health_url: str) -> dict:
@@ -81,10 +101,15 @@ def collect(base: Path, health_url: str) -> dict:
     expected = len(result.get("protocol", {}).get("pilot_tasks", [])) * 2 * result.get("protocol", {}).get("formal_repeats", 3)
     result["new_formal_attempts_planned"] = expected or 30
     result["new_formal_attempts_completed"] = len(report["attempts"])
+    result["campaign"] = campaign_progress(base)
     if report["pending"]:
         result["status"] = "formal_running"
     elif report["attempts"] and len(report["attempts"]) == expected:
         result["status"] = "formal_complete"
+    elif result["campaign"]["controller_alive"] and result["campaign"].get("status") == "formal_running":
+        result["status"] = "formal_running"
+    elif report["attempts"]:
+        result["status"] = "formal_incomplete"
     elif controls:
         result["status"] = ("controls_validated" if len(controls) == len(result.get("protocol", {}).get("pilot_tasks", []))
                             and all(value["valid"] for value in controls.values()) else "validating_controls")

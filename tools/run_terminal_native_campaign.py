@@ -42,7 +42,8 @@ def main():
 
     def checkpoint(status, **details):
         write_json(base / "campaign-state.json", {"status": status, "updated_at": time.time(),
-                   "pid": os.getpid(), "stage": stage, "source_identity": evaluation.identity(stage), **details})
+                   "pid": os.getpid(), "controller_identity": runner.process_identity(os.getpid()),
+                   "stage": stage, "source_identity": evaluation.identity(stage), **details})
         save(base, args.checkpoint_output.resolve(), health_url, commit=True)
 
     try:
