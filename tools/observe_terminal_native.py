@@ -32,7 +32,7 @@ def observe(base: Path, checkpoint: Path | None, health_url: str, lookback: floa
     result = {
         "observed_at": datetime.fromtimestamp(now).astimezone().isoformat(),
         "completed": len(report["attempts"]), "totals": report["totals"],
-        "results": [{key: row[key] for key in ("task", "effort", "repeat", "artifact_score",
+        "results": [{key: row[key] for key in ("task", "stage", "effort", "repeat", "artifact_score",
                      "end_to_end_success", "agent_seconds", "bridge_errors")}
                     for row in report["attempts"]],
         "pending": report["pending"],
@@ -49,6 +49,10 @@ def observe(base: Path, checkpoint: Path | None, health_url: str, lookback: floa
         "campaign": {key: campaign[key] for key in ("status", "task", "repeat") if key in campaign},
         "campaign_error_present": (base / "campaign-error.json").exists(),
     }
+    transition = read_json(base / "transport-transition-state.json")
+    if transition:
+        result["transport_transition"] = {key: transition[key] for key in (
+            "status", "at", "current_agent_signalled") if key in transition}
     if resource:
         result["resources"] = {key: resource[key] for key in ("disk_free_bytes", "memory_rss_bytes",
             "memory_file_cache_bytes", "memory_limit_bytes", "memory_events", "memory_allocation_failures")
@@ -59,7 +63,8 @@ def observe(base: Path, checkpoint: Path | None, health_url: str, lookback: floa
     processes = {}
     for filename in ("campaign-state.json", "bridge-runtime.json", "brave-process.json",
                      "checkpoint-process.json", "bridge-monitor-process.json",
-                     "cdp-observer-process.json", "resource-monitor-process.json"):
+                     "cdp-observer-process.json", "resource-monitor-process.json",
+                     "transport-transition-process.json"):
         recorded = read_json(base / filename)
         pid = recorded.get("pid")
         actual = process_identity(pid) if isinstance(pid, int) and pid > 0 else None
