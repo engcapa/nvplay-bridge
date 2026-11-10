@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794315370.737642,
+  "checkpoint_at": 1794315430.277367,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-resume-20261110-1647",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -541,7 +541,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794315370.783565,
+    "generated_at": 1794315430.3167357,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-128k-fixed/28800/high": {
@@ -855,11 +855,32 @@
         "source_head": "508a582197501490ff84c781f2bd40af187c2aa5"
       }
     ],
-    "pending": []
+    "pending": [
+      {
+        "attempt": "runs/formal-128k-fixed/batched-eval-parity--high--r1",
+        "status": "agent_running",
+        "task": "batched-eval-parity",
+        "effort": "high",
+        "started_at": 1794315384.4192412,
+        "elapsed_seconds": 45.9,
+        "tool_calls": 0,
+        "last_tool": null
+      },
+      {
+        "attempt": "runs/formal-128k-fixed/batched-eval-parity--max--r1",
+        "status": "agent_running",
+        "task": "batched-eval-parity",
+        "effort": "max",
+        "started_at": 1794315384.410672,
+        "elapsed_seconds": 45.9,
+        "tool_calls": 0,
+        "last_tool": null
+      }
+    ]
   },
   "new_formal_attempts_planned": 30,
   "new_formal_attempts_completed": 4,
-  "status": "controls_validated",
+  "status": "formal_running",
   "bridge_health": {
     "status": "ok",
     "model": "moonshotai/kimi-k3.1-pro",
@@ -875,18 +896,44 @@
       "idle_seconds": 3600.0
     },
     "pool_states": {
-      "ready": 5
+      "ready": 3,
+      "busy": 2
     },
     "recovering_tabs": []
   },
   "bridge_activity": {
     "events_last_300s": {
-      "browser_progress": 30,
+      "browser_progress": 18,
       "browser_buffer": 1,
       "browser_pool_release": 1,
-      "browser_done": 1
+      "browser_done": 1,
+      "request": 2,
+      "payload": 2,
+      "browser_start": 2,
+      "browser_tab": 2
     },
-    "active": [],
+    "active": [
+      {
+        "id": "75204466",
+        "retry_count": 0,
+        "phase": "browser_tab",
+        "attempt": 1,
+        "reasoning_effort": "max",
+        "tab_id": "kpool=2",
+        "age_seconds": 44.1,
+        "activity_age_seconds": 43.5
+      },
+      {
+        "id": "68f86b9c",
+        "retry_count": 0,
+        "phase": "browser_tab",
+        "attempt": 1,
+        "reasoning_effort": "high",
+        "tab_id": "kpool=5",
+        "age_seconds": 44.0,
+        "activity_age_seconds": 43.5
+      }
+    ],
     "recent_errors": [],
     "recent_upstream_errors": [],
     "recent_retries": []
@@ -1009,7 +1056,7 @@
     },
     {
       "path": "next-uid.json",
-      "sha256": "05fafd366421858fb0bb638ab8b22bc11b927db0844ed3193d764e0fe1fc7c9a",
+      "sha256": "51a6ac0a599ce81d59ff0eb8d01445ec5db56cfee11296cbc605459404423413",
       "size": 20
     },
     {
@@ -1039,13 +1086,33 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "bd57639ce8c9eac67b88e7dfdb67f4f8cdf559a280e4f0251d1d7b078f7b9e4b",
-      "size": 791
+      "sha256": "8c66b1ccb9bcbaf6728f966d91a94acf8cf3af9b17f0fdf836b0ccd05496e94f",
+      "size": 786
     },
     {
       "path": "restoration-regression.log",
       "sha256": "2fa3cf9cd317a05c8d0a703d84abc0a9bf94685c5ea7a72e2ab929694daabe6f",
       "size": 1223
+    },
+    {
+      "path": "runs/formal-128k-fixed/batched-eval-parity--high--r1/identity.json",
+      "sha256": "bad9d330d8c22dfb311f7e954c89d468348ab4d2036006cc8feff3ed979c2b91",
+      "size": 2828
+    },
+    {
+      "path": "runs/formal-128k-fixed/batched-eval-parity--high--r1/request-protocol.json",
+      "sha256": "2710293349ef350bc1757cd82bea93a92c8b4dbf6e42dd3da348f325c3155dac",
+      "size": 803
+    },
+    {
+      "path": "runs/formal-128k-fixed/batched-eval-parity--max--r1/identity.json",
+      "sha256": "bad9d330d8c22dfb311f7e954c89d468348ab4d2036006cc8feff3ed979c2b91",
+      "size": 2828
+    },
+    {
+      "path": "runs/formal-128k-fixed/batched-eval-parity--max--r1/request-protocol.json",
+      "sha256": "15feb065d6acbc4f0a37d99104142e0a23b0a221b482332cb24be854521974dc",
+      "size": 802
     },
     {
       "path": "runs/formal-128k-fixed/embedding-drift-monitor--high--r1/artifacts.json",
