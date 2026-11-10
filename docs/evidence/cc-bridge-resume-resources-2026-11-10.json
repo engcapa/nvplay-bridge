@@ -1,0 +1,29 @@
+{
+  "summarized_at": 1794313151.2138255,
+  "scope": "Shared container resource samples; not per-attempt accounting; sampling began after the first pair started",
+  "sample_count": 225,
+  "first_sample_at": 1794306441.7639267,
+  "last_sample_at": 1794313140.7591617,
+  "source_prefix_sha256": "395f28f567b06d6a973ff842854924c777c7600380a3c5a69c5c9aa1354abf84",
+  "source_prefix_bytes": 157343,
+  "cgroup_version": 1,
+  "memory_limit_bytes": 34359738368,
+  "min_disk_free_bytes": 44556812288,
+  "peak_memory_usage_bytes": 29832359936,
+  "peak_memory_rss_bytes": 7526322176,
+  "peak_file_cache_bytes": 22891106304,
+  "memory_allocation_failures_start": 0,
+  "memory_allocation_failures_end": 0,
+  "oom_events_start": {
+    "oom_kill": 0,
+    "oom_kill_disable": 0,
+    "under_oom": 0
+  },
+  "oom_events_end": {
+    "oom_kill": 0,
+    "oom_kill_disable": 0,
+    "under_oom": 0
+  },
+  "cpu_throttled_periods_delta": 0,
+  "cpu_throttled_seconds_delta": 0.0
+}

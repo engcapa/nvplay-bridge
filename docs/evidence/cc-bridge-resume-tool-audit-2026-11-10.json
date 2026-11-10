@@ -1,0 +1,28 @@
+{
+  "audited_at": 1794311740.2391214,
+  "scope": "Candidate scan of explicit tool inputs; not proof against dynamic behavior",
+  "attempts": [
+    {
+      "attempt": "session-window-debug--high--r1",
+      "tool_counts": {
+        "Bash": 23,
+        "Read": 25,
+        "Edit": 20,
+        "Glob": 2,
+        "Write": 2
+      },
+      "candidate_count": 0
+    },
+    {
+      "attempt": "session-window-debug--max--r1",
+      "tool_counts": {
+        "Bash": 32,
+        "Read": 27,
+        "Glob": 1,
+        "Edit": 36,
+        "Write": 6
+      },
+      "candidate_count": 0
+    }
+  ]
+}
