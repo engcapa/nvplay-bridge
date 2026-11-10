@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794327636.228592,
+  "checkpoint_at": 1794327760.47779,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-1m-20261110-2355",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -550,8 +550,8 @@
     "host_memory_limit_bytes": "30064771072"
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794327510.9345436,
-    "commit": "d0819d6fd118b94d3361bb76cf55d881b51c681e",
+    "attempted_at": 1794327636.2471492,
+    "commit": "7f1e62fa9b91bd2a985892ea4bdf2abffe32e326",
     "pushed": true,
     "returncode": 0
   },
@@ -870,6 +870,17 @@
     ]
   },
   "controls": {
+    "batched-eval-parity": {
+      "valid": true,
+      "baseline": {
+        "score": 0,
+        "infrastructure_error": null
+      },
+      "oracle": {
+        "score": 1,
+        "infrastructure_error": null
+      }
+    },
     "embedding-drift-monitor": {
       "valid": true,
       "baseline": {
@@ -895,7 +906,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794327636.2299318,
+    "generated_at": 1794327760.479639,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
@@ -929,18 +940,7 @@
     "recovering_tabs": []
   },
   "bridge_activity": {
-    "events_last_300s": {
-      "browser_first_data": 4,
-      "browser_progress": 6,
-      "browser_first_content": 4,
-      "browser_buffer": 4,
-      "browser_pool_release": 4,
-      "browser_done": 4,
-      "request": 2,
-      "payload": 2,
-      "browser_start": 2,
-      "browser_tab": 2
-    },
+    "events_last_300s": {},
     "active": [],
     "recent_errors": [],
     "recent_upstream_errors": [],
@@ -984,7 +984,7 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "860ef01aec2d4cbd68565893a0b1d9c4d5f14222283b664b74c184859f3d6132",
+      "sha256": "db3a5d0c531d5f50d997c339855e929c5c9410ab75913c697e6181d4ad475735",
       "size": 134
     },
     {
@@ -996,6 +996,11 @@
       "path": "continuation-regression.log",
       "sha256": "ad51de6dd2235222614a13af19d06c592da103f851712bb00704c82453c24bb7",
       "size": 1581
+    },
+    {
+      "path": "controls/batched-eval-parity/result.json",
+      "sha256": "5af33e228eb311d51d3d3515069095d0c0b687bbc6296c87f837309257641b69",
+      "size": 530
     },
     {
       "path": "controls/embedding-drift-monitor/result.json",
@@ -1109,7 +1114,7 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "1de7ffe3a420e887ecb72ccf3e912270548f7b5869da935edba840232e95d5fb",
+      "sha256": "9aae474b51006dc9a58d3e551942e2eefc38d9454a02429457d11a820f0c4530",
       "size": 718
     },
     {
@@ -1176,6 +1181,46 @@
       "archive": "agent-root.tar.gz",
       "sha256": "20c31c4f77d1dbf047ed3600fee28c5140d995640b9e901f0df9fd120a9fef11",
       "bytes": 555069496,
+      "tar_compare_passed_before_reclaim": true,
+      "restore": "sudo tar -xpf agent-root.tar.gz -C ."
+    },
+    {
+      "directory": "controls/embedding-drift-monitor/oracle",
+      "archived_at": 1794327636.805289,
+      "root": "verifier-root",
+      "archive": "verifier-root.tar.gz",
+      "sha256": "df3bb26fcf727c12a810ccc4526351bd964576771c37babfea8a36990d4fa3b1",
+      "bytes": 564523263,
+      "tar_compare_passed_before_reclaim": true,
+      "restore": "sudo tar -xpf verifier-root.tar.gz -C ."
+    },
+    {
+      "directory": "controls/session-window-debug/baseline",
+      "archived_at": 1794327670.0556445,
+      "root": "agent-root",
+      "archive": "agent-root.tar.gz",
+      "sha256": "3dad3f760cfb83ac7cbeb6b9fd90cf6f88b1817e3dd925e65f3e25275e29a894",
+      "bytes": 352998819,
+      "tar_compare_passed_before_reclaim": true,
+      "restore": "sudo tar -xpf agent-root.tar.gz -C ."
+    },
+    {
+      "directory": "controls/session-window-debug/baseline",
+      "archived_at": 1794327710.258883,
+      "root": "verifier-root",
+      "archive": "verifier-root.tar.gz",
+      "sha256": "2886ecb80112f6abfc5966ddd15d5a68c199d3a199a409b36d95ad15601fe79e",
+      "bytes": 486832889,
+      "tar_compare_passed_before_reclaim": true,
+      "restore": "sudo tar -xpf verifier-root.tar.gz -C ."
+    },
+    {
+      "directory": "controls/session-window-debug/oracle",
+      "archived_at": 1794327743.9577358,
+      "root": "agent-root",
+      "archive": "agent-root.tar.gz",
+      "sha256": "ce29cb9a1ed07bf134847c9bc40bb40a3905accf45e3c5a806c1daa9a2bffc28",
+      "bytes": 352999657,
       "tar_compare_passed_before_reclaim": true,
       "restore": "sudo tar -xpf agent-root.tar.gz -C ."
     }
