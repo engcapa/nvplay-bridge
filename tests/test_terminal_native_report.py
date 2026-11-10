@@ -25,7 +25,10 @@ class NativeReportTests(unittest.TestCase):
             variants = [sample,
                         {**sample, "infrastructure_error": "verifier_timeout", "end_to_end_success": False,
                          "grade": {"score": None, "infrastructure_error": "verifier_timeout"}},
-                        {**sample, "budget_seconds": 28800}]
+                        {**sample, "budget_seconds": 28800,
+                         "bridge": {**sample["bridge"], "retries": [{"id": "a", "status": 500},
+                                                                    {"id": "b", "status": 500}],
+                                    "cancelled": [{"id": "b"}]}}]
             for index, data in enumerate(variants):
                 directory = root / "runs/pilot" / str(index)
                 directory.mkdir(parents=True)
@@ -41,6 +44,11 @@ class NativeReportTests(unittest.TestCase):
             self.assertEqual(small["end_to_end_pass_rate"], 0.5)
             self.assertEqual(small["usage"]["prompt_tokens"], 40)
             self.assertEqual(report["totals"]["pilot/28800/high"]["attempts"], 1)
+            retry = report["totals"]["pilot/28800/high"]
+            self.assertEqual(retry["bridge_errors"], 0)
+            self.assertEqual(retry["http_failures_retried"], 2)
+            self.assertEqual(retry["requests_recovered_after_retry"], 1)
+            self.assertEqual(retry["cancelled_requests"], 1)
             self.assertEqual(len(report["pending"]), 1)
             self.assertNotIn("result", report["attempts"][0])
 

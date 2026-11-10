@@ -38,7 +38,7 @@ sudo -n python3 tools/eval_terminal_native.py run --base logs/<run> --stage pilo
 python3 tools/report_terminal_native.py --base logs/<run> --output logs/<run>/summary.json
 ```
 
-`init` 拒绝覆盖已冻结的计划；每次运行核对题目目录摘要。运行器支持六个显式环境 recipe，默认五题；不假设其他 61 题已有原生适配。
+`init` 拒绝覆盖已冻结的计划；每次运行核对题目目录摘要。运行器支持六个显式环境 recipe，默认评测其中五题；其余任务需独立适配和验证。
 
 每题先证明初始代码得 0、原始参考解得 1。隐藏测试和参考解不进入被测 agent 文件系统。CC 使用独立 UID、新会话、空 MCP、固定工具集合，禁用技能、自动压缩和自动记忆。两个 effort 分别占用不同 CPU；其判分器复用各自的 CPU 分配。原始判分器不改写，只复制任务声明的产物到全新的 verifier 文件系统。
 

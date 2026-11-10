@@ -43,6 +43,9 @@ def summarize(base: Path) -> dict:
             usage["cached_prompt_tokens"] += request.get("prompt_tokens_details", {}).get("cached_tokens", 0)
             usage["reasoning_tokens"] += request.get("completion_tokens_details", {}).get("reasoning_tokens", 0)
         infra = data.get("infrastructure_error") or data["grade"]["infrastructure_error"]
+        retried_ids = {event["id"] for event in data["bridge"]["retries"]}
+        failed_ids = {event["id"] for event in [*data["bridge"]["errors"], *data["bridge"]["cancelled"]]}
+        failed_ids.update(data["bridge"]["unfinished"])
         row = {"task": data["task"], "stage": data["stage"], "effort": data["effort"],
                "repeat": data["repeat"], "budget_seconds": data["budget_seconds"],
                "artifact_score": data["grade"]["score"], "infrastructure_error": infra,
@@ -55,6 +58,9 @@ def summarize(base: Path) -> dict:
                "upstream_attempts": data["bridge"]["upstream_attempts"],
                "bridge_errors": len(data["bridge"]["errors"]),
                "bridge_retries": len(data["bridge"]["retries"]),
+               "http_failures_retried": sum(isinstance(event.get("status"), int) and event["status"] >= 400
+                                            for event in data["bridge"]["retries"]),
+               "requests_recovered_after_retry": len(retried_ids - failed_ids),
                "bridge_cancelled": len(data["bridge"]["cancelled"]),
                "bridge_unfinished": data["bridge"]["unfinished"],
                "usage": dict(usage), "source_head": data["source_head"]}
@@ -76,6 +82,9 @@ def summarize(base: Path) -> dict:
                        "logical_requests": sum(row["logical_requests"] for row in attempts),
                        "bridge_errors": sum(row["bridge_errors"] for row in attempts),
                        "bridge_retries": sum(row["bridge_retries"] for row in attempts),
+                       "http_failures_retried": sum(row["http_failures_retried"] for row in attempts),
+                       "requests_recovered_after_retry": sum(row["requests_recovered_after_retry"] for row in attempts),
+                       "cancelled_requests": sum(row["bridge_cancelled"] for row in attempts),
                        "usage": dict(sum((Counter(row["usage"]) for row in attempts), Counter()))}
     return {"generated_at": time.time(), "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
             "totals": totals, "attempts": rows, "pending": pending}
