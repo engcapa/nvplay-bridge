@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794315190.0392976,
+  "checkpoint_at": 1794315297.3416126,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-resume-20261110-1647",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -541,7 +541,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794315190.0907154,
+    "generated_at": 1794315297.3842497,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-128k-fixed/28800/high": {
@@ -592,50 +592,50 @@
         }
       },
       "formal-128k-fixed/28800/max": {
-        "attempts": 1,
-        "valid_grades": 1,
+        "attempts": 2,
+        "valid_grades": 2,
         "infrastructure_errors": 0,
-        "artifact_passes": 0,
-        "artifact_pass_at_1": 0.0,
-        "end_to_end_passes": 0,
-        "end_to_end_pass_rate": 0.0,
-        "agent_seconds": 4985.066,
-        "logical_requests": 80,
+        "artifact_passes": 1,
+        "artifact_pass_at_1": 0.5,
+        "end_to_end_passes": 1,
+        "end_to_end_pass_rate": 0.5,
+        "agent_seconds": 10773.34,
+        "logical_requests": 156,
         "bridge_errors": 1,
         "bridge_errors_after_content": 0,
         "bridge_errors_before_content": 1,
-        "bridge_retries": 2,
-        "http_failures_retried": 2,
-        "requests_recovered_after_retry": 0,
+        "bridge_retries": 5,
+        "http_failures_retried": 5,
+        "requests_recovered_after_retry": 3,
         "cancelled_requests": 0,
         "transport": {
-          "attempts_with_evidence": 1,
+          "attempts_with_evidence": 2,
           "max_output_tokens": [
             131072
           ],
           "http_status_counts": {
-            "500": 3
+            "500": 6
           },
-          "timed_http_failures": 3,
-          "http_failed_attempt_seconds": 147.635,
-          "completed_requests": 79,
+          "timed_http_failures": 6,
+          "http_failed_attempt_seconds": 299.363,
+          "completed_requests": 155,
           "observed_usage": {
-            "prompt_tokens": 6322559,
-            "completion_tokens": 101229,
-            "total_tokens": 6423788,
-            "cached_prompt_tokens": 6191616,
-            "reasoning_tokens": 90551
+            "prompt_tokens": 11937470,
+            "completion_tokens": 197990,
+            "total_tokens": 12135460,
+            "cached_prompt_tokens": 11669760,
+            "reasoning_tokens": 173513
           },
           "requests_with_partial_usage": 0,
           "requests_without_observed_usage": 1,
-          "longest_completed_request_seconds": 492.449
+          "longest_completed_request_seconds": 590.461
         },
         "usage": {
-          "prompt_tokens": 6322559,
-          "completion_tokens": 101229,
-          "total_tokens": 6423788,
-          "cached_prompt_tokens": 6191616,
-          "reasoning_tokens": 90551
+          "prompt_tokens": 11937470,
+          "completion_tokens": 197990,
+          "total_tokens": 12135460,
+          "cached_prompt_tokens": 11669760,
+          "reasoning_tokens": 173513
         }
       }
     },
@@ -689,6 +689,60 @@
           "total_tokens": 4802777,
           "cached_prompt_tokens": 4570752,
           "reasoning_tokens": 70791
+        },
+        "source_head": "508a582197501490ff84c781f2bd40af187c2aa5"
+      },
+      {
+        "task": "embedding-drift-monitor",
+        "stage": "formal-128k-fixed",
+        "effort": "max",
+        "repeat": 1,
+        "budget_seconds": 28800,
+        "artifact_score": 1,
+        "infrastructure_error": null,
+        "end_to_end_success": true,
+        "agent_seconds": 5788.274,
+        "agent_timed_out": false,
+        "cc_subtype": "success",
+        "cc_turns": 91,
+        "logical_requests": 76,
+        "upstream_attempts": 79,
+        "bridge_errors": 0,
+        "bridge_errors_after_content": 0,
+        "bridge_errors_before_content": 0,
+        "bridge_retries": 3,
+        "http_failures_retried": 3,
+        "requests_recovered_after_retry": 3,
+        "bridge_cancelled": 0,
+        "bridge_unfinished": [],
+        "transport": {
+          "max_output_tokens": [
+            131072
+          ],
+          "http_status_counts": {
+            "500": 3
+          },
+          "timed_http_failures": 3,
+          "http_failed_attempt_seconds": 151.728,
+          "completed_requests": 76,
+          "completed_request_seconds": 5474.435,
+          "longest_completed_request_seconds": 590.461,
+          "observed_usage": {
+            "prompt_tokens": 5614911,
+            "completion_tokens": 96761,
+            "total_tokens": 5711672,
+            "cached_prompt_tokens": 5478144,
+            "reasoning_tokens": 82962
+          },
+          "requests_with_partial_usage": 0,
+          "requests_without_observed_usage": 0
+        },
+        "usage": {
+          "prompt_tokens": 5614911,
+          "completion_tokens": 96761,
+          "total_tokens": 5711672,
+          "cached_prompt_tokens": 5478144,
+          "reasoning_tokens": 82962
         },
         "source_head": "508a582197501490ff84c781f2bd40af187c2aa5"
       },
@@ -801,22 +855,11 @@
         "source_head": "508a582197501490ff84c781f2bd40af187c2aa5"
       }
     ],
-    "pending": [
-      {
-        "attempt": "runs/formal-128k-fixed/embedding-drift-monitor--max--r1",
-        "status": "agent_running",
-        "task": "embedding-drift-monitor",
-        "effort": "max",
-        "started_at": 1794309436.757663,
-        "elapsed_seconds": 5753.3,
-        "tool_calls": 90,
-        "last_tool": "Bash"
-      }
-    ]
+    "pending": []
   },
   "new_formal_attempts_planned": 30,
-  "new_formal_attempts_completed": 3,
-  "status": "formal_running",
+  "new_formal_attempts_completed": 4,
+  "status": "controls_validated",
   "bridge_health": {
     "status": "ok",
     "model": "moonshotai/kimi-k3.1-pro",
@@ -832,52 +875,18 @@
       "idle_seconds": 3600.0
     },
     "pool_states": {
-      "ready": 4,
-      "busy": 1
+      "ready": 5
     },
     "recovering_tabs": []
   },
   "bridge_activity": {
     "events_last_300s": {
-      "browser_progress": 52,
-      "browser_buffer": 3,
-      "browser_pool_release": 3,
-      "browser_done": 3,
-      "request": 3,
-      "payload": 3,
-      "browser_start": 3,
-      "browser_tab": 3,
-      "browser_first_data": 3,
-      "browser_first_content": 3
+      "browser_progress": 44,
+      "browser_buffer": 1,
+      "browser_pool_release": 1,
+      "browser_done": 1
     },
-    "active": [
-      {
-        "id": "8f4722fd",
-        "retry_count": 0,
-        "phase": "browser_progress",
-        "attempt": 1,
-        "reasoning_effort": "max",
-        "tab_id": "kpool=3",
-        "counts": {
-          "thinking_chars": 14220,
-          "text_chars": 0,
-          "tool_calls": 0
-        },
-        "usage": {
-          "prompt_tokens": 124016,
-          "completion_tokens": 3001,
-          "total_tokens": 127017,
-          "prompt_tokens_details": {
-            "cached_tokens": 123520
-          },
-          "completion_tokens_details": {
-            "reasoning_tokens": 3001
-          }
-        },
-        "age_seconds": 208.7,
-        "activity_age_seconds": 3.8
-      }
-    ],
+    "active": [],
     "recent_errors": [],
     "recent_upstream_errors": [],
     "recent_retries": []
@@ -910,8 +919,8 @@
     },
     {
       "path": "campaign-state.json",
-      "sha256": "504531b006af33ad1a39a7f6f55b5609abfabc08fea8293a8759fc44a339f5d4",
-      "size": 2921
+      "sha256": "ef8e7b8f36730b5b62b65e334f804ca30a50e992729ed2a4ec7968d6099d1046",
+      "size": 2919
     },
     {
       "path": "campaign-validation.log",
@@ -1030,8 +1039,8 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "a43eb490772c45aaec5659f822f9fb6a3d40a815561308b125dfb00981619ef3",
-      "size": 791
+      "sha256": "aa37d1f6b720c18c325e0b3d324a0a386e3162084f29d716d22df6e25068b44e",
+      "size": 790
     },
     {
       "path": "restoration-regression.log",
@@ -1064,6 +1073,16 @@
       "size": 26544
     },
     {
+      "path": "runs/formal-128k-fixed/embedding-drift-monitor--max--r1/artifacts.json",
+      "sha256": "c1c8b6c64960218a470006fb964adefbdff4439e41d71866e24404cb8b961ead",
+      "size": 1511
+    },
+    {
+      "path": "runs/formal-128k-fixed/embedding-drift-monitor--max--r1/grade.json",
+      "sha256": "bc9ec9dd9da06ac717c2a6e462d866ba67da5b3211f6e87ae395b5369b761c8e",
+      "size": 221
+    },
+    {
       "path": "runs/formal-128k-fixed/embedding-drift-monitor--max--r1/identity.json",
       "sha256": "bad9d330d8c22dfb311f7e954c89d468348ab4d2036006cc8feff3ed979c2b91",
       "size": 2828
@@ -1072,6 +1091,11 @@
       "path": "runs/formal-128k-fixed/embedding-drift-monitor--max--r1/request-protocol.json",
       "sha256": "15feb065d6acbc4f0a37d99104142e0a23b0a221b482332cb24be854521974dc",
       "size": 802
+    },
+    {
+      "path": "runs/formal-128k-fixed/embedding-drift-monitor--max--r1/result.json",
+      "sha256": "c7a1343f0a42ce9a1c0ef4a59da349f61ad02acdc82b49391e0a980cd564923c",
+      "size": 28980
     },
     {
       "path": "runs/formal-128k-fixed/session-window-debug--high--r1/artifacts.json",
