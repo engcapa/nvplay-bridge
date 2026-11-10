@@ -11,8 +11,45 @@ import time
 from native_eval_support import write_json
 
 
+def transport_evidence(records: dict[str, list[dict]] | None, request_ids: list[str] | None) -> dict | None:
+    """Count failed HTTP attempts without mistaking cumulative request age for attempt time."""
+    if records is None or request_ids is None:
+        return None
+    failures, durations, completed = Counter(), [], []
+    for request_id in request_ids:
+        starts = {}
+        for event in records.get(request_id, []):
+            kind = event.get("event")
+            attempt = event.get("attempt")
+            if kind == "browser_start":
+                starts[attempt] = event["ts"]
+            elif kind == "browser_http_error":
+                failures[str(event["status"])] += 1
+                if attempt in starts and event["ts"] >= starts[attempt]:
+                    durations.append(event["ts"] - starts[attempt])
+            elif kind == "browser_done" and isinstance(event.get("sec"), (int, float)):
+                completed.append(event["sec"])
+    return {"http_status_counts": dict(failures),
+            "timed_http_failures": len(durations),
+            "http_failed_attempt_seconds": round(sum(durations), 3),
+            "completed_requests": len(completed),
+            "completed_request_seconds": round(sum(completed), 3),
+            "longest_completed_request_seconds": max(completed, default=None)}
+
+
 def summarize(base: Path) -> dict:
     groups, pending, rows = {}, [], []
+    records = None
+    log = base / "bridge-debug.jsonl"
+    if log.is_file():
+        records = {}
+        for line in log.read_text(errors="replace").splitlines():
+            try:
+                event = json.loads(line)
+            except ValueError:
+                continue
+            if isinstance(event, dict) and event.get("id"):
+                records.setdefault(event["id"], []).append(event)
     for directory in sorted((base / "runs").glob("*/*")):
         result = directory / "result.json"
         if not result.is_file():
@@ -63,6 +100,7 @@ def summarize(base: Path) -> dict:
                "requests_recovered_after_retry": len(retried_ids - failed_ids),
                "bridge_cancelled": len(data["bridge"]["cancelled"]),
                "bridge_unfinished": data["bridge"]["unfinished"],
+               "transport": transport_evidence(records, data["bridge"].get("request_ids")),
                "usage": dict(usage), "source_head": data["source_head"]}
         rows.append(row)
         key = f'{row["stage"]}/{row["budget_seconds"]}/{row["effort"]}'
@@ -71,6 +109,7 @@ def summarize(base: Path) -> dict:
     for key, attempts in groups.items():
         valid = [row for row in attempts if not row["infrastructure_error"]]
         n = len(valid)
+        transport = [row["transport"] for row in attempts if row["transport"] is not None]
         # Keep every operational attempt in the end-to-end denominator.
         totals[key] = {"attempts": len(attempts), "valid_grades": n,
                        "infrastructure_errors": len(attempts) - n,
@@ -85,6 +124,17 @@ def summarize(base: Path) -> dict:
                        "http_failures_retried": sum(row["http_failures_retried"] for row in attempts),
                        "requests_recovered_after_retry": sum(row["requests_recovered_after_retry"] for row in attempts),
                        "cancelled_requests": sum(row["bridge_cancelled"] for row in attempts),
+                       "transport": {
+                           "attempts_with_evidence": len(transport),
+                           "http_status_counts": dict(sum((Counter(item["http_status_counts"])
+                                                            for item in transport), Counter())),
+                           "timed_http_failures": sum(item["timed_http_failures"] for item in transport),
+                           "http_failed_attempt_seconds": round(sum(item["http_failed_attempt_seconds"]
+                                                                     for item in transport), 3),
+                           "completed_requests": sum(item["completed_requests"] for item in transport),
+                           "longest_completed_request_seconds": max(
+                               (item["longest_completed_request_seconds"] for item in transport
+                                if item["longest_completed_request_seconds"] is not None), default=None)},
                        "usage": dict(sum((Counter(row["usage"]) for row in attempts), Counter()))}
     return {"generated_at": time.time(), "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
             "totals": totals, "attempts": rows, "pending": pending}

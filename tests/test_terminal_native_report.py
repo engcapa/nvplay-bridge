@@ -7,10 +7,42 @@ import tempfile
 import unittest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tools"))
-from report_terminal_native import summarize  # noqa: E402
+from report_terminal_native import summarize, transport_evidence  # noqa: E402
 
 
 class NativeReportTests(unittest.TestCase):
+    def test_http_failure_time_uses_each_attempt_and_includes_exhausted_errors(self):
+        events = [
+            {"id": "a", "event": "browser_start", "attempt": 1, "ts": 0},
+            {"id": "a", "event": "browser_http_error", "attempt": 1, "ts": 50, "sec": 50, "status": 500},
+            {"id": "a", "event": "browser_start", "attempt": 2, "ts": 55},
+            {"id": "a", "event": "browser_http_error", "attempt": 2, "ts": 100, "sec": 100, "status": 500},
+            {"id": "a", "event": "browser_start", "attempt": 3, "ts": 110},
+            {"id": "a", "event": "browser_done", "attempt": 3, "ts": 150, "sec": 150},
+            {"id": "b", "event": "browser_start", "attempt": 1, "ts": 160},
+            {"id": "b", "event": "browser_http_error", "attempt": 1, "ts": 205, "sec": 45, "status": 503},
+            {"id": "b", "event": "browser_error", "attempt": 1, "ts": 206, "sec": 46, "status": 503},
+            {"id": "other", "event": "browser_http_error", "attempt": 1, "ts": 210, "status": 500},
+        ]
+        records = {}
+        for event in events:
+            records.setdefault(event["id"], []).append(event)
+        result = transport_evidence(records, ["a", "b"])
+        self.assertEqual(result["http_status_counts"], {"500": 2, "503": 1})
+        self.assertEqual(result["timed_http_failures"], 3)
+        self.assertEqual(result["http_failed_attempt_seconds"], 140)
+        self.assertEqual(result["completed_requests"], 1)
+        self.assertEqual(result["longest_completed_request_seconds"], 150)
+
+    def test_missing_transport_log_or_request_ids_are_unknown(self):
+        self.assertIsNone(transport_evidence(None, ["a"]))
+        self.assertIsNone(transport_evidence({}, None))
+        result = transport_evidence({"a": [{"event": "browser_http_error", "attempt": 2,
+                                            "ts": 10, "status": 500}]}, ["a"])
+        self.assertEqual(result["http_status_counts"], {"500": 1})
+        self.assertEqual(result["timed_http_failures"], 0)
+        self.assertEqual(result["http_failed_attempt_seconds"], 0)
+
     def test_denominators_keep_failed_infrastructure_and_separate_budgets(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
