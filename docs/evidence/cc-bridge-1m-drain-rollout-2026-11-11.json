@@ -1,0 +1,485 @@
+{
+  "started_at": 1794350527.195421,
+  "from_stage": "formal-1m-720k",
+  "to_stage": "formal-1m-720k-drain-v3",
+  "agent_interrupted": false,
+  "preserved_completed_local_slots": [
+    {
+      "task": "batched-eval-parity",
+      "repeat": 1,
+      "effort": "max",
+      "stage": "formal-1m-720k"
+    }
+  ],
+  "remaining_schedule": [
+    {
+      "task": "mvcc-lsm-compaction",
+      "repeat": 1,
+      "effort": "high"
+    },
+    {
+      "task": "mvcc-lsm-compaction",
+      "repeat": 1,
+      "effort": "max"
+    },
+    {
+      "task": "ks-solver-cpp",
+      "repeat": 1,
+      "effort": "high"
+    },
+    {
+      "task": "ks-solver-cpp",
+      "repeat": 1,
+      "effort": "max"
+    },
+    {
+      "task": "session-window-debug",
+      "repeat": 2,
+      "effort": "high"
+    },
+    {
+      "task": "session-window-debug",
+      "repeat": 2,
+      "effort": "max"
+    },
+    {
+      "task": "embedding-drift-monitor",
+      "repeat": 2,
+      "effort": "high"
+    },
+    {
+      "task": "embedding-drift-monitor",
+      "repeat": 2,
+      "effort": "max"
+    },
+    {
+      "task": "batched-eval-parity",
+      "repeat": 2,
+      "effort": "high"
+    },
+    {
+      "task": "batched-eval-parity",
+      "repeat": 2,
+      "effort": "max"
+    },
+    {
+      "task": "mvcc-lsm-compaction",
+      "repeat": 2,
+      "effort": "high"
+    },
+    {
+      "task": "mvcc-lsm-compaction",
+      "repeat": 2,
+      "effort": "max"
+    },
+    {
+      "task": "ks-solver-cpp",
+      "repeat": 2,
+      "effort": "high"
+    },
+    {
+      "task": "ks-solver-cpp",
+      "repeat": 2,
+      "effort": "max"
+    },
+    {
+      "task": "session-window-debug",
+      "repeat": 3,
+      "effort": "high"
+    },
+    {
+      "task": "session-window-debug",
+      "repeat": 3,
+      "effort": "max"
+    },
+    {
+      "task": "embedding-drift-monitor",
+      "repeat": 3,
+      "effort": "high"
+    },
+    {
+      "task": "embedding-drift-monitor",
+      "repeat": 3,
+      "effort": "max"
+    },
+    {
+      "task": "batched-eval-parity",
+      "repeat": 3,
+      "effort": "high"
+    },
+    {
+      "task": "batched-eval-parity",
+      "repeat": 3,
+      "effort": "max"
+    },
+    {
+      "task": "mvcc-lsm-compaction",
+      "repeat": 3,
+      "effort": "high"
+    },
+    {
+      "task": "mvcc-lsm-compaction",
+      "repeat": 3,
+      "effort": "max"
+    },
+    {
+      "task": "ks-solver-cpp",
+      "repeat": 3,
+      "effort": "high"
+    },
+    {
+      "task": "ks-solver-cpp",
+      "repeat": 3,
+      "effort": "max"
+    }
+  ],
+  "before_stage_results": {
+    "generated_at": 1794350527.1854146,
+    "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
+    "totals": {
+      "formal-1m-720k/28800/max": {
+        "attempts": 1,
+        "valid_grades": 1,
+        "infrastructure_errors": 0,
+        "artifact_passes": 0,
+        "artifact_pass_at_1": 0.0,
+        "end_to_end_passes": 0,
+        "end_to_end_pass_rate": 0.0,
+        "agent_seconds": 6023.336,
+        "logical_requests": 13,
+        "bridge_errors": 2,
+        "bridge_errors_after_content": 2,
+        "bridge_errors_before_content": 0,
+        "bridge_retries": 0,
+        "http_failures_retried": 0,
+        "requests_recovered_after_retry": 0,
+        "cancelled_requests": 3,
+        "transport": {
+          "attempts_with_evidence": 1,
+          "max_output_tokens": [
+            131072
+          ],
+          "http_status_counts": {},
+          "timed_http_failures": 0,
+          "http_failed_attempt_seconds": 0,
+          "completed_requests": 8,
+          "observed_usage": {
+            "prompt_tokens": 611778,
+            "completion_tokens": 113208,
+            "total_tokens": 724986,
+            "cached_prompt_tokens": 450816,
+            "reasoning_tokens": 111428
+          },
+          "requests_with_partial_usage": 5,
+          "requests_without_observed_usage": 0,
+          "longest_completed_request_seconds": 883.781
+        },
+        "usage": {
+          "prompt_tokens": 383790,
+          "completion_tokens": 101139,
+          "total_tokens": 484929,
+          "cached_prompt_tokens": 299008,
+          "reasoning_tokens": 99359
+        }
+      }
+    },
+    "attempts": [
+      {
+        "task": "batched-eval-parity",
+        "stage": "formal-1m-720k",
+        "effort": "max",
+        "repeat": 1,
+        "budget_seconds": 28800,
+        "agent_wall_clock_timeout_seconds": null,
+        "artifact_score": 0,
+        "infrastructure_error": null,
+        "end_to_end_success": false,
+        "agent_seconds": 6023.336,
+        "agent_timed_out": false,
+        "cc_subtype": "success",
+        "cc_turns": 31,
+        "logical_requests": 13,
+        "upstream_attempts": 13,
+        "bridge_errors": 2,
+        "bridge_errors_after_content": 2,
+        "bridge_errors_before_content": 0,
+        "bridge_retries": 0,
+        "http_failures_retried": 0,
+        "requests_recovered_after_retry": 0,
+        "bridge_cancelled": 3,
+        "bridge_unfinished": [],
+        "transport": {
+          "max_output_tokens": [
+            131072
+          ],
+          "http_status_counts": {},
+          "timed_http_failures": 0,
+          "http_failed_attempt_seconds": 0,
+          "completed_requests": 8,
+          "completed_request_seconds": 1195.823,
+          "longest_completed_request_seconds": 883.781,
+          "observed_usage": {
+            "prompt_tokens": 611778,
+            "completion_tokens": 113208,
+            "total_tokens": 724986,
+            "cached_prompt_tokens": 450816,
+            "reasoning_tokens": 111428
+          },
+          "requests_with_partial_usage": 5,
+          "requests_without_observed_usage": 0
+        },
+        "usage": {
+          "prompt_tokens": 383790,
+          "completion_tokens": 101139,
+          "total_tokens": 484929,
+          "cached_prompt_tokens": 299008,
+          "reasoning_tokens": 99359
+        },
+        "source_head": "fa6050911e5a8dba50b33784649d1cf23d97e1a9"
+      }
+    ],
+    "pending": []
+  },
+  "artifact_review": {
+    "reviewed_at": 1794350527.2084205,
+    "attempts": [
+      {
+        "attempt": "runs/formal-1m-720k/batched-eval-parity--max--r1",
+        "task": "batched-eval-parity",
+        "control": null,
+        "effort": "max",
+        "repeat": 1,
+        "artifact_score": 0,
+        "infrastructure_error": null,
+        "changed_original_files": [],
+        "added_files": [
+          "app/evalbench/__pycache__/__init__.cpython-311.pyc",
+          "app/evalbench/__pycache__/byte_stops.cpython-311.pyc",
+          "app/evalbench/__pycache__/evaluate.cpython-311.pyc",
+          "app/evalbench/__pycache__/generation.cpython-311.pyc",
+          "app/evalbench/__pycache__/io_utils.cpython-311.pyc",
+          "app/evalbench/__pycache__/metrics.cpython-311.pyc",
+          "app/evalbench/__pycache__/model.cpython-311.pyc",
+          "app/evalbench/__pycache__/packing.cpython-311.pyc",
+          "app/evalbench/__pycache__/prefix_cache.cpython-311.pyc",
+          "app/evalbench/__pycache__/reference.cpython-311.pyc",
+          "app/evalbench/__pycache__/rendering.cpython-311.pyc",
+          "app/evalbench/__pycache__/scheduler.cpython-311.pyc",
+          "app/evalbench/__pycache__/schema.cpython-311.pyc",
+          "app/evalbench/__pycache__/scoring.cpython-311.pyc",
+          "app/evalbench/__pycache__/spans.cpython-311.pyc",
+          "app/evalbench/__pycache__/tokenizer.cpython-311.pyc",
+          "app/evalbench/__pycache__/trace.cpython-311.pyc"
+        ],
+        "removed_original_files": [],
+        "declared_read_only_files_unchanged": {},
+        "read_only_check_scope": "not checked",
+        "artifact_errors_present": false,
+        "verifier": {
+          "test_count": 5,
+          "statuses": {
+            "failed": 5
+          },
+          "sha256": "112d69d2dbcf61dc061626ba1b6cd41aac7392b2b17551c1e8e107653dffb457"
+        },
+        "client_terminal": {
+          "exit_code": 1,
+          "timed_out": false,
+          "subtype": "success",
+          "is_error": true,
+          "terminal_reason": "completed",
+          "api_error_status": null,
+          "prompt_too_long": false,
+          "reported_context_window_tokens": [
+            1000000
+          ]
+        }
+      }
+    ],
+    "scope": "saved copied-artifact hashes and original verifier results; not a semantic code review"
+  },
+  "validated_candidate_runtime": {
+    "started_at": 1794330849.8082786,
+    "source_head": "9459ab1ba1d48808038b264a615b1f5409beadf1",
+    "source_module_sha256": {
+      "nvplay_bridge.py": "537f857a142c8d4391d02837bab2d2123b2fe802185f785d34696dde1287856f",
+      "browser_upstream.py": "44025b2a4b9b757c95537b4a4ecbdfb170755a8098274f5b9fc43ae4ab763517",
+      "browser_events.py": "9ca0a5b7d18edcde37bf19aef27ddf226b588f840f97b4b9df46fc08042daf29",
+      "stream_support.py": "f46b07b3cdf1e4cae0f409caf26c0a279bd57477f5259ee8bba045c14f95f602",
+      "responses_api.py": "da451613bf0a1c4aa12ef03effc4d5ffe1ea330fb48006f9d09925233f9580c6",
+      "responses_support.py": "ed907b22106ff58923efa5431c20422e59bfdeb9a719b0766969522e444f033e"
+    },
+    "configuration": {
+      "UPSTREAM_KIND": "browser",
+      "UPSTREAM_MODEL": "moonshotai/kimi-k3.1-pro",
+      "BROWSER_CDP_PORT": "9225",
+      "BROWSER_POOL_SIZE": "2",
+      "BROWSER_TIMEOUT": "28800",
+      "BROWSER_FIRST_BYTE_TIMEOUT": "3600",
+      "BROWSER_IDLE_TIMEOUT": "3600",
+      "BROWSER_MAX_TOKENS": "131072",
+      "BROWSER_FIXED_MAX_TOKENS": "131072",
+      "BROWSER_HTTP_5XX_RETRIES": "2",
+      "BROWSER_DEBUG_LOG": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-1m-20261110-2355/drain-fix-live-v2/bridge-debug.jsonl"
+    },
+    "fixed_max_output_tokens": 131072,
+    "request_timeout_seconds": 28800,
+    "first_byte_timeout_seconds": 3600,
+    "idle_timeout_seconds": 3600,
+    "cdp_port": 9225,
+    "bridge_port": 8084,
+    "pid": 99951,
+    "health_at_start": {
+      "status": "ok",
+      "upstream_kind": "browser",
+      "upstream_url": "browser://cdp:9225",
+      "model": "moonshotai/kimi-k3.1-pro",
+      "cookie_present": false,
+      "captcha_present": false,
+      "tool_ids": "unique_per_invocation",
+      "loop_reminder_enabled": false,
+      "history_reasoning": "preserve",
+      "browser_output_tokens": {
+        "maximum": 131072,
+        "fixed": 131072
+      },
+      "browser_timeouts": {
+        "total_seconds": 28800,
+        "first_byte_seconds": 3600.0,
+        "idle_seconds": 3600.0
+      },
+      "browser_pool": {
+        "size": 2,
+        "tabs": {},
+        "errors": {}
+      }
+    },
+    "boot_id": "84bdf8c2-84f9-4339-9906-273d6191a66c",
+    "start_ticks": "631601",
+    "process_identity_observed_at": 1794326642.1575377,
+    "pool_prefix": "kdrainvalidation",
+    "pool_size": 2
+  },
+  "stopped_checkpoint": {
+    "record": "checkpoint-process.json",
+    "identity": {
+      "pid": 146297,
+      "boot_id": "84bdf8c2-84f9-4339-9906-273d6191a66c",
+      "start_ticks": "1016505"
+    },
+    "stopped_at": 1794350531.5814438,
+    "signal": "SIGTERM"
+  },
+  "stopped_bridge": {
+    "record": "bridge-runtime.json",
+    "identity": {
+      "pid": 37175,
+      "boot_id": "84bdf8c2-84f9-4339-9906-273d6191a66c",
+      "start_ticks": "196772"
+    },
+    "stopped_at": 1794350531.7843552,
+    "signal": "SIGTERM"
+  },
+  "actual_rollout_smoke": [
+    {
+      "effort": "high",
+      "passed": true,
+      "process": {
+        "exit_code": 0,
+        "timed_out": false,
+        "timeout_seconds": null,
+        "started_at": 1794350549.6622636,
+        "finished_at": 1794350608.3709767,
+        "duration_seconds": 58.709
+      },
+      "logical_requests": 2,
+      "errors": 0,
+      "retries": 0,
+      "unfinished": [],
+      "reported_context_windows": [
+        1000000
+      ]
+    },
+    {
+      "effort": "max",
+      "passed": true,
+      "process": {
+        "exit_code": 0,
+        "timed_out": false,
+        "timeout_seconds": null,
+        "started_at": 1794350549.6614304,
+        "finished_at": 1794350610.1211245,
+        "duration_seconds": 60.46
+      },
+      "logical_requests": 2,
+      "errors": 0,
+      "retries": 0,
+      "unfinished": [],
+      "reported_context_windows": [
+        1000000
+      ]
+    }
+  ],
+  "preceding_controller_error": {
+    "at": 1794334628.2971056,
+    "error_type": "RuntimeError",
+    "error": "runner source changed after initialization; start a new process before another attempt"
+  },
+  "status": "validated_rollout_starting_remaining_slots",
+  "runtime": {
+    "started_at": 1794350531.78639,
+    "source_head": "e5ab0f70368a0c4cb0294f2dabc2f8e682cd9e09",
+    "source_module_sha256": {
+      "nvplay_bridge.py": "537f857a142c8d4391d02837bab2d2123b2fe802185f785d34696dde1287856f",
+      "browser_upstream.py": "44025b2a4b9b757c95537b4a4ecbdfb170755a8098274f5b9fc43ae4ab763517",
+      "browser_events.py": "9ca0a5b7d18edcde37bf19aef27ddf226b588f840f97b4b9df46fc08042daf29",
+      "stream_support.py": "f46b07b3cdf1e4cae0f409caf26c0a279bd57477f5259ee8bba045c14f95f602",
+      "responses_api.py": "da451613bf0a1c4aa12ef03effc4d5ffe1ea330fb48006f9d09925233f9580c6",
+      "responses_support.py": "ed907b22106ff58923efa5431c20422e59bfdeb9a719b0766969522e444f033e"
+    },
+    "configuration": {
+      "UPSTREAM_KIND": "browser",
+      "UPSTREAM_MODEL": "moonshotai/kimi-k3.1-pro",
+      "BROWSER_CDP_PORT": "9225",
+      "BROWSER_POOL_SIZE": "5",
+      "BROWSER_TIMEOUT": "28800",
+      "BROWSER_FIRST_BYTE_TIMEOUT": "3600",
+      "BROWSER_IDLE_TIMEOUT": "3600",
+      "BROWSER_MAX_TOKENS": "131072",
+      "BROWSER_FIXED_MAX_TOKENS": "131072",
+      "BROWSER_HTTP_5XX_RETRIES": "2",
+      "BROWSER_DEBUG_LOG": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-1m-20261110-2355/bridge-debug.jsonl"
+    },
+    "fixed_max_output_tokens": 131072,
+    "request_timeout_seconds": 28800,
+    "first_byte_timeout_seconds": 3600,
+    "idle_timeout_seconds": 3600,
+    "cdp_port": 9225,
+    "bridge_port": 8083,
+    "pid": 342020,
+    "health_at_start": {
+      "status": "ok",
+      "upstream_kind": "browser",
+      "upstream_url": "browser://cdp:9225",
+      "model": "moonshotai/kimi-k3.1-pro",
+      "cookie_present": false,
+      "captcha_present": false,
+      "tool_ids": "unique_per_invocation",
+      "loop_reminder_enabled": false,
+      "history_reasoning": "preserve",
+      "browser_output_tokens": {
+        "maximum": 131072,
+        "fixed": 131072
+      },
+      "browser_timeouts": {
+        "total_seconds": 28800,
+        "first_byte_seconds": 3600.0,
+        "idle_seconds": 3600.0
+      }
+    },
+    "boot_id": "84bdf8c2-84f9-4339-9906-273d6191a66c",
+    "start_ticks": "2599798",
+    "process_identity_observed_at": 1794326642.1575377
+  },
+  "completed_at": 1794350665.2799225
+}
