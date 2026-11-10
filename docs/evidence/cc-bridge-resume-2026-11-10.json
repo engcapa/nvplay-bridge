@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794310265.1760492,
+  "checkpoint_at": 1794310385.2914207,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-resume-20261110-1647",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -541,7 +541,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794310265.2134216,
+    "generated_at": 1794310385.33573,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-128k-fixed/28800/high": {
@@ -756,8 +756,8 @@
         "task": "embedding-drift-monitor",
         "effort": "high",
         "started_at": 1794309436.7690861,
-        "elapsed_seconds": 828.4,
-        "tool_calls": 25,
+        "elapsed_seconds": 948.6,
+        "tool_calls": 26,
         "last_tool": "Edit"
       },
       {
@@ -766,9 +766,9 @@
         "task": "embedding-drift-monitor",
         "effort": "max",
         "started_at": 1794309436.757663,
-        "elapsed_seconds": 828.5,
-        "tool_calls": 17,
-        "last_tool": "Write"
+        "elapsed_seconds": 948.6,
+        "tool_calls": 20,
+        "last_tool": "Bash"
       }
     ]
   },
@@ -790,81 +790,104 @@
       "idle_seconds": 3600.0
     },
     "pool_states": {
-      "busy": 2,
-      "ready": 3
+      "ready": 3,
+      "busy": 2
     },
     "recovering_tabs": []
   },
   "bridge_activity": {
     "events_last_300s": {
-      "browser_progress": 93,
-      "browser_first_data": 7,
+      "browser_progress": 86,
+      "browser_buffer": 10,
+      "browser_pool_release": 10,
+      "browser_done": 9,
+      "request": 9,
+      "payload": 9,
+      "browser_start": 10,
+      "browser_tab": 10,
+      "browser_first_data": 8,
       "browser_first_content": 7,
-      "browser_buffer": 6,
-      "browser_pool_release": 6,
-      "browser_done": 6,
-      "request": 6,
-      "payload": 6,
-      "browser_start": 6,
-      "browser_tab": 6
+      "browser_http_error": 1,
+      "browser_abort": 1,
+      "pool_recovery_start": 1,
+      "upstream_retry": 1,
+      "pool_activation": 2,
+      "pool_page_ready": 1,
+      "pool_ready": 1
     },
     "active": [
       {
-        "id": "7470c153",
-        "retry_count": 0,
-        "phase": "browser_progress",
-        "attempt": 1,
-        "reasoning_effort": "max",
-        "tab_id": "kpool=1",
-        "counts": {
-          "thinking_chars": 682,
-          "text_chars": 0,
-          "tool_calls": 0
-        },
-        "usage": {
-          "prompt_tokens": 30169,
-          "completion_tokens": 254,
-          "total_tokens": 30423,
-          "prompt_tokens_details": {
-            "cached_tokens": 29184
-          },
-          "completion_tokens_details": {
-            "reasoning_tokens": 254
-          }
-        },
-        "age_seconds": 29.2,
-        "activity_age_seconds": 2.6
-      },
-      {
-        "id": "77da0909",
+        "id": "08227ced",
         "retry_count": 0,
         "phase": "browser_progress",
         "attempt": 1,
         "reasoning_effort": "high",
-        "tab_id": "kpool=5",
+        "tab_id": "kpool=4",
         "counts": {
-          "thinking_chars": 452,
+          "thinking_chars": 0,
           "text_chars": 0,
           "tool_calls": 0
         },
         "usage": {
-          "prompt_tokens": 26671,
-          "completion_tokens": 161,
-          "total_tokens": 26832,
+          "prompt_tokens": 27024,
+          "completion_tokens": 1001,
+          "total_tokens": 28025,
           "prompt_tokens_details": {
-            "cached_tokens": 25984
+            "cached_tokens": 26624
           },
           "completion_tokens_details": {
-            "reasoning_tokens": 161
+            "reasoning_tokens": 0
           }
         },
-        "age_seconds": 24.1,
-        "activity_age_seconds": 4.1
+        "age_seconds": 118.0,
+        "activity_age_seconds": 1.9
+      },
+      {
+        "id": "ae23502a",
+        "retry_count": 1,
+        "reasoning_effort": "max",
+        "last_retry": {
+          "reason": "nvidia_pool_acquire_timeout",
+          "status": 500,
+          "delay": 5.263
+        },
+        "phase": "browser_tab",
+        "attempt": 2,
+        "tab_id": "kpool=5",
+        "age_seconds": 70.4,
+        "activity_age_seconds": 11.9
       }
     ],
     "recent_errors": [],
-    "recent_upstream_errors": [],
-    "recent_retries": []
+    "recent_upstream_errors": [
+      {
+        "event": "browser_http_error",
+        "ts": 1794310368.0348725,
+        "id": "ae23502a",
+        "attempt": 1,
+        "reasoning_effort": "max",
+        "status": 500,
+        "sec": 53.117
+      }
+    ],
+    "recent_retries": [
+      {
+        "event": "upstream_retry",
+        "ts": 1794310368.0445569,
+        "id": "ae23502a",
+        "attempt": 1,
+        "reasoning_effort": "max",
+        "status": 500,
+        "sec": 53.127,
+        "counts": {
+          "thinking_chars": 0,
+          "text_chars": 0,
+          "tool_calls": 0
+        },
+        "usage": {},
+        "error_sha256": "c0c7c81a82584266f4c648dfdf96793a96b19a92dd951f2aada7e0327ab2c75c"
+      }
+    ]
   },
   "evidence_fingerprints": [
     {
@@ -1009,7 +1032,7 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "99179f972d49ed82fd72ab110beb3a5cae50eccb14fa1d0d2ce3a1ab8e3e3e8a",
+      "sha256": "bd8de46e2a26f7d12b167995c5f406d878f746177aaf4d92c649988e1c22e290",
       "size": 791
     },
     {
