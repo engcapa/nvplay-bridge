@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794350719.599732,
+  "checkpoint_at": 1794350722.623393,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-1m-20261110-2355",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -789,8 +789,8 @@
     "host_memory_limit_bytes": "30064771072"
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794350716.6169944,
-    "commit": "f628b9b6f17d742212defe827b9dc18f91f98cfd",
+    "attempted_at": 1794350719.6484532,
+    "commit": "44aa97d250ae97a3e3813779ea63920e96a62a46",
     "pushed": true,
     "returncode": 0
   },
@@ -1167,7 +1167,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794350719.610299,
+    "generated_at": 1794350722.6326962,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-1m-720k/28800/max": {
@@ -1279,13 +1279,15 @@
   "combined_plan_positions_completed": 6,
   "campaign": {
     "controller_alive": true,
-    "status": "live_tools_validated"
+    "status": "formal_running",
+    "task": "mvcc-lsm-compaction",
+    "repeat": 1
   },
   "transport_transition": {
     "status": "remaining_campaign_started",
     "at": 1794350671.691184
   },
-  "status": "formal_incomplete",
+  "status": "formal_running",
   "bridge_health": {
     "status": "ok",
     "model": "moonshotai/kimi-k3.1-pro",
@@ -1373,8 +1375,8 @@
     },
     {
       "path": "campaign-state.json",
-      "sha256": "976ac66b84d395c39493d3d5a22038f1c707c7bbd6188eb4fdbf0cdf3ed09e55",
-      "size": 3793
+      "sha256": "4d226dd529a24ecd93929a26858dee157e12e1602f12f3e5ba2987496618d165",
+      "size": 3835
     },
     {
       "path": "cdp-monitor-process.json",
@@ -1388,7 +1390,7 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "d64e84e633d46b8a4b14d8dd13694599894f218adf8e0a8593761054e1b66078",
+      "sha256": "d692b959b8e5ddce9ee53397fb03b70e7dcdff8e680aa4337da260287fdd06f4",
       "size": 134
     },
     {
