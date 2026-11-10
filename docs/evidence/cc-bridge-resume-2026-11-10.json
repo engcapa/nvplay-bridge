@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794304019.471879,
+  "checkpoint_at": 1794304045.5817084,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-resume-20261110-1647",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -505,6 +505,17 @@
         "infrastructure_error": null
       }
     },
+    "ks-solver-cpp": {
+      "valid": true,
+      "baseline": {
+        "score": 0,
+        "infrastructure_error": null
+      },
+      "oracle": {
+        "score": 1,
+        "infrastructure_error": null
+      }
+    },
     "mvcc-lsm-compaction": {
       "valid": true,
       "baseline": {
@@ -530,7 +541,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794304019.4738567,
+    "generated_at": 1794304045.583494,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
@@ -538,7 +549,7 @@
   },
   "new_formal_attempts_planned": 30,
   "new_formal_attempts_completed": 0,
-  "status": "validating_controls",
+  "status": "controls_validated",
   "bridge_health": {
     "status": "ok",
     "model": "moonshotai/kimi-k3.1-pro",
@@ -593,8 +604,8 @@
     },
     {
       "path": "campaign-state.json",
-      "sha256": "62426c360391c440384078088fc0755910a82b8980033f68c9859f9a950eec03",
-      "size": 2858
+      "sha256": "3ee4ca9c1d0bc855dcae605d01839d404563b0ce22f5346a3116bcd7f1c3105a",
+      "size": 2855
     },
     {
       "path": "campaign-validation.log",
@@ -619,6 +630,11 @@
     {
       "path": "controls/embedding-drift-monitor/result.json",
       "sha256": "0b4b705de594fd99023b1efe84857afeb7fe125bf0a773912f4eadf8de476201",
+      "size": 529
+    },
+    {
+      "path": "controls/ks-solver-cpp/result.json",
+      "sha256": "5e48dadcdc88f88647a8d6e0284c496a05c9d53901e4bdf0e82143fab8c3ce49",
       "size": 529
     },
     {
