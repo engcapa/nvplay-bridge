@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794309303.4480612,
+  "checkpoint_at": 1794309305.1310837,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-resume-20261110-1647",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -541,7 +541,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794309303.483968,
+    "generated_at": 1794309305.158969,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-128k-fixed/28800/high": {
@@ -589,6 +589,53 @@
           "total_tokens": 3407951,
           "cached_prompt_tokens": 3234304,
           "reasoning_tokens": 60017
+        }
+      },
+      "formal-128k-fixed/28800/max": {
+        "attempts": 1,
+        "valid_grades": 1,
+        "infrastructure_errors": 0,
+        "artifact_passes": 0,
+        "artifact_pass_at_1": 0.0,
+        "end_to_end_passes": 0,
+        "end_to_end_pass_rate": 0.0,
+        "agent_seconds": 4985.066,
+        "logical_requests": 80,
+        "bridge_errors": 1,
+        "bridge_errors_after_content": 0,
+        "bridge_errors_before_content": 1,
+        "bridge_retries": 2,
+        "http_failures_retried": 2,
+        "requests_recovered_after_retry": 0,
+        "cancelled_requests": 0,
+        "transport": {
+          "attempts_with_evidence": 1,
+          "max_output_tokens": [
+            131072
+          ],
+          "http_status_counts": {
+            "500": 3
+          },
+          "timed_http_failures": 3,
+          "http_failed_attempt_seconds": 147.635,
+          "completed_requests": 79,
+          "observed_usage": {
+            "prompt_tokens": 6322559,
+            "completion_tokens": 101229,
+            "total_tokens": 6423788,
+            "cached_prompt_tokens": 6191616,
+            "reasoning_tokens": 90551
+          },
+          "requests_with_partial_usage": 0,
+          "requests_without_observed_usage": 1,
+          "longest_completed_request_seconds": 492.449
+        },
+        "usage": {
+          "prompt_tokens": 6322559,
+          "completion_tokens": 101229,
+          "total_tokens": 6423788,
+          "cached_prompt_tokens": 6191616,
+          "reasoning_tokens": 90551
         }
       }
     },
@@ -646,22 +693,67 @@
           "reasoning_tokens": 60017
         },
         "source_head": "508a582197501490ff84c781f2bd40af187c2aa5"
+      },
+      {
+        "task": "session-window-debug",
+        "stage": "formal-128k-fixed",
+        "effort": "max",
+        "repeat": 1,
+        "budget_seconds": 28800,
+        "artifact_score": 0,
+        "infrastructure_error": null,
+        "end_to_end_success": false,
+        "agent_seconds": 4985.066,
+        "agent_timed_out": false,
+        "cc_subtype": "success",
+        "cc_turns": 103,
+        "logical_requests": 80,
+        "upstream_attempts": 82,
+        "bridge_errors": 1,
+        "bridge_errors_after_content": 0,
+        "bridge_errors_before_content": 1,
+        "bridge_retries": 2,
+        "http_failures_retried": 2,
+        "requests_recovered_after_retry": 0,
+        "bridge_cancelled": 0,
+        "bridge_unfinished": [],
+        "transport": {
+          "max_output_tokens": [
+            131072
+          ],
+          "http_status_counts": {
+            "500": 3
+          },
+          "timed_http_failures": 3,
+          "http_failed_attempt_seconds": 147.635,
+          "completed_requests": 79,
+          "completed_request_seconds": 4805.672,
+          "longest_completed_request_seconds": 492.449,
+          "observed_usage": {
+            "prompt_tokens": 6322559,
+            "completion_tokens": 101229,
+            "total_tokens": 6423788,
+            "cached_prompt_tokens": 6191616,
+            "reasoning_tokens": 90551
+          },
+          "requests_with_partial_usage": 0,
+          "requests_without_observed_usage": 1
+        },
+        "usage": {
+          "prompt_tokens": 6322559,
+          "completion_tokens": 101229,
+          "total_tokens": 6423788,
+          "cached_prompt_tokens": 6191616,
+          "reasoning_tokens": 90551
+        },
+        "source_head": "508a582197501490ff84c781f2bd40af187c2aa5"
       }
     ],
-    "pending": [
-      {
-        "attempt": "runs/formal-128k-fixed/session-window-debug--max--r1",
-        "status": "grading",
-        "task": "session-window-debug",
-        "effort": "max",
-        "tool_calls": 102,
-        "last_tool": "Bash"
-      }
-    ]
+    "pending": []
   },
   "new_formal_attempts_planned": 30,
-  "new_formal_attempts_completed": 1,
-  "status": "formal_running",
+  "new_formal_attempts_completed": 2,
+  "status": "controls_validated",
   "bridge_health": {
     "status": "ok",
     "model": "moonshotai/kimi-k3.1-pro",
@@ -727,8 +819,8 @@
     },
     {
       "path": "campaign-state.json",
-      "sha256": "feffb43e004b8f8579ed84a66cf3a8b306daa71a82b223d0e563e28739c1d662",
-      "size": 2919
+      "sha256": "2b1c95247da9d87529a4d4a081feac0b9e9678eb693629a993c87d763e2e6f2f",
+      "size": 2918
     },
     {
       "path": "campaign-validation.log",
@@ -871,6 +963,16 @@
       "size": 23555
     },
     {
+      "path": "runs/formal-128k-fixed/session-window-debug--max--r1/artifacts.json",
+      "sha256": "e77f7eba228745defac15c5ae2a18b79126d883c3bda594678c402a5622491c9",
+      "size": 1607
+    },
+    {
+      "path": "runs/formal-128k-fixed/session-window-debug--max--r1/grade.json",
+      "sha256": "e618e5c66cc7d1393e1158d23ced7b4e60d54c00c5fc34d5ccd4a15c2e9412da",
+      "size": 220
+    },
+    {
       "path": "runs/formal-128k-fixed/session-window-debug--max--r1/identity.json",
       "sha256": "bad9d330d8c22dfb311f7e954c89d468348ab4d2036006cc8feff3ed979c2b91",
       "size": 2828
@@ -879,6 +981,11 @@
       "path": "runs/formal-128k-fixed/session-window-debug--max--r1/request-protocol.json",
       "sha256": "15feb065d6acbc4f0a37d99104142e0a23b0a221b482332cb24be854521974dc",
       "size": 802
+    },
+    {
+      "path": "runs/formal-128k-fixed/session-window-debug--max--r1/result.json",
+      "sha256": "35b3ae76724785d979c9125157226159fa4d7033cfc8bfb2cd4ad374f1373ffe",
+      "size": 29601
     },
     {
       "path": "settings-formal-high.json",
