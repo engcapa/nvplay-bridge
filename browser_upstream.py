@@ -49,11 +49,11 @@ def _matches_hint(url: str, hint: str) -> bool:
 
 PATCH_JS = r"""
 (() => {
-  if (window.__bridgeVersion === 2) return 'already';
+  if (window.__bridgeVersion === 3) return 'already';
   if (window.__bridgeInstalled && !window.__bridgeOriginalFetch) return 'reload-required';
   const prev = window.__bridgeOriginalFetch || window.fetch.bind(window);
   window.__bridgeOriginalFetch = prev;
-  window.__bridgeVersion = 2;
+  window.__bridgeVersion = 3;
   window.__bridgeInstalled = true;
   const encoder = new TextEncoder();
   window.__bridgeArm = (id, body, limit) => {
@@ -69,7 +69,7 @@ PATCH_JS = r"""
       const c = b.chunks.shift(); data += c.text; size += c.bytes; b.pending -= c.bytes;
     }
     return { data, status: b.status, ct: b.ct, done: b.done && !b.chunks.length,
-      error: b.error, peak: b.peak };
+      error: b.chunks.length ? null : b.error, peak: b.peak };
   };
   window.__bridgeAbort = async id => {
     const b = window.__bridge;
@@ -495,13 +495,16 @@ class BrowserUpstream:
                     if status > 0:
                         raise self._http_error(quoted_id, state, cancel, deadline, trace)
                     raise BrowserError(f"上游请求未建立: {data[:500] or state.get('error')}")
-                if state.get("error"):
-                    raise BrowserError(f"上游响应读取失败: {state['error']}")
                 if data:
                     if status != 200:
                         raise BrowserError("上游数据缺少成功响应状态")
                     last_data = time.monotonic()
                     yield data
+                # A reader can fail after receiving data but before this poll.
+                # Drain every queued byte before surfacing its terminal error;
+                # the page defers that error while further chunks remain.
+                if state.get("error"):
+                    raise BrowserError(f"上游响应读取失败: {state['error']}")
                 if state.get("done"):
                     if status != 200:
                         raise BrowserError("上游响应未成功建立")

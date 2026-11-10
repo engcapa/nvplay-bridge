@@ -64,5 +64,23 @@ async function waitFor(predicate) {
   await waitFor(() => window.__bridge.done);
   assert.match(window.__bridge.error, /buffer exceeded/);
   assert.equal(window.__bridge.pending, 0);
+
+  window.__bridgeArm('reader-error', '{}', 1024 * 1024);
+  await window.fetch('https://test/v2/predict/models/test', { method: 'POST', body: 'x' });
+  const received = 'received before failure '.repeat(6000);
+  controllers[3].enqueue(encoder.encode(received));
+  await waitFor(() => window.__bridge.pending === encoder.encode(received).length);
+  controllers[3].error(new TypeError('network error'));
+  await waitFor(() => window.__bridge.done);
+  let drained = '', batch;
+  do {
+    batch = window.__bridgeDrain('reader-error', 65536);
+    drained += batch.data;
+    if (!batch.done) assert.equal(batch.error, null);
+  } while (!batch.done);
+  assert.equal(drained, received);
+  assert.match(batch.error, /network error/);
+  assert.equal(window.__bridge.pending, 0);
+  assert.equal(await window.__bridgeAbort('reader-error'), true);
   console.log('PASS browser patch: Unicode fragments, incremental drain, request isolation, abort and buffer limit');
 })().catch(error => { console.error(error); process.exitCode = 1; });

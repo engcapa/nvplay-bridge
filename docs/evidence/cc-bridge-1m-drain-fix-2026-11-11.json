@@ -1,0 +1,37 @@
+{
+  "recorded_at": 1794330205.6922045,
+  "status": "offline_fix_passed_real_cc_validation_running",
+  "incident_reference": "docs/evidence/cc-bridge-1m-idle-observation-2026-11-11.json",
+  "observed_incident_root_cause_established": false,
+  "observed_incident_data_loss_established": false,
+  "confirmed_defect": "CDP drain returning received data and a reader error in the same state discarded the received data; queued later chunks could also be lost.",
+  "fix": "Drain all already received page chunks, deliver final data before propagating the reader error. The error remains terminal even if a finish frame was received.",
+  "request_replay_policy_changed": false,
+  "thinking_buffering_policy_changed": false,
+  "page_patch_version": 3,
+  "python_regression": {
+    "passed": 208,
+    "seconds": 15.819
+  },
+  "javascript_regression": {
+    "passed": true,
+    "original_source_failed_new_fixture": true,
+    "received_fixture_chars": 144000,
+    "drain_bytes": 65536
+  },
+  "deployed_to_scored_service": false,
+  "current_scored_runtime_head": "fa6050911e5a8dba50b33784649d1cf23d97e1a9",
+  "validation_scope": "Offline fault fixtures and local real CC transport checks. This does not fix or identify the remote connection closure.",
+  "evidence_fingerprints": [
+    {
+      "path": "logs/eval-cc-1m-20261110-2355/drain-fix-js-before.json",
+      "size": 462,
+      "sha256": "68a0d8d0c14a1d2883a6691b29fd4fe92737daf100f113fbf408354d16467553"
+    },
+    {
+      "path": "logs/eval-cc-1m-20261110-2355/drain-fix-python-regression.log",
+      "size": 2395,
+      "sha256": "2bf78f8833fd0bdc58aeebb979eb19cd710a1c11469ccbc933d66756c9337f58"
+    }
+  ]
+}

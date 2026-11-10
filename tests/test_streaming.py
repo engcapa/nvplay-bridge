@@ -160,6 +160,28 @@ class FakeCDP(bu.BrowserUpstream):
 
 
 class AsyncBoundaryTests(unittest.IsolatedAsyncioTestCase):
+    async def test_final_buffer_is_preserved_without_turning_reader_error_into_success(self):
+        for delta, expected, finish in (
+            ({"content": "RECEIVED_TEXT"}, "RECEIVED_TEXT", "stop"),
+            ({"reasoning_content": "RECEIVED_THINKING"}, "RECEIVED_THINKING", "stop"),
+            ({"tool_calls": [{"index": 0, "id": "call_1", "function": {
+                "name": "Bash", "arguments": '{"command":"echo RECEIVED_TOOL"}'}}]},
+                "RECEIVED_TOOL", "tool_calls"),
+        ):
+            with self.subTest(delta=delta):
+                browser = FakeCDP([{"status": 200, "done": True,
+                    "data": frame(delta, finish) + frame(usage={"completion_tokens": 37}),
+                    "error": "TypeError: network error"}])
+                with patch.object(bridge, "_browser", browser), patch.object(bridge, "_dbg") as debug:
+                    wire = "".join([part async for part in bridge.stream_anthropic({}, {}, "kimi-k3.1-pro")])
+                self.assertIn(expected, wire)
+                self.assertIn("event: error", wire)
+                self.assertNotIn("event: message_stop", wire)
+                self.assertEqual(browser.aborted, 1)
+                failure = [call.kwargs for call in debug.call_args_list if call.args[0] == "browser_error"][-1]
+                self.assertEqual(failure["usage"], {"completion_tokens": 37})
+                self.assertTrue(failure["committed"])
+
     async def test_backpressure_failure_closes_source_without_blocking_on_error(self):
         closed = threading.Event()
 
@@ -240,6 +262,16 @@ class AsyncBoundaryTests(unittest.IsolatedAsyncioTestCase):
 
 
 class CDPStreamTests(unittest.TestCase):
+    def test_received_data_is_delivered_before_simultaneous_reader_failure(self):
+        browser = FakeCDP([{"status": 200, "data": "received bytes", "done": True,
+                            "error": "TypeError: network error"}])
+        source = browser.stream({}, timeout=1)
+        self.assertEqual(next(source), "received bytes")
+        with self.assertRaisesRegex(bu.BrowserError, "network error"):
+            next(source)
+        self.assertEqual(browser.aborted, 1)
+        self.assertFalse(browser._lock.locked())
+
     def test_first_data_before_completion_and_abort_on_close(self):
         browser = FakeCDP([{"status": 200, "data": "first", "done": False}])
         trace = []

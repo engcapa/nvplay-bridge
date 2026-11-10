@@ -80,7 +80,11 @@ class Fixture(BaseHTTPRequestHandler):
                 kind = "complete_tool"
             fixture_events.append({"ts": time.time(), "case": active["name"],
                                    "request": active["requests"], "kind": kind,
-                                   "max_tokens": request.get("max_tokens")})
+                                   "max_tokens": request.get("max_tokens"),
+                                   "model": request.get("model"),
+                                   "reasoning_effort": request.get("reasoning_effort")})
+        if broken and active.get("coalesce_reader_error"):
+            time.sleep(0.2)
         self.send_response(200)
         self.send_header("Content-Type", "text/event-stream")
         self.send_header("Content-Length", str(len(body) + 100000 if broken else len(body)))
@@ -88,7 +92,7 @@ class Fixture(BaseHTTPRequestHandler):
         self.wfile.write(body)
         self.wfile.flush()
         if broken:
-            time.sleep(1)
+            time.sleep(0.2 if active.get("coalesce_reader_error") else 1)
             self.close_connection = True
             self.connection.shutdown(socket.SHUT_RDWR)
 
@@ -112,9 +116,20 @@ def main():
     parser.add_argument("--cdp-port", type=int, default=9225)
     parser.add_argument("--pinned-cli", type=Path, help="Optional official Node.js CC cli.js to compare")
     parser.add_argument("--fixed-max-tokens", type=int, default=0)
+    parser.add_argument("--pinned-only", action="store_true")
+    parser.add_argument("--model", default="kimi-k3.1-pro")
+    parser.add_argument("--effort", choices=("low", "high", "max"), default="low")
+    parser.add_argument("--auto-compact-window", type=int)
+    parser.add_argument("--unlimited-agent-wait", action="store_true")
+    parser.add_argument("--coalesce-reader-error", action="store_true",
+                        help="Let data and a reader error accumulate before the next CDP poll")
     args = parser.parse_args()
     if not 0 <= args.fixed_max_tokens <= bridge.BROWSER_MAX_TOKENS:
         parser.error("fixed output cap must be between zero and BROWSER_MAX_TOKENS")
+    if args.pinned_only and not args.pinned_cli:
+        parser.error("--pinned-only requires --pinned-cli")
+    if args.auto_compact_window is not None and args.auto_compact_window <= 0:
+        parser.error("auto-compaction window must be positive")
     HERE = args.output.resolve()
     HERE.mkdir(parents=True, exist_ok=True)
     if (HERE / "result.json").exists() or any(HERE.glob("*/initial.jsonl")):
@@ -130,6 +145,7 @@ def main():
     connected = threading.Event()
     network = []
     rows = []
+    drains = []
 
     def emit(event):
         network.append({"ts": time.time(), **event})
@@ -144,6 +160,19 @@ def main():
         observer.start()
         assert connected.wait(5)
         tab = browser.BrowserUpstream(port=args.cdp_port, target_hint=hint)
+        if args.coalesce_reader_error:
+            browser.POLL_INTERVAL = 1
+        original_eval = tab._eval
+
+        def evaluated(expression, timeout=5):
+            state = original_eval(expression, timeout)
+            if "__bridgeDrain" in expression and state.get("error"):
+                drains.append({"case": active.get("name"), "ts": time.time(),
+                               "data_chars": len(state.get("data") or ""),
+                               "done": state.get("done"), "status": state.get("status")})
+            return state
+
+        tab._eval = evaluated
         tab._connect()
         tab._wait_ready(threading.Event(), time.monotonic() + 10)
         bridge.UPSTREAM_KIND = "browser"
@@ -164,7 +193,7 @@ def main():
                 break
             time.sleep(.05)
         assert api.started
-        flavors = {"latest-native": [shutil.which("claude")]}
+        flavors = {} if args.pinned_only else {"latest-native": [shutil.which("claude")]}
         if args.pinned_cli:
             flavors = {"pinned-node": [shutil.which("node"), str(args.pinned_cli.resolve())], **flavors}
         versions = {name: subprocess.check_output(command + ["--version"], text=True).strip()
@@ -173,7 +202,11 @@ def main():
             "probe_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
             "inference_sha256": {name: hashlib.sha256((REPO / name).read_bytes()).hexdigest()
                 for name in ("nvplay_bridge.py", "browser_upstream.py", "browser_events.py", "stream_support.py")},
-            "fixed_max_tokens": args.fixed_max_tokens, "nvidia_requests": 0})
+            "fixed_max_tokens": args.fixed_max_tokens, "nvidia_requests": 0,
+            "cc_model": args.model, "effort": args.effort,
+            "auto_compact_window": args.auto_compact_window,
+            "agent_timeout_seconds": None if args.unlimited_agent_wait else 300,
+            "coalesce_reader_error": args.coalesce_reader_error})
         os.chdir(HERE)
         for flavor, cli in flavors.items():
             for mode in ("text", "thinking-only", "thinking-and-text", "complete-tool-args"):
@@ -184,24 +217,29 @@ def main():
                 incomplete_counter = out / "incomplete-counter.txt"
                 with lock:
                     active.update(name=name, mode=mode, requests=0,
+                                  coalesce_reader_error=args.coalesce_reader_error,
                                   command=counter_command(counter),
                                   incomplete_command=counter_command(incomplete_counter))
                 settings = {"env": {"ANTHROPIC_BASE_URL": f"http://127.0.0.1:{port}",
-                    "ANTHROPIC_AUTH_TOKEN": "local-fault-fixture-token", "ANTHROPIC_MODEL": "kimi-k3.1-pro",
+                    "ANTHROPIC_AUTH_TOKEN": "local-fault-fixture-token", "ANTHROPIC_MODEL": args.model,
                     "CLAUDE_CODE_ALLOW_OTHER_MODELS": "1", "CLAUDE_CONFIG_DIR": str(out / "config"),
                     "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC": "1", "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1",
-                    "CLAUDE_CODE_MAX_OUTPUT_TOKENS": "128000", "API_TIMEOUT_MS": "180000",
-                    "CLAUDE_CODE_EXTRA_BODY": json.dumps({"max_tokens": 131072, "output_config": {"effort": "low"}}),
+                    "CLAUDE_CODE_MAX_OUTPUT_TOKENS": "128000", "API_TIMEOUT_MS": "29400000",
+                    "CLAUDE_CODE_EXTRA_BODY": json.dumps({"max_tokens": 131072, "output_config": {"effort": args.effort}}),
                     "DISABLE_AUTOUPDATER": "1", "DISABLE_AUTO_COMPACT": "1"}, "enabledPlugins": {}}
+                if args.auto_compact_window is not None:
+                    del settings["env"]["DISABLE_AUTO_COMPACT"]
+                    settings["env"]["CLAUDE_CODE_AUTO_COMPACT_WINDOW"] = str(args.auto_compact_window)
                 write_json(out / "settings.json", settings)
                 write_json(out / "mcp.json", {"mcpServers": {}})
                 shared = ["--output-format", "stream-json", "--verbose", "--settings", str(out / "settings.json"),
                     "--setting-sources", "", "--strict-mcp-config", "--mcp-config", str(out / "mcp.json"),
                     "--permission-mode", "bypassPermissions", "--disable-slash-commands", "--tools", "Bash",
-                    "--model", "kimi-k3.1-pro", "--effort", "low", "--max-turns", "6"]
+                    "--model", args.model, "--effort", args.effort, "--max-turns", "6"]
                 session = str(uuid.uuid4())
+                agent_timeout = None if args.unlimited_agent_wait else 300
                 initial = run_logged(cli + ["-p", "This is a controlled local transport fixture. Execute the supplied counter tool once, then finish."]
-                    + shared + ["--session-id", session], out / "initial.jsonl", 300, out / "initial-state.json")
+                    + shared + ["--session-id", session], out / "initial.jsonl", agent_timeout, out / "initial-state.json")
                 first_client = cc_result(out / "initial.jsonl")
                 first_count = count(counter)
                 first_incomplete_count = count(incomplete_counter)
@@ -210,7 +248,7 @@ def main():
                 resumed = second_client = None
                 if initial["exit_code"] != 0 or (first_client or {}).get("is_error"):
                     resumed = run_logged(cli + ["-p", "Continue the controlled fixture after the transport interruption."]
-                        + shared + ["--resume", session], out / "resume.jsonl", 300, out / "resume-state.json")
+                        + shared + ["--resume", session], out / "resume.jsonl", agent_timeout, out / "resume-state.json")
                     second_client = cc_result(out / "resume.jsonl")
                 final_client = second_client if resumed else first_client
                 final_process = resumed or initial
@@ -229,6 +267,9 @@ def main():
                         and MARKER in (final_client.get("result") or "")}
                 row["observed_provider_limits"] = sorted({event["max_tokens"] for event in events})
                 row["fixed_max_tokens"] = args.fixed_max_tokens
+                row["coalesced_error_drains"] = [item for item in drains if item["case"] == name]
+                if args.coalesce_reader_error:
+                    row["success"] = row["success"] and any(item["data_chars"] > 0 for item in row["coalesced_error_drains"])
                 if args.fixed_max_tokens:
                     row["success"] = row["success"] and row["observed_provider_limits"] == [args.fixed_max_tokens]
                 rows.append(row)
