@@ -275,6 +275,21 @@
     "fix": "Resolve the source root before copying; reject existing or dangling destination links. Internal rootfs symlinks remain preserved.",
     "targeted_tests_passed": 11,
     "new_regressions": 2,
-    "base_must_be_rebuilt_and_version_checked": true
+    "base_must_be_rebuilt_and_version_checked": true,
+    "scored_isolation_confirmation": {
+      "active_root_is_directory": true,
+      "active_root_is_symlink": false,
+      "active_root_inode": 147634,
+      "rejected_base_inode": 77373,
+      "templates_are_directories": true,
+      "source_sha256": "cc686e832fdfb97841608875a918043db5d565a2110821b8fc4cd9fad12ea861",
+      "observed_at": 1794330632.7568188
+    }
+  },
+  "final_python_regression": {
+    "passed": 211,
+    "seconds": 16.667,
+    "log": "logs/eval-cc-1m-20261110-2355/drain-and-clone-final-regression.log",
+    "sha256": "378239fdc49d77eca515653fec66c31c8ed286c53b9235f8c80ce5f46d7e30b8"
   }
 }
