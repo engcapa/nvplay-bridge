@@ -160,6 +160,7 @@ The bridge accepts only Kimi model aliases; other model IDs return `404 not_foun
 | `UPSTREAM_MODEL` | `moonshotai/kimi-k3.1-pro` | Real upstream model |
 | `ALLOWED_MODELS` | Kimi aliases | Comma-separated request model allowlist |
 | `BROWSER_MAX_TOKENS` | `131072` | Max output tokens (128K) in browser mode |
+| `BROWSER_FIXED_MAX_TOKENS` | `0` (off) | Explicitly replace client output limits in browser mode, including CC's 64K non-streaming fallback; must be at most `BROWSER_MAX_TOKENS` |
 | `NVCF_MAX_TOKENS` | `131072` | Max output tokens (128K) in NVCF mode |
 | `MAX_OUTPUT_TOKENS` | `131072` | Max output tokens (128K) in openai mode |
 | `BROWSER_CDP_PORT` | `9222` | CDP port |

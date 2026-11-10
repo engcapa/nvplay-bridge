@@ -74,6 +74,59 @@ execute malformed tools or retry an already delivered stream to replace them.
 `loop_reminder_enabled` so a restarted bridge can be distinguished from an old
 process. These compatibility fixes do not promise identical model answers.
 
+CC can replace `CLAUDE_CODE_EXTRA_BODY.max_tokens=131072` with `64000` when
+falling back from an interrupted stream to a non-streaming request. Both
+2.1.110 and 2.1.321 exhibit this in a controlled local CDP fixture. For a
+benchmark that requires an identical output ceiling on every attempt, set
+`BROWSER_FIXED_MAX_TOKENS=131072` explicitly on the bridge. The default is
+`0`, which preserves smaller client limits. The setting applies to Messages
+and Responses in browser mode, must not exceed `BROWSER_MAX_TOKENS`, and is
+exposed as `browser_output_tokens` in `/health`. Overrides are logged as
+`browser_output_limit_override` with the requested and effective values.
+The same endpoint reports the loaded total, first-byte and idle deadlines in
+`browser_timeouts`; increasing the total alone does not increase the default
+90-second idle limit.
+
+The official Node.js CC CLI has another fallback constraint: Node fetch can
+close a non-streaming request while waiting for headers after about 301
+seconds even when CC's `API_TIMEOUT_MS` is larger. A local real-CC probe
+captured `UND_ERR_HEADERS_TIMEOUT`; the native CC distribution waited for
+the delayed 310-second response. Non-streaming bridge responses intentionally
+retain the final HTTP error status and do not send success headers early.
+
+For the Node CLI, an explicit optional adapter aligns fetch's header/body
+timeouts with the process's `API_TIMEOUT_MS` for the configured
+`ANTHROPIC_BASE_URL` origin. Install its locked dependency with
+`npm ci --ignore-scripts --prefix tools/cc_node_runtime`, then start the
+unmodified official `cli.js` with
+`node --require /absolute/path/tools/cc_node_runtime/timeout.cjs /path/to/cli.js ...`.
+Both variables must exist in the process environment before Node starts;
+putting them only in CC settings is too late for a preload. Other origins and
+AbortSignal cancellation retain their original behavior. This is an opt-in
+Node runtime workaround, not a change to CC source or a fix for upstream
+HTTP/2 faults. A client-supplied dispatcher can bypass the global adapter;
+validate the actual client/proxy configuration when using it outside the
+isolated evaluation setup.
+
+`node --test tests/test_cc_node_timeout.cjs` checks slow response headers,
+slow bodies, cancellation, and origin scoping. The opt-in
+`tests/probe_cc_http_timeout.py` uses a real CC process and local Messages
+fixture with a 310-second delayed fallback response. Supply `--output` and
+`--pinned-cli`, optionally `--adapter`, `--adapter-only`, or `--include-native`.
+It records passive Undici errors without capturing request credentials or
+contents. These probes do not invoke NVIDIA or evaluate model quality.
+
+The opt-in `tests/probe_cc_midresponse.py` runs real CC processes against an
+isolated local HTTP/CDP fixture. It truncates an HTTP 200 stream after text,
+thinking, thinking plus text, or complete tool JSON without a finish marker,
+then checks client recovery, explicit session resume when needed, and a
+single counter write. It never sends NVIDIA requests or opens benchmark
+inputs. Supply `--output`, optionally `--pinned-cli` for an official Node.js
+`cli.js`, and `--fixed-max-tokens 131072` to verify the override. The browser
+must already be running on the selected `--cdp-port`; only the probe's own
+tab is created and closed. This tests protocol behavior, not model quality
+or the cause of a real provider's network failure.
+
 Offline regression coverage includes all four protocol/format combinations,
 interleaved calls, late metadata, Unicode argument preservation, stored
 Responses continuations, early-close propagation, independent sessions,

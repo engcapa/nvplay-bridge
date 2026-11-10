@@ -82,6 +82,9 @@ BROWSER_CDP_PORT = int(os.getenv("BROWSER_CDP_PORT", "9222"))
 BROWSER_TARGET_HINT = os.getenv("BROWSER_TARGET_HINT", "kimi-k3_1-pro/playground")
 # Kimi K3.1 Pro 官方最大输出 128K tokens。
 BROWSER_MAX_TOKENS = int(os.getenv("BROWSER_MAX_TOKENS", "131072"))
+BROWSER_FIXED_MAX_TOKENS = int(os.getenv("BROWSER_FIXED_MAX_TOKENS", "0"))
+if not 0 <= BROWSER_FIXED_MAX_TOKENS <= BROWSER_MAX_TOKENS:
+    raise RuntimeError("BROWSER_FIXED_MAX_TOKENS must be 0 (disabled) or at most BROWSER_MAX_TOKENS")
 BROWSER_TIMEOUT = int(os.getenv("BROWSER_TIMEOUT", "3600"))
 BROWSER_HEARTBEAT_SEC = float(os.getenv("BROWSER_HEARTBEAT_SEC", "10"))
 BROWSER_POOL_SIZE = int(os.getenv("BROWSER_POOL_SIZE", "5"))
@@ -537,6 +540,11 @@ def to_openai_request(body: dict[str, Any]) -> dict[str, Any]:
     else:
         limit = OPENAI_MAX_TOKENS
     payload["max_tokens"] = min(int(max_tokens), limit) if max_tokens else limit
+    if UPSTREAM_KIND == "browser" and BROWSER_FIXED_MAX_TOKENS:
+        if payload["max_tokens"] != BROWSER_FIXED_MAX_TOKENS:
+            _dbg("browser_output_limit_override", requested_max_tokens=max_tokens,
+                 effective_max_tokens=BROWSER_FIXED_MAX_TOKENS)
+        payload["max_tokens"] = BROWSER_FIXED_MAX_TOKENS
     if body.get("seed") is not None:
         if type(body["seed"]) is not int:
             raise ValueError("seed must be an integer")
@@ -1212,8 +1220,15 @@ async def health() -> dict[str, Any]:
         "loop_reminder_enabled": bool(LOOP_BREAKER),
         "history_reasoning": HISTORY_REASONING,
     }
-    if UPSTREAM_KIND == "browser" and _browser is not None and hasattr(_browser, "status"):
-        result["browser_pool"] = _browser.status()
+    if UPSTREAM_KIND == "browser":
+        from browser_upstream import FIRST_BYTE_TIMEOUT, IDLE_TIMEOUT
+        result["browser_output_tokens"] = {
+            "maximum": BROWSER_MAX_TOKENS, "fixed": BROWSER_FIXED_MAX_TOKENS or None}
+        result["browser_timeouts"] = {
+            "total_seconds": BROWSER_TIMEOUT, "first_byte_seconds": FIRST_BYTE_TIMEOUT,
+            "idle_seconds": IDLE_TIMEOUT}
+        if _browser is not None and hasattr(_browser, "status"):
+            result["browser_pool"] = _browser.status()
     return result
 
 

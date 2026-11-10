@@ -1,0 +1,8 @@
+{
+  "name": "nvplay-bridge-cc-node-runtime",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Opt-in Node fetch timeout adapter for the local CC bridge",
+  "engines": {"node": ">=20.18.1"},
+  "dependencies": {"undici": "7.18.2"}
+}

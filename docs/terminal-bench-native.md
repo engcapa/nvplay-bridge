@@ -47,14 +47,20 @@ python3 tools/report_terminal_native.py --base logs/<run> --output logs/<run>/su
 试跑完成后，使用不同 stage 执行原始 8 小时上限、三次独立重复：
 
 ```sh
-sudo -n python3 tools/eval_terminal_native.py run --base logs/<run> --stage formal --budget 28800 --repeats 3
+sudo -n python3 tools/eval_terminal_native.py run --base logs/<run> --stage formal-128k-fixed --budget 28800 --repeats 3
 ```
 
 这条命令只覆盖计划中通过对照的题目，不代表完成全 66 题。完整数据集包含 GPU、多服务和特殊系统环境任务，必须分别适配、验证和披露缺项。
 
-本轮按用户补充要求，将正式阶段输出上限固定为 128K（131,072），原 30 分钟试跑的实际请求上限为 32,000。正式阶段使用独立的 `settings-formal-high.json`、`settings-formal-max.json`，设置 `CLAUDE_CODE_MAX_OUTPUT_TOKENS=128000`，并通过 `CLAUDE_CODE_EXTRA_BODY` 的 `max_tokens=131072` 固定最终请求值；同一对象中的 `output_config.effort` 分别为 high/max。CC 2.1.110 的环境变量上限按十进制 128,000 截断，请求体覆盖则可以发出 131,072；两者已在真实 CC 进程的本地协议夹具上验证，没有修改 CC 源码。
+本轮按用户补充要求，将正式阶段输出上限固定为 128K（131,072），原 30 分钟试跑的实际请求上限为 32,000。正式阶段使用独立的 `settings-formal-high.json`、`settings-formal-max.json`，设置 `CLAUDE_CODE_MAX_OUTPUT_TOKENS=128000`，并通过 `CLAUDE_CODE_EXTRA_BODY` 的 `max_tokens=131072` 设置请求值；同一对象中的 `output_config.effort` 分别为 high/max。CC 2.1.110 的环境变量上限按十进制 128,000 截断，请求体覆盖则可以发出 131,072；两者已在真实 CC 进程的本地协议夹具上验证，没有修改 CC 源码。
 
-正式 bridge 使用 `BROWSER_TIMEOUT=28800`，CC 使用 `API_TIMEOUT_MS=29400000`，避免旧的一小时请求上限先于八小时 agent 预算结束长响应。正式开始前还需执行真实上游工具烟测，并从 `browser_start.max_tokens` 验证实际下发。提高输出上限不要求模型必须输出到上限；试跑与正式阶段不能合并计算。
+断流探针进一步发现，两版 CC 的非流式回退都会覆盖 EXTRA_BODY，将上限降到 64,000。正式 bridge 因此还必须显式配置 `BROWSER_FIXED_MAX_TOKENS=131072`，并从 `/health.browser_output_tokens` 和实际请求日志复核。已启动的原 `formal` 首对保留为修复前补充观察，不计入新的 30 次 `formal-128k-fixed`；这一调整在原首对出分前冻结。
+
+正式 bridge 使用 `BROWSER_TIMEOUT=28800`、`BROWSER_FIRST_BYTE_TIMEOUT=3600`、`BROWSER_IDLE_TIMEOUT=3600`，CC 使用 `API_TIMEOUT_MS=29400000`。原 90 秒空闲上限曾在已有输出后终止两个真实慢响应；它与首字节、总时限是不同约束。`/health.browser_timeouts` 公布实际加载值。正式开始前还需执行真实上游工具烟测，并从 `browser_start.max_tokens` 验证实际下发。提高输出上限不要求模型必须输出到上限；不同阶段不能合并计算。
+
+Node fetch 的默认等响应头限制还会在约 301 秒先于 SDK 超时取消非流式回退；真实 CC 本地探针捕获 `UND_ERR_HEADERS_TIMEOUT`。本轮为两个 effort 一致启用显式 Node 适配器，安装方法为 `npm ci --ignore-scripts --prefix tools/cc_node_runtime`。在计划 `formal_native_subset.node_network_adapter` 冻结完整安装树的 `tree_sha256`；运行器开始 attempt 前核对摘要，将独立副本放入 chroot，并用 `node --require` 启动未修改的官方 `cli.js`。启动前向进程注入 API_TIMEOUT_MS 和 ANTHROPIC_BASE_URL，避免只写 settings 而错过预加载阶段。没有使用全局 NODE_OPTIONS，因此模型的后续 Node 工具命令不会自动加载适配器。
+
+适配器只调整配置 API origin 的 header/body 超时，取消信号及其他 origin 保持原行为。安装依赖、预加载源码、实际启动命令和配置摘要写入版本身份及 `request-protocol.json`；历史 stage 不自动启用。该适配改变客户端运行环境，属于与官方 harness 的另一项明确差异，不宣称修改了 CC 或解决了提供方 HTTP/2 中断。
 
 在计划的 `formal_native_subset` 中冻结 `max_output_tokens`、`cc_output_environment_tokens`、`cc_api_timeout_ms` 后，运行器会核对正式设置文件；输出上限、effort 或客户端超时不一致会拒绝运行。每个 attempt 的 `request-protocol.json` 保存最终设置摘要和实际预算。bridge 重启后，将实际 PID、源码提交、模块摘要与超时记入 `bridge_runtime_by_stage`，避免用工具仓库最新提交冒充在途服务版本。
 

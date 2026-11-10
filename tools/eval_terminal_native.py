@@ -28,7 +28,15 @@ from native_eval_support import (
 )
 
 
-TOOLING_SOURCES = (Path(__file__).resolve(), Path(__file__).with_name("native_eval_support.py").resolve())
+NODE_NETWORK_DIRECTORY = Path(__file__).with_name("cc_node_runtime").resolve()
+TOOLING_SOURCES = (Path(__file__).resolve(), Path(__file__).with_name("native_eval_support.py").resolve(),
+                   *(NODE_NETWORK_DIRECTORY / name for name in ("timeout.cjs", "package.json", "package-lock.json")))
+
+
+def network_tree_identity(directory: Path) -> dict:
+    files = file_hashes(directory)
+    encoded = json.dumps(files, sort_keys=True, separators=(",", ":")).encode()
+    return {"tree_sha256": hashlib.sha256(encoded).hexdigest(), "files": len(files)}
 
 
 RECIPES = {
@@ -129,7 +137,8 @@ class Evaluation:
         return tomllib.loads((self.dataset / name / "task.toml").read_text())
 
     def request_settings(self, effort: str, stage: str) -> dict:
-        formal = self.plan.get("formal_native_subset", {}) if stage == "formal" else {}
+        frozen = self.plan.get("formal_native_subset", {})
+        formal = frozen if stage in ("formal", frozen.get("stage")) else {}
         explicit_output = formal.get("max_output_tokens")
         prefix = "settings-formal" if explicit_output else "settings"
         settings = json.loads((self.base / f"{prefix}-{effort}.json").read_text())
@@ -141,11 +150,26 @@ class Evaluation:
                     or env.get("CLAUDE_CODE_MAX_OUTPUT_TOKENS") != str(formal["cc_output_environment_tokens"])
                     or env.get("API_TIMEOUT_MS") != str(formal["cc_api_timeout_ms"])):
                 raise ValueError("formal request settings do not match the frozen output/effort/timeout protocol")
+            fixed = formal.get("bridge_fixed_max_output_tokens")
+            runtime = self.plan.get("bridge_runtime_by_stage", {}).get(stage, {})
+            if fixed and runtime.get("fixed_max_output_tokens") != fixed:
+                raise ValueError("formal bridge runtime does not match the frozen fixed output protocol")
         return settings
 
     def verify_source(self, name: str) -> None:
         if file_hashes(self.dataset / name) != self.plan["task_identities"][name]:
             raise ValueError(f"benchmark source changed: {name}")
+
+    def network_adapter(self, stage: str) -> dict | None:
+        formal = self.plan.get("formal_native_subset", {})
+        spec = formal.get("node_network_adapter") if stage == formal.get("stage") else None
+        if not spec:
+            return None
+        actual = network_tree_identity(NODE_NETWORK_DIRECTORY)
+        if actual["tree_sha256"] != spec["tree_sha256"]:
+            raise RuntimeError("CC network adapter differs from the frozen installed tree")
+        return {**actual, "require": "/opt/cc-node-runtime/timeout.cjs",
+                "cli": "/opt/claude-code-2.1.110/package/cli.js"}
 
     def install(self, root: Path, packages: list[str], log: Path) -> None:
         if not packages:
@@ -294,6 +318,9 @@ class Evaluation:
                 budget: int, uid: int) -> dict:
         identity = self.identity(stage)
         settings = self.request_settings(effort, stage)
+        adapter = self.network_adapter(stage)
+        if adapter:
+            identity["cc_network_adapter"] = adapter
         self.verify_source(name)
         controls = json.loads((self.base / "controls" / name / "result.json").read_text())
         if not controls["valid"]:
@@ -318,15 +345,25 @@ class Evaluation:
         settings["env"].update(DISABLE_AUTOUPDATER="1", DISABLE_AUTO_COMPACT="1",
                                CLAUDE_CODE_DISABLE_AUTO_MEMORY="1")
         write_json(config / "settings.json", settings)
+        bootstrap = ["claude"]
+        bootstrap_env = {}
+        if adapter:
+            target = root / "opt/cc-node-runtime"
+            copy_tree(NODE_NETWORK_DIRECTORY, target)
+            if network_tree_identity(target)["tree_sha256"] != adapter["tree_sha256"]:
+                raise RuntimeError("CC network adapter changed while copying the installed tree")
+            bootstrap = ["node", "--require", adapter["require"], adapter["cli"]]
+            bootstrap_env = {key: settings["env"][key] for key in ("API_TIMEOUT_MS", "ANTHROPIC_BASE_URL")}
         write_json(output / "request-protocol.json", {
             "settings_sha256": hashlib.sha256((config / "settings.json").read_bytes()).hexdigest(),
             "cc_output_environment_tokens": settings["env"].get("CLAUDE_CODE_MAX_OUTPUT_TOKENS"),
             "extra_body": json.loads(settings["env"].get("CLAUDE_CODE_EXTRA_BODY", "{}")),
             "cc_api_timeout_ms": settings["env"].get("API_TIMEOUT_MS"),
-            "agent_budget_seconds": budget})
+            "agent_budget_seconds": budget, "cc_network_adapter": adapter,
+            "cc_bootstrap": bootstrap, "bootstrap_environment": bootstrap_env})
         write_json(config / "mcp.json", {"mcpServers": {}})
         (config / "instruction.md").write_bytes((self.dataset / name / "instruction.md").read_bytes())
-        args = ["claude", "-p", "--output-format", "stream-json", "--verbose",
+        args = bootstrap + ["-p", "--output-format", "stream-json", "--verbose",
                 "--settings", "/eval/settings.json", "--setting-sources", "",
                 "--strict-mcp-config", "--mcp-config", "/eval/mcp.json",
                 "--permission-mode", "bypassPermissions", "--disable-slash-commands",
@@ -337,9 +374,9 @@ class Evaluation:
         prefix += "Work independently. Do not retrieve benchmark solutions, tests or task-specific online hints.\n\n"
         (config / "prompt.txt").write_text(prefix + (config / "instruction.md").read_text())
         command = "cd /app && " + shlex.join(args) + " < /eval/prompt.txt"
-        env = RECIPES[name].get("environment", {})
+        env = {**RECIPES[name].get("environment", {}), **bootstrap_env}
         actual_version = subprocess.check_output(
-            shell_command(root, "claude --version", uid=uid, environment=env), text=True).strip()
+            shell_command(root, shlex.join(bootstrap + ["--version"]), uid=uid, environment=env), text=True).strip()
         if actual_version.split()[0] != self.plan["cc_version"]:
             raise RuntimeError(f"CC version mismatch: {actual_version}")
         started = time.time()

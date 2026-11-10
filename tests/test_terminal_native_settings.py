@@ -56,6 +56,24 @@ class NativeRequestSettingTests(unittest.TestCase):
                     self.evaluation.request_settings("high", "formal")
         path.write_text(json.dumps(original))
 
+    def test_revised_formal_stage_uses_the_same_frozen_settings(self):
+        self.evaluation.plan["formal_native_subset"]["stage"] = "formal-128k-fixed"
+        for effort in ("high", "max"):
+            self.assertEqual(self.evaluation.request_settings(effort, "formal-128k-fixed"),
+                             self.evaluation.request_settings(effort, "formal"))
+
+    def test_fixed_protocol_refuses_an_unconfigured_bridge_runtime(self):
+        self.evaluation.plan["formal_native_subset"].update(
+            stage="formal-128k-fixed", bridge_fixed_max_output_tokens=131072)
+        for runtime in ({}, {"fixed_max_output_tokens": 0}, {"fixed_max_output_tokens": 64000}):
+            with self.subTest(runtime=runtime):
+                self.evaluation.plan["bridge_runtime_by_stage"] = {"formal-128k-fixed": runtime}
+                with self.assertRaisesRegex(ValueError, "frozen fixed output protocol"):
+                    self.evaluation.request_settings("high", "formal-128k-fixed")
+        self.evaluation.plan["bridge_runtime_by_stage"]["formal-128k-fixed"] = {
+            "fixed_max_output_tokens": 131072}
+        self.evaluation.request_settings("high", "formal-128k-fixed")
+
 
 if __name__ == "__main__":
     unittest.main()
