@@ -17,6 +17,12 @@
 
 ## 进度与证据
 
-当前正在下载固定数据集、Ubuntu 基座和官方 CC 包，恢复 Node 网络适配器。新的脱敏状态见 [持续检查点](evidence/cc-bridge-resume-2026-11-10.json)。历史记录见 [原报告](cc-bridge-native-benchmark-2026-11-10.md) 和 [历史归档](evidence/cc-bridge-native-2026-11-10.json)。
+Ubuntu 基座和官方 CC 包已下载并核验。三个固定 Python 已重新安装；Node 二进制及网络适配器安装树（208 文件）与历史摘要一致。固定数据集和 apt 安装仍在进行。
+
+新 Brave/CDP 与 bridge 已启动，实际 `/health` 确认 131072 固定输出、28800 秒总时限、3600 秒首字节及 idle；不计分的 low effort 就绪请求已正常结束，五个标签 ready，无错误或重试。bridge 源码身份以 `bridge-runtime.json` 记录的实际启动提交 `508a582197501490ff84c781f2bd40af187c2aa5` 和六模块摘要为准。
+
+已提交可复用的环境搭建、服务启动、真实 CC 工具烟测、持续检查点、续跑恢复及 rootfs 压缩归档代码。自动检查点每 120 秒单独提交脱敏 JSON。重启恢复逻辑保留所有已完成失败，只有控制器与 agent 均停止时才允许归档未完成任务；已用失败保留、协议拒绝、活进程拒绝和原日志保全测试验证。磁盘探针确认不支持 reflink，因此结束后的完整 rootfs 将在压缩、逐文件比较和摘要验证后回收展开副本。
+
+新的脱敏状态见 [持续检查点](evidence/cc-bridge-resume-2026-11-10.json)。历史记录见 [原报告](cc-bridge-native-benchmark-2026-11-10.md) 和 [历史归档](evidence/cc-bridge-native-2026-11-10.json)。
 
 只有独立验收完成的 attempt 才计入成绩；当前没有新的正式结果。原生子集结果不等同于官方全题集或 AA 智能指数。

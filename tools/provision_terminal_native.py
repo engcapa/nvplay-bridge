@@ -11,6 +11,7 @@ import shlex
 import shutil
 import subprocess
 import time
+import urllib.request
 import zipfile
 
 from native_eval_support import select_python, write_json
@@ -49,7 +50,7 @@ def downloads(base: Path, proxy: str):
         target = base / name
         if not target.exists():
             temporary = target.with_suffix(target.suffix + ".part")
-            checked(["curl", "--proxy", proxy, "--connect-timeout", "30", "--max-time", "1800",
+            checked(["curl", "--proxy", proxy, "--connect-timeout", "30", "--max-time", "7200",
                      "--retry", "4", "--fail", "--location", "--silent", "--show-error",
                      "--output", temporary, url], base / "downloads.log")
             if digest(temporary) != expected:
@@ -164,9 +165,60 @@ def wheels(base: Path, proxy: str):
                                              for path in sorted(cache.glob("*.whl"))})
 
 
+def configure(base: Path, proxy: str):
+    from copy import deepcopy
+    from eval_terminal_native import DEFAULT_PILOT, NODE_NETWORK_DIRECTORY, initialize_plan, network_tree_identity
+
+    path = base / "evaluation-plan.json"
+    if path.exists():
+        raise FileExistsError("the plan is already frozen; do not replace it")
+    repo = Path(__file__).resolve().parents[1]
+    historical = json.loads((repo / "docs/evidence/cc-bridge-native-2026-11-10.json").read_text())
+    formal = deepcopy(historical["protocol"]["formal_fixed"])
+    formal["frozen_at"] = time.time()
+    installed = network_tree_identity(NODE_NETWORK_DIRECTORY)
+    if installed != {key: formal["node_network_adapter"][key] for key in ("tree_sha256", "files")}:
+        raise ValueError("Node network installation differs from the archived protocol")
+    runtime = json.loads((base / "bridge-runtime.json").read_text())
+    opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))
+    with opener.open(f'http://127.0.0.1:{runtime["bridge_port"]}/health', timeout=5) as response:
+        health = json.load(response)
+    if (health.get("browser_output_tokens") != {"maximum": 131072, "fixed": 131072}
+            or health.get("browser_timeouts") != {"total_seconds": 28800, "first_byte_seconds": 3600,
+                                                  "idle_seconds": 3600}):
+        raise ValueError("live bridge does not implement the frozen 128K/long-wait protocol")
+    initialize_plan(base, DEFAULT_PILOT)
+    plan = json.loads(path.read_text())
+    for task, files in plan["task_identities"].items():
+        if hashlib.sha256(json.dumps(files, sort_keys=True).encode()).hexdigest() != historical["protocol"]["task_manifest_sha256"][task]:
+            raise ValueError(f"restored task differs from historical manifest: {task}")
+    plan["formal_native_subset"] = formal
+    plan["bridge_runtime_by_stage"] = {formal["stage"]: runtime}
+    plan["restart_relationship"] = {
+        "recorded_at": time.time(), "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
+        "historical_complete_observations_preserved": 12, "historical_user_interruptions_excluded": 2,
+        "new_full_formal_attempts": 30, "new_sessions_and_roots": True, "no_scored_feedback": True,
+        "same_five_tasks_and_equal_effort_limits": True}
+    for effort in ("high", "max"):
+        settings = json.loads((repo / f"configs/settings-kimi{'-high' if effort == 'high' else ''}.json").read_text())
+        settings["env"].update({"ANTHROPIC_BASE_URL": f'http://127.0.0.1:{runtime["bridge_port"]}',
+            "API_TIMEOUT_MS": "29400000", "CLAUDE_CODE_MAX_OUTPUT_TOKENS": "128000",
+            "CLAUDE_CODE_EXTRA_BODY": json.dumps({"max_tokens": 131072, "output_config": {"effort": effort}}),
+            "HTTP_PROXY": proxy, "HTTPS_PROXY": proxy, "NO_PROXY": "127.0.0.1,localhost"})
+        write_json(base / f"settings-formal-{effort}.json", settings)
+    write_json(path, plan)
+    resources = {"recorded_at": time.time(), "cpu_affinity": sorted(os.sched_getaffinity(0)),
+                 "docker_processes_started": 0}
+    for name in ("cpu.max", "memory.max"):
+        source = Path("/sys/fs/cgroup") / name
+        if source.exists():
+            resources[name] = source.read_text().strip()
+    write_json(base / "host-resources.json", resources)
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("action", choices=("downloads", "base", "wheels"))
+    parser.add_argument("action", choices=("downloads", "base", "wheels", "configure"))
     parser.add_argument("--base", type=Path, required=True)
     parser.add_argument("--proxy", default="http://127.0.0.1:31128")
     parser.add_argument("--node", type=Path)
@@ -178,6 +230,8 @@ def main():
         downloads(base, args.proxy)
     elif args.action == "wheels":
         wheels(base, args.proxy)
+    elif args.action == "configure":
+        configure(base, args.proxy)
     else:
         if not args.node or not args.uv_wheel:
             parser.error("base requires --node and --uv-wheel")

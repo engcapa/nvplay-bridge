@@ -41,7 +41,11 @@ python3 tools/checkpoint_terminal_native.py --base logs/<run> --output docs/evid
 
 服务启动器拒绝占用已有端口，显式使用外网代理和八小时、128K 配置；它不替换正在工作的服务。首次工具烟测创建标签池后，另启动 `tools/monitor_cdp_network.py` 持续观测网络终态。checkpoint 仅归档协议、版本、统计、产物摘要及证据哈希，隐藏 CC 正文和错误响应正文；`--commit` 每次只提交指定检查点文件。
 
+准备好服务及 Node 安装树后，`python3 tools/provision_terminal_native.py configure --base logs/<run>` 校验实际 `/health`、历史任务摘要及网络适配器，生成正式设置文件，并一次性冻结新计划。`sudo -n python3 tools/smoke_terminal_native.py --base logs/<run>` 使用两个普通 UID，运行 high/max 的真实 Bash/Python 随机文件 SHA256 闭环，独立核对文件及最终回答；此烟测不计入题目分数。
+
 运行器 `run --resume` 保留所有已完成结果，包括失败；协议不符会拒绝续跑。容器重启后可显式使用 `--resume --recover-interrupted`：只有原控制器和 agent 均已停止，才将未完成目录移入 `runs-interrupted/`，记为 `score=null` 并排除模型判分，然后使用新会话重跑对应计划位置。原日志不覆盖。PID 身份同时检查 boot ID 和进程起始时刻，避免重启后误认复用 PID。恢复时仍需重新启动服务、记录实际服务身份并完成必要烟测。
+
+若文件系统不支持 reflink，可运行 `sudo -n python3 tools/archive_terminal_native_roots.py --base logs/<run>`。它只处理已结束的任务、有效对照和烟测，拒绝仍被进程使用的 rootfs；先用 tar/gzip 保存完整文件树，再运行 tar compare 核对原目录、计算 SHA256，最后回收展开目录。日志、判分、原始产物及压缩 rootfs 均保留，可按各 `*-root-archive.json` 的命令还原。不要清理仍在运行的 rootfs 或模板。
 
 ## 执行顺序
 

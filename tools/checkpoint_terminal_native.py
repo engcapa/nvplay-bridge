@@ -110,6 +110,9 @@ def collect(base: Path, health_url: str) -> dict:
     for path in sorted({path for pattern in patterns for path in base.glob(pattern) if path.is_file()}):
         evidence.append(fingerprint(path, base))
     result["evidence_fingerprints"] = evidence
+    archive_patterns = ("runs/*/*/*-root-archive.json", "controls/*/*/*-root-archive.json", "smoke/*/*-root-archive.json")
+    result["compressed_root_evidence"] = [{"directory": str(path.parent.relative_to(base)), **json.loads(path.read_text())}
+        for path in sorted({path for pattern in archive_patterns for path in base.glob(pattern)})]
     return result
 
 
