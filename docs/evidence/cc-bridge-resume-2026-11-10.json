@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794322643.2406957,
+  "checkpoint_at": 1794322763.6114917,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-resume-20261110-1647",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -541,7 +541,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794322643.3934326,
+    "generated_at": 1794322763.723202,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-128k-fixed/28800/high": {
@@ -916,7 +916,7 @@
         "task": "batched-eval-parity",
         "effort": "max",
         "started_at": 1794315384.410672,
-        "elapsed_seconds": 7259.0,
+        "elapsed_seconds": 7379.3,
         "tool_calls": 54,
         "last_tool": "Bash"
       }
@@ -947,7 +947,7 @@
   },
   "bridge_activity": {
     "events_last_300s": {
-      "browser_progress": 59
+      "browser_progress": 58
     },
     "active": [
       {
@@ -958,23 +958,23 @@
         "reasoning_effort": "max",
         "tab_id": "kpool=2",
         "counts": {
-          "thinking_chars": 415977,
+          "thinking_chars": 445277,
           "text_chars": 0,
           "tool_calls": 0
         },
         "usage": {
           "prompt_tokens": 172356,
-          "completion_tokens": 45760,
-          "total_tokens": 218116,
+          "completion_tokens": 48690,
+          "total_tokens": 221046,
           "prompt_tokens_details": {
             "cached_tokens": 171904
           },
           "completion_tokens_details": {
-            "reasoning_tokens": 45760
+            "reasoning_tokens": 48690
           }
         },
-        "age_seconds": 2198.5,
-        "activity_age_seconds": 0.7
+        "age_seconds": 2318.8,
+        "activity_age_seconds": 1.6
       }
     ],
     "recent_errors": [],
@@ -1134,7 +1134,7 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "44f9bbc4dbc2fd16d4b002341be380a0dcadf8b88e922b4d252cd6f561b30230",
+      "sha256": "84759cfb1e0227876ae8604841ba52a30c2ad68de5a35d4bb5b091cadf8c8449",
       "size": 786
     },
     {
@@ -1528,6 +1528,16 @@
       "bytes": 508644976,
       "tar_compare_passed_before_reclaim": true,
       "restore": "sudo tar -xpf agent-root.tar.gz -C ."
+    },
+    {
+      "directory": "runs/formal-128k-fixed/batched-eval-parity--high--r1",
+      "archived_at": 1794322684.8737917,
+      "root": "verifier-root",
+      "archive": "verifier-root.tar.gz",
+      "sha256": "0e35a7d5d7a1c7e9bcf408fdd958c8ce8977e5d3d62164735cde00f530d96249",
+      "bytes": 514402862,
+      "tar_compare_passed_before_reclaim": true,
+      "restore": "sudo tar -xpf verifier-root.tar.gz -C ."
     },
     {
       "directory": "runs/formal-128k-fixed/embedding-drift-monitor--high--r1",
