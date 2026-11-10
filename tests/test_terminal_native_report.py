@@ -43,6 +43,30 @@ class NativeReportTests(unittest.TestCase):
         self.assertEqual(result["timed_http_failures"], 0)
         self.assertEqual(result["http_failed_attempt_seconds"], 0)
 
+    def test_cancelled_usage_keeps_last_observation_and_marks_it_partial(self):
+        records = {
+            "cancelled": [
+                {"event": "browser_progress", "usage": {
+                    "prompt_tokens": 10, "completion_tokens": 40, "total_tokens": 50,
+                    "prompt_tokens_details": {"cached_tokens": 4},
+                    "completion_tokens_details": {"reasoning_tokens": 35}}},
+                {"event": "browser_cancelled"}],
+            "done": [
+                {"event": "browser_progress", "usage": {"prompt_tokens": 20, "completion_tokens": 2}},
+                {"event": "browser_done", "sec": 50, "usage": {
+                    "prompt_tokens": 20, "completion_tokens": 5, "total_tokens": 25,
+                    "prompt_tokens_details": {"cached_tokens": 10},
+                    "completion_tokens_details": {"reasoning_tokens": 3}}}],
+            "unreported": [{"event": "browser_error", "usage": {}}],
+        }
+        result = transport_evidence(records, list(records))
+        self.assertEqual(result["observed_usage"], {
+            "prompt_tokens": 30, "completion_tokens": 45, "total_tokens": 75,
+            "cached_prompt_tokens": 14, "reasoning_tokens": 38})
+        self.assertEqual(result["requests_with_partial_usage"], 1)
+        self.assertEqual(result["requests_without_observed_usage"], 1)
+        self.assertEqual(result["completed_requests"], 1)
+
     def test_denominators_keep_failed_infrastructure_and_separate_budgets(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)

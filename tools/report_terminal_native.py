@@ -11,16 +11,32 @@ import time
 from native_eval_support import write_json
 
 
+def usage_totals(requests) -> dict:
+    totals = Counter()
+    for request in requests:
+        for key in ("prompt_tokens", "completion_tokens", "total_tokens"):
+            totals[key] += request.get(key, 0)
+        totals["cached_prompt_tokens"] += request.get("prompt_tokens_details", {}).get("cached_tokens", 0)
+        totals["reasoning_tokens"] += request.get("completion_tokens_details", {}).get("reasoning_tokens", 0)
+    return dict(totals)
+
+
 def transport_evidence(records: dict[str, list[dict]] | None, request_ids: list[str] | None) -> dict | None:
     """Count failed HTTP attempts without mistaking cumulative request age for attempt time."""
     if records is None or request_ids is None:
         return None
     failures, durations, completed = Counter(), [], []
+    usages, partial_usage, missing_usage = [], 0, 0
     for request_id in request_ids:
         starts = {}
+        latest_usage, final_usage = None, False
         for event in records.get(request_id, []):
             kind = event.get("event")
             attempt = event.get("attempt")
+            if event.get("usage"):
+                latest_usage = event["usage"]
+            if kind in ("browser_done", "browser_error", "browser_cancelled"):
+                final_usage = kind == "browser_done" and bool(event.get("usage"))
             if kind == "browser_start":
                 starts[attempt] = event["ts"]
             elif kind == "browser_http_error":
@@ -29,12 +45,20 @@ def transport_evidence(records: dict[str, list[dict]] | None, request_ids: list[
                     durations.append(event["ts"] - starts[attempt])
             elif kind == "browser_done" and isinstance(event.get("sec"), (int, float)):
                 completed.append(event["sec"])
+        if latest_usage:
+            usages.append(latest_usage)
+            partial_usage += not final_usage
+        else:
+            missing_usage += 1
     return {"http_status_counts": dict(failures),
             "timed_http_failures": len(durations),
             "http_failed_attempt_seconds": round(sum(durations), 3),
             "completed_requests": len(completed),
             "completed_request_seconds": round(sum(completed), 3),
-            "longest_completed_request_seconds": max(completed, default=None)}
+            "longest_completed_request_seconds": max(completed, default=None),
+            "observed_usage": usage_totals(usages),
+            "requests_with_partial_usage": partial_usage,
+            "requests_without_observed_usage": missing_usage}
 
 
 def summarize(base: Path) -> dict:
@@ -73,12 +97,7 @@ def summarize(base: Path) -> dict:
             pending.append(progress)
             continue
         data = json.loads(result.read_text())
-        usage = Counter()
-        for request in data["bridge"]["usage_by_request"].values():
-            for key in ("prompt_tokens", "completion_tokens", "total_tokens"):
-                usage[key] += request.get(key, 0)
-            usage["cached_prompt_tokens"] += request.get("prompt_tokens_details", {}).get("cached_tokens", 0)
-            usage["reasoning_tokens"] += request.get("completion_tokens_details", {}).get("reasoning_tokens", 0)
+        usage = usage_totals(data["bridge"]["usage_by_request"].values())
         infra = data.get("infrastructure_error") or data["grade"]["infrastructure_error"]
         retried_ids = {event["id"] for event in data["bridge"]["retries"]}
         failed_ids = {event["id"] for event in [*data["bridge"]["errors"], *data["bridge"]["cancelled"]]}
@@ -132,6 +151,10 @@ def summarize(base: Path) -> dict:
                            "http_failed_attempt_seconds": round(sum(item["http_failed_attempt_seconds"]
                                                                      for item in transport), 3),
                            "completed_requests": sum(item["completed_requests"] for item in transport),
+                           "observed_usage": dict(sum((Counter(item["observed_usage"])
+                                                       for item in transport), Counter())),
+                           "requests_with_partial_usage": sum(item["requests_with_partial_usage"] for item in transport),
+                           "requests_without_observed_usage": sum(item["requests_without_observed_usage"] for item in transport),
                            "longest_completed_request_seconds": max(
                                (item["longest_completed_request_seconds"] for item in transport
                                 if item["longest_completed_request_seconds"] is not None), default=None)},
