@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794314709.57351,
+  "checkpoint_at": 1794314829.6950548,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-resume-20261110-1647",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -541,7 +541,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794314709.616895,
+    "generated_at": 1794314829.737065,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-128k-fixed/28800/high": {
@@ -808,7 +808,7 @@
         "task": "embedding-drift-monitor",
         "effort": "max",
         "started_at": 1794309436.757663,
-        "elapsed_seconds": 5272.9,
+        "elapsed_seconds": 5393.0,
         "tool_calls": 87,
         "last_tool": "Bash"
       }
@@ -839,16 +839,16 @@
   },
   "bridge_activity": {
     "events_last_300s": {
-      "browser_progress": 78,
-      "browser_buffer": 7,
-      "browser_pool_release": 7,
-      "browser_done": 7,
-      "request": 6,
-      "payload": 6,
-      "browser_start": 6,
-      "browser_tab": 6,
-      "browser_first_data": 6,
-      "browser_first_content": 6
+      "browser_progress": 58,
+      "browser_buffer": 5,
+      "browser_pool_release": 5,
+      "browser_done": 5,
+      "request": 4,
+      "payload": 4,
+      "browser_start": 4,
+      "browser_tab": 4,
+      "browser_first_data": 4,
+      "browser_first_content": 4
     },
     "active": [
       {
@@ -859,23 +859,23 @@
         "reasoning_effort": "max",
         "tab_id": "kpool=5",
         "counts": {
-          "thinking_chars": 3989,
+          "thinking_chars": 14395,
           "text_chars": 0,
           "tool_calls": 0
         },
         "usage": {
           "prompt_tokens": 118926,
-          "completion_tokens": 854,
-          "total_tokens": 119780,
+          "completion_tokens": 2983,
+          "total_tokens": 121909,
           "prompt_tokens_details": {
             "cached_tokens": 118656
           },
           "completion_tokens_details": {
-            "reasoning_tokens": 854
+            "reasoning_tokens": 2983
           }
         },
-        "age_seconds": 72.0,
-        "activity_age_seconds": 3.6
+        "age_seconds": 192.1,
+        "activity_age_seconds": 0.3
       }
     ],
     "recent_errors": [],
@@ -935,13 +935,13 @@
     },
     {
       "path": "completed-artifact-review.json",
-      "sha256": "809ee4f8627d2ae815576f529c2c038931e9e84a369d9f36e77120ff17d7fe17",
-      "size": 2443
+      "sha256": "435fa7a60492ae82f705e543abf0b512d6e08b99c561e403982d2d7e94d64a33",
+      "size": 4043
     },
     {
       "path": "completed-tool-path-audit.json",
-      "sha256": "6c1865058f70d493230c36b55e06cd2e21eb06ea293e12ab3319cbcb57ce1efb",
-      "size": 1224
+      "sha256": "c72119f6432b645343d18eceb540d609b07b50a6b5cd45c3b38c160fb40a74aa",
+      "size": 1613
     },
     {
       "path": "control-artifact-review.json",
@@ -1030,7 +1030,7 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "1db8e3a948db1dab42dd4128dd914d7863bfb91c48946d16008867a0d19d1645",
+      "sha256": "374b1c142c54db21bfc95fea3d253b617ba6c3e99f37dc88162eb43127ac5270",
       "size": 790
     },
     {
@@ -1357,6 +1357,26 @@
       "archive": "verifier-root.tar.gz",
       "sha256": "3901878f9daebb3fee9e71eb6604c8e203b5e338b21b55c4e6df6294bcdd1e2b",
       "bytes": 486830462,
+      "tar_compare_passed_before_reclaim": true,
+      "restore": "sudo tar -xpf verifier-root.tar.gz -C ."
+    },
+    {
+      "directory": "runs/formal-128k-fixed/embedding-drift-monitor--high--r1",
+      "archived_at": 1794314717.6395502,
+      "root": "agent-root",
+      "archive": "agent-root.tar.gz",
+      "sha256": "85ab7d8279527fb53f65b27f9d185dd34315d62962274b47cbae7227ac944eea",
+      "bytes": 555849921,
+      "tar_compare_passed_before_reclaim": true,
+      "restore": "sudo tar -xpf agent-root.tar.gz -C ."
+    },
+    {
+      "directory": "runs/formal-128k-fixed/embedding-drift-monitor--high--r1",
+      "archived_at": 1794314751.6137252,
+      "root": "verifier-root",
+      "archive": "verifier-root.tar.gz",
+      "sha256": "cb600cc9cdbcee7bc5c2ee3bec5f9736d56c10708ecdd15d3dd174c4b2ce014c",
+      "bytes": 564560619,
       "tar_compare_passed_before_reclaim": true,
       "restore": "sudo tar -xpf verifier-root.tar.gz -C ."
     },
