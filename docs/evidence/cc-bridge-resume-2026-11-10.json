@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794321440.0699353,
+  "checkpoint_at": 1794321560.354376,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-resume-20261110-1647",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -541,7 +541,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794321440.1903374,
+    "generated_at": 1794321560.4797435,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-128k-fixed/28800/high": {
@@ -862,8 +862,8 @@
         "task": "batched-eval-parity",
         "effort": "high",
         "started_at": 1794315384.4192412,
-        "elapsed_seconds": 6055.7,
-        "tool_calls": 79,
+        "elapsed_seconds": 6176.0,
+        "tool_calls": 82,
         "last_tool": "Bash"
       },
       {
@@ -872,7 +872,7 @@
         "task": "batched-eval-parity",
         "effort": "max",
         "started_at": 1794315384.410672,
-        "elapsed_seconds": 6055.8,
+        "elapsed_seconds": 6176.1,
         "tool_calls": 54,
         "last_tool": "Bash"
       }
@@ -896,23 +896,23 @@
       "idle_seconds": 3600.0
     },
     "pool_states": {
-      "busy": 2,
-      "ready": 3
+      "ready": 4,
+      "busy": 1
     },
     "recovering_tabs": []
   },
   "bridge_activity": {
     "events_last_300s": {
-      "browser_progress": 100,
-      "browser_buffer": 4,
-      "browser_pool_release": 4,
-      "browser_done": 3,
-      "request": 3,
-      "payload": 3,
-      "browser_start": 4,
-      "browser_tab": 4,
-      "browser_first_data": 3,
-      "browser_first_content": 3,
+      "browser_progress": 96,
+      "request": 4,
+      "payload": 4,
+      "browser_start": 5,
+      "browser_tab": 5,
+      "browser_first_data": 4,
+      "browser_first_content": 4,
+      "browser_buffer": 5,
+      "browser_pool_release": 5,
+      "browser_done": 4,
       "browser_http_error": 1,
       "browser_abort": 1,
       "pool_recovery_start": 1,
@@ -930,54 +930,23 @@
         "reasoning_effort": "max",
         "tab_id": "kpool=2",
         "counts": {
-          "thinking_chars": 144717,
+          "thinking_chars": 176417,
           "text_chars": 0,
           "tool_calls": 0
         },
         "usage": {
           "prompt_tokens": 172356,
-          "completion_tokens": 18634,
-          "total_tokens": 190990,
+          "completion_tokens": 21804,
+          "total_tokens": 194160,
           "prompt_tokens_details": {
             "cached_tokens": 171904
           },
           "completion_tokens_details": {
-            "reasoning_tokens": 18634
+            "reasoning_tokens": 21804
           }
         },
-        "age_seconds": 995.3,
-        "activity_age_seconds": 1.6
-      },
-      {
-        "id": "5ebb0943",
-        "retry_count": 1,
-        "reasoning_effort": "high",
-        "last_retry": {
-          "reason": "nvidia_pool_acquire_timeout",
-          "status": 500,
-          "delay": 5.174
-        },
-        "phase": "browser_progress",
-        "attempt": 2,
-        "tab_id": "kpool=1",
-        "counts": {
-          "thinking_chars": 6856,
-          "text_chars": 0,
-          "tool_calls": 0
-        },
-        "usage": {
-          "prompt_tokens": 161966,
-          "completion_tokens": 1469,
-          "total_tokens": 163435,
-          "prompt_tokens_details": {
-            "cached_tokens": 161024
-          },
-          "completion_tokens_details": {
-            "reasoning_tokens": 1469
-          }
-        },
-        "age_seconds": 116.7,
-        "activity_age_seconds": 0.0
+        "age_seconds": 1115.6,
+        "activity_age_seconds": 4.7
       }
     ],
     "recent_errors": [],
@@ -1159,7 +1128,7 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "f90613eab7b21e735c5c79baf93e6c5b4f39a6d7fd337f6f300d93deaeda0b0c",
+      "sha256": "5d376afec8f4b4722c5f0bd21ac8761b45284426dfe777391f3b01454019795a",
       "size": 786
     },
     {
@@ -1286,6 +1255,11 @@
       "path": "runs/formal-128k-fixed/session-window-debug--max--r1/result.json",
       "sha256": "35b3ae76724785d979c9125157226159fa4d7033cfc8bfb2cd4ad374f1373ffe",
       "size": 29601
+    },
+    {
+      "path": "selected-process-rss.json",
+      "sha256": "76f89935a65930d88007be16c4b87432c4abdde822ed75b176972c885f433ccc",
+      "size": 490
     },
     {
       "path": "settings-formal-high.json",
