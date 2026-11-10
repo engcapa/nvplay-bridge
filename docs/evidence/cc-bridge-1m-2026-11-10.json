@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794334635.9206612,
+  "checkpoint_at": 1794334658.2091293,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-1m-20261110-2355",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -552,8 +552,8 @@
     "host_memory_limit_bytes": "30064771072"
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794334535.088417,
-    "commit": "c6dd572decc190ce7ea816cf007c4c6ee1b8cefa",
+    "attempted_at": 1794334635.964788,
+    "commit": "dd372d8b0af1ea54b2b67e0103d3bfefe041d29e",
     "pushed": true,
     "returncode": 0
   },
@@ -930,7 +930,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794334635.928935,
+    "generated_at": 1794334658.2182481,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-1m-720k/28800/max": {
@@ -1046,11 +1046,6 @@
     "task": "batched-eval-parity",
     "repeat": 1
   },
-  "transport_transition": {
-    "status": "waiting_for_natural_completion",
-    "at": 1794334620.8698637,
-    "current_agent_signalled": false
-  },
   "status": "formal_incomplete",
   "bridge_health": {
     "status": "ok",
@@ -1073,7 +1068,7 @@
   },
   "bridge_activity": {
     "events_last_300s": {
-      "browser_progress": 15,
+      "browser_progress": 11,
       "browser_abort": 1,
       "browser_buffer": 1,
       "browser_pool_release": 1,
@@ -1146,7 +1141,7 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "0321db8cb804fac23b5ba0439ee0c57969ad2bf5e2e3897348cda84266c89362",
+      "sha256": "090c7c8b2ba7d8193c87ad2e4660741d271bd338f322a34ff5cd16dadcd27844",
       "size": 133
     },
     {
@@ -1336,8 +1331,8 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "e1f54b0e370e3c00c515bfa55806b85c774106e4c20434b6295213ffcc2b5648",
-      "size": 824
+      "sha256": "c3d0ca3cba9d24c4de988a3b6fcabbfbf7ec645f75952d86dbcdb4de8c02af07",
+      "size": 823
     },
     {
       "path": "runs/formal-1m-720k/batched-eval-parity--max--r1/artifacts.json",
@@ -1411,8 +1406,8 @@
     },
     {
       "path": "transport-transition-state.json",
-      "sha256": "4918253421dcdb4a8fda1f846783ee5e151095540dd478fe381090b231b95fab",
-      "size": 113
+      "sha256": "19fadbc916ed4869bbbe54f4277ac9b5d23905b1b080edc38055a2d335fde20a",
+      "size": 75
     },
     {
       "path": "unlimited-native-regression.log",
