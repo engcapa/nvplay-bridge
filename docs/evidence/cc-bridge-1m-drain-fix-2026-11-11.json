@@ -1,6 +1,6 @@
 {
   "recorded_at": 1794330205.6922045,
-  "status": "real_cc_local_fault_validation_passed_live_smoke_base_rebuilding",
+  "status": "all_fix_validation_passed_waiting_for_scored_attempt_natural_completion",
   "incident_reference": "docs/evidence/cc-bridge-1m-idle-observation-2026-11-11.json",
   "observed_incident_root_cause_established": false,
   "observed_incident_data_loss_established": false,
@@ -266,7 +266,7 @@
   ],
   "native_clone_setup_incident": {
     "recorded_at": 1794330571.3107002,
-    "status": "rebuilding_base_before_retest",
+    "status": "base_rebuilt_and_verified_live_smoke_passed",
     "cause": "Validation setup incorrectly reused a directory symlink as a clone source. cp -a copied the alias itself; smoke setup mutated the shared base.",
     "scored_attempt_affected": false,
     "all_scored_templates_are_independent_directories": true,
@@ -283,7 +283,24 @@
       "rejected_base_inode": 77373,
       "templates_are_directories": true,
       "source_sha256": "cc686e832fdfb97841608875a918043db5d565a2110821b8fc4cd9fad12ea861",
-      "observed_at": 1794330632.7568188
+      "observed_at": 1794330632.7568188,
+      "file_inodes_independent": {
+        "etc/passwd": true,
+        "etc/group": true,
+        "home/agent": true,
+        "usr/local/bin/node": true,
+        "opt/claude-code-2.1.110/package/cli.js": true
+      }
+    },
+    "base_rebuild_validation": {
+      "validated_at": 1794330849.8058727,
+      "all_recorded_versions_identical": true,
+      "system_packages": 174,
+      "app_empty": true,
+      "eval_directory_absent": true,
+      "smoke_base_has_independent_inodes": true,
+      "original_manifest_sha256": "0b566b88d58c0f341501a9d22ca69f172c3b69db9f65dfab35f6d1825d01673c",
+      "rebuilt_manifest_sha256": "eebf7942a182d925d10a9d8e9fd6b817a8d87bcf13af2e58f70fdd0e11a00aa0"
     }
   },
   "final_python_regression": {
@@ -291,5 +308,148 @@
     "seconds": 16.667,
     "log": "logs/eval-cc-1m-20261110-2355/drain-and-clone-final-regression.log",
     "sha256": "378239fdc49d77eca515653fec66c31c8ed286c53b9235f8c80ce5f46d7e30b8"
+  },
+  "real_upstream_validation": {
+    "recorded_at": 1794331090.6491125,
+    "run_directory": "logs/eval-cc-1m-20261110-2355/drain-fix-live-v2",
+    "passed": true,
+    "runtime": {
+      "started_at": 1794330849.8082786,
+      "source_head": "9459ab1ba1d48808038b264a615b1f5409beadf1",
+      "source_module_sha256": {
+        "nvplay_bridge.py": "537f857a142c8d4391d02837bab2d2123b2fe802185f785d34696dde1287856f",
+        "browser_upstream.py": "44025b2a4b9b757c95537b4a4ecbdfb170755a8098274f5b9fc43ae4ab763517",
+        "browser_events.py": "9ca0a5b7d18edcde37bf19aef27ddf226b588f840f97b4b9df46fc08042daf29",
+        "stream_support.py": "f46b07b3cdf1e4cae0f409caf26c0a279bd57477f5259ee8bba045c14f95f602",
+        "responses_api.py": "da451613bf0a1c4aa12ef03effc4d5ffe1ea330fb48006f9d09925233f9580c6",
+        "responses_support.py": "ed907b22106ff58923efa5431c20422e59bfdeb9a719b0766969522e444f033e"
+      },
+      "configuration": {
+        "UPSTREAM_KIND": "browser",
+        "UPSTREAM_MODEL": "moonshotai/kimi-k3.1-pro",
+        "BROWSER_CDP_PORT": "9225",
+        "BROWSER_POOL_SIZE": "2",
+        "BROWSER_TIMEOUT": "28800",
+        "BROWSER_FIRST_BYTE_TIMEOUT": "3600",
+        "BROWSER_IDLE_TIMEOUT": "3600",
+        "BROWSER_MAX_TOKENS": "131072",
+        "BROWSER_FIXED_MAX_TOKENS": "131072",
+        "BROWSER_HTTP_5XX_RETRIES": "2",
+        "BROWSER_DEBUG_LOG": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-1m-20261110-2355/drain-fix-live-v2/bridge-debug.jsonl"
+      },
+      "fixed_max_output_tokens": 131072,
+      "request_timeout_seconds": 28800,
+      "first_byte_timeout_seconds": 3600,
+      "idle_timeout_seconds": 3600,
+      "cdp_port": 9225,
+      "bridge_port": 8084,
+      "pid": 99951,
+      "health_at_start": {
+        "status": "ok",
+        "upstream_kind": "browser",
+        "upstream_url": "browser://cdp:9225",
+        "model": "moonshotai/kimi-k3.1-pro",
+        "cookie_present": false,
+        "captcha_present": false,
+        "tool_ids": "unique_per_invocation",
+        "loop_reminder_enabled": false,
+        "history_reasoning": "preserve",
+        "browser_output_tokens": {
+          "maximum": 131072,
+          "fixed": 131072
+        },
+        "browser_timeouts": {
+          "total_seconds": 28800,
+          "first_byte_seconds": 3600.0,
+          "idle_seconds": 3600.0
+        },
+        "browser_pool": {
+          "size": 2,
+          "tabs": {},
+          "errors": {}
+        }
+      },
+      "boot_id": "84bdf8c2-84f9-4339-9906-273d6191a66c",
+      "start_ticks": "631601",
+      "process_identity_observed_at": 1794326642.1575377,
+      "pool_prefix": "kdrainvalidation",
+      "pool_size": 2
+    },
+    "efforts": [
+      {
+        "effort": "high",
+        "passed": true,
+        "seconds": 76.753,
+        "uid": 28011,
+        "reported_context_windows": [
+          1000000
+        ],
+        "cc_launch_configuration": {
+          "model": "kimi-k3.1-pro[1m]",
+          "automatic_compaction_enabled": true,
+          "auto_compact_window_tokens": 720000
+        },
+        "agent_wall_clock_timeout_seconds": null,
+        "logical_requests": 2,
+        "actual_efforts": [
+          "high"
+        ],
+        "errors": 0,
+        "retries": 0,
+        "unfinished": [],
+        "system_sha256sum_matches_answer_and_expected": true,
+        "archive": {
+          "archived_at": 1794330961.7363338,
+          "root": "agent-root",
+          "archive": "agent-root.tar.gz",
+          "sha256": "25fdcea46b385d5e4ad97848f13088fdf5e741692747575690153b06a125ff73",
+          "bytes": 353471715,
+          "tar_compare_passed_before_reclaim": true,
+          "restore": "sudo tar -xpf agent-root.tar.gz -C ."
+        }
+      },
+      {
+        "effort": "max",
+        "passed": true,
+        "seconds": 75.268,
+        "uid": 28010,
+        "reported_context_windows": [
+          1000000
+        ],
+        "cc_launch_configuration": {
+          "model": "kimi-k3.1-pro[1m]",
+          "automatic_compaction_enabled": true,
+          "auto_compact_window_tokens": 720000
+        },
+        "agent_wall_clock_timeout_seconds": null,
+        "logical_requests": 2,
+        "actual_efforts": [
+          "max"
+        ],
+        "errors": 0,
+        "retries": 0,
+        "unfinished": [],
+        "system_sha256sum_matches_answer_and_expected": true,
+        "archive": {
+          "archived_at": 1794330990.7166944,
+          "root": "agent-root",
+          "archive": "agent-root.tar.gz",
+          "sha256": "2bf358ccaf4fa3282f0c4e20c13b5c179f494bad8b1d1a925b009212ea1f9e3b",
+          "bytes": 353471706,
+          "tar_compare_passed_before_reclaim": true,
+          "restore": "sudo tar -xpf agent-root.tar.gz -C ."
+        }
+      }
+    ],
+    "validation_complete": {
+      "passed": true,
+      "at": 1794330991.1313226,
+      "rootfs_archives_verified": true
+    },
+    "result_sha256": "97cb567d362c55e7b49c0645b096a1e531c5a1bf6706de8ec5cd9a3e4b38ce9b",
+    "during_scored_attempt": true,
+    "pool_prefix_distinct_from_scored_service": true,
+    "shared_browser_and_container_resources": true,
+    "not_an_effort_speed_comparison": true
   }
 }
