@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794322402.630949,
+  "checkpoint_at": 1794322522.9267075,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-resume-20261110-1647",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -541,54 +541,54 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794322402.7410696,
+    "generated_at": 1794322523.0549824,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-128k-fixed/28800/high": {
-        "attempts": 2,
-        "valid_grades": 2,
+        "attempts": 3,
+        "valid_grades": 3,
         "infrastructure_errors": 0,
-        "artifact_passes": 2,
+        "artifact_passes": 3,
         "artifact_pass_at_1": 1.0,
         "end_to_end_passes": 2,
-        "end_to_end_pass_rate": 1.0,
-        "agent_seconds": 8953.402,
-        "logical_requests": 132,
+        "end_to_end_pass_rate": 0.6666666666666666,
+        "agent_seconds": 15814.386,
+        "logical_requests": 203,
         "bridge_errors": 0,
         "bridge_errors_after_content": 0,
         "bridge_errors_before_content": 0,
-        "bridge_retries": 4,
-        "http_failures_retried": 4,
-        "requests_recovered_after_retry": 2,
+        "bridge_retries": 7,
+        "http_failures_retried": 7,
+        "requests_recovered_after_retry": 4,
         "cancelled_requests": 0,
         "transport": {
-          "attempts_with_evidence": 2,
+          "attempts_with_evidence": 3,
           "max_output_tokens": [
             131072
           ],
           "http_status_counts": {
-            "500": 4
+            "500": 7
           },
-          "timed_http_failures": 4,
-          "http_failed_attempt_seconds": 196.824,
-          "completed_requests": 132,
+          "timed_http_failures": 7,
+          "http_failed_attempt_seconds": 347.387,
+          "completed_requests": 203,
           "observed_usage": {
-            "prompt_tokens": 8047931,
-            "completion_tokens": 162797,
-            "total_tokens": 8210728,
-            "cached_prompt_tokens": 7805056,
-            "reasoning_tokens": 130808
+            "prompt_tokens": 15812999,
+            "completion_tokens": 294235,
+            "total_tokens": 16107234,
+            "cached_prompt_tokens": 15383552,
+            "reasoning_tokens": 242988
           },
           "requests_with_partial_usage": 0,
           "requests_without_observed_usage": 0,
-          "longest_completed_request_seconds": 510.897
+          "longest_completed_request_seconds": 925.192
         },
         "usage": {
-          "prompt_tokens": 8047931,
-          "completion_tokens": 162797,
-          "total_tokens": 8210728,
-          "cached_prompt_tokens": 7805056,
-          "reasoning_tokens": 130808
+          "prompt_tokens": 15812999,
+          "completion_tokens": 294235,
+          "total_tokens": 16107234,
+          "cached_prompt_tokens": 15383552,
+          "reasoning_tokens": 242988
         }
       },
       "formal-128k-fixed/28800/max": {
@@ -640,6 +640,60 @@
       }
     },
     "attempts": [
+      {
+        "task": "batched-eval-parity",
+        "stage": "formal-128k-fixed",
+        "effort": "high",
+        "repeat": 1,
+        "budget_seconds": 28800,
+        "artifact_score": 1,
+        "infrastructure_error": null,
+        "end_to_end_success": false,
+        "agent_seconds": 6860.984,
+        "agent_timed_out": false,
+        "cc_subtype": "success",
+        "cc_turns": 92,
+        "logical_requests": 71,
+        "upstream_attempts": 74,
+        "bridge_errors": 0,
+        "bridge_errors_after_content": 0,
+        "bridge_errors_before_content": 0,
+        "bridge_retries": 3,
+        "http_failures_retried": 3,
+        "requests_recovered_after_retry": 2,
+        "bridge_cancelled": 0,
+        "bridge_unfinished": [],
+        "transport": {
+          "max_output_tokens": [
+            131072
+          ],
+          "http_status_counts": {
+            "500": 3
+          },
+          "timed_http_failures": 3,
+          "http_failed_attempt_seconds": 150.563,
+          "completed_requests": 71,
+          "completed_request_seconds": 6760.38,
+          "longest_completed_request_seconds": 925.192,
+          "observed_usage": {
+            "prompt_tokens": 7765068,
+            "completion_tokens": 131438,
+            "total_tokens": 7896506,
+            "cached_prompt_tokens": 7578496,
+            "reasoning_tokens": 112180
+          },
+          "requests_with_partial_usage": 0,
+          "requests_without_observed_usage": 0
+        },
+        "usage": {
+          "prompt_tokens": 7765068,
+          "completion_tokens": 131438,
+          "total_tokens": 7896506,
+          "cached_prompt_tokens": 7578496,
+          "reasoning_tokens": 112180
+        },
+        "source_head": "508a582197501490ff84c781f2bd40af187c2aa5"
+      },
       {
         "task": "embedding-drift-monitor",
         "stage": "formal-128k-fixed",
@@ -857,27 +911,19 @@
     ],
     "pending": [
       {
-        "attempt": "runs/formal-128k-fixed/batched-eval-parity--high--r1",
-        "status": "grading",
-        "task": "batched-eval-parity",
-        "effort": "high",
-        "tool_calls": 91,
-        "last_tool": "Bash"
-      },
-      {
         "attempt": "runs/formal-128k-fixed/batched-eval-parity--max--r1",
         "status": "agent_running",
         "task": "batched-eval-parity",
         "effort": "max",
         "started_at": 1794315384.410672,
-        "elapsed_seconds": 7018.3,
+        "elapsed_seconds": 7138.6,
         "tool_calls": 54,
         "last_tool": "Bash"
       }
     ]
   },
   "new_formal_attempts_planned": 30,
-  "new_formal_attempts_completed": 4,
+  "new_formal_attempts_completed": 5,
   "status": "formal_running",
   "bridge_health": {
     "status": "ok",
@@ -901,20 +947,9 @@
   },
   "bridge_activity": {
     "events_last_300s": {
-      "browser_start": 2,
-      "browser_tab": 2,
-      "pool_page_ready": 2,
-      "pool_ready": 2,
-      "browser_progress": 68,
-      "browser_http_error": 1,
-      "browser_abort": 1,
-      "browser_buffer": 2,
-      "browser_pool_release": 2,
-      "pool_recovery_start": 1,
-      "upstream_retry": 1,
-      "pool_activation": 2,
-      "browser_first_data": 1,
-      "browser_first_content": 1,
+      "browser_progress": 62,
+      "browser_buffer": 1,
+      "browser_pool_release": 1,
       "browser_done": 1
     },
     "active": [
@@ -926,55 +961,28 @@
         "reasoning_effort": "max",
         "tab_id": "kpool=2",
         "counts": {
-          "thinking_chars": 363937,
+          "thinking_chars": 386667,
           "text_chars": 0,
           "tool_calls": 0
         },
         "usage": {
           "prompt_tokens": 172356,
-          "completion_tokens": 40556,
-          "total_tokens": 212912,
+          "completion_tokens": 42829,
+          "total_tokens": 215185,
           "prompt_tokens_details": {
             "cached_tokens": 171904
           },
           "completion_tokens_details": {
-            "reasoning_tokens": 40556
+            "reasoning_tokens": 42829
           }
         },
-        "age_seconds": 1957.9,
-        "activity_age_seconds": 1.6
+        "age_seconds": 2078.2,
+        "activity_age_seconds": 3.8
       }
     ],
     "recent_errors": [],
-    "recent_upstream_errors": [
-      {
-        "event": "browser_http_error",
-        "ts": 1794322153.6490998,
-        "id": "f1b63a18",
-        "attempt": 2,
-        "reasoning_effort": "high",
-        "status": 500,
-        "sec": 105.977
-      }
-    ],
-    "recent_retries": [
-      {
-        "event": "upstream_retry",
-        "ts": 1794322153.6890726,
-        "id": "f1b63a18",
-        "attempt": 2,
-        "reasoning_effort": "high",
-        "status": 500,
-        "sec": 106.017,
-        "counts": {
-          "thinking_chars": 0,
-          "text_chars": 0,
-          "tool_calls": 0
-        },
-        "usage": {},
-        "error_sha256": "c0c7c81a82584266f4c648dfdf96793a96b19a92dd951f2aada7e0327ab2c75c"
-      }
-    ]
+    "recent_upstream_errors": [],
+    "recent_retries": []
   },
   "evidence_fingerprints": [
     {
@@ -1029,13 +1037,13 @@
     },
     {
       "path": "completed-artifact-review.json",
-      "sha256": "b1c70db3b11ebd6472a3344ae4a096fb16e28755b97342c869001046b4f71574",
-      "size": 5030
+      "sha256": "bb9d244e819301b84ca2e8ff6d6880ae43e2786993e128c107d126e0cdbab944",
+      "size": 6407
     },
     {
       "path": "completed-tool-path-audit.json",
-      "sha256": "6fdc0bb98e6a1bec7f1f2aeda1407572cc547a0452a29d8157033d2063020822",
-      "size": 1983
+      "sha256": "0c283cde09b7e53d1591ded7bc7caffdfb9f49fbed65a8b0df65fec8c9e8895a",
+      "size": 2330
     },
     {
       "path": "control-artifact-review.json",
@@ -1129,7 +1137,7 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "fb0dc52efe01c0a8d0251c5b4e0b7c75533105735357bb0167db0206a7db9da8",
+      "sha256": "6f256ce98c82274aa76e5e7905f2f638a585fd87173c8ddd37295552658aad46",
       "size": 787
     },
     {
@@ -1143,6 +1151,11 @@
       "size": 2632
     },
     {
+      "path": "runs/formal-128k-fixed/batched-eval-parity--high--r1/grade.json",
+      "sha256": "ceb5f0c63fa97a8014e64da4f7709e4b3613486b7ffecbb133276a2a7cd22475",
+      "size": 222
+    },
+    {
       "path": "runs/formal-128k-fixed/batched-eval-parity--high--r1/identity.json",
       "sha256": "bad9d330d8c22dfb311f7e954c89d468348ab4d2036006cc8feff3ed979c2b91",
       "size": 2828
@@ -1151,6 +1164,11 @@
       "path": "runs/formal-128k-fixed/batched-eval-parity--high--r1/request-protocol.json",
       "sha256": "2710293349ef350bc1757cd82bea93a92c8b4dbf6e42dd3da348f325c3155dac",
       "size": 803
+    },
+    {
+      "path": "runs/formal-128k-fixed/batched-eval-parity--high--r1/result.json",
+      "sha256": "7789dcd097ff5a309adabfa9e9f4e8b4a8d478d532eee64bf7ddb5b7e3295e98",
+      "size": 26444
     },
     {
       "path": "runs/formal-128k-fixed/batched-eval-parity--max--r1/identity.json",
