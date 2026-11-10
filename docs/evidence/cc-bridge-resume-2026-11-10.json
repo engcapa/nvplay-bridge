@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794306661.0734053,
+  "checkpoint_at": 1794306781.1825101,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-resume-20261110-1647",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -541,7 +541,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794306661.0960975,
+    "generated_at": 1794306781.2103596,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
@@ -552,9 +552,9 @@
         "task": "session-window-debug",
         "effort": "high",
         "started_at": 1794304311.0699286,
-        "elapsed_seconds": 2350.0,
-        "tool_calls": 39,
-        "last_tool": "Edit"
+        "elapsed_seconds": 2470.1,
+        "tool_calls": 45,
+        "last_tool": "Read"
       },
       {
         "attempt": "runs/formal-128k-fixed/session-window-debug--max--r1",
@@ -562,7 +562,7 @@
         "task": "session-window-debug",
         "effort": "max",
         "started_at": 1794304311.0446827,
-        "elapsed_seconds": 2350.0,
+        "elapsed_seconds": 2470.2,
         "tool_calls": 50,
         "last_tool": "Bash"
       }
@@ -593,16 +593,16 @@
   },
   "bridge_activity": {
     "events_last_300s": {
-      "browser_progress": 105,
-      "browser_buffer": 11,
-      "browser_pool_release": 11,
-      "browser_done": 11,
-      "request": 11,
-      "payload": 11,
-      "browser_start": 11,
-      "browser_tab": 11,
-      "browser_first_data": 11,
-      "browser_first_content": 11
+      "browser_progress": 113,
+      "browser_first_data": 9,
+      "browser_first_content": 9,
+      "browser_buffer": 8,
+      "browser_pool_release": 8,
+      "browser_done": 8,
+      "request": 8,
+      "payload": 8,
+      "browser_start": 8,
+      "browser_tab": 8
     },
     "active": [
       {
@@ -613,49 +613,49 @@
         "reasoning_effort": "max",
         "tab_id": "kpool=5",
         "counts": {
-          "thinking_chars": 18464,
+          "thinking_chars": 32600,
           "text_chars": 0,
           "tool_calls": 0
         },
         "usage": {
           "prompt_tokens": 72764,
-          "completion_tokens": 3527,
-          "total_tokens": 76291,
+          "completion_tokens": 6357,
+          "total_tokens": 79121,
           "prompt_tokens_details": {
             "cached_tokens": 72576
           },
           "completion_tokens_details": {
-            "reasoning_tokens": 3527
+            "reasoning_tokens": 6357
           }
         },
-        "age_seconds": 172.6,
-        "activity_age_seconds": 3.5
+        "age_seconds": 292.7,
+        "activity_age_seconds": 0.7
       },
       {
-        "id": "7d60dda0",
+        "id": "a83beac5",
         "retry_count": 0,
         "phase": "browser_progress",
         "attempt": 1,
         "reasoning_effort": "high",
-        "tab_id": "kpool=3",
+        "tab_id": "kpool=2",
         "counts": {
-          "thinking_chars": 791,
+          "thinking_chars": 83,
           "text_chars": 0,
           "tool_calls": 0
         },
         "usage": {
-          "prompt_tokens": 67871,
-          "completion_tokens": 565,
-          "total_tokens": 68436,
+          "prompt_tokens": 71418,
+          "completion_tokens": 22,
+          "total_tokens": 71440,
           "prompt_tokens_details": {
-            "cached_tokens": 65536
+            "cached_tokens": 70784
           },
           "completion_tokens_details": {
-            "reasoning_tokens": 565
+            "reasoning_tokens": 22
           }
         },
-        "age_seconds": 43.1,
-        "activity_age_seconds": 4.4
+        "age_seconds": 9.2,
+        "activity_age_seconds": 4.1
       }
     ],
     "recent_errors": [],
@@ -790,7 +790,7 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "1add32b944b89cd82214511b6a9e985e26e7eb07444937c5caa4e9e5df288596",
+      "sha256": "f41c08d1290ddc189d73b4125ed5b08a824fd7d3621dd9bd23f8f9907490b479",
       "size": 787
     },
     {
