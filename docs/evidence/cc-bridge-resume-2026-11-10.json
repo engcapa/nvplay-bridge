@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794308943.1336806,
+  "checkpoint_at": 1794309063.232705,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-resume-20261110-1647",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -541,7 +541,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794308943.1711128,
+    "generated_at": 1794309063.2691095,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-128k-fixed/28800/high": {
@@ -655,7 +655,7 @@
         "task": "session-window-debug",
         "effort": "max",
         "started_at": 1794304311.0446827,
-        "elapsed_seconds": 4632.1,
+        "elapsed_seconds": 4752.2,
         "tool_calls": 100,
         "last_tool": "Bash"
       }
@@ -686,7 +686,7 @@
   },
   "bridge_activity": {
     "events_last_300s": {
-      "browser_progress": 56,
+      "browser_progress": 57,
       "browser_buffer": 2,
       "browser_pool_release": 2,
       "browser_done": 2,
@@ -706,23 +706,23 @@
         "reasoning_effort": "max",
         "tab_id": "kpool=3",
         "counts": {
-          "thinking_chars": 15093,
+          "thinking_chars": 23218,
           "text_chars": 0,
           "tool_calls": 0
         },
         "usage": {
           "prompt_tokens": 125757,
-          "completion_tokens": 3042,
-          "total_tokens": 128799,
+          "completion_tokens": 4698,
+          "total_tokens": 130455,
           "prompt_tokens_details": {
             "cached_tokens": 125440
           },
           "completion_tokens_details": {
-            "reasoning_tokens": 3042
+            "reasoning_tokens": 4698
           }
         },
-        "age_seconds": 156.2,
-        "activity_age_seconds": 3.3
+        "age_seconds": 276.3,
+        "activity_age_seconds": 0.9
       }
     ],
     "recent_errors": [],
@@ -867,7 +867,7 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "1b1deac0a37af592cc1c1e642664cc64453947a07d371a48f506c2e62ff774bb",
+      "sha256": "e14c9dc53ba4aea45868866e3d736b2dafcaeacead08e013aecd1243b9c608ba",
       "size": 788
     },
     {
