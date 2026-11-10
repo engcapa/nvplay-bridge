@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794302698.8519917,
+  "checkpoint_at": 1794302729.7304351,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-resume-20261110-1647",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -505,7 +505,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794302698.854689,
+    "generated_at": 1794302729.7320802,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
@@ -568,8 +568,8 @@
     },
     {
       "path": "campaign-state.json",
-      "sha256": "915f5eb33350b285b8188b78474504b5eb062db609496fa0c2220f5a93c107d9",
-      "size": 2865
+      "sha256": "53a6fb6fea154f2e43d6b835deae424806858420f4575178cf80611ee0f64207",
+      "size": 2863
     },
     {
       "path": "campaign-validation.log",
@@ -770,6 +770,16 @@
       "archive": "agent-root.tar.gz",
       "sha256": "cd937777a6dc1c6761f3f5ce200ed452c90b5525b8bcd5c999be45709ebd221a",
       "bytes": 353478252,
+      "tar_compare_passed_before_reclaim": true,
+      "restore": "sudo tar -xpf agent-root.tar.gz -C ."
+    },
+    {
+      "directory": "smoke/max",
+      "archived_at": 1794302729.269003,
+      "root": "agent-root",
+      "archive": "agent-root.tar.gz",
+      "sha256": "dd2d6006f9944fbd3bbea28033d39dd2f2529a432f1209c98e6aa97f9837ba48",
+      "bytes": 353479622,
       "tar_compare_passed_before_reclaim": true,
       "restore": "sudo tar -xpf agent-root.tar.gz -C ."
     }
