@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794309784.7238157,
+  "checkpoint_at": 1794309904.8213878,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-resume-20261110-1647",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -541,7 +541,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794309784.7498002,
+    "generated_at": 1794309904.8562524,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-128k-fixed/28800/high": {
@@ -756,8 +756,8 @@
         "task": "embedding-drift-monitor",
         "effort": "high",
         "started_at": 1794309436.7690861,
-        "elapsed_seconds": 348.0,
-        "tool_calls": 18,
+        "elapsed_seconds": 468.1,
+        "tool_calls": 19,
         "last_tool": "Bash"
       },
       {
@@ -766,8 +766,8 @@
         "task": "embedding-drift-monitor",
         "effort": "max",
         "started_at": 1794309436.757663,
-        "elapsed_seconds": 348.0,
-        "tool_calls": 14,
+        "elapsed_seconds": 468.1,
+        "tool_calls": 15,
         "last_tool": "Bash"
       }
     ]
@@ -790,76 +790,76 @@
       "idle_seconds": 3600.0
     },
     "pool_states": {
-      "ready": 3,
-      "busy": 2
+      "busy": 2,
+      "ready": 3
     },
     "recovering_tabs": []
   },
   "bridge_activity": {
     "events_last_300s": {
-      "browser_first_data": 9,
-      "browser_progress": 102,
-      "browser_first_content": 9,
-      "browser_buffer": 7,
-      "browser_pool_release": 7,
-      "browser_done": 7,
-      "request": 7,
-      "payload": 7,
-      "browser_start": 7,
-      "browser_tab": 7
+      "browser_progress": 99,
+      "browser_buffer": 4,
+      "browser_pool_release": 4,
+      "browser_done": 4,
+      "request": 4,
+      "payload": 4,
+      "browser_start": 4,
+      "browser_tab": 4,
+      "browser_first_data": 4,
+      "browser_first_content": 4
     },
     "active": [
       {
-        "id": "72773755",
-        "retry_count": 0,
-        "phase": "browser_progress",
-        "attempt": 1,
-        "reasoning_effort": "max",
-        "tab_id": "kpool=4",
-        "counts": {
-          "thinking_chars": 23839,
-          "text_chars": 0,
-          "tool_calls": 0
-        },
-        "usage": {
-          "prompt_tokens": 17103,
-          "completion_tokens": 4993,
-          "total_tokens": 22096,
-          "prompt_tokens_details": {
-            "cached_tokens": 14464
-          },
-          "completion_tokens_details": {
-            "reasoning_tokens": 4993
-          }
-        },
-        "age_seconds": 194.8,
-        "activity_age_seconds": 3.8
-      },
-      {
-        "id": "13e9d8b6",
+        "id": "6eb7887f",
         "retry_count": 0,
         "phase": "browser_progress",
         "attempt": 1,
         "reasoning_effort": "high",
-        "tab_id": "kpool=5",
+        "tab_id": "kpool=2",
         "counts": {
-          "thinking_chars": 620,
+          "thinking_chars": 8612,
           "text_chars": 0,
           "tool_calls": 0
         },
         "usage": {
-          "prompt_tokens": 19806,
-          "completion_tokens": 123,
-          "total_tokens": 19929,
+          "prompt_tokens": 20143,
+          "completion_tokens": 1723,
+          "total_tokens": 21866,
           "prompt_tokens_details": {
-            "cached_tokens": 19584
+            "cached_tokens": 19712
           },
           "completion_tokens_details": {
-            "reasoning_tokens": 123
+            "reasoning_tokens": 1723
           }
         },
-        "age_seconds": 46.7,
-        "activity_age_seconds": 1.7
+        "age_seconds": 105.6,
+        "activity_age_seconds": 4.1
+      },
+      {
+        "id": "70300f6f",
+        "retry_count": 0,
+        "phase": "browser_progress",
+        "attempt": 1,
+        "reasoning_effort": "max",
+        "tab_id": "kpool=1",
+        "counts": {
+          "thinking_chars": 237,
+          "text_chars": 0,
+          "tool_calls": 0
+        },
+        "usage": {
+          "prompt_tokens": 23260,
+          "completion_tokens": 43,
+          "total_tokens": 23303,
+          "prompt_tokens_details": {
+            "cached_tokens": 17024
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 43
+          }
+        },
+        "age_seconds": 41.2,
+        "activity_age_seconds": 4.2
       }
     ],
     "recent_errors": [],
@@ -911,6 +911,11 @@
       "path": "checkpoint-process.json",
       "sha256": "d26645961b072dd7b4f5aeb0fb61f51d302754b6aa07ef66bcce9a3cd7ed653f",
       "size": 55
+    },
+    {
+      "path": "checkpoint-state-fix-verification.json",
+      "sha256": "fc1e2d8282df46ea894657916569044c293be6c26c7ac29f65c8d11dfba4f2e5",
+      "size": 831
     },
     {
       "path": "completed-artifact-review.json",
@@ -1004,8 +1009,8 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "f07213c7f672bb2145ec7e404c81d21d0f84ac0366d96fc421b3c32c64b2d310",
-      "size": 790
+      "sha256": "0a30ed24425713153711e7f1c9660ac779372d25050eed92d7699bf85d39fa90",
+      "size": 791
     },
     {
       "path": "restoration-regression.log",
