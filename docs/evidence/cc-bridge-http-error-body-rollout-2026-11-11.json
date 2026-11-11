@@ -1,0 +1,416 @@
+{
+  "started_at": 1794405576.2045853,
+  "from_stage": "formal-1m-720k-host-cc-20261111-evening",
+  "to_stage": "formal-1m-720k-host-body-read-clean-20261111",
+  "agent_interrupted": false,
+  "preserved_completed_local_slots": [
+    {
+      "task": "ks-solver-cpp",
+      "repeat": 1,
+      "effort": "high",
+      "stage": "formal-1m-720k-host-cc-20261111-evening"
+    }
+  ],
+  "remaining_schedule": [
+    {
+      "task": "session-window-debug",
+      "repeat": 2,
+      "effort": "high"
+    },
+    {
+      "task": "session-window-debug",
+      "repeat": 2,
+      "effort": "max"
+    },
+    {
+      "task": "embedding-drift-monitor",
+      "repeat": 2,
+      "effort": "high"
+    },
+    {
+      "task": "embedding-drift-monitor",
+      "repeat": 2,
+      "effort": "max"
+    },
+    {
+      "task": "batched-eval-parity",
+      "repeat": 2,
+      "effort": "high"
+    },
+    {
+      "task": "batched-eval-parity",
+      "repeat": 2,
+      "effort": "max"
+    },
+    {
+      "task": "mvcc-lsm-compaction",
+      "repeat": 2,
+      "effort": "high"
+    },
+    {
+      "task": "mvcc-lsm-compaction",
+      "repeat": 2,
+      "effort": "max"
+    },
+    {
+      "task": "ks-solver-cpp",
+      "repeat": 2,
+      "effort": "high"
+    },
+    {
+      "task": "ks-solver-cpp",
+      "repeat": 2,
+      "effort": "max"
+    },
+    {
+      "task": "session-window-debug",
+      "repeat": 3,
+      "effort": "high"
+    },
+    {
+      "task": "session-window-debug",
+      "repeat": 3,
+      "effort": "max"
+    },
+    {
+      "task": "embedding-drift-monitor",
+      "repeat": 3,
+      "effort": "high"
+    },
+    {
+      "task": "embedding-drift-monitor",
+      "repeat": 3,
+      "effort": "max"
+    },
+    {
+      "task": "batched-eval-parity",
+      "repeat": 3,
+      "effort": "high"
+    },
+    {
+      "task": "batched-eval-parity",
+      "repeat": 3,
+      "effort": "max"
+    },
+    {
+      "task": "mvcc-lsm-compaction",
+      "repeat": 3,
+      "effort": "high"
+    },
+    {
+      "task": "mvcc-lsm-compaction",
+      "repeat": 3,
+      "effort": "max"
+    },
+    {
+      "task": "ks-solver-cpp",
+      "repeat": 3,
+      "effort": "high"
+    },
+    {
+      "task": "ks-solver-cpp",
+      "repeat": 3,
+      "effort": "max"
+    }
+  ],
+  "before_stage_results": {
+    "generated_at": 1794405576.1785119,
+    "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
+    "totals": {
+      "formal-1m-720k-host-cc-20261111-evening/28800/high": {
+        "attempts": 1,
+        "valid_grades": 1,
+        "infrastructure_errors": 0,
+        "artifact_passes": 0,
+        "artifact_pass_at_1": 0.0,
+        "end_to_end_passes": 0,
+        "end_to_end_pass_rate": 0.0,
+        "agent_seconds": 6821.841,
+        "logical_requests": 8,
+        "bridge_errors": 5,
+        "bridge_errors_after_content": 0,
+        "bridge_errors_before_content": 5,
+        "bridge_retries": 7,
+        "http_failures_retried": 7,
+        "requests_recovered_after_retry": 1,
+        "cancelled_requests": 0,
+        "transport": {
+          "attempts_with_evidence": 1,
+          "max_output_tokens": [
+            131072
+          ],
+          "http_status_counts": {
+            "400": 3,
+            "500": 9
+          },
+          "timed_http_failures": 12,
+          "http_failed_attempt_seconds": 1918.89,
+          "completed_requests": 3,
+          "observed_usage": {
+            "prompt_tokens": 16253,
+            "completion_tokens": 71613,
+            "total_tokens": 87866,
+            "reasoning_tokens": 71330
+          },
+          "requests_with_partial_usage": 0,
+          "requests_without_observed_usage": 5,
+          "longest_completed_request_seconds": 4584.249
+        },
+        "usage": {
+          "prompt_tokens": 16253,
+          "completion_tokens": 71613,
+          "total_tokens": 87866,
+          "reasoning_tokens": 71330
+        }
+      }
+    },
+    "attempts": [
+      {
+        "task": "ks-solver-cpp",
+        "stage": "formal-1m-720k-host-cc-20261111-evening",
+        "effort": "high",
+        "repeat": 1,
+        "budget_seconds": 28800,
+        "agent_wall_clock_timeout_seconds": null,
+        "artifact_score": 0,
+        "infrastructure_error": null,
+        "end_to_end_success": false,
+        "agent_seconds": 6821.841,
+        "agent_timed_out": false,
+        "cc_subtype": "success",
+        "cc_turns": 4,
+        "logical_requests": 8,
+        "upstream_attempts": 15,
+        "bridge_errors": 5,
+        "bridge_errors_after_content": 0,
+        "bridge_errors_before_content": 5,
+        "bridge_retries": 7,
+        "http_failures_retried": 7,
+        "requests_recovered_after_retry": 1,
+        "bridge_cancelled": 0,
+        "bridge_unfinished": [],
+        "transport": {
+          "max_output_tokens": [
+            131072
+          ],
+          "http_status_counts": {
+            "400": 3,
+            "500": 9
+          },
+          "timed_http_failures": 12,
+          "http_failed_attempt_seconds": 1918.89,
+          "completed_requests": 3,
+          "completed_request_seconds": 5200.555,
+          "longest_completed_request_seconds": 4584.249,
+          "observed_usage": {
+            "prompt_tokens": 16253,
+            "completion_tokens": 71613,
+            "total_tokens": 87866,
+            "cached_prompt_tokens": 0,
+            "reasoning_tokens": 71330
+          },
+          "requests_with_partial_usage": 0,
+          "requests_without_observed_usage": 5
+        },
+        "usage": {
+          "prompt_tokens": 16253,
+          "completion_tokens": 71613,
+          "total_tokens": 87866,
+          "cached_prompt_tokens": 0,
+          "reasoning_tokens": 71330
+        },
+        "source_head": "73d9155d3365f0fe3f20263241ed00e35933cb78"
+      }
+    ],
+    "pending": []
+  },
+  "artifact_review": {
+    "reviewed_at": 1794405576.5897326,
+    "attempts": [
+      {
+        "attempt": "runs/formal-1m-720k-host-cc-20261111-evening/ks-solver-cpp--high--r1",
+        "task": "ks-solver-cpp",
+        "control": null,
+        "effort": "high",
+        "repeat": 1,
+        "artifact_score": 0,
+        "infrastructure_error": null,
+        "changed_original_files": [],
+        "added_files": [],
+        "removed_original_files": [],
+        "declared_read_only_files_unchanged": {},
+        "read_only_check_scope": "not checked",
+        "artifact_errors_present": false,
+        "verifier": null,
+        "client_terminal": {
+          "exit_code": 1,
+          "timed_out": false,
+          "subtype": "success",
+          "is_error": true,
+          "terminal_reason": "api_error",
+          "api_error_status": 400,
+          "prompt_too_long": false,
+          "reported_context_window_tokens": [
+            1000000
+          ]
+        }
+      }
+    ],
+    "scope": "saved copied-artifact hashes and original verifier results; not a semantic code review"
+  },
+  "validated_candidate_runtime": {
+    "passed": true,
+    "recorded_at": 1794400810.7637253,
+    "duration_seconds": 29.822,
+    "source_module_sha256": {
+      "nvplay_bridge.py": "40e502b1d99573b5f5b3bb4006c097c7f89af849a53ee2069381855bc6d752ab",
+      "browser_upstream.py": "8dd872e1fba62e0752efa5355e010d8e78fdfc4e3855e02c6f58a306a4fd9f1d",
+      "browser_events.py": "5e745cce57f3c0ac3f04d8193802c987c59b3bde00ed8a5c97668ba4de8bbdb3",
+      "stream_support.py": "8631dd909e24192413855c353285d4c0703f86082b3722ead1140a820c0a2d32",
+      "responses_api.py": "da451613bf0a1c4aa12ef03effc4d5ffe1ea330fb48006f9d09925233f9580c6",
+      "responses_support.py": "ed907b22106ff58923efa5431c20422e59bfdeb9a719b0766969522e444f033e"
+    },
+    "regression_log_sha256": "8989fd1eb07c1a691332bfae6f11bf56c1f5e4ff44cca22b19f057ce3c745670",
+    "regression_log_size": 3991,
+    "returncode": 0,
+    "source_unchanged_during_validation": true,
+    "real_cdp_abort_cases_passed": 4,
+    "baseline_missing_error_body_cases_reproduced": 2
+  },
+  "stopped_checkpoint": {
+    "record": "checkpoint-process.json",
+    "identity": {
+      "pid": 380308,
+      "boot_id": "a5433646-d26c-4433-92b6-b498d40bdf91",
+      "start_ticks": "1649549"
+    },
+    "stopped_at": 1794405582.729366,
+    "signal": "SIGTERM"
+  },
+  "stopped_bridge": {
+    "record": "bridge-runtime.json",
+    "identity": {
+      "pid": 380319,
+      "boot_id": "a5433646-d26c-4433-92b6-b498d40bdf91",
+      "start_ticks": "1649570"
+    },
+    "stopped_at": 1794405582.9308002,
+    "signal": "SIGTERM"
+  },
+  "actual_rollout_smoke": [
+    {
+      "effort": "high",
+      "passed": true,
+      "process": {
+        "exit_code": 0,
+        "timed_out": false,
+        "timeout_seconds": null,
+        "started_at": 1794405613.4696784,
+        "finished_at": 1794405633.6512275,
+        "duration_seconds": 20.182
+      },
+      "logical_requests": 2,
+      "errors": 0,
+      "retries": 0,
+      "unfinished": [],
+      "reported_context_windows": [
+        1000000
+      ]
+    },
+    {
+      "effort": "max",
+      "passed": true,
+      "process": {
+        "exit_code": 0,
+        "timed_out": false,
+        "timeout_seconds": null,
+        "started_at": 1794405641.7355225,
+        "finished_at": 1794405705.9110103,
+        "duration_seconds": 64.175
+      },
+      "logical_requests": 2,
+      "errors": 0,
+      "retries": 0,
+      "unfinished": [],
+      "reported_context_windows": [
+        1000000
+      ]
+    }
+  ],
+  "previous_smoke_archive": "smoke-history/formal-1m-720k-host-cc-20261111-evening--1794405706793528984",
+  "preceding_controller_error": {
+    "at": 1794400245.9027395,
+    "error_type": "RuntimeError",
+    "error": "runner source changed after initialization; start a new process before another attempt"
+  },
+  "status": "validated_rollout_starting_remaining_slots",
+  "runtime": {
+    "started_at": 1794405582.9442792,
+    "source_head": "e21bfd3096761cd5dbe2553bc0cc43ee4841442f",
+    "source_module_sha256": {
+      "nvplay_bridge.py": "40e502b1d99573b5f5b3bb4006c097c7f89af849a53ee2069381855bc6d752ab",
+      "browser_upstream.py": "8dd872e1fba62e0752efa5355e010d8e78fdfc4e3855e02c6f58a306a4fd9f1d",
+      "browser_events.py": "5e745cce57f3c0ac3f04d8193802c987c59b3bde00ed8a5c97668ba4de8bbdb3",
+      "stream_support.py": "8631dd909e24192413855c353285d4c0703f86082b3722ead1140a820c0a2d32",
+      "responses_api.py": "da451613bf0a1c4aa12ef03effc4d5ffe1ea330fb48006f9d09925233f9580c6",
+      "responses_support.py": "ed907b22106ff58923efa5431c20422e59bfdeb9a719b0766969522e444f033e"
+    },
+    "configuration": {
+      "UPSTREAM_KIND": "browser",
+      "UPSTREAM_MODEL": "moonshotai/kimi-k3.1-pro",
+      "BROWSER_CDP_PORT": "9225",
+      "BROWSER_POOL_SIZE": "5",
+      "BROWSER_TIMEOUT": "28800",
+      "BROWSER_FIRST_BYTE_TIMEOUT": "3600",
+      "BROWSER_IDLE_TIMEOUT": "3600",
+      "BROWSER_MAX_TOKENS": "131072",
+      "BROWSER_FIXED_MAX_TOKENS": "131072",
+      "BROWSER_HTTP_5XX_RETRIES": "2",
+      "BROWSER_DEBUG_LOG": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261111-evening/bridge-debug.jsonl"
+    },
+    "fixed_max_output_tokens": 131072,
+    "request_timeout_seconds": 28800,
+    "first_byte_timeout_seconds": 3600,
+    "idle_timeout_seconds": 3600,
+    "cdp_port": 9225,
+    "bridge_port": 8083,
+    "pid": 457990,
+    "boot_id": "a5433646-d26c-4433-92b6-b498d40bdf91",
+    "start_ticks": "1908623",
+    "health_at_start": {
+      "status": "ok",
+      "upstream_kind": "browser",
+      "upstream_url": "browser://cdp:9225",
+      "model": "moonshotai/kimi-k3.1-pro",
+      "cookie_present": false,
+      "captcha_present": false,
+      "tool_ids": "unique_per_invocation",
+      "loop_reminder_enabled": false,
+      "history_reasoning": "preserve",
+      "browser_output_tokens": {
+        "maximum": 131072,
+        "fixed": 131072
+      },
+      "browser_timeouts": {
+        "total_seconds": 28800,
+        "first_byte_seconds": 3600.0,
+        "idle_seconds": 3600.0
+      },
+      "browser_messages_delivery": {
+        "thinking": "live",
+        "defer_output": true,
+        "stream_retries": 2
+      },
+      "browser_retry_policy": {
+        "http_5xx_retries": 2,
+        "http_5xx_initial_backoff_seconds": 5.0,
+        "stream_retries": 2,
+        "stream_initial_backoff_seconds": 5.0,
+        "backoff_cap_seconds": 30,
+        "jitter_max_seconds": 1,
+        "failed_pool_tabs": "refresh_before_reuse"
+      }
+    }
+  },
+  "completed_at": 1794405706.8028498
+}
