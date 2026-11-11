@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794403844.2484987,
+  "checkpoint_at": 1794403960.0596697,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261111-evening",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -997,8 +997,8 @@
     "fresh_controls_required": true
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794403710.1971698,
-    "commit": "73ab60c81d97425b2012833a0d3c237c1d4fc85f",
+    "attempted_at": 1794403844.3977556,
+    "commit": "2b630f34de38e55a2dd58ced60cc3660b7706c29",
     "pushed": true,
     "returncode": 0
   },
@@ -1422,7 +1422,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794403844.268167,
+    "generated_at": 1794403960.0768466,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-1m-720k-host-cc-20261111-evening/28800/high": {
@@ -1567,7 +1567,7 @@
     },
     "pool_states": {
       "ready": 4,
-      "busy": 1
+      "recovering": 1
     },
     "recovering_tabs": []
   },
@@ -1579,13 +1579,13 @@
       "browser_pool_release": 3,
       "pool_recovery_start": 3,
       "upstream_retry": 2,
-      "pool_activation": 4,
-      "pool_page_ready": 3,
-      "pool_ready": 3,
-      "browser_start": 3,
-      "browser_lease": 3,
-      "browser_tab": 3,
-      "browser_sent": 3,
+      "pool_activation": 2,
+      "pool_page_ready": 2,
+      "pool_ready": 2,
+      "browser_start": 2,
+      "browser_lease": 2,
+      "browser_tab": 2,
+      "browser_sent": 2,
       "upstream_retry_skipped": 1,
       "browser_error": 1,
       "messages_failed": 1,
@@ -1597,13 +1597,24 @@
     "active": [
       {
         "id": "5c4bc96d195442adb7444a83",
-        "retry_count": 0,
-        "phase": "browser_sent",
+        "retry_count": 1,
+        "phase": "upstream_retry",
         "attempt": 1,
         "reasoning_effort": "high",
         "tab_id": "kpool=2",
-        "age_seconds": 8.8,
-        "activity_age_seconds": 7.9
+        "counts": {
+          "thinking_chars": 0,
+          "text_chars": 0,
+          "tool_calls": 0
+        },
+        "usage": {},
+        "last_retry": {
+          "reason": "upstream_http_5xx",
+          "status": 500,
+          "delay": 5.252
+        },
+        "age_seconds": 124.6,
+        "activity_age_seconds": 0.7
       }
     ],
     "recent_errors": [
@@ -1627,15 +1638,6 @@
     "recent_upstream_errors": [
       {
         "event": "browser_http_error",
-        "ts": 1794403570.4823968,
-        "id": "f01c9e636e6b4f73b1d3809f",
-        "attempt": 1,
-        "reasoning_effort": "high",
-        "status": 500,
-        "sec": 124.324
-      },
-      {
-        "event": "browser_http_error",
         "ts": 1794403700.0680504,
         "id": "f01c9e636e6b4f73b1d3809f",
         "attempt": 2,
@@ -1651,17 +1653,26 @@
         "reasoning_effort": "high",
         "status": 500,
         "sec": 388.703
+      },
+      {
+        "event": "browser_http_error",
+        "ts": 1794403959.3667789,
+        "id": "5c4bc96d195442adb7444a83",
+        "attempt": 1,
+        "reasoning_effort": "high",
+        "status": 500,
+        "sec": 123.893
       }
     ],
     "recent_retries": [
       {
         "event": "upstream_retry",
-        "ts": 1794403570.5279546,
+        "ts": 1794403700.116921,
         "id": "f01c9e636e6b4f73b1d3809f",
-        "attempt": 1,
+        "attempt": 2,
         "reasoning_effort": "high",
         "status": 500,
-        "sec": 124.369,
+        "sec": 253.958,
         "counts": {
           "thinking_chars": 0,
           "text_chars": 0,
@@ -1672,12 +1683,12 @@
       },
       {
         "event": "upstream_retry",
-        "ts": 1794403700.116921,
-        "id": "f01c9e636e6b4f73b1d3809f",
-        "attempt": 2,
+        "ts": 1794403959.3954682,
+        "id": "5c4bc96d195442adb7444a83",
+        "attempt": 1,
         "reasoning_effort": "high",
         "status": 500,
-        "sec": 253.958,
+        "sec": 123.922,
         "counts": {
           "thinking_chars": 0,
           "text_chars": 0,
@@ -1741,7 +1752,7 @@
     },
     {
       "path": "browser-supervisor-state.json",
-      "sha256": "14eebe5abbe263b45bab6922a5909a21cdd9f128bd6e31889456947d72473ad0",
+      "sha256": "a422eeafd7fbd439055fa5f44512cc54dcd24b8ef841cb6c0620ce24b0a95df1",
       "size": 101
     },
     {
@@ -1766,7 +1777,7 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "0ac3f51c55f543fedc872f95eb260dd502bad018c3e2df0548dbf1da07ba5f4d",
+      "sha256": "3392450e0043e0d1daf4e2d50cb815397fbc4979d17067b6370ba08e9b3924f6",
       "size": 134
     },
     {
@@ -1981,7 +1992,7 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "f24867378e087297039bdec5da151ff1e962daeca6658c2dba70950f2e49446d",
+      "sha256": "4aafcb2c8830b3806dec7e58e0065d32b4a007c395cdba3e7883f2eedd4ac7b5",
       "size": 782
     },
     {
