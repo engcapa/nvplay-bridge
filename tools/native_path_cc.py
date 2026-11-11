@@ -27,6 +27,11 @@ def sha256(path: Path) -> str:
 
 
 def verify_runtime(spec: dict) -> dict:
+    if spec.get("kind") == "path-native-host":
+        from native_host_cc import verify_runtime as verify_host_runtime
+        if sha256(Path(spec["snapshot_path"])) != spec["sha256"]:
+            raise RuntimeError("native CC runtime identity changed: snapshot_path")
+        return verify_host_runtime(spec)
     if spec.get("kind") != "path-native-proot":
         raise ValueError("unsupported native CC runtime")
     for path_key, hash_key in (("snapshot_path", "sha256"), ("proot_path", "proot_sha256")):
@@ -94,7 +99,7 @@ def runtime_root(output: Path) -> tuple[Path, int | None]:
         return output / "agent-root", None
     marker = json.loads(marker_path.read_text())
     uid = marker["uid"]
-    if not 20000 <= uid <= 29999 or marker.get("kind") != "path-native-proot":
+    if not 20000 <= uid <= 29999 or marker.get("kind") not in ("path-native-proot", "path-native-host"):
         raise ValueError("invalid native CC root marker")
     if marker["canonical_root"] != str(output.resolve() / "agent-root"):
         raise ValueError("native CC root marker belongs to another attempt")
@@ -117,11 +122,14 @@ def return_agent_root(output: Path) -> Path:
         return root
     if uid_processes(uid):
         raise RuntimeError("refusing to move a live native CC root")
+    marker = json.loads((output / "runtime-root.json").read_text())
+    if marker["kind"] == "path-native-host":
+        from native_host_cc import release_workspace
+        release_workspace(root)
     if canonical.exists() or canonical.is_symlink():
         raise FileExistsError(canonical)
     root.rename(canonical)
     root.parent.rmdir()
-    marker = json.loads((output / "runtime-root.json").read_text())
     write_json(output / "runtime-root.json", {**marker, "phase": "returned", "returned_at": time.time()})
     return canonical
 

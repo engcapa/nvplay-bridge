@@ -24,6 +24,18 @@ def read(path: Path) -> dict:
     return json.loads(path.read_text()) if path.is_file() else {}
 
 
+def unfinished_control_directories(base: Path) -> list[Path]:
+    """Host reference setup can own a UID and /app before any scored attempt."""
+    result = []
+    for directory in sorted((base / "controls").glob("*/*")):
+        marker = read(directory / "runtime-root.json")
+        if (marker.get("phase") in ("preparing", "active")
+                or (not (directory / "grade.json").exists()
+                    and (marker or (directory / "agent-root").is_dir()))):
+            result.append(directory)
+    return result
+
+
 def scoped_processes(uids: set[int], roots: set[str], sessions: set[int]):
     for proc in Path("/proc").iterdir():
         if not proc.name.isdigit() or not (identity := process_identity(int(proc.name))):
@@ -124,6 +136,8 @@ def pause(base: Path, output: Path, deadline: float) -> dict:
 
     report = summarize(base)
     directories = [base / row["attempt"] for row in report["pending"]]
+    incomplete_controls = unfinished_control_directories(base)
+    directories.extend(incomplete_controls)
     # Include isolated deployment smoke if the deadline falls during rollout.
     for smoke in (base / "smoke", base / "transport-rollout-smoke" / "smoke"):
         if smoke.is_dir() and not (smoke.parent / "smoke-result.json").exists():
@@ -180,6 +194,7 @@ def pause(base: Path, output: Path, deadline: float) -> dict:
              "reason": "user requested stop for container reboot",
              "completed": len(report["attempts"]), "interrupted_attempts": len(interrupted),
              "interrupted_positions": interrupted, "signalled_attempt_pids": signalled,
+             "interrupted_control_directories": [str(path.relative_to(base)) for path in incomplete_controls],
              "stopped_services": stopped, "active_bridge_requests_before_shutdown": len(active)}
     write_json(base / "pause-state.json", state)
     runtime = read(base / "bridge-runtime.json")

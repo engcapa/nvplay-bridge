@@ -13,6 +13,7 @@ import time
 import urllib.request
 
 from native_eval_support import write_json
+from eval_terminal_native import process_identity
 
 
 MODULES = ("nvplay_bridge.py", "browser_upstream.py", "browser_events.py", "stream_support.py",
@@ -24,7 +25,10 @@ def launch(args, base, name, env=None):
     with (base / f"{name}.log").open("ab") as log:
         process = subprocess.Popen(list(map(str, args)), stdout=log, stderr=subprocess.STDOUT,
                                    env=env, start_new_session=True)
-    write_json(base / f"{name}-process.json", {"pid": process.pid, "args": list(map(str, args)),
+    identity = process_identity(process.pid)
+    if identity is None:
+        raise RuntimeError(f"{name} exited before its process identity was recorded; inspect its log")
+    write_json(base / f"{name}-process.json", {**identity, "args": list(map(str, args)),
                                              "started_at": time.time()})
     return process
 
@@ -79,7 +83,7 @@ def main():
     bridge = launch(["python3", "-m", "uvicorn", "nvplay_bridge:app", "--host", "127.0.0.1",
                      "--port", str(args.bridge_port), "--timeout-keep-alive", "75"], base, "bridge-server",
                     env={**os.environ, **settings, "NO_PROXY": "127.0.0.1,localhost"})
-    identity["pid"] = bridge.pid
+    identity.update(process_identity(bridge.pid) or {"pid": bridge.pid})
     identity["health_at_start"] = await_json(f"http://127.0.0.1:{args.bridge_port}/health", bridge)
     write_json(base / "bridge-runtime.json", identity)
     launch(["python3", "-u", "tools/monitor_bridge.py", "--log", base / "bridge-debug.jsonl", "--duration", "0",

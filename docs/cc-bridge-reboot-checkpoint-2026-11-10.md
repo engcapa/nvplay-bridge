@@ -1,5 +1,9 @@
 # CC + bridge 评测重启检查点（2026-11-10）
 
+**2026-11-11 18:03 按用户要求改为容器内直接运行 CC，后续不再使用 PRoot。** 历史 **9/30** 保留，新阶段 `formal-1m-720k-host-cc-20261111-evening` 继续剩余 21 个位置；重新运行真实 high/max 烟测和原始评分对照。CC 使用独立 UID、HOME 和 venv，`/app` 独占链接要求两档串行；原始判分器继续独立验收。自动停机仍为 **11 月 12 日 00:05:57（北京时间）**。新方式见 [运行说明](terminal-bench-native.md#当前方式容器内直接运行-cc)，当前进度见 [本轮 checkpoint](evidence/cc-bridge-evening-continuation-2026-11-11.json)。
+
+**2026-11-11 17:06 已再次恢复。** 保留累计完成的 **9/30**，重建环境后从 `ks-solver-cpp` high / r1 继续。用户要求约 7 小时后主动停止，已安排 **2026-11-12 00:05:57（北京时间）** 自动停机并保存提交推送。新阶段启用原生 idle 修复，模型 `kimi-k3.1-pro[1m]`、压缩窗口 720000、128K 输出配置；详见 [本轮记录](cc-bridge-evening-continuation-2026-11-11.md) 和 [持续 checkpoint](evidence/cc-bridge-evening-continuation-2026-11-11.json)。下面的 15:00 暂停是上一轮历史状态。
+
 **2026-11-11 15:00 已按约定暂停，可以重启容器。** 最终 checkpoint `8ecacda` 已推送，累计完成 **9/30**；KS high / r1 在 136 次工具调用后按行政停止记录，未判分。已核对评测、自动 checkpoint、bridge、浏览器、监督与监控进程全部退出，8083/9225 关闭，无遗留请求。完整终态见 [本轮检查点](evidence/cc-bridge-1m-reboot-continuation-2026-11-11.json)。
 
 下一次收到继续指令后，从剩余 21 个位置中的 `ks-solver-cpp` high / r1 开始；保留 KS max 的 0 分和其它 8 个完成结果。新阶段应使用当时普通用户 PATH 的 Claude，并按 [原生说明](terminal-bench-native.md#当前-path-原生-cc) 添加 `--disable-native-idle-timeout`，重新完成 high/max 真实烟测。修复已通过 430 秒本地 HTTP/1.0、HTTP/1.1 和真实 max 工具闭环；本次尚未在新的正式计分阶段启用，不能补标到已结束或中断的旧会话。原始日志可能被重启清空，PID、外部 root 与在途 CC 会话不可复用。
@@ -60,7 +64,17 @@
 
 旧控制器在源码变化后报 `runner source changed after initialization`，按设计拒绝下一题。这是身份保护生效；之后已用新控制器启动修复版，不记为 bridge 缺陷。
 
-## 重启后按顺序恢复
+## 当前直接运行方式的重启恢复
+
+收到下一次继续指令后，先读本文件最上方的最新交接和对应 checkpoint；保留所有完成位置及其原阶段，未完成位置用新会话继续。不要复用旧 PID、宿主 `/app` 链接、外部工作目录、运行副本或已过期的行政停机时间。
+
+1. 使用新的 `logs/<run>/` 恢复固定下载、Ubuntu 判分基座、离线 wheel 和任务模板，方法见 [原生说明](terminal-bench-native.md)。**不再构建或调用 PRoot。** 原始判分器的 chroot 与 CC 的宿主直接运行分别记录。
+2. 按 `provision_terminal_native.py configure --cc-model 'kimi-k3.1-pro[1m]' --auto-compact-window 720000 --no-agent-timeout --continue-checkpoint <最新检查点> --stage formal-<新准备阶段>` 建立缺失位置计划；bridge 实际配置仍为固定 131072、总请求 28800 秒、首字节/idle 各 3600 秒。
+3. 运行 `sudo -n python3 tools/configure_terminal_native_path_cc.py --base logs/<run> --claude "$(command -v claude)" --host-direct --disable-native-idle-timeout --stage formal-<新宿主阶段>`。它冻结当前 PATH CLI 和宿主工具链、设置串行执行，并保留旧结果及旧控制/烟测。若 `/app` 已被占用，先核对所有者与活进程，不能覆盖。
+4. 新 high/max 真实工具烟测通过后，用 `run_terminal_native_campaign.py` 重新完成宿主原始参考解 0/1 对照及剩余正式位置。持续 checkpoint 使用 `--commit --push`，campaign 使用 `--push-checkpoints`；监控 bridge、CDP、资源与进程身份。
+5. 若用户再次指定约 7 小时停机，按新会话的绝对截止重新启动 `stop_terminal_native_at.py`，并确认它与 checkpoint、浏览器监督进程一起存活。截止时先停止调度，再停止在途 UID、清理 `/app` 和 `/solution`、关闭本轮服务；未完成位置得分为空，不判模型失败。
+
+## 历史重启清单（Node/chroot 阶段，保留备查）
 
 1. 用户确认重启完成后，先核对 main 和归档文件仍在；建立新的 `logs/<new-run>/`，不覆盖旧证据。检查端口、代理、磁盘、内存、sudo/chroot 权限及本机工具。禁止 Docker；缺失的本机依赖可以 apt 安装。
 2. 按原生说明恢复固定数据集与基座。Terminal-Bench 提交固定为 `452bf305c6daa62fc59061d22133a7cbc7c1572e`，tarball SHA256 为 `61530c06fc0069abc5917e386e888672e1a10950d40a061fa9c1daf52eb1935f`。继续使用官方 Node CC 2.1.110、Node 24.13.0 和相同 Python 版本；不要把依赖 `/proc` 的原生 CC 2.1.321 直接放入原 chroot。

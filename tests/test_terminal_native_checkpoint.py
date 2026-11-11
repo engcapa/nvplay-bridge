@@ -61,6 +61,25 @@ class NativeCheckpointTests(unittest.TestCase):
         (control / "result.json").write_text('{"valid":false,"baseline":{"score":0},"oracle":{"score":0}}')
         self.assertEqual(self.collect()["status"], "validating_controls")
 
+    def test_smoke_recovered_errors_are_hashed_and_private_logs_stay_complete(self):
+        data = {"passed": True, "stage": "formal-fixture", "private": "PRIVATE_SMOKE_DATA",
+                "efforts": [{"effort": "max", "passed": True, "tool_calls": ["Bash"],
+                    "bridge": {"logical_requests": 2, "upstream_attempts": 3,
+                        "private": "PRIVATE_BRIDGE_DATA", "actual_efforts": ["max"],
+                        "retries": [{"event": "upstream_retry", "id": "fixture", "status": 500,
+                                     "error": "PRIVATE_UPSTREAM_BODY", "response": "PRIVATE_RESPONSE"}],
+                        "errors": [], "cancelled": [], "unfinished": []}}]}
+        path = self.base / "smoke-result.json"
+        path.write_text(json.dumps(data))
+        result = self.collect()
+        self.assertNotIn("PRIVATE_", json.dumps(result))
+        smoke = result["smoke"]["efforts"][0]
+        self.assertTrue(smoke["passed"])
+        self.assertEqual(smoke["bridge"]["upstream_attempts"], 3)
+        self.assertEqual(smoke["bridge"]["retries"][0]["status"], 500)
+        self.assertIn("error_sha256", smoke["bridge"]["retries"][0])
+        self.assertEqual(json.loads(path.read_text()), data)
+
     def test_transition_state_is_visible_without_private_details(self):
         (self.base / "transport-transition-state.json").write_text(json.dumps({
             "status": "validating_actual_rollout", "at": 42, "private": "PRIVATE_ROLLOUT_LOG"}))

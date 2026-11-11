@@ -26,12 +26,23 @@ class PathConfigureTests(unittest.TestCase):
         (self.base / "evaluation-plan.json").write_text(json.dumps(self.plan))
         self.report = {"attempts": [{**slots[0], "stage": "formal-legacy", "artifact_score": 0}], "pending": []}
 
-    def configure(self, *, alive=False, disable_native_idle_timeout=False):
+    def configure(self, *, alive=False, disable_native_idle_timeout=False, proot_banner="PRoot 5.5.0"):
         with patch.object(upgrade, "summarize", return_value=self.report), \
              patch.object(upgrade, "campaign_progress", return_value={"controller_alive": alive}), \
-             patch.object(upgrade.subprocess, "check_output", side_effect=["2.1.322 (Claude Code)", "PRoot 5.5.0"]):
+             patch.object(upgrade.subprocess, "check_output", side_effect=["2.1.322 (Claude Code)", proot_banner]):
             return upgrade.configure(self.base, self.cli, self.proot, "formal-path-new",
                                      disable_native_idle_timeout=disable_native_idle_timeout)
+
+    def test_accepts_source_build_version_with_v_prefix_and_commit_suffix(self):
+        result = self.configure(proot_banner="|__|  |__|__\\_____/\\_____/\\____| v5.5.0-25dc6a31\n")
+        self.assertEqual(result["runtime"]["proot_version"], "5.5.0")
+
+    def test_rejects_old_proot_with_v_prefix_without_changing_plan(self):
+        original = (self.base / "evaluation-plan.json").read_bytes()
+        with self.assertRaisesRegex(ValueError, "PRoot 5.5.0 or later"):
+            self.configure(proot_banner="PRoot v5.1.0\n")
+        self.assertEqual((self.base / "evaluation-plan.json").read_bytes(), original)
+        self.assertFalse((self.base / "path-cc-runtime").exists())
 
     def test_idle_fix_creates_a_distinct_protocol_and_keeps_old_results(self):
         for effort in ("high", "max"):
@@ -85,6 +96,25 @@ class PathConfigureTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "already frozen"):
             self.configure()
         self.assertEqual((self.base / "evaluation-plan.json").read_bytes(), original)
+
+    def test_direct_host_transition_preserves_old_controls_and_failed_slot(self):
+        controls = self.base / "controls/fixture"
+        controls.mkdir(parents=True)
+        (controls / "result.json").write_text('{"valid":true}')
+        with patch.object(upgrade, "summarize", return_value=self.report), \
+             patch.object(upgrade, "campaign_progress", return_value={"controller_alive": False}), \
+             patch.object(upgrade.subprocess, "check_output", return_value="2.1.322 (Claude Code)"), \
+             patch.object(upgrade.native_host_cc, "prepare_toolchain", return_value={"host_cli": "/verified/claude"}), \
+             patch.object(upgrade, "verify_runtime"):
+            result = upgrade.configure(self.base, self.cli, None, "formal-host-new", host_direct=True)
+        plan = json.loads((self.base / "evaluation-plan.json").read_text())
+        self.assertEqual(result["runtime"]["kind"], "path-native-host")
+        self.assertNotIn("proot_path", result["runtime"])
+        self.assertEqual(plan["formal_native_subset"]["agent_concurrency"], 1)
+        self.assertEqual(result["remaining_positions"], 1)
+        self.assertEqual(plan["formal_native_subset"]["preserved_local_schedule"][0]["stage"], "formal-legacy")
+        self.assertTrue(next((self.base / "controls-history").glob("*/fixture/result.json")).is_file())
+        self.assertFalse((self.base / "controls").exists())
 
 
 if __name__ == "__main__":

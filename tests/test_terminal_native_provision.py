@@ -67,10 +67,12 @@ class ContinuationTests(unittest.TestCase):
         protocol.update(cc_version="2.1.322", formal_native_subset={"stage": "path-native"},
                         cc_runtime_by_stage={"path-native": {"kind": "path-native-proot",
                             "version": "2.1.322", "sha256": "a" * 64}})
-        continuation = self.resume()
-        self.assertEqual(continuation["source_cc_version"], "2.1.322")
-        self.assertEqual(continuation["preserved_completed_attempts"], 5)
-        self.assertEqual(len(self.formal["schedule"]), 25)
+        for kind in ("path-native-proot", "path-native-host"):
+            protocol["cc_runtime_by_stage"]["path-native"]["kind"] = kind
+            continuation = self.resume()
+            self.assertEqual(continuation["source_cc_version"], "2.1.322")
+            self.assertEqual(continuation["preserved_completed_attempts"], 5)
+            self.assertEqual(len(self.formal["schedule"]), 25)
         protocol["cc_runtime_by_stage"]["path-native"]["version"] = "mismatch"
         with self.assertRaisesRegex(ValueError, "different dataset, CLI or task set"):
             self.resume()

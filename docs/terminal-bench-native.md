@@ -2,7 +2,7 @@
 
 这套工具用于监督式实测，不是 Harbor 官方运行器，也不能产生 Artificial Analysis 官方智能指数。所有任务题面、参考解、隐藏测试、运行目录和会话日志都保存在 Git 忽略的 `logs/` 下。仓库只提交运行器、证据处理测试和不含题目内容的结果。
 
-2026-11-11 起按用户要求使用当前普通用户 PATH 中的 Claude Code，切换时为 **2.1.322**，具体见下文“当前 PATH 原生 CC”。2.1.110 仅保留为历史协议与基座的兼容组件，新的计分会话使用冻结的 PATH 原生可执行文件。
+2026-11-11 晚间起按用户要求，**CC 直接在当前容器运行，不再使用 PRoot**。CLI 仍冻结普通用户 PATH 的实际版本，本轮为 **2.1.322**。旧结果及其原阶段保留；直接运行产生的结果归入新阶段。2.1.110 和 Ubuntu 基座继续供历史兼容与独立原始判分器使用。
 
 ## 固定输入
 
@@ -28,7 +28,28 @@ exec /usr/local/bin/node /opt/claude-code-2.1.110/package/cli.js "$@"
 
 需要先在普通 UID 下完成一次实际 Bash/文件操作烟测；`claude --version` 成功不能证明工具调用可用。基座及每题安装日志应保存版本、包清单和文件摘要。托管 Python 的包安装只修改任务自己的副本，不修改 host Python。
 
-## 当前 PATH 原生 CC
+<a id="当前-path-原生-cc"></a>
+
+## 当前方式：容器内直接运行 CC
+
+在固定下载、原生基座和模板准备完成后，执行以下命令；默认运行方式也是 `--host-direct`，不需要安装或指定 PRoot：
+
+```sh
+sudo -n python3 tools/configure_terminal_native_path_cc.py \
+  --base logs/<run> --claude "$(command -v claude)" \
+  --host-direct --disable-native-idle-timeout \
+  --stage formal-1m-720k-host-cc-<new-run>
+```
+
+CC 通过 `setpriv` 直接降到独立 UID，清空附加组并启用 `no-new-privs`，然后运行冻结的原生 CLI。没有 PRoot、chroot 或路径转换参与 CC 及其工具进程。每次使用独立 HOME、任务目录和 Python venv；固定 Python、Node 与 CLI 的公共运行副本不含题库或凭据，完整文件树摘要在每次新任务前核验。宿主 OS、GCC 和 libc 版本单独记录，不能用原 Ubuntu 判分基座清单冒充实际 CC 环境。
+
+题面和工具保留 `/app` 绝对路径。控制器以独占文件锁将 root 所有的 `/app` 链接指向当前任务的目录，因此 high/max 按原计划顺序串行运行。已有宿主 `/app` 或其它所有者的链接会阻止启动，不被替换。原始参考解对照期间临时提供 `/solution`，对照结束立即清理；模型运行时没有该链接。CC 自然结束或行政停止后，先确认其 UID 无活进程，再清理链接并归档工作目录。停机工具同时支持这种方式及历史 root 标记。
+
+独立 UID 和源目录权限继续保护参考解、隐藏测试、其它任务及用户主目录。进程直接共享宿主文件系统、内核和网络，不能声称等同完整容器隔离，也不给被测 CC 用户的 sudo 权限。验收仍将声明产物复制给全新的原始判分器 chroot，原测试和参考解不改写；新阶段重新在宿主运行原始参考解，再确认初始 0 分、参考解 1 分。
+
+切换配置保留旧已完成位置、旧控制和烟测，要求新 high/max 真实工具烟测及新控制通过。模型 `kimi-k3.1-pro[1m]`、压缩窗口 720000、128K 输出、`API_FORCE_IDLE_TIMEOUT=0` 和无会话墙钟截止保持一致。通过同一个 campaign 和 checkpoint 命令运行；用户指定的行政停机绝对时间不因切换方式延长。
+
+## 历史 PATH 原生 CC（PRoot，不再用于新评测）
 
 容器允许 chroot，但不允许 mount namespace 或挂载 proc。原生 CLI 通过 PRoot 5.5.0 转换路径并绑定真实 `/proc`；系统包 PRoot 5.1.0 的 statx 兼容性不足，不能使用。构建源固定为 `https://github.com/proot-me/proot.git` 的 `v5.5.0`、提交 `25dc6a3134891f98a79f57ce1c2c1b23ff15cad1`；通过 `git -c http.proxy=http://127.0.0.1:31128 clone --depth 1 --branch v5.5.0 …` 获取源码，安装 `libtalloc-dev` 后执行 `make -C <source>/src -j4`，将结果安装到 `/usr/local/libexec/nvplay-proot-5.5.0`。apt 的 http/https Acquire 代理均使用 `http://127.0.0.1:31128`。
 

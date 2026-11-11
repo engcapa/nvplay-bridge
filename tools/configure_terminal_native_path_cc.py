@@ -22,11 +22,12 @@ from advance_terminal_native_transport import remaining_schedule
 from checkpoint_terminal_native import campaign_progress
 from native_eval_support import write_json
 from native_path_cc import GUEST_CLI, sha256, verify_runtime
+import native_host_cc
 from report_terminal_native import summarize
 
 
-def configure(base: Path, cli: Path, proot: Path, stage: str, *, proot_source_commit: str | None = None,
-              disable_native_idle_timeout: bool = False) -> dict:
+def configure(base: Path, cli: Path, proot: Path | None, stage: str, *, proot_source_commit: str | None = None,
+              disable_native_idle_timeout: bool = False, host_direct: bool = False) -> dict:
     base = base.resolve(strict=True)
     if not re.fullmatch(r"formal-[A-Za-z0-9_-]+", stage):
         raise ValueError("use a distinct formal stage name")
@@ -43,7 +44,7 @@ def configure(base: Path, cli: Path, proot: Path, stage: str, *, proot_source_co
         old_stage = formal["stage"]
         if stage == old_stage or stage in plan.get("cc_runtime_by_stage", {}):
             raise ValueError("the requested stage is already frozen")
-        source, translator = cli.resolve(strict=True), proot.resolve(strict=True)
+        source = cli.resolve(strict=True)
         version = subprocess.check_output([str(source), "--version"], text=True).strip().split()[0]
         if not re.fullmatch(r"\d+\.\d+\.\d+", version):
             raise RuntimeError("unrecognized PATH Claude version")
@@ -51,24 +52,31 @@ def configure(base: Path, cli: Path, proot: Path, stage: str, *, proot_source_co
             native_executable = executable.read(4) == b"\x7fELF"
         if not native_executable:
             raise ValueError("this runtime requires the user's native Claude executable")
-        proot_output = subprocess.check_output([str(translator), "--version"], text=True)
-        match = re.search(r"\b(\d+\.\d+\.\d+)\b", proot_output)
-        if not match or tuple(map(int, match[1].split("."))) < (5, 5, 0):
-            raise ValueError("use PRoot 5.5.0 or later for native file-query compatibility")
+        if not host_direct:
+            if proot is None:
+                raise ValueError("select direct host execution or provide the historical PRoot executable")
+            translator = proot.resolve(strict=True)
+            proot_output = subprocess.check_output([str(translator), "--version"], text=True)
+            match = re.search(r"\bv?(\d+\.\d+\.\d+)\b", proot_output)
+            if not match or tuple(map(int, match[1].split("."))) < (5, 5, 0):
+                raise ValueError("use PRoot 5.5.0 or later for native file-query compatibility")
         snapshot = base / "path-cc-runtime" / stage / "claude"
         snapshot.parent.mkdir(parents=True, exist_ok=False)
         digest = sha256(source)
         shutil.copy2(source, snapshot)
         snapshot.chmod(0o755)
-        spec = {"kind": "path-native-proot", "source_path": str(cli.absolute()),
+        spec = {"kind": native_host_cc.KIND if host_direct else "path-native-proot", "source_path": str(cli.absolute()),
                 "resolved_source": str(source), "version": version, "sha256": digest,
                 "size": source.stat().st_size, "snapshot_path": str(snapshot), "guest_cli": GUEST_CLI,
-                "proot_path": str(translator), "proot_sha256": sha256(translator), "proot_version": match[1],
                 "real_proc_binding": True, "real_dedicated_uid": True, "no_new_privileges": True,
                 "host_cwd_inside_agent_root": True,
                 "isolation_boundary": "Real Unix UID and private source directory permissions; PRoot supplies path translation only"}
-        if proot_source_commit:
-            spec["proot_source_commit"] = proot_source_commit
+        if host_direct:
+            spec.update(native_host_cc.prepare_toolchain(base, snapshot))
+        else:
+            spec.update(proot_path=str(translator), proot_sha256=sha256(translator), proot_version=match[1])
+            if proot_source_commit:
+                spec["proot_source_commit"] = proot_source_commit
         verify_runtime(spec)
         if sha256(source) != digest:
             raise RuntimeError("PATH executable changed during snapshot creation")
@@ -85,7 +93,8 @@ def configure(base: Path, cli: Path, proot: Path, stage: str, *, proot_source_co
         write_json(snapshot.parent / "runtime.json", spec)
         write_json(base / f"evaluation-plan-before-cc-{time.time_ns()}.json", plan)
         plan.setdefault("protocol_history", []).append({"changed_at": time.time(),
-            "reason": ("disable native fetch idle timeout after controlled delayed-header reproduction"
+            "reason": ("user requested direct execution on the current host without PRoot" if host_direct else
+                       "disable native fetch idle timeout after controlled delayed-header reproduction"
                        if disable_native_idle_timeout else "user requested current PATH Claude Code"),
             "cc_version": plan["cc_version"],
             "formal_native_subset": deepcopy(formal), "executor": plan["executor"]})
@@ -98,7 +107,12 @@ def configure(base: Path, cli: Path, proot: Path, stage: str, *, proot_source_co
             formal["cc_autocompact_cli_tokens"] = formal["cc_auto_compact_window_tokens"]
         if disable_native_idle_timeout:
             formal["cc_native_idle_timeout_disabled"] = True
-        plan.update(cc_version=version, executor="PRoot path translation, real dedicated ordinary UID, protected sources, real /proc; shared host kernel/network")
+        if host_direct:
+            formal.update(agent_concurrency=1, agent_execution_kind=native_host_cc.KIND,
+                          control_execution_kind="direct host reference setup; unchanged isolated original verifier")
+        plan.update(cc_version=version, executor=(
+            "Direct host CC, real dedicated ordinary UID, private venv/home, serialized /app alias; original verifier in chroot"
+            if host_direct else "PRoot path translation, real dedicated ordinary UID, protected sources, real /proc; shared host kernel/network"))
         plan.setdefault("cc_runtime_by_stage", {})[stage] = spec
         plan["bridge_runtime_by_stage"][stage] = deepcopy(plan["bridge_runtime_by_stage"][old_stage])
         smoke_paths = [base / name for name in ("smoke", "smoke-result.json") if (base / name).exists()]
@@ -107,6 +121,12 @@ def configure(base: Path, cli: Path, proot: Path, stage: str, *, proot_source_co
             history.mkdir(parents=True)
             for smoke in smoke_paths:
                 smoke.rename(history / smoke.name)
+        if host_direct and (base / "controls").exists():
+            history = base / "controls-history" / f"{old_stage}--{time.time_ns()}"
+            history.parent.mkdir(exist_ok=True)
+            (base / "controls").rename(history)
+            write_json(base / "host-control-transition.json", {"previous_stage": old_stage,
+                       "stage": stage, "previous_controls": str(history), "fresh_controls_required": True})
         for settings_path, settings in settings_updates.items():
             write_json(settings_path, settings)
         write_json(path, plan)
@@ -118,7 +138,9 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--base", type=Path, required=True)
     parser.add_argument("--claude", type=Path, required=True, help="command -v claude from the ordinary user's PATH")
-    parser.add_argument("--proot", type=Path, required=True)
+    runtime = parser.add_mutually_exclusive_group()
+    runtime.add_argument("--host-direct", action="store_true", help="Execute directly on this host (default)")
+    runtime.add_argument("--proot", type=Path, help="Historical compatibility mode; not used for new host runs")
     parser.add_argument("--stage", required=True)
     parser.add_argument("--proot-source-commit")
     parser.add_argument("--disable-native-idle-timeout", action="store_true",
@@ -128,7 +150,8 @@ def main():
         parser.error("use sudo; measured CC runs as an ordinary dedicated UID")
     print(json.dumps(configure(args.base, args.claude, args.proot, args.stage,
                               proot_source_commit=args.proot_source_commit,
-                              disable_native_idle_timeout=args.disable_native_idle_timeout), ensure_ascii=False))
+                              disable_native_idle_timeout=args.disable_native_idle_timeout,
+                              host_direct=args.host_direct or args.proot is None), ensure_ascii=False))
 
 
 if __name__ == "__main__":

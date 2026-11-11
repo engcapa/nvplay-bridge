@@ -39,6 +39,25 @@ def event_summary(event: dict) -> dict:
     return result
 
 
+def smoke_summary(data: dict) -> dict:
+    """Keep recovered retry evidence without publishing upstream response bodies."""
+    result = {key: data[key] for key in ("recorded_at", "passed", "stage") if key in data}
+    result["efforts"] = []
+    for row in data.get("efforts", []):
+        public = {key: row[key] for key in (
+            "effort", "passed", "process", "uid", "tool_calls", "expected_sha256",
+            "source_identity", "network_adapter", "cc_version_output",
+            "cc_launch_configuration", "reported_context_windows") if key in row}
+        bridge = row.get("bridge", {})
+        public["bridge"] = {key: bridge[key] for key in (
+            "request_ids", "logical_requests", "upstream_attempts", "unfinished",
+            "actual_efforts", "usage_by_request") if key in bridge}
+        for key in ("retries", "errors", "cancelled"):
+            public["bridge"][key] = [event_summary(event) for event in bridge.get(key, [])]
+        result["efforts"].append(public)
+    return result
+
+
 def campaign_progress(base: Path) -> dict:
     state = base / "campaign-state.json"
     if not state.is_file():
@@ -85,11 +104,14 @@ def collect(base: Path, health_url: str) -> dict:
                            ("download-manifest.json", "downloads"),
                            ("wheel-manifest.json", "wheels"),
                            ("host-resources.json", "host_resources"),
+                           ("host-toolchain-manifest.json", "host_environment"),
+                           ("host-control-transition.json", "control_transition"),
                            ("checkpoint-git-sync.json", "previous_checkpoint_git_sync"),
                            ("smoke-result.json", "smoke"), ("cc-upgrade-state.json", "cc_upgrade")):
         path = base / filename
         if path.exists():
-            result[key] = json.loads(path.read_text())
+            data = json.loads(path.read_text())
+            result[key] = smoke_summary(data) if key == "smoke" else data
     controls = {}
     for path in sorted((base / "controls").glob("*/result.json")):
         data = json.loads(path.read_text())
