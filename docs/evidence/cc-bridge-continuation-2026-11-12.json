@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794441333.4595945,
+  "checkpoint_at": 1794441346.5166218,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261112",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -854,8 +854,8 @@
     "isolation_boundary": "Real dedicated Unix UID and protected source directories; shared host filesystem, kernel and network"
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794441329.4122627,
-    "commit": "80bbcc318e32b403d5a4a979e6c4e33d663c03e8",
+    "attempted_at": 1794441333.491857,
+    "commit": "0ae4235e87642722cb1778868f274683eb27ab21",
     "pushed": true,
     "returncode": 0
   },
@@ -1310,13 +1310,18 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794441333.4613583,
+    "generated_at": 1794441346.5185795,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
     "pending": [
       {
         "attempt": "runs/formal-1m-720k-host-cc-20261112/session-window-debug--max--r2",
+        "status": "agent_running",
+        "task": "session-window-debug",
+        "effort": "max",
+        "started_at": 1794441338.0270572,
+        "elapsed_seconds": 8.5,
         "tool_calls": 0,
         "last_tool": null
       }
@@ -1348,13 +1353,51 @@
       "idle_seconds": 3600.0
     },
     "pool_states": {
-      "ready": 5
+      "ready": 4,
+      "busy": 1
     },
     "recovering_tabs": []
   },
   "bridge_activity": {
-    "events_last_300s": {},
-    "active": [],
+    "events_last_300s": {
+      "request": 1,
+      "payload": 1,
+      "browser_start": 1,
+      "browser_lease": 1,
+      "browser_tab": 1,
+      "browser_sent": 1,
+      "browser_first_data": 1,
+      "browser_progress": 1,
+      "messages_first_block": 1
+    },
+    "active": [
+      {
+        "id": "5991dc720ca2470194939f6b",
+        "retry_count": 0,
+        "phase": "browser_progress",
+        "attempt": 1,
+        "reasoning_effort": "max",
+        "tab_id": "kpool=2",
+        "counts": {
+          "thinking_chars": 0,
+          "text_chars": 0,
+          "tool_calls": 0
+        },
+        "usage": {
+          "prompt_tokens": 4163,
+          "completion_tokens": 1,
+          "total_tokens": 4164,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 1
+          }
+        },
+        "age_seconds": 8.2,
+        "activity_age_seconds": 1.7
+      }
+    ],
     "recent_errors": [],
     "recent_upstream_errors": [],
     "recent_retries": []
@@ -1397,8 +1440,8 @@
     },
     {
       "path": "browser-supervisor-state.json",
-      "sha256": "6472fea69e1c1bfd0f9b732e5c40f3f7bb20f37128f2852d28d6c78a1872909d",
-      "size": 102
+      "sha256": "058163855287f4a42d08c188027ac7cefc9de836dc7ee6f43bf0bd278748a07c",
+      "size": 101
     },
     {
       "path": "campaign-launch-process.json",
@@ -1417,8 +1460,8 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "b42b6791e7ff2ff615b6c497f83724f73d754643a61e88bebfc265785e1c2013",
-      "size": 134
+      "sha256": "cba2210b85c0fa2add013db58957e502eb877014e84457ce5dbb66bf90895ad2",
+      "size": 133
     },
     {
       "path": "checkpoint-process.json",
@@ -1522,8 +1565,8 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "036f35e96a0abaafa3834ebf3f1b16793a70b53d31805c6c26a821373ffb5b91",
-      "size": 800
+      "sha256": "9deb6e12c9d9989361a84d089602f4a634e5ec79f673d67ce3779f25f0a9effc",
+      "size": 821
     },
     {
       "path": "restore-fixed-regression.log",
@@ -1539,6 +1582,11 @@
       "path": "runs/formal-1m-720k-host-cc-20261112/session-window-debug--max--r2/identity.json",
       "sha256": "edbc2f3dff06c0284a28344b525cba35a7cb8bdf09c560e38d032f4263f34331",
       "size": 5968
+    },
+    {
+      "path": "runs/formal-1m-720k-host-cc-20261112/session-window-debug--max--r2/request-protocol.json",
+      "sha256": "9745407c078b6a3e693abda5c50fb0b5517406d3b771012ff029703181a2416b",
+      "size": 2844
     },
     {
       "path": "service-resource-snapshot.json",
