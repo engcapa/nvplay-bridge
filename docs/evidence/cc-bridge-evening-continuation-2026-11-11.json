@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794405725.5775864,
+  "checkpoint_at": 1794405729.1411824,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261111-evening",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -1257,8 +1257,8 @@
     "fresh_controls_required": true
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794405722.1031952,
-    "commit": "3a82a6fa3246fc791a6794e5c95e79f677bcc4e9",
+    "attempted_at": 1794405725.7010357,
+    "commit": "badd10314fbf743899f1aa33711f42148ea9afc3",
     "pushed": true,
     "returncode": 0
   },
@@ -1702,7 +1702,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794405725.5982847,
+    "generated_at": 1794405729.1560774,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-1m-720k-host-cc-20261111-evening/28800/high": {
@@ -1819,7 +1819,7 @@
   "campaign": {
     "controller_alive": true,
     "status": "preparing",
-    "task": "batched-eval-parity"
+    "task": "mvcc-lsm-compaction"
   },
   "transport_transition": {
     "status": "remaining_campaign_started",
@@ -1930,8 +1930,8 @@
     },
     {
       "path": "browser-supervisor-state.json",
-      "sha256": "d717ba714d7ccf6b33ca12c06af3dcfb8d5965ad309b3496e8b4255a3a61dfc3",
-      "size": 101
+      "sha256": "cfdee790877a098c85795fcc3c1415e5bff2ed3a505e2ac996b35392fd39524e",
+      "size": 102
     },
     {
       "path": "campaign-error-before-transport-fix.json",
@@ -1945,8 +1945,8 @@
     },
     {
       "path": "campaign-state.json",
-      "sha256": "c19fd0e944ec9d8bb17aef110b5b486c4ff6985c31f371c6382b77306832316c",
-      "size": 6550
+      "sha256": "008875649c58d0c44b9b79e6ee943549cca99253d8d343c92b0c85001c1c1ad5",
+      "size": 6551
     },
     {
       "path": "cdp-observer-process.json",
@@ -1955,7 +1955,7 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "21d0d8542f352777206863235f8d43494c42061039e8d76ac752065d12de2cef",
+      "sha256": "3acdac669b4c2df800908724a11a1a08cfc472d3c7dc4095e4e00efb7fa780c4",
       "size": 134
     },
     {
