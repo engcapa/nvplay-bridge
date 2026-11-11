@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794364562.0444267,
+  "checkpoint_at": 1794364862.0451872,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-1m-20261111-0801",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -780,8 +780,8 @@
     "host_memory_limit_bytes": "30064771072"
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794364333.2676551,
-    "commit": "3cd35cdccaa4005aae3b65ec566ae81cddcc236d",
+    "attempted_at": 1794364562.3167288,
+    "commit": "d8936f6860c83c60e83a19b5f0f0dec73b35323e",
     "pushed": true,
     "returncode": 0
   },
@@ -1246,7 +1246,7 @@
     }
   ],
   "results": {
-    "generated_at": 1794364562.2736056,
+    "generated_at": 1794364862.3044596,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
@@ -1257,7 +1257,7 @@
         "task": "mvcc-lsm-compaction",
         "effort": "max",
         "started_at": 1794360810.819098,
-        "elapsed_seconds": 3751.2,
+        "elapsed_seconds": 4051.2,
         "tool_calls": 73,
         "last_tool": "Bash"
       }
@@ -1311,23 +1311,23 @@
         "reasoning_effort": "max",
         "tab_id": "kpool=2",
         "counts": {
-          "thinking_chars": 80428,
+          "thinking_chars": 129894,
           "text_chars": 0,
           "tool_calls": 0
         },
         "usage": {
           "prompt_tokens": 90475,
-          "completion_tokens": 16849,
-          "total_tokens": 107324,
+          "completion_tokens": 27677,
+          "total_tokens": 118152,
           "prompt_tokens_details": {
             "cached_tokens": 86272
           },
           "completion_tokens_details": {
-            "reasoning_tokens": 16849
+            "reasoning_tokens": 27677
           }
         },
-        "age_seconds": 538.0,
-        "activity_age_seconds": 1.2
+        "age_seconds": 838.0,
+        "activity_age_seconds": 1.4
       }
     ],
     "recent_errors": [],
@@ -1397,7 +1397,7 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "f1abd9099baff85a16667b7ebe52593500442180151f7a1b810a097504730a37",
+      "sha256": "97c2b3bb0be61096afa21604f8b71214531e29ef54209386b393c4c5d58740ab",
       "size": 134
     },
     {
@@ -1517,8 +1517,8 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "694d9e161d9a4064cf7075760c42d428091ccd7a77bc359c5b5aa8cdcea916d5",
-      "size": 823
+      "sha256": "9eb1a30fff09ea248efbe45198641c8a77d5b3d3de7087cf1ab6e91c3ed1a9e8",
+      "size": 824
     },
     {
       "path": "runs/formal-1m-720k-path-cc-2-1-322-20261111/mvcc-lsm-compaction--max--r1/identity.json",
