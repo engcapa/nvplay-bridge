@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794390506.9685624,
+  "checkpoint_at": 1794390570.0366828,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261111-evening",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -716,8 +716,8 @@
     "host_memory_limit_bytes": "34359738368"
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794390443.9257252,
-    "commit": "43672c99988a6917480f421eb9fc3b89c71ae8ca",
+    "attempted_at": 1794390507.110741,
+    "commit": "0c8a68c10415731229f711b7804abeca0227d69e",
     "pushed": true,
     "returncode": 0
   },
@@ -1135,7 +1135,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794390506.9703937,
+    "generated_at": 1794390570.0398393,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
@@ -1212,7 +1212,7 @@
     },
     {
       "path": "browser-supervisor-state.json",
-      "sha256": "6aa7d00d8fef2c9dd8e9689ec41ada09939bd268596e70bfe9e350c150cca301",
+      "sha256": "f6ce3cf2e6662b68c6f3b072ce81416aa8bbcc57d25fb5c5beeb057d9a5dc9d1",
       "size": 102
     },
     {
@@ -1222,8 +1222,8 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "dcd8d515d67aa1d368bdaee18fb9c6c91aac810a6ef11448b7cba096ab666d2b",
-      "size": 134
+      "sha256": "4c32559501c271c07a2620984bf0e6f1ca55e6ee4ba078cb382fd7b30595d259",
+      "size": 133
     },
     {
       "path": "checkpoint-process.json",
@@ -1347,8 +1347,8 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "f837890dc6e0178b9500d2a620334a1354733786249bffafd6c39c296e41973b",
-      "size": 680
+      "sha256": "47cb3ff3dbc19d64571c849f42d487e75e1079df08baf220512d2db901e73b78",
+      "size": 679
     },
     {
       "path": "service-identity-regression.log",
@@ -1441,6 +1441,16 @@
       "bytes": 353002368,
       "tar_compare_passed_before_reclaim": true,
       "restore": "sudo tar -xpf agent-root.tar.gz -C ."
+    },
+    {
+      "directory": "controls/session-window-debug/baseline",
+      "archived_at": 1794390569.780512,
+      "root": "verifier-root",
+      "archive": "verifier-root.tar.gz",
+      "sha256": "96a87a6fc593309d91ba29b146c5294528baf4d70839234acddfcade58e1f1bd",
+      "bytes": 486843448,
+      "tar_compare_passed_before_reclaim": true,
+      "restore": "sudo tar -xpf verifier-root.tar.gz -C ."
     }
   ]
 }
