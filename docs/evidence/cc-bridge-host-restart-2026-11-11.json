@@ -1,0 +1,40 @@
+{
+  "requested_at": 1794397363.7246385,
+  "requested_by_user": true,
+  "from_stage": "formal-1m-720k-host-cc-20261111-evening",
+  "to_stage": "formal-1m-720k-host-bridge-refresh-20261111",
+  "reason": "User requested restarting nvplay-bridge before the next evaluation to load optimizations",
+  "current_agent_signalled": false,
+  "stop_at": 1794413157.0,
+  "status": "prepared_waiting_for_natural_completion",
+  "current_attempt": "ks-solver-cpp--high--r1",
+  "previous_positions_preserved": 9,
+  "deployed_bridge_before": "73d9155d3365f0fe3f20263241ed00e35933cb78",
+  "candidate_bridge_change": "8b8f9b8",
+  "offline_validation": {
+    "passed": true,
+    "recorded_at": 1794397319.0122285,
+    "duration_seconds": 34.289,
+    "source_module_sha256": {
+      "nvplay_bridge.py": "40e502b1d99573b5f5b3bb4006c097c7f89af849a53ee2069381855bc6d752ab",
+      "browser_upstream.py": "ddad081474e7f6c3d0902a20ce66cde7eb6e69bdcd66cc2f5507706da3074306",
+      "browser_events.py": "5e745cce57f3c0ac3f04d8193802c987c59b3bde00ed8a5c97668ba4de8bbdb3",
+      "stream_support.py": "8631dd909e24192413855c353285d4c0703f86082b3722ead1140a820c0a2d32",
+      "responses_api.py": "da451613bf0a1c4aa12ef03effc4d5ffe1ea330fb48006f9d09925233f9580c6",
+      "responses_support.py": "ed907b22106ff58923efa5431c20422e59bfdeb9a719b0766969522e444f033e"
+    },
+    "regression_log_sha256": "040be9d8b8dbc176ebdb111c252536e560e8d916daf6560c853ebeab2dfeaf46",
+    "regression_log_size": 3608,
+    "returncode": 0,
+    "source_unchanged_during_validation": true
+  },
+  "regression_tests_passed": 280,
+  "regression_seconds": 31.609,
+  "host_execution_preserved": true,
+  "actual_rollout_smoke_required": [
+    "high",
+    "max"
+  ],
+  "administrative_stop_unchanged": true,
+  "scheduler_boundary": "Current controller source guard stops scheduling only after this complete attempt writes its result; coordinator then archives, restarts, smokes and resumes."
+}

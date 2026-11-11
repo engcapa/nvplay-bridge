@@ -10,6 +10,7 @@ import os
 from pathlib import Path
 import pwd
 import re
+import shutil
 import subprocess
 import sys
 import time
@@ -30,6 +31,32 @@ REPO = Path(__file__).resolve().parents[1]
 
 def module_hashes():
     return {name: hashlib.sha256((REPO / name).read_bytes()).hexdigest() for name in MODULES}
+
+
+def carry_cc_runtime(plan, from_stage, to_stage):
+    """A bridge-only rollout must retain the exact native CLI and host execution."""
+    for key in ("cc_runtime_by_stage", "cc_versions_by_stage"):
+        if from_stage in plan.get(key, {}):
+            plan[key][to_stage] = deepcopy(plan[key][from_stage])
+
+
+def promote_smoke(base, rollout, from_stage):
+    """Keep the old smoke, then expose the actual rollout smoke to the campaign."""
+    history = base / "smoke-history" / f"{from_stage}--{time.time_ns()}"
+    history.mkdir(parents=True)
+    for name in ("smoke", "smoke-result.json"):
+        if (base / name).exists():
+            (base / name).rename(history / name)
+    (rollout / "smoke").rename(base / "smoke")
+    shutil.copy2(rollout / "smoke-result.json", base / "smoke-result.json")
+    return history
+
+
+def validated_source(path):
+    data = json.loads(path.read_text())
+    if not data.get("passed") or data.get("source_module_sha256") != module_hashes():
+        raise RuntimeError("bridge modules do not match the passing source validation")
+    return data
 
 
 def remaining_schedule(formal, report):
@@ -87,7 +114,10 @@ def start_process(base, name, command, *, env=None, ordinary_user=False):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--base", type=Path, required=True)
-    parser.add_argument("--validated-smoke", type=Path, required=True)
+    validation_args = parser.add_mutually_exclusive_group(required=True)
+    validation_args.add_argument("--validated-smoke", type=Path)
+    validation_args.add_argument("--validated-source", type=Path,
+                                 help="Passing offline source validation; live smoke runs after the boundary")
     parser.add_argument("--checkpoint-output", type=Path, required=True)
     parser.add_argument("--evidence-output", type=Path, required=True)
     parser.add_argument("--from-stage", required=True)
@@ -99,7 +129,7 @@ def main():
         parser.error("use sudo for verified rootfs archival and ordinary-UID CC setup")
     if any(not re.fullmatch(r"[A-Za-z0-9._-]+", name) for name in (args.from_stage, args.to_stage)):
         parser.error("invalid stage name")
-    base, validation = args.base.resolve(strict=True), args.validated_smoke.resolve(strict=True)
+    base = args.base.resolve(strict=True)
     output, evidence = args.checkpoint_output.resolve(), args.evidence_output.resolve()
     output.relative_to(REPO)
     evidence.relative_to(REPO)
@@ -129,11 +159,15 @@ def main():
         raise RuntimeError("source or destination stage does not match the plan")
     if args.resume_before_deploy and before["bridge_runtime"] != plan["bridge_runtime_by_stage"][args.from_stage]:
         raise RuntimeError("recorded source-stage runtime changed since the predeployment checkpoint")
-    validated_runtime = json.loads((validation / "bridge-runtime.json").read_text())
-    if (not json.loads((validation / "validation-complete.json").read_text()).get("passed")
-            or not json.loads((validation / "smoke-result.json").read_text()).get("passed")
-            or module_hashes() != validated_runtime["source_module_sha256"]):
-        raise RuntimeError("current bridge modules do not match the successfully validated service")
+    if args.validated_source:
+        validated_runtime = validated_source(args.validated_source.resolve(strict=True))
+    else:
+        validation = args.validated_smoke.resolve(strict=True)
+        validated_runtime = json.loads((validation / "bridge-runtime.json").read_text())
+        if (not json.loads((validation / "validation-complete.json").read_text()).get("passed")
+                or not json.loads((validation / "smoke-result.json").read_text()).get("passed")
+                or module_hashes() != validated_runtime["source_module_sha256"]):
+            raise RuntimeError("current bridge modules do not match the successfully validated service")
     write_json(base / "transport-transition-process.json", {**process_identity(os.getpid()), "started_at": time.time(),
         "from_stage": args.from_stage, "to_stage": args.to_stage,
         "source_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest()})
@@ -187,11 +221,16 @@ def main():
     settings["BROWSER_DEBUG_LOG"] = str(base / "bridge-debug.jsonl")
     child = start_process(base, "bridge-server", [sys.executable, "-m", "uvicorn", "nvplay_bridge:app",
         "--host", "127.0.0.1", "--port", str(old_runtime["bridge_port"]), "--timeout-keep-alive", "75"],
-        env={**os.environ, **settings, "NO_PROXY": "127.0.0.1,localhost"}, ordinary_user=True)
+        env={**os.environ, **settings, "HTTP_PROXY": "http://127.0.0.1:31128",
+             "HTTPS_PROXY": "http://127.0.0.1:31128", "ALL_PROXY": "http://127.0.0.1:31128",
+             "NO_PROXY": "127.0.0.1,localhost"}, ordinary_user=True)
     runtime = {**old_runtime, **process_identity(child.pid), "started_at": time.time(), "configuration": settings,
         "source_head": subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip(),
         "source_module_sha256": module_hashes()}
     health_url = f'http://127.0.0.1:{runtime["bridge_port"]}/health'
+    runtime.pop("health_at_start", None)
+    # The administrative timer must own the new PID even during readiness.
+    write_json(base / "bridge-runtime.json", runtime)
     runtime["health_at_start"] = await_json(health_url, child)
     write_json(base / "bridge-runtime.json", runtime)
     write_json(base / "transport-transition-state.json", {"status": "validating_actual_rollout", "at": time.time()})
@@ -202,6 +241,7 @@ def main():
     smoke_plan = deepcopy(plan)
     smoke_plan["formal_native_subset"]["stage"] = args.to_stage
     smoke_plan["bridge_runtime_by_stage"][args.to_stage] = runtime
+    carry_cc_runtime(smoke_plan, args.from_stage, args.to_stage)
     write_json(rollout / "evaluation-plan.json", smoke_plan)
     write_json(rollout / "next-uid.json", {"next": 28020})
     (rollout / "bridge-debug.jsonl").symlink_to(base / "bridge-debug.jsonl")
@@ -220,11 +260,13 @@ def main():
         for row in smoke_result["efforts"]]
     plan.setdefault("protocol_history", []).append({"recorded_at": time.time(),
         "formal_native_subset": deepcopy(formal), "source_plan_sha256": hashlib.sha256(initial_plan).hexdigest(),
-        "reason": "Validated drain ordering fix; all completed outcomes remain in their original stage"})
+        "reason": "Validated bridge rollout at a natural boundary; all completed outcomes retain their original stage"})
     formal.update(stage=args.to_stage, frozen_at=time.time(), schedule=remaining, preserved_local_schedule=preserved,
                   live_validation={"path": str(rollout.relative_to(base)), "passed": True,
                     "smoke_result_sha256": hashlib.sha256((rollout / "smoke-result.json").read_bytes()).hexdigest()})
     plan["bridge_runtime_by_stage"][args.to_stage] = runtime
+    carry_cc_runtime(plan, args.from_stage, args.to_stage)
+    record["previous_smoke_archive"] = str(promote_smoke(base, rollout, args.from_stage).relative_to(base))
     write_json(plan_path, plan)
     if error.exists():
         record["preceding_controller_error"] = boundary_error

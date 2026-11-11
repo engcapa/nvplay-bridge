@@ -16,6 +16,25 @@ from checkpoint_terminal_native import save
 from native_eval_support import allocate_uid, write_json
 
 
+def bridge_restart_requested(base, stage):
+    path = base / "bridge-restart-request.json"
+    if not path.is_file():
+        return False
+    request = json.loads(path.read_text())
+    return request.get("requested_by_user") is True and request.get("from_stage") == stage
+
+
+def run_serial_efforts(base, stage, efforts, attempt, finish):
+    """Do not queue another host CC while a requested bridge restart is pending."""
+    for effort in efforts:
+        if bridge_restart_requested(base, stage):
+            return True
+        result = attempt(effort)
+        if result is not None:
+            finish(result)
+    return bridge_restart_requested(base, stage)
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--base", type=Path, required=True)
@@ -76,7 +95,31 @@ def main():
         for root in list(completed_roots(base)):
             archive_root(root)
         for name, repeat, efforts in runner.attempt_batches(evaluation.plan, stage, formal["repeats_per_effort"]):
+            if bridge_restart_requested(base, stage):
+                checkpoint("waiting_for_bridge_restart")
+                return
             checkpoint("formal_running", task=name, repeat=repeat)
+
+            def attempt(effort):
+                if args.resume and evaluation.resume_attempt(name, effort, stage, repeat,
+                                                             budget, args.recover_interrupted):
+                    return None
+                return evaluation.attempt(name, effort, stage, repeat, budget, allocate_uid(base))
+
+            def finish(result):
+                checkpoint("formal_running", task=name, repeat=repeat,
+                           completed_effort=result["effort"], score=result["grade"]["score"])
+                directory = base / "runs" / stage / f'{name}--{result["effort"]}--r{repeat}'
+                for role in ("agent-root", "verifier-root"):
+                    root = directory / role
+                    if root.exists():
+                        archive_root(root)
+
+            if formal.get("agent_concurrency", 2) == 1:
+                if run_serial_efforts(base, stage, efforts, attempt, finish):
+                    checkpoint("waiting_for_bridge_restart")
+                    return
+                continue
             with ThreadPoolExecutor(max_workers=formal.get("agent_concurrency", 2)) as pool:
                 futures = []
                 for effort in efforts:
@@ -87,13 +130,7 @@ def main():
                                                budget, allocate_uid(base)))
                 for future in as_completed(futures):
                     result = future.result()
-                    checkpoint("formal_running", task=name, repeat=repeat,
-                               completed_effort=result["effort"], score=result["grade"]["score"])
-                    directory = base / "runs" / stage / f'{name}--{result["effort"]}--r{repeat}'
-                    for role in ("agent-root", "verifier-root"):
-                        root = directory / role
-                        if root.exists():
-                            archive_root(root)
+                    finish(result)
         checkpoint("formal_complete")
     except Exception as error:
         write_json(base / "campaign-error.json", {"at": time.time(), "error_type": type(error).__name__,
