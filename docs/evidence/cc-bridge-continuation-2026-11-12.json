@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794441325.776327,
+  "checkpoint_at": 1794441329.382168,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261112",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -854,8 +854,8 @@
     "isolation_boundary": "Real dedicated Unix UID and protected source directories; shared host filesystem, kernel and network"
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794441299.9674382,
-    "commit": "664cbd6c780891f477ed7a47bf596638ce297c6e",
+    "attempted_at": 1794441325.806217,
+    "commit": "09fa470aecdd80ebb65dab311df3cd6bf4ed6430",
     "pushed": true,
     "returncode": 0
   },
@@ -1310,7 +1310,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794441325.7780612,
+    "generated_at": 1794441329.3838286,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
@@ -1322,9 +1322,11 @@
   "combined_plan_positions_completed": 11,
   "campaign": {
     "controller_alive": true,
-    "status": "live_tools_validated"
+    "status": "formal_running",
+    "task": "session-window-debug",
+    "repeat": 2
   },
-  "status": "controls_validated",
+  "status": "formal_running",
   "bridge_health": {
     "status": "ok",
     "model": "moonshotai/kimi-k3.1-pro",
@@ -1399,8 +1401,8 @@
     },
     {
       "path": "campaign-state.json",
-      "sha256": "b76e57ad808355fec77a8cb9d2a82b36cfca59081f5c5da4ae371332467956dd",
-      "size": 6504
+      "sha256": "ba3857116ca87ba1bb78fdf2e5ae012c2d097138870abce856325152d0b8f770",
+      "size": 6547
     },
     {
       "path": "cdp-observer-process.json",
@@ -1409,8 +1411,8 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "efe8c1642b13a75f9ad1ef6455634f904df1efaec7f7919f57ee6ac59c7fff52",
-      "size": 134
+      "sha256": "220717a854d7076e06df2bf67ea70b5522e3dee4eeef8abbc7c81c8af7b362b1",
+      "size": 133
     },
     {
       "path": "checkpoint-process.json",
