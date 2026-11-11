@@ -71,9 +71,50 @@ class MessagesDiagnosticsTests(unittest.IsolatedAsyncioTestCase):
                     self.assertEqual(call["arguments_sha256"], hashlib.sha256(canonical.encode()).hexdigest())
                     self.assertEqual(records[-1]["event"], "http_complete")
                     self.assertTrue(records[-1]["body_complete"])
+                    self.assertFalse(records[-1]["client_disconnected"])
         log_text = self.log.read_text()
         self.assertNotIn("SessionResults.tsx", log_text)
         self.assertNotIn("const label", log_text)
+
+    async def test_only_disconnects_before_response_completion_are_client_failures(self):
+        for completed in (False, True):
+            with self.subTest(completed=completed):
+                async def app(scope, receive, send):
+                    await send({"type": "http.response.start", "status": 200, "headers": []})
+                    await send({"type": "http.response.body", "body": b"data", "more_body": not completed})
+                    await receive()
+
+                async def receive():
+                    return {"type": "http.disconnect"}
+
+                async def send(message):
+                    pass
+
+                await bridge.RequestDiagnosticsMiddleware(app)(
+                    {"type": "http", "method": "POST", "path": "/v1/messages"}, receive, send)
+                record = self.records()[-1]
+                self.assertEqual(record["body_complete"], completed)
+                self.assertEqual(record["client_disconnected"], not completed)
+
+    async def test_lifespan_closes_browser_and_marks_process_boundaries(self):
+        class Browser:
+            closed = False
+
+            def close(self):
+                self.closed = True
+
+        browser = Browser()
+        with patch.object(bridge, "_browser", browser):
+            async with bridge.app.router.lifespan_context(bridge.app):
+                self.assertFalse(browser.closed)
+                health = await bridge.health()
+            self.assertTrue(browser.closed)
+            self.assertIsNone(bridge._browser)
+        records = self.records()
+        self.assertEqual([r["event"] for r in records], ["bridge_started", "bridge_stopped"])
+        self.assertEqual(records[0]["instance_id"], health["instance_id"])
+        self.assertEqual(records[0]["instance_id"], records[1]["instance_id"])
+        self.assertEqual(records[0]["pid"], os.getpid())
 
     async def test_conversion_failure_is_logged_before_deferred_output_is_delivered(self):
         class MalformedBrowser:

@@ -7,6 +7,7 @@ import unittest
 from unittest.mock import patch
 
 import browser_upstream as bu
+import websocket
 
 
 class HTTPErrorTab(bu.BrowserUpstream):
@@ -97,6 +98,51 @@ class BrowserHTTPErrorTests(unittest.TestCase):
         self.assertIn("upstream detail", str(caught.exception))
         self.assertIn("read_error", str(caught.exception))
 
+    def test_cdp_body_failure_preserves_confirmed_http_status_and_partial_body(self):
+        for error in (bu.BrowserError("Execution context was destroyed"),
+                      websocket.WebSocketTimeoutException("Connection timed out"),
+                      websocket.WebSocketConnectionClosedException("Connection closed")):
+            with self.subTest(error=type(error).__name__):
+                tab = HTTPErrorTab([{"status": 503, "data": "Service temporarily unavailable", "done": False}])
+                original = tab._eval
+
+                def evaluate(expression, timeout=5):
+                    if "__bridgeDrain" in expression and tab.drains:
+                        raise error
+                    return original(expression, timeout)
+
+                tab._eval = evaluate
+                trace = []
+                with patch.object(bu, "POLL_INTERVAL", 0.001):
+                    with self.assertRaises(bu.BrowserHTTPError) as caught:
+                        list(tab.stream({}, timeout=1, trace=lambda event, **data: trace.append((event, data))))
+                self.assertEqual(caught.exception.status, 503)
+                self.assertIn("Service temporarily unavailable", str(caught.exception))
+                self.assertIn("cdp_read_error", str(caught.exception))
+                self.assertTrue(tab.needs_refresh)
+                self.assertEqual(tab.aborts, 1)
+                self.assertFalse(tab._lock.locked())
+                failure = next(data for event, data in trace if event == "browser_http_error")
+                self.assertEqual((failure["status"], failure["body_state"]), (503, "cdp_read_error"))
+
+    def test_cancel_during_cdp_body_failure_is_not_converted_to_http_retry(self):
+        tab = HTTPErrorTab([{"status": 503, "data": "partial", "done": False}])
+        original = tab._eval
+        cancel = threading.Event()
+
+        def evaluate(expression, timeout=5):
+            if "__bridgeDrain" in expression and tab.drains:
+                cancel.set()
+                raise websocket.WebSocketTimeoutException("Connection timed out")
+            return original(expression, timeout)
+
+        tab._eval = evaluate
+        with patch.object(bu, "POLL_INTERVAL", 0.001):
+            with self.assertRaises(bu.BrowserCancelled):
+                list(tab.stream({}, timeout=1, cancel=cancel))
+        self.assertEqual(tab.aborts, 1)
+        self.assertFalse(tab._lock.locked())
+
     def test_cancellation_while_collecting_body_aborts_and_unlocks(self):
         tab = HTTPErrorTab([])
         cancel = threading.Event()
@@ -150,6 +196,40 @@ class BrowserHTTPErrorTests(unittest.TestCase):
 
 
 class CDPRetryTests(unittest.IsolatedAsyncioTestCase):
+    async def test_cdp_body_timeout_still_reaches_http_retry_policy(self):
+        import nvplay_bridge as bridge
+
+        tab = HTTPErrorTab([{"status": 503, "data": "partial service error", "done": False}])
+        original = tab._eval
+
+        def evaluate(expression, timeout=5):
+            if "__bridgeDrain" in expression and tab.drains:
+                raise websocket.WebSocketTimeoutException("Connection timed out")
+            return original(expression, timeout)
+
+        tab._eval = evaluate
+
+        class Browser:
+            calls = 0
+
+            def stream(self, body, timeout, cancel, trace=None):
+                self.calls += 1
+                if self.calls == 1:
+                    yield from tab.stream(body, timeout, cancel, trace)
+                else:
+                    yield ('data: {"choices":[{"delta":{"content":"recovered"},'
+                           '"finish_reason":"stop"}]}\n\n')
+
+        browser = Browser()
+        with patch.multiple(bridge, _browser=browser, UPSTREAM_KIND="browser", BROWSER_TIMEOUT=2,
+                            BROWSER_HTTP_5XX_BACKOFF=0, BROWSER_HTTP_5XX_RETRIES=1):
+            with patch.object(bu, "POLL_INTERVAL", 0.001):
+                output = [event async for event in bridge._browser_events_with_retry({}, buffered=False)]
+        self.assertEqual(browser.calls, 2)
+        self.assertEqual([event["text"] for event in output if event["type"] == "text"], ["recovered"])
+        self.assertFalse(any(event["type"] == "error" for event in output))
+        self.assertEqual(tab.aborts, 1)
+
     async def test_delayed_long_pool_timeout_body_reaches_retry_policy(self):
         import nvplay_bridge as bridge
 

@@ -9,6 +9,23 @@ from tools.monitor_bridge import LogTail, snapshot
 
 
 class MonitorTests(unittest.TestCase):
+    def test_restart_clears_orphaned_requests_and_ignores_late_old_process_events(self):
+        records = [
+            {"event": "browser_start", "id": "legacy", "ts": 1},
+            {"event": "bridge_started", "instance_id": "old", "ts": 2},
+            {"event": "browser_start", "id": "orphaned", "instance_id": "old", "ts": 3},
+            {"event": "browser_error", "id": "failed", "instance_id": "old", "ts": 4, "error": "old failure"},
+            {"event": "bridge_started", "instance_id": "new", "ts": 5},
+            {"event": "browser_start", "id": "live", "instance_id": "new", "ts": 6},
+            {"event": "browser_start", "id": "late", "instance_id": "old", "ts": 7},
+            {"event": "bridge_stopped", "instance_id": "old", "ts": 8},
+        ]
+        result = snapshot(records, now=10)
+        self.assertEqual([r["id"] for r in result["active"]], ["live"])
+        self.assertEqual(result["recent_errors"], [records[3]])
+        records.append({"event": "bridge_stopped", "instance_id": "new", "ts": 11})
+        self.assertEqual(snapshot(records, now=12)["active"], [])
+
     def test_client_conversion_and_tool_failures_remain_visible_after_browser_done(self):
         records = [
             {"event": "browser_start", "id": "a", "ts": 10},

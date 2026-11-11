@@ -57,6 +57,7 @@ def snapshot(records, now=None, since=None):
     """Replay request lifetimes, applying the window only to event/error totals."""
     now = time.time() if now is None else now
     active = {}
+    instance_id = None
     counts = Counter()
     errors = []
     upstream_errors = []
@@ -68,15 +69,21 @@ def snapshot(records, now=None, since=None):
         recent = since is None or record.get("ts", 0) >= since
         if recent:
             counts[kind] += 1
+        if kind == "bridge_started":
+            active.clear()
+            instance_id = record.get("instance_id")
+        current_instance = instance_id is None or record.get("instance_id") == instance_id
+        if kind == "bridge_stopped" and current_instance:
+            active.clear()
         request_id = record.get("id")
-        if kind == "browser_start":
+        if kind == "browser_start" and current_instance:
             previous = active.get(request_id, {})
             active[request_id] = {"id": request_id, "started": previous.get("started", record["ts"]),
                                   "retry_count": previous.get("retry_count", 0)}
             for key in ("reasoning_effort", "last_retry"):
                 if key in previous:
                     active[request_id][key] = previous[key]
-        if request_id in active:
+        if request_id in active and current_instance:
             request = active[request_id]
             request.update(phase=kind, last_activity=record["ts"])
             for key in ("attempt", "tab_id", "counts", "usage", "reasoning_effort"):
@@ -85,7 +92,7 @@ def snapshot(records, now=None, since=None):
             if kind == "upstream_retry":
                 request["retry_count"] += 1
                 request["last_retry"] = {key: record[key] for key in ("reason", "status", "delay") if key in record}
-        if kind in ("browser_done", "browser_error", "browser_cancelled"):
+        if kind in ("browser_done", "browser_error", "browser_cancelled") and current_instance:
             active.pop(request_id, None)
         if recent and kind in ("browser_error", "pool_recovery_error"):
             errors.append(record)

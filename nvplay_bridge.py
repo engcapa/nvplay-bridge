@@ -50,7 +50,7 @@ nvplay_bridge.py — Anthropic Messages API 适配层
 
 from __future__ import annotations
 
-from contextlib import aclosing
+from contextlib import aclosing, asynccontextmanager
 from contextvars import ContextVar
 from stream_support import AnthropicBlocks, DeferredEvents
 
@@ -107,6 +107,8 @@ if HISTORY_REASONING not in {"preserve", "omit"}:
     raise RuntimeError("HISTORY_REASONING must be 'preserve' or 'omit'")
 BROWSER_DEBUG_MESSAGES = os.getenv("BROWSER_DEBUG_MESSAGES", "") == "1"
 _request_id: ContextVar[str | None] = ContextVar("bridge_request_id", default=None)
+_INSTANCE_ID = uuid.uuid4().hex[:12]
+_PROCESS_STARTED = time.monotonic()
 
 
 def _dbg(event: str, **data: Any) -> None:
@@ -114,7 +116,7 @@ def _dbg(event: str, **data: Any) -> None:
         return
     try:
         request_id = _request_id.get()
-        record = {"ts": time.time(), "event": event,
+        record = {"ts": time.time(), "event": event, "instance_id": _INSTANCE_ID, "pid": os.getpid(),
                   **({"request_id": request_id} if request_id else {}), **data}
         with open(BROWSER_DEBUG_LOG, "a", encoding="utf-8") as f:
             f.write(json.dumps(record, ensure_ascii=False) + "\n")
@@ -142,7 +144,9 @@ class RequestDiagnosticsMiddleware:
         async def receive_traced():
             nonlocal disconnected
             message = await receive()
-            if message["type"] == "http.disconnect":
+            # ASGI servers also return http.disconnect after a completed body.
+            # That normal response teardown is not a cancelled generation.
+            if message["type"] == "http.disconnect" and not complete:
                 disconnected = True
             return message
 
@@ -207,10 +211,27 @@ NV_UA = os.getenv(
 
 PASS_SAMPLING = os.getenv("PASS_SAMPLING", "0") == "1"
 
+
+@asynccontextmanager
+async def _lifespan(app):
+    global _browser
+    _dbg("bridge_started", upstream_kind=UPSTREAM_KIND, model=UPSTREAM_MODEL)
+    try:
+        yield
+    finally:
+        browser, _browser = _browser, None
+        try:
+            if browser is not None:
+                await asyncio.to_thread(browser.close)
+        finally:
+            _dbg("bridge_stopped")
+
+
 app = FastAPI(
     title="nvplay-bridge",
     version="0.3.0",
     description="Anthropic Messages and OpenAI Responses bridge for Kimi K3.1 Pro via NVIDIA Build Playground",
+    lifespan=_lifespan,
 )
 app.add_middleware(RequestDiagnosticsMiddleware)
 
@@ -1417,6 +1438,9 @@ async def aggregate(payload: dict[str, Any], headers: dict[str, str], model: str
 async def health() -> dict[str, Any]:
     result = {
         "status": "ok",
+        "instance_id": _INSTANCE_ID,
+        "pid": os.getpid(),
+        "uptime_seconds": round(time.monotonic() - _PROCESS_STARTED, 3),
         "upstream_kind": UPSTREAM_KIND,
         "upstream_url": _upstream_url() if UPSTREAM_KIND == "nvcf" or UPSTREAM_BASE else "",
         "model": UPSTREAM_MODEL,
