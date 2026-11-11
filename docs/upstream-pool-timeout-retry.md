@@ -32,6 +32,10 @@ Pool#acquire(Duration) has been pending for more than the configured timeout of 
 
 达到重试上限时保留原始错误。Responses 发一个 `response.failed`，Anthropic 发一个 SSE `error`，都不伪造成功结束；非流式接口沿用既有 HTTP 错误返回。该策略缓解间歇性错误，无法保证上游持续拥堵时成功。
 
+页面补丁版本 4 修复了错误正文读取期间的取消竞争：页面前端可能在收到 HTTP 400/500 响应头后立即取消原始信号，导致桥接的克隆流只剩 `AbortError`。现在收到错误响应头后解除前端信号传递，让桥接在原有 5 秒、8192 字符上限内收集正文；客户端取消和总时限仍通过桥接自己的控制器中止读取，成功响应继续传递前端取消。真实 HTTP 状态保持原样，读取正文不会把 HTTP 400 变成可重试的 5xx。
+
+2026-11-11 的独立本地 CDP 探针先在 400、500 两种场景复现正文丢失，再验证两种正文完整读取、成功流前端取消和错误正文期间客户端取消，共四项通过；280 项完整回归通过。可运行 `PYTHONPATH=. python3 tests/probe_browser_http_abort_body.py --cdp-port 9225` 复查，它只访问自己的本地页面和标签。现场已丢失的上游正文无法恢复，诊断与部署证据见 [错误正文取消修复](evidence/cc-bridge-http-error-body-abort-2026-11-11.json)。
+
 ## 配置与日志
 
 | 变量 | 默认值 | 含义 |
