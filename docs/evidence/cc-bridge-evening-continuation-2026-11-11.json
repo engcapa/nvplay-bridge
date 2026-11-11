@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794390360.430467,
+  "checkpoint_at": 1794390443.7329807,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261111-evening",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -716,8 +716,8 @@
     "host_memory_limit_bytes": "34359738368"
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794390277.3504033,
-    "commit": "999c2fc318fe5dca33cf38a1ab9842ce5fa5decf",
+    "attempted_at": 1794390360.651586,
+    "commit": "8c1b738e649a963f0a8b75d4bd67ccd7923faeda",
     "pushed": true,
     "returncode": 0
   },
@@ -1135,7 +1135,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794390360.433362,
+    "generated_at": 1794390443.7359169,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
@@ -1212,7 +1212,7 @@
     },
     {
       "path": "browser-supervisor-state.json",
-      "sha256": "cf48911bf140e14b11b034ac6f0eed6ba6bddb75a99a76cabc54dc461ce6f309",
+      "sha256": "6e489c6c7dccc11683f85b0c7bb8ffd6b4e48568acf76b5a47426d72a9a29188",
       "size": 102
     },
     {
@@ -1222,8 +1222,8 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "66e54127e5ff4cb62f16e5d6c99dd682d62b98e302dcd732c88e65eb4601f538",
-      "size": 134
+      "sha256": "16b7d42173c4093fbceada55e891c7e0b13c40ec0d3751a1d5cc400d36f866f3",
+      "size": 133
     },
     {
       "path": "checkpoint-process.json",
@@ -1347,8 +1347,8 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "8ed36a193aea8196f730451e322850f4f62e98e6781aed78cf72209cef3e191e",
-      "size": 680
+      "sha256": "2efc94b2ddad2a34e1fce705ffa9ef7b3d312b5fb791f929fc1b330dcd297ff3",
+      "size": 681
     },
     {
       "path": "service-identity-regression.log",
@@ -1421,6 +1421,16 @@
       "bytes": 555067833,
       "tar_compare_passed_before_reclaim": true,
       "restore": "sudo tar -xpf agent-root.tar.gz -C ."
+    },
+    {
+      "directory": "controls/embedding-drift-monitor/oracle",
+      "archived_at": 1794390434.5184932,
+      "root": "verifier-root",
+      "archive": "verifier-root.tar.gz",
+      "sha256": "707b076abaf88a377a43f1115ec29a089273b5fc5a51c443ed817a062077ad59",
+      "bytes": 564527935,
+      "tar_compare_passed_before_reclaim": true,
+      "restore": "sudo tar -xpf verifier-root.tar.gz -C ."
     }
   ]
 }
