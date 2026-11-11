@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794440866.3445702,
+  "checkpoint_at": 1794440879.7366555,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261112",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -854,8 +854,8 @@
     "isolation_boundary": "Real dedicated Unix UID and protected source directories; shared host filesystem, kernel and network"
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794440644.2430463,
-    "commit": "4c6175e8bc022a201af6a75d73dd397e2b3c5a00",
+    "attempted_at": 1794440866.3984208,
+    "commit": "13bb0e7b3fbe4a41a347dd714d401f5ebbd1ff5c",
     "pushed": true,
     "returncode": 0
   },
@@ -1288,7 +1288,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794440866.3466973,
+    "generated_at": 1794440879.738264,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
@@ -1368,7 +1368,7 @@
     },
     {
       "path": "browser-supervisor-state.json",
-      "sha256": "25243289ab98785ee4ae71dc3d6b93bb5d31bc81e4501aa47411c48dbb93bf4d",
+      "sha256": "944ff3c802e3d086f9ecc9702b349c18fc6f740827b3f6d9f76daa876661fe00",
       "size": 102
     },
     {
@@ -1388,7 +1388,7 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "83ed2920636e12398d74efc92859eda082fe864e9a8ab8838eb2987e518b8a77",
+      "sha256": "0478ee7c9ca6ad1ce00a5b43514d31b47b7c5b926cdb1fe79cf244a1cb2c56d4",
       "size": 134
     },
     {
@@ -1538,6 +1538,16 @@
     }
   ],
   "compressed_root_evidence": [
+    {
+      "directory": "controls/batched-eval-parity/baseline",
+      "archived_at": 1794440872.4211009,
+      "root": "agent-root",
+      "archive": "agent-root.tar.gz",
+      "sha256": "15c836f791507db1eb2c61074e037b9a28024a25c9dc08f3984a9c8f67c852b7",
+      "bytes": 33650399,
+      "tar_compare_passed_before_reclaim": true,
+      "restore": "sudo tar -xpf agent-root.tar.gz -C ."
+    },
     {
       "directory": "controls/embedding-drift-monitor/baseline",
       "archived_at": 1794440572.3784287,
