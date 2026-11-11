@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794360700.8939254,
+  "checkpoint_at": 1794360740.9898102,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-1m-20261111-0801",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -780,8 +780,8 @@
     "host_memory_limit_bytes": "30064771072"
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794360698.271083,
-    "commit": "2623818081d519e34a154edbd7aeb15db51f669c",
+    "attempted_at": 1794360700.9351404,
+    "commit": "eea9ac200f73647f4fef84aafbbc6935e2b44298",
     "pushed": true,
     "returncode": 0
   },
@@ -1243,7 +1243,7 @@
     }
   ],
   "results": {
-    "generated_at": 1794360700.900512,
+    "generated_at": 1794360740.9963646,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
@@ -1363,8 +1363,8 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "d79f926a5f6ed209d740e6d886eb48cd9d224768ffd5413001c2a4ed141e76dd",
-      "size": 133
+      "sha256": "7b3d01731ff440aef37f88ba30fd63c859efdf9455535daa2ef4512e20234d0a",
+      "size": 134
     },
     {
       "path": "checkpoint-permission-regression.log",
@@ -1478,8 +1478,8 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "7b986a0150f204a56128501dd1f878c09d5087395a826688e33b5c5386ad41f3",
-      "size": 809
+      "sha256": "ed5cb74ed9b10a76dade6acb982d159992325719cb33880f7a56ff62ad0e0ab4",
+      "size": 807
     },
     {
       "path": "settings-formal-high.json",
@@ -1702,6 +1702,16 @@
       "bytes": 486829450,
       "tar_compare_passed_before_reclaim": true,
       "restore": "sudo tar -xpf verifier-root.tar.gz -C ."
+    },
+    {
+      "directory": "smoke/high",
+      "archived_at": 1794360740.8103502,
+      "root": "agent-root",
+      "archive": "agent-root.tar.gz",
+      "sha256": "a7962c1408f1bfa15da2aa2395671960e97f42695366e12294b13239e06fb46d",
+      "bytes": 523851440,
+      "tar_compare_passed_before_reclaim": true,
+      "restore": "sudo tar -xpf agent-root.tar.gz -C ."
     }
   ]
 }
