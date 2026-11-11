@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794407904.3411314,
+  "checkpoint_at": 1794407987.8679354,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261111-evening",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -1257,8 +1257,8 @@
     "fresh_controls_required": true
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794407891.4624002,
-    "commit": "f3d486d1b161e0ce256bf917fdff852ee8e5a9ef",
+    "attempted_at": 1794407904.4308994,
+    "commit": "fe7758294d2eeb8bfd213626dd767ad153a9e209",
     "pushed": true,
     "returncode": 0
   },
@@ -1702,7 +1702,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794407904.3623595,
+    "generated_at": 1794407987.9098854,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-1m-720k-host-body-read-clean-20261111/28800/high": {
@@ -1915,9 +1915,9 @@
         "task": "session-window-debug",
         "effort": "max",
         "started_at": 1794407879.5171292,
-        "elapsed_seconds": 24.8,
-        "tool_calls": 9,
-        "last_tool": "Read"
+        "elapsed_seconds": 108.4,
+        "tool_calls": 10,
+        "last_tool": "Bash"
       }
     ]
   },
@@ -1955,42 +1955,42 @@
       "idle_seconds": 3600.0
     },
     "pool_states": {
-      "ready": 4,
-      "busy": 1
+      "busy": 1,
+      "ready": 4
     },
     "recovering_tabs": []
   },
   "bridge_activity": {
     "events_last_300s": {
-      "browser_first_data": 16,
-      "browser_progress": 32,
-      "browser_buffer": 16,
-      "browser_pool_release": 16,
-      "browser_output_ready": 16,
-      "browser_first_content": 16,
-      "messages_first_block": 16,
-      "browser_done": 16,
-      "tool_call": 27,
-      "messages_done": 16,
-      "http_complete": 16,
-      "tool_result": 27,
-      "request": 16,
-      "payload": 16,
-      "browser_start": 16,
-      "browser_lease": 16,
-      "browser_tab": 16,
-      "browser_sent": 16
+      "browser_progress": 34,
+      "browser_buffer": 12,
+      "browser_pool_release": 12,
+      "browser_output_ready": 12,
+      "browser_first_content": 12,
+      "browser_done": 12,
+      "tool_call": 21,
+      "messages_done": 12,
+      "http_complete": 12,
+      "tool_result": 21,
+      "request": 12,
+      "payload": 12,
+      "browser_start": 12,
+      "browser_lease": 12,
+      "browser_tab": 12,
+      "browser_sent": 12,
+      "browser_first_data": 11,
+      "messages_first_block": 11
     },
     "active": [
       {
-        "id": "c15e15a8eb0945969bfbe598",
+        "id": "297714ce9034409cb0207642",
         "retry_count": 0,
         "phase": "browser_sent",
         "attempt": 1,
         "reasoning_effort": "max",
-        "tab_id": "kpool=5",
-        "age_seconds": 2.4,
-        "activity_age_seconds": 1.4
+        "tab_id": "kpool=1",
+        "age_seconds": 7.7,
+        "activity_age_seconds": 6.8
       }
     ],
     "recent_errors": [],
@@ -2055,8 +2055,8 @@
     },
     {
       "path": "browser-supervisor-state.json",
-      "sha256": "83769f5ad6808d72deb400fa6fa270ef17d22450a0ad0ffe18f18936126ed7e8",
-      "size": 102
+      "sha256": "bda4eb962f35eadad4884d8880db78d092a875abc07ada5ede3ce1c7393bcad3",
+      "size": 101
     },
     {
       "path": "campaign-error-before-transport-fix.json",
@@ -2080,7 +2080,7 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "6a6de2597092dd784103cc402bfdc32b00b52cfa377f92a8d3e0e7b08cf542db",
+      "sha256": "0b635912358280b64849be8cd65f398053dd43d08b1889cb5a0dbcd696be4c11",
       "size": 134
     },
     {
@@ -2300,8 +2300,8 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "d583af275420647901c67bbf2eec795316b8461ee2f9d4ba568aa1fbca716530",
-      "size": 789
+      "sha256": "386c9f4d0985df3bc4ea3e6da3dd4f2b688bb017e737cf190d1f96dabef03d9e",
+      "size": 790
     },
     {
       "path": "rollout-validation-interruption.json",
