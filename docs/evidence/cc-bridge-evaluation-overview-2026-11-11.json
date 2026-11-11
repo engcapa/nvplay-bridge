@@ -1,6 +1,6 @@
 {
-  "recorded_at": 1794409302.0490267,
-  "as_of_beijing": "2026-11-11T23:01:42+08:00",
+  "recorded_at": 1794409593.2429812,
+  "as_of_beijing": "2026-11-11T23:06:33+08:00",
   "completed_benchmark_observations": 23,
   "early_observations": 12,
   "current_30_position_plan": {
@@ -38,9 +38,9 @@
     },
     {
       "file": "cc-bridge-evening-continuation-2026-11-11.json",
-      "sha256": "66f9b942201e8ba04b7b02ddea746239d14b211b4589ccb9fcf895ad33991b7a",
+      "sha256": "9b3b6a41dc4e0b92d61d3bc2e095b8cf21768bb62bab3ff5496236538c892230",
       "completed_rows": 2,
-      "at": 1794409255.46602
+      "at": 1794409577.82886
     }
   ],
   "group_counts": {
@@ -578,8 +578,8 @@
       "task": "session-window-debug",
       "effort": "max",
       "started_at": 1794407879.5171292,
-      "elapsed_seconds": 1376.0,
-      "tool_calls": 35,
+      "elapsed_seconds": 1698.3,
+      "tool_calls": 42,
       "last_tool": "Bash"
     }
   ],
@@ -587,8 +587,7 @@
     "administrative interruptions",
     "missing terminal evidence after reboot",
     "smoke and protocol fixtures",
-    "baseline and oracle controls",
-    "taomni supervised engineering validation"
+    "baseline and oracle controls"
   ],
   "long_output_evidence": {
     "full_output_tokens": 131072,
@@ -600,12 +599,22 @@
     "one_million_input_capacity_demonstrated": false
   },
   "active_bridge_source_head": "e21bfd3096761cd5dbe2553bc0cc43ee4841442f",
-  "remote_merge_commit": "4949f60",
-  "remote_regression_tests_passed": 286,
   "administrative_stop_at_unix": 1794413157,
   "limitations": [
     "Historical source summaries survive cleanup; raw logs may no longer exist.",
     "Not an Artificial Analysis official Intelligence Index or full Terminal-Bench score.",
     "No reliable high/max ranking from incomplete and changing protocol stages."
-  ]
+  ],
+  "scope": "CC + bridge on the originally selected five-task Terminal-Bench 4.0.0 native adaptation only",
+  "benchmark_version": "Terminal-Bench v4.0.0",
+  "dataset_commit": "452bf305c6daa62fc59061d22133a7cbc7c1572e",
+  "plan_definition": {
+    "tasks": 5,
+    "efforts": [
+      "high",
+      "max"
+    ],
+    "independent_repeats_each": 3,
+    "positions": 30
+  }
 }
