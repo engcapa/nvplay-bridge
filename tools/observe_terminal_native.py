@@ -64,11 +64,14 @@ def observe(base: Path, checkpoint: Path | None, health_url: str, lookback: floa
     for filename in ("campaign-state.json", "bridge-runtime.json", "brave-process.json",
                      "checkpoint-process.json", "bridge-monitor-process.json",
                      "cdp-observer-process.json", "resource-monitor-process.json",
+                     "browser-supervisor-process.json",
                      "transport-transition-process.json"):
         recorded = read_json(base / filename)
         pid = recorded.get("pid")
         actual = process_identity(pid) if isinstance(pid, int) and pid > 0 else None
         expected = {key: recorded[key] for key in ("pid", "boot_id", "start_ticks") if key in recorded}
+        if filename == "campaign-state.json" and recorded.get("controller_identity"):
+            expected = recorded["controller_identity"]
         # Older controllers put their boot/start identity in each attempt owner.
         if filename == "campaign-state.json" and len(expected) < 3:
             owners = [read_json(base / row["attempt"] / "owner.json") for row in report["pending"]]
