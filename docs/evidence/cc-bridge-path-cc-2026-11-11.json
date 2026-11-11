@@ -233,7 +233,7 @@
     "deadline_unchanged": 1794380400
   },
   "deadline_unchanged": 1794380400,
-  "latest_client_formal_attempts_completed": 0,
+  "latest_client_formal_attempts_completed": 1,
   "preserved_historical_completed_positions": 7,
   "compatibility": {
     "plain_chroot": "native Bun cannot resolve cwd without real proc",
@@ -630,9 +630,14 @@
       "path": "path-cc-delayed-headers-v2/result.json",
       "sha256": "a1f3006cd9503e274803f7d53c7bdca02d937bf3dda41dc56aab6a51da280e4a",
       "size": 474
+    },
+    {
+      "path": "continuity-observation-20261111-1148.json",
+      "sha256": "d2c09a5ccb6cc7d77e83efd882c8ee5a9fc2d3e093adad97e71e54e970b8a8ae",
+      "size": 9161
     }
   ],
-  "updated_at": 1794361141.2805285,
+  "updated_at": 1794368948.9832585,
   "live_runtime_isolation": {
     "readable_private_paths": [],
     "real_uid": 20006,
@@ -919,5 +924,536 @@
     "matching_active_processes": 3,
     "passed": true,
     "deadline_unchanged": 1794380400
-  }
+  },
+  "latest_continuity_observation": {
+    "recorded_at": 1794368903.1648016,
+    "controller": {
+      "controller_alive": true,
+      "status": "formal_running",
+      "task": "ks-solver-cpp",
+      "repeat": 1
+    },
+    "verified_services_alive": {
+      "campaign-launch-process.json": true,
+      "bridge-runtime.json": true,
+      "checkpoint-process.json": true,
+      "reboot-stop-process.json": true,
+      "resource-monitor-process.json": true,
+      "bridge-monitor-process.json": true,
+      "cdp-observer-process.json": true,
+      "brave-process.json": true
+    },
+    "health": {
+      "status": "ok",
+      "browser_output_tokens": {
+        "maximum": 131072,
+        "fixed": 131072
+      },
+      "browser_timeouts": {
+        "total_seconds": 28800,
+        "first_byte_seconds": 3600.0,
+        "idle_seconds": 3600.0
+      },
+      "browser_pool": {
+        "size": 5,
+        "tabs": {
+          "kpool=1": "ready",
+          "kpool=2": "ready",
+          "kpool=3": "busy",
+          "kpool=4": "ready",
+          "kpool=5": "busy"
+        },
+        "errors": {}
+      }
+    },
+    "activity_before": {
+      "events": {
+        "browser_progress": 118
+      },
+      "active": [
+        {
+          "id": "32fe7e3e",
+          "retry_count": 0,
+          "phase": "browser_progress",
+          "attempt": 1,
+          "reasoning_effort": "high",
+          "tab_id": "kpool=3",
+          "counts": {
+            "thinking_chars": 194770,
+            "text_chars": 0,
+            "tool_calls": 0
+          },
+          "usage": {
+            "prompt_tokens": 5608,
+            "completion_tokens": 55850,
+            "total_tokens": 61458,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 55850
+            }
+          },
+          "age_seconds": 2138.9,
+          "activity_age_seconds": 0.9
+        },
+        {
+          "id": "113ba4f0",
+          "retry_count": 0,
+          "phase": "browser_progress",
+          "attempt": 1,
+          "reasoning_effort": "max",
+          "tab_id": "kpool=5",
+          "counts": {
+            "thinking_chars": 200667,
+            "text_chars": 0,
+            "tool_calls": 0
+          },
+          "usage": {
+            "prompt_tokens": 5449,
+            "completion_tokens": 64439,
+            "total_tokens": 69888,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 64439
+            }
+          },
+          "age_seconds": 2138.6,
+          "activity_age_seconds": 3.0
+        }
+      ],
+      "recent_errors": [],
+      "recent_retries": []
+    },
+    "frozen_source_changes": {
+      "ks-solver-cpp--max--r1": [],
+      "ks-solver-cpp--high--r1": [],
+      "mvcc-lsm-compaction--max--r1": []
+    },
+    "pending": [
+      {
+        "attempt": "runs/formal-1m-720k-path-cc-2-1-322-20261111/ks-solver-cpp--high--r1",
+        "status": "agent_running",
+        "task": "ks-solver-cpp",
+        "effort": "high",
+        "started_at": 1794366750.3032668,
+        "elapsed_seconds": 2153.0,
+        "tool_calls": 2,
+        "last_tool": "Read"
+      },
+      {
+        "attempt": "runs/formal-1m-720k-path-cc-2-1-322-20261111/ks-solver-cpp--max--r1",
+        "status": "agent_running",
+        "task": "ks-solver-cpp",
+        "effort": "max",
+        "started_at": 1794366750.2963288,
+        "elapsed_seconds": 2153.2,
+        "tool_calls": 1,
+        "last_tool": "Read"
+      }
+    ],
+    "same_requested_configuration": {
+      "tasks": [
+        "session-window-debug",
+        "embedding-drift-monitor",
+        "batched-eval-parity",
+        "mvcc-lsm-compaction",
+        "ks-solver-cpp"
+      ],
+      "repeats_per_effort": 3,
+      "budget_seconds": 28800,
+      "frozen_at": 1794360579.931411,
+      "selection_basis": "Same five tasks selected and validated by native environment feasibility; retain every task regardless of pilot success or failure.",
+      "full_66_status": "not executable with current validated native recipes and hardware; no GPU devices; full coverage remains incomplete",
+      "excluded_or_pending": {
+        "unstable_oracle_verifier": 1,
+        "gpu_hardware_unavailable": 3,
+        "native_recipes_pending": 57
+      },
+      "max_output_tokens": 131072,
+      "cc_output_environment_tokens": 128000,
+      "bridge_request_timeout_seconds": 28800,
+      "cc_api_timeout_ms": 29400000,
+      "stage": "formal-1m-720k-path-cc-2-1-322-20261111",
+      "bridge_fixed_max_output_tokens": 131072,
+      "bridge_first_byte_timeout_seconds": 3600,
+      "bridge_idle_timeout_seconds": 3600,
+      "agent_wall_clock_timeout_seconds": null,
+      "budget_seconds_is_reference_only": true,
+      "cc_model": "kimi-k3.1-pro[1m]",
+      "cc_model_context_window_tokens": 1000000,
+      "cc_auto_compact_window_tokens": 720000,
+      "automatic_compaction_enabled": true,
+      "schedule": [
+        {
+          "task": "mvcc-lsm-compaction",
+          "repeat": 1,
+          "effort": "max"
+        },
+        {
+          "task": "ks-solver-cpp",
+          "repeat": 1,
+          "effort": "high"
+        },
+        {
+          "task": "ks-solver-cpp",
+          "repeat": 1,
+          "effort": "max"
+        },
+        {
+          "task": "session-window-debug",
+          "repeat": 2,
+          "effort": "high"
+        },
+        {
+          "task": "session-window-debug",
+          "repeat": 2,
+          "effort": "max"
+        },
+        {
+          "task": "embedding-drift-monitor",
+          "repeat": 2,
+          "effort": "high"
+        },
+        {
+          "task": "embedding-drift-monitor",
+          "repeat": 2,
+          "effort": "max"
+        },
+        {
+          "task": "batched-eval-parity",
+          "repeat": 2,
+          "effort": "high"
+        },
+        {
+          "task": "batched-eval-parity",
+          "repeat": 2,
+          "effort": "max"
+        },
+        {
+          "task": "mvcc-lsm-compaction",
+          "repeat": 2,
+          "effort": "high"
+        },
+        {
+          "task": "mvcc-lsm-compaction",
+          "repeat": 2,
+          "effort": "max"
+        },
+        {
+          "task": "ks-solver-cpp",
+          "repeat": 2,
+          "effort": "high"
+        },
+        {
+          "task": "ks-solver-cpp",
+          "repeat": 2,
+          "effort": "max"
+        },
+        {
+          "task": "session-window-debug",
+          "repeat": 3,
+          "effort": "high"
+        },
+        {
+          "task": "session-window-debug",
+          "repeat": 3,
+          "effort": "max"
+        },
+        {
+          "task": "embedding-drift-monitor",
+          "repeat": 3,
+          "effort": "high"
+        },
+        {
+          "task": "embedding-drift-monitor",
+          "repeat": 3,
+          "effort": "max"
+        },
+        {
+          "task": "batched-eval-parity",
+          "repeat": 3,
+          "effort": "high"
+        },
+        {
+          "task": "batched-eval-parity",
+          "repeat": 3,
+          "effort": "max"
+        },
+        {
+          "task": "mvcc-lsm-compaction",
+          "repeat": 3,
+          "effort": "high"
+        },
+        {
+          "task": "mvcc-lsm-compaction",
+          "repeat": 3,
+          "effort": "max"
+        },
+        {
+          "task": "ks-solver-cpp",
+          "repeat": 3,
+          "effort": "high"
+        },
+        {
+          "task": "ks-solver-cpp",
+          "repeat": 3,
+          "effort": "max"
+        }
+      ],
+      "preserved_local_schedule": [],
+      "cc_runtime_kind": "path-native-proot",
+      "cc_autocompact_cli_tokens": 720000
+    },
+    "stop_at": 1794380400.0,
+    "activity_after": {
+      "events": {
+        "browser_progress": 118
+      },
+      "active": [
+        {
+          "id": "32fe7e3e",
+          "retry_count": 0,
+          "phase": "browser_progress",
+          "attempt": 1,
+          "reasoning_effort": "high",
+          "tab_id": "kpool=3",
+          "counts": {
+            "thinking_chars": 198254,
+            "text_chars": 0,
+            "tool_calls": 0
+          },
+          "usage": {
+            "prompt_tokens": 5608,
+            "completion_tokens": 57065,
+            "total_tokens": 62673,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 57065
+            }
+          },
+          "age_seconds": 2184.7,
+          "activity_age_seconds": 0.4
+        },
+        {
+          "id": "113ba4f0",
+          "retry_count": 0,
+          "phase": "browser_progress",
+          "attempt": 1,
+          "reasoning_effort": "max",
+          "tab_id": "kpool=5",
+          "counts": {
+            "thinking_chars": 204197,
+            "text_chars": 0,
+            "tool_calls": 0
+          },
+          "usage": {
+            "prompt_tokens": 5449,
+            "completion_tokens": 65765,
+            "total_tokens": 71214,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 65765
+            }
+          },
+          "age_seconds": 2184.5,
+          "activity_age_seconds": 3.0
+        }
+      ],
+      "recent_errors": [],
+      "recent_retries": []
+    },
+    "checked_again_at": 1794368948.9832585,
+    "measured_progress": [
+      {
+        "id": "32fe7e3e",
+        "effort": "high",
+        "before_output_tokens": 55850,
+        "after_output_tokens": 57065,
+        "increase": 1215,
+        "latest_activity_age_seconds": 0.4
+      },
+      {
+        "id": "113ba4f0",
+        "effort": "max",
+        "before_output_tokens": 64439,
+        "after_output_tokens": 65765,
+        "increase": 1326,
+        "latest_activity_age_seconds": 3.0
+      }
+    ],
+    "continues_generating": true
+  },
+  "latest_results": {
+    "generated_at": 1794368949.614085,
+    "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
+    "totals": {
+      "formal-1m-720k-path-cc-2-1-322-20261111/28800/max": {
+        "attempts": 1,
+        "valid_grades": 1,
+        "infrastructure_errors": 0,
+        "artifact_passes": 1,
+        "artifact_pass_at_1": 1.0,
+        "end_to_end_passes": 1,
+        "end_to_end_pass_rate": 1.0,
+        "agent_seconds": 5788.821,
+        "logical_requests": 63,
+        "bridge_errors": 1,
+        "bridge_errors_after_content": 0,
+        "bridge_errors_before_content": 1,
+        "bridge_retries": 0,
+        "http_failures_retried": 0,
+        "requests_recovered_after_retry": 0,
+        "cancelled_requests": 0,
+        "transport": {
+          "attempts_with_evidence": 1,
+          "max_output_tokens": [
+            131072
+          ],
+          "http_status_counts": {
+            "400": 1
+          },
+          "timed_http_failures": 1,
+          "http_failed_attempt_seconds": 301.666,
+          "completed_requests": 62,
+          "observed_usage": {
+            "prompt_tokens": 5510017,
+            "completion_tokens": 147230,
+            "total_tokens": 5657247,
+            "cached_prompt_tokens": 5301248,
+            "reasoning_tokens": 127984
+          },
+          "requests_with_partial_usage": 0,
+          "requests_without_observed_usage": 1,
+          "longest_completed_request_seconds": 1023.596
+        },
+        "usage": {
+          "prompt_tokens": 5510017,
+          "completion_tokens": 147230,
+          "total_tokens": 5657247,
+          "cached_prompt_tokens": 5301248,
+          "reasoning_tokens": 127984
+        }
+      }
+    },
+    "attempts": [
+      {
+        "task": "mvcc-lsm-compaction",
+        "stage": "formal-1m-720k-path-cc-2-1-322-20261111",
+        "effort": "max",
+        "repeat": 1,
+        "budget_seconds": 28800,
+        "agent_wall_clock_timeout_seconds": null,
+        "artifact_score": 1,
+        "infrastructure_error": null,
+        "end_to_end_success": true,
+        "agent_seconds": 5788.821,
+        "agent_timed_out": false,
+        "cc_subtype": "success",
+        "cc_turns": 98,
+        "logical_requests": 63,
+        "upstream_attempts": 63,
+        "bridge_errors": 1,
+        "bridge_errors_after_content": 0,
+        "bridge_errors_before_content": 1,
+        "bridge_retries": 0,
+        "http_failures_retried": 0,
+        "requests_recovered_after_retry": 0,
+        "bridge_cancelled": 0,
+        "bridge_unfinished": [],
+        "transport": {
+          "max_output_tokens": [
+            131072
+          ],
+          "http_status_counts": {
+            "400": 1
+          },
+          "timed_http_failures": 1,
+          "http_failed_attempt_seconds": 301.666,
+          "completed_requests": 62,
+          "completed_request_seconds": 5333.777,
+          "longest_completed_request_seconds": 1023.596,
+          "observed_usage": {
+            "prompt_tokens": 5510017,
+            "completion_tokens": 147230,
+            "total_tokens": 5657247,
+            "cached_prompt_tokens": 5301248,
+            "reasoning_tokens": 127984
+          },
+          "requests_with_partial_usage": 0,
+          "requests_without_observed_usage": 1
+        },
+        "usage": {
+          "prompt_tokens": 5510017,
+          "completion_tokens": 147230,
+          "total_tokens": 5657247,
+          "cached_prompt_tokens": 5301248,
+          "reasoning_tokens": 127984
+        },
+        "source_head": "3166ea20e55cc782622e58c5456064512ced3e04"
+      }
+    ],
+    "pending": [
+      {
+        "attempt": "runs/formal-1m-720k-path-cc-2-1-322-20261111/ks-solver-cpp--high--r1",
+        "status": "agent_running",
+        "task": "ks-solver-cpp",
+        "effort": "high",
+        "started_at": 1794366750.3032668,
+        "elapsed_seconds": 2198.8,
+        "tool_calls": 2,
+        "last_tool": "Read"
+      },
+      {
+        "attempt": "runs/formal-1m-720k-path-cc-2-1-322-20261111/ks-solver-cpp--max--r1",
+        "status": "agent_running",
+        "task": "ks-solver-cpp",
+        "effort": "max",
+        "started_at": 1794366750.2963288,
+        "elapsed_seconds": 2199.0,
+        "tool_calls": 1,
+        "last_tool": "Read"
+      }
+    ]
+  },
+  "latest_completed_artifact_review": {
+    "reviewed_at": 1794368903.8846912,
+    "attempts": [
+      {
+        "attempt": "runs/formal-1m-720k-path-cc-2-1-322-20261111/mvcc-lsm-compaction--max--r1",
+        "task": "mvcc-lsm-compaction",
+        "effort": "max",
+        "repeat": 1,
+        "artifact_score": 1,
+        "infrastructure_error": null,
+        "artifact_errors_present": false,
+        "verifier": {
+          "test_count": 15,
+          "statuses": {
+            "passed": 15
+          },
+          "sha256": "ba4551e54588f25d4378e43345bd1e85f15205cda671f1130b94ea137cfeb0c6"
+        },
+        "client_terminal": {
+          "exit_code": 0,
+          "timed_out": false,
+          "subtype": "success",
+          "is_error": false,
+          "terminal_reason": "completed",
+          "api_error_status": null,
+          "prompt_too_long": false,
+          "reported_context_window_tokens": [
+            1000000
+          ]
+        }
+      }
+    ]
+  },
+  "combined_plan_positions_completed": 8
 }
