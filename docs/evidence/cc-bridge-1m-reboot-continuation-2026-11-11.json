@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794374011.4580514,
+  "checkpoint_at": 1794374224.31899,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-1m-20261111-0801",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -780,8 +780,8 @@
     "host_memory_limit_bytes": "30064771072"
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794373962.6973104,
-    "commit": "579948ae96737986da7ab827c2367e8671181b81",
+    "attempted_at": 1794374013.2913382,
+    "commit": "790db431a0bbb082c6a153b498edc10e5c8d20d1",
     "pushed": true,
     "returncode": 0
   },
@@ -1246,7 +1246,7 @@
     }
   ],
   "results": {
-    "generated_at": 1794374013.1898053,
+    "generated_at": 1794374225.7646995,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-1m-720k-path-cc-2-1-322-20261111/28800/max": {
@@ -1361,8 +1361,8 @@
         "task": "ks-solver-cpp",
         "effort": "high",
         "started_at": 1794366750.3032668,
-        "elapsed_seconds": 7261.2,
-        "tool_calls": 16,
+        "elapsed_seconds": 7474.1,
+        "tool_calls": 17,
         "last_tool": "Write"
       },
       {
@@ -1371,7 +1371,7 @@
         "task": "ks-solver-cpp",
         "effort": "max",
         "started_at": 1794366750.2963288,
-        "elapsed_seconds": 7262.0,
+        "elapsed_seconds": 7474.7,
         "tool_calls": 2,
         "last_tool": "Bash"
       }
@@ -1407,30 +1407,29 @@
       "idle_seconds": 3600.0
     },
     "pool_states": {
-      "ready": 3,
-      "busy": 2
+      "busy": 2,
+      "ready": 3
     },
     "recovering_tabs": []
   },
   "bridge_activity": {
     "events_last_300s": {
-      "pool_recovery_start": 35,
-      "pool_recovery_error": 30,
-      "browser_error": 4,
-      "request": 5,
-      "browser_output_limit_override": 4,
-      "payload": 5,
-      "browser_start": 5,
+      "browser_error": 2,
+      "pool_recovery_start": 5,
       "pool_activation": 7,
+      "request": 4,
+      "browser_output_limit_override": 2,
+      "payload": 4,
+      "browser_start": 4,
       "pool_page_ready": 5,
       "pool_ready": 5,
-      "browser_tab": 3,
+      "browser_tab": 4,
       "browser_first_data": 3,
-      "browser_progress": 22,
+      "browser_progress": 103,
       "browser_first_content": 2,
-      "browser_buffer": 1,
-      "browser_pool_release": 1,
-      "browser_done": 1
+      "browser_buffer": 2,
+      "browser_pool_release": 2,
+      "browser_done": 2
     },
     "active": [
       {
@@ -1441,100 +1440,36 @@
         "reasoning_effort": "max",
         "tab_id": "kpool=5",
         "counts": {
-          "thinking_chars": 6910,
+          "thinking_chars": 28341,
           "text_chars": 0,
           "tool_calls": 0
         },
         "usage": {
           "prompt_tokens": 5773,
-          "completion_tokens": 1738,
-          "total_tokens": 7511,
+          "completion_tokens": 7733,
+          "total_tokens": 13506,
           "prompt_tokens_details": {
             "cached_tokens": 0
           },
           "completion_tokens_details": {
-            "reasoning_tokens": 1738
+            "reasoning_tokens": 7733
           }
         },
-        "age_seconds": 63.2,
-        "activity_age_seconds": -0.4
+        "age_seconds": 276.1,
+        "activity_age_seconds": 0.4
       },
       {
-        "id": "688d32af",
+        "id": "f02d913d",
         "retry_count": 0,
-        "phase": "browser_first_content",
+        "phase": "browser_tab",
         "attempt": 1,
         "reasoning_effort": "high",
-        "tab_id": "kpool=4",
-        "counts": {
-          "thinking_chars": 0,
-          "text_chars": 0,
-          "tool_calls": 0
-        },
-        "usage": {
-          "prompt_tokens": 151654,
-          "completion_tokens": 1,
-          "total_tokens": 151655,
-          "prompt_tokens_details": {
-            "cached_tokens": 150272
-          },
-          "completion_tokens_details": {
-            "reasoning_tokens": 1
-          }
-        },
-        "age_seconds": 7.5,
-        "activity_age_seconds": 1.7
+        "tab_id": "kpool=1",
+        "age_seconds": 9.2,
+        "activity_age_seconds": 9.2
       }
     ],
     "recent_errors": [
-      {
-        "event": "pool_recovery_error",
-        "ts": 1794373884.6839855,
-        "error_type": "BrowserError",
-        "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
-      },
-      {
-        "event": "pool_recovery_error",
-        "ts": 1794373884.6841116,
-        "error_type": "BrowserError",
-        "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
-      },
-      {
-        "event": "pool_recovery_error",
-        "ts": 1794373884.6842413,
-        "error_type": "BrowserError",
-        "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
-      },
-      {
-        "event": "pool_recovery_error",
-        "ts": 1794373884.6843524,
-        "error_type": "BrowserError",
-        "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
-      },
-      {
-        "event": "pool_recovery_error",
-        "ts": 1794373884.6844728,
-        "error_type": "BrowserError",
-        "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
-      },
-      {
-        "event": "pool_recovery_error",
-        "ts": 1794373884.6846154,
-        "error_type": "BrowserError",
-        "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
-      },
-      {
-        "event": "pool_recovery_error",
-        "ts": 1794373884.6847863,
-        "error_type": "BrowserError",
-        "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
-      },
-      {
-        "event": "pool_recovery_error",
-        "ts": 1794373884.6849089,
-        "error_type": "BrowserError",
-        "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
-      },
       {
         "event": "browser_error",
         "ts": 1794373937.9566624,
@@ -1614,8 +1549,23 @@
     },
     {
       "path": "browser-recovery-20261111-1310.json",
-      "sha256": "ea424479992f09b0586a3b03a56461e33155e1f34b5d04aa9be00ce281d4cf7a",
-      "size": 60983
+      "sha256": "5f59c855cb03cd55ba3fea92c2c6fff8b1a211b350a8637bcf62e293e1b6efe8",
+      "size": 65473
+    },
+    {
+      "path": "browser-supervisor-process.json",
+      "sha256": "26eb2b7265b3fab9453ac9c86687ca0be5b409d83a971bce11e9a8075013368b",
+      "size": 334
+    },
+    {
+      "path": "browser-supervisor-regression.log",
+      "sha256": "7f0a28f82df3c5cf92909ea7331b40374e1a29e986a11a0555c8a8e1ed34b05d",
+      "size": 3200
+    },
+    {
+      "path": "browser-supervisor-state.json",
+      "sha256": "f7a9ecd545b419a6ed0e17000b097603b686133ada3ff566879ce2f3ff94e7ed",
+      "size": 103
     },
     {
       "path": "campaign-launch-process.json",
@@ -1633,9 +1583,14 @@
       "size": 1718
     },
     {
-      "path": "cdp-observer-process.json",
+      "path": "cdp-observer-before-browser-recovery.json",
       "sha256": "9efd19259534ab04243bade0430bb3eb19c35c490398fbb48cafa512e7ac12b3",
       "size": 366
+    },
+    {
+      "path": "cdp-observer-process.json",
+      "sha256": "d7cdd435e003d1609454876c4420b3fc125dbd3bacbe6ee5032dace890e32ab5",
+      "size": 370
     },
     {
       "path": "checkpoint-cadence-regression.log",
@@ -1649,7 +1604,7 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "2ccd221a45baf6ad1bb52c7e5bee5a2653ac01e83e5ac7ae4102f6c8b06cd00a",
+      "sha256": "906e40ab739e29755385354a66d3c695f321ace903536006e9c49dd1f4b46505",
       "size": 134
     },
     {
@@ -1758,19 +1713,24 @@
       "size": 1082
     },
     {
+      "path": "progress-report-policy.json",
+      "sha256": "7a394591d20fbb41e0eee6fe22421ec541d1a035a925f68185b1f1a9dbc0fc8e",
+      "size": 356
+    },
+    {
       "path": "reboot-resume-regression.log",
       "sha256": "2867271377ddbc4f5396563d1adba89ce9bcf83127d0c173244e21bace31d409",
       "size": 3187
     },
     {
       "path": "reboot-stop-process.json",
-      "sha256": "c65742d3605708395e3ad60a8119bb70b2894df50de9be689e1fb8bcd639f908",
-      "size": 495
+      "sha256": "0c14c3bc00ad095a1b4919fb99fedb09fea8eb770a176f3f034020099eedf6ac",
+      "size": 497
     },
     {
       "path": "reboot-stop-request.json",
-      "sha256": "ce375b858ff8aad50743617bbb9c0b1cf08c13ee7891b499afd9454bc79b36bf",
-      "size": 234
+      "sha256": "c97c8eaecd854e67544253600a84422bb1113d4852eb05f90c90f731932a581f",
+      "size": 235
     },
     {
       "path": "resource-monitor-process.json",
@@ -1779,7 +1739,7 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "9598ae4a432305af7b994e5978650e6c1ec153761c531caa0bc753d3dcb397cd",
+      "sha256": "f4298c3ec4e69f305f22dabc565f8ee56057f6d983c24fac06cb7ef4ab57c735",
       "size": 818
     },
     {
