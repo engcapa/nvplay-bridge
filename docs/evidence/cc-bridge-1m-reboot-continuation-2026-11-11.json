@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794360802.1464565,
+  "checkpoint_at": 1794360805.46574,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-1m-20261111-0801",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -780,8 +780,8 @@
     "host_memory_limit_bytes": "30064771072"
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794360799.3218453,
-    "commit": "0b7ffec278f33c0adca4ce02cebda7eab10dfa46",
+    "attempted_at": 1794360802.190252,
+    "commit": "bbd9475e89c96ad74e700a92ec82210e4d320b99",
     "pushed": true,
     "returncode": 0
   },
@@ -1243,7 +1243,7 @@
     }
   ],
   "results": {
-    "generated_at": 1794360802.1525307,
+    "generated_at": 1794360805.4719322,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
@@ -1255,13 +1255,15 @@
   "combined_plan_positions_completed": 7,
   "campaign": {
     "controller_alive": true,
-    "status": "live_tools_validated"
+    "status": "formal_running",
+    "task": "mvcc-lsm-compaction",
+    "repeat": 1
   },
   "reboot_stop": {
     "stop_at": 1794380400.0,
     "armed": true
   },
-  "status": "controls_validated",
+  "status": "formal_running",
   "bridge_health": {
     "status": "ok",
     "model": "moonshotai/kimi-k3.1-pro",
@@ -1337,8 +1339,8 @@
     },
     {
       "path": "campaign-state.json",
-      "sha256": "68e401e53b694b5bf3d8686d441589fdc1ccce13fb0e4577bfad75a51aa990d4",
-      "size": 4896
+      "sha256": "c8a30a6db3dafcf7acd6137b034301c8b89df2c0a26a0e73a1cd10b70f554091",
+      "size": 4938
     },
     {
       "path": "cc-upgrade-state.json",
@@ -1362,8 +1364,8 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "9285071d3957b2da10b18be931970076e56d8886401e2b26d9f419ee436703f0",
-      "size": 134
+      "sha256": "5fd99c65f0a6006f8de6b948b56a0309ace4fc1b3a4621ed626c78007a6cb7a7",
+      "size": 133
     },
     {
       "path": "checkpoint-permission-regression.log",
