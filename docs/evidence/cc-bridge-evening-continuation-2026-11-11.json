@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794390570.0366828,
+  "checkpoint_at": 1794390613.832264,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261111-evening",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -716,8 +716,8 @@
     "host_memory_limit_bytes": "34359738368"
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794390507.110741,
-    "commit": "0c8a68c10415731229f711b7804abeca0227d69e",
+    "attempted_at": 1794390570.1957486,
+    "commit": "382d51f1cd9d83d67452cfb24e177af9b94a45c5",
     "pushed": true,
     "returncode": 0
   },
@@ -1121,6 +1121,17 @@
         "infrastructure_error": null
       }
     },
+    "mvcc-lsm-compaction": {
+      "valid": true,
+      "baseline": {
+        "score": 0,
+        "infrastructure_error": null
+      },
+      "oracle": {
+        "score": 1,
+        "infrastructure_error": null
+      }
+    },
     "session-window-debug": {
       "valid": true,
       "baseline": {
@@ -1135,7 +1146,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794390570.0398393,
+    "generated_at": 1794390613.8355758,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
@@ -1212,7 +1223,7 @@
     },
     {
       "path": "browser-supervisor-state.json",
-      "sha256": "f6ce3cf2e6662b68c6f3b072ce81416aa8bbcc57d25fb5c5beeb057d9a5dc9d1",
+      "sha256": "6ee8428f9c0f4101c5e22d78b0bc40786d176aff8ff9bea9ff9701636053434c",
       "size": 102
     },
     {
@@ -1222,8 +1233,8 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "4c32559501c271c07a2620984bf0e6f1ca55e6ee4ba078cb382fd7b30595d259",
-      "size": 133
+      "sha256": "20562eed7fa8505218b0b11462983e1084dcc0e8604d9a5e9d6338495e4180df",
+      "size": 134
     },
     {
       "path": "checkpoint-process.json",
@@ -1232,8 +1243,8 @@
     },
     {
       "path": "control-validation.log",
-      "sha256": "0894eee6108ccce929465f05205a6cdd044c6cb8a3af31bfc929782ff5cc5ed7",
-      "size": 134
+      "sha256": "86268e39592155c7b89fbd935ea28233b2c9b4d622774545796f47bda40d4d8a",
+      "size": 177
     },
     {
       "path": "controls/batched-eval-parity/result.json",
@@ -1244,6 +1255,11 @@
       "path": "controls/embedding-drift-monitor/result.json",
       "sha256": "b2e96fa10d1cab28eb0f03043e78418fc228a6c0c9ef51260f7d0e86fa6bf624",
       "size": 592
+    },
+    {
+      "path": "controls/mvcc-lsm-compaction/result.json",
+      "sha256": "902965cad789038b0972c3019a506c1763908516a4185e9a910fbcae05b33adb",
+      "size": 594
     },
     {
       "path": "controls/session-window-debug/result.json",
@@ -1347,8 +1363,8 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "47cb3ff3dbc19d64571c849f42d487e75e1079df08baf220512d2db901e73b78",
-      "size": 679
+      "sha256": "bfaec4bda723f9a53382c9356f127af00f683d017eed224b8f2b4260f42223b5",
+      "size": 681
     },
     {
       "path": "service-identity-regression.log",
