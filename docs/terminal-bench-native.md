@@ -78,6 +78,8 @@ CC 自然结束或行政停止后，先确认其 UID 已无活进程，再将外
 
 `tools/provision_terminal_native.py` 将下载校验、原生基座与离线 wheel 准备保存在源码中。Ubuntu 与数据集、官方 CC 包、CC CLI 和 Node 二进制均检查固定 SHA256；Python 使用确切补丁版本。apt 包及 wheel 的实际版本和摘要另存 manifest，不假设软件源与上一轮完全相同。
 
+固定 Perl 包从实时镜像下架时，配置器会回退到 Ubuntu 官方 `20261110T000000Z` 快照，仍校验原认证索引中保存的 SHA256；下载来源写入 manifest。不会因实时源出现新版本而替换固定版本，哈希不符直接拒绝。
+
 ```sh
 python3 tools/provision_terminal_native.py downloads --base logs/<run>
 HTTPS_PROXY=http://127.0.0.1:31128 python3 -m pip download --no-deps --only-binary=:all: --dest logs/<run>/downloads uv==0.13.7
