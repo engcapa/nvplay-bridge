@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794392219.1367946,
+  "checkpoint_at": 1794392519.1378872,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261111-evening",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -983,8 +983,8 @@
     "fresh_controls_required": true
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794392160.6275103,
-    "commit": "d366635a418e897c29ca42f501b92b406a0d0aca",
+    "attempted_at": 1794392219.2838967,
+    "commit": "aa778140e72e8246641821d2c09c42c53bacec28",
     "pushed": true,
     "returncode": 0
   },
@@ -1375,7 +1375,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794392219.1405847,
+    "generated_at": 1794392519.1411374,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
@@ -1454,7 +1454,7 @@
     },
     {
       "path": "browser-supervisor-state.json",
-      "sha256": "495b15f4ba47c9a41c4b1ab63c08a09fb07eb5a03fc4b7547cc9f5e3304bb852",
+      "sha256": "bed4e26c2c69a507b132b316c3967d3beaa9879440463e59d4e437d98bcd312b",
       "size": 102
     },
     {
@@ -1474,7 +1474,7 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "8bfa7b4bfc9ba7b700564d374ed36cfdd6bc1d5b27e4d5833ce7052ceab8b437",
+      "sha256": "3febe969239061a5b45bae412a9eebdbd93a0fde61d8fdb7e9b70f3b37515ae8",
       "size": 134
     },
     {
@@ -1589,7 +1589,7 @@
     },
     {
       "path": "next-uid.json",
-      "sha256": "51a6ac0a599ce81d59ff0eb8d01445ec5db56cfee11296cbc605459404423413",
+      "sha256": "2d4acfea9c0ee7a8a6b1e68ddf7c74a36249b77dd7bb0aa481a8d5888d4a7f6d",
       "size": 20
     },
     {
@@ -1644,8 +1644,8 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "0cc73644babc26e533599895caf25644d310bd304a4fd3256074e0679c216b6d",
-      "size": 775
+      "sha256": "bcee4c7253c7d0aedbbb2a132b22213af3f647c8a48493dd419def21fe5a065f",
+      "size": 774
     },
     {
       "path": "service-identity-regression.log",
