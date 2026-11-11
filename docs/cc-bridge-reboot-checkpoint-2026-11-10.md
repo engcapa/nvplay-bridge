@@ -64,7 +64,17 @@
 
 旧控制器在源码变化后报 `runner source changed after initialization`，按设计拒绝下一题。这是身份保护生效；之后已用新控制器启动修复版，不记为 bridge 缺陷。
 
-## 重启后按顺序恢复
+## 当前直接运行方式的重启恢复
+
+收到下一次继续指令后，先读本文件最上方的最新交接和对应 checkpoint；保留所有完成位置及其原阶段，未完成位置用新会话继续。不要复用旧 PID、宿主 `/app` 链接、外部工作目录、运行副本或已过期的行政停机时间。
+
+1. 使用新的 `logs/<run>/` 恢复固定下载、Ubuntu 判分基座、离线 wheel 和任务模板，方法见 [原生说明](terminal-bench-native.md)。**不再构建或调用 PRoot。** 原始判分器的 chroot 与 CC 的宿主直接运行分别记录。
+2. 按 `provision_terminal_native.py configure --cc-model 'kimi-k3.1-pro[1m]' --auto-compact-window 720000 --no-agent-timeout --continue-checkpoint <最新检查点> --stage formal-<新准备阶段>` 建立缺失位置计划；bridge 实际配置仍为固定 131072、总请求 28800 秒、首字节/idle 各 3600 秒。
+3. 运行 `sudo -n python3 tools/configure_terminal_native_path_cc.py --base logs/<run> --claude "$(command -v claude)" --host-direct --disable-native-idle-timeout --stage formal-<新宿主阶段>`。它冻结当前 PATH CLI 和宿主工具链、设置串行执行，并保留旧结果及旧控制/烟测。若 `/app` 已被占用，先核对所有者与活进程，不能覆盖。
+4. 新 high/max 真实工具烟测通过后，用 `run_terminal_native_campaign.py` 重新完成宿主原始参考解 0/1 对照及剩余正式位置。持续 checkpoint 使用 `--commit --push`，campaign 使用 `--push-checkpoints`；监控 bridge、CDP、资源与进程身份。
+5. 若用户再次指定约 7 小时停机，按新会话的绝对截止重新启动 `stop_terminal_native_at.py`，并确认它与 checkpoint、浏览器监督进程一起存活。截止时先停止调度，再停止在途 UID、清理 `/app` 和 `/solution`、关闭本轮服务；未完成位置得分为空，不判模型失败。
+
+## 历史重启清单（Node/chroot 阶段，保留备查）
 
 1. 用户确认重启完成后，先核对 main 和归档文件仍在；建立新的 `logs/<new-run>/`，不覆盖旧证据。检查端口、代理、磁盘、内存、sudo/chroot 权限及本机工具。禁止 Docker；缺失的本机依赖可以 apt 安装。
 2. 按原生说明恢复固定数据集与基座。Terminal-Bench 提交固定为 `452bf305c6daa62fc59061d22133a7cbc7c1572e`，tarball SHA256 为 `61530c06fc0069abc5917e386e888672e1a10950d40a061fa9c1daf52eb1935f`。继续使用官方 Node CC 2.1.110、Node 24.13.0 和相同 Python 版本；不要把依赖 `/proc` 的原生 CC 2.1.321 直接放入原 chroot。
