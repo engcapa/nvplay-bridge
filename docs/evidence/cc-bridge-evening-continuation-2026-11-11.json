@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794405753.0980463,
+  "checkpoint_at": 1794405756.4561508,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261111-evening",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -1257,8 +1257,8 @@
     "fresh_controls_required": true
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794405749.9829385,
-    "commit": "272f711753ae9dbfe4f7ba70bf97784631d119a9",
+    "attempted_at": 1794405753.2126658,
+    "commit": "f572bf4353d39a9d1c0011807f399dc10f295579",
     "pushed": true,
     "returncode": 0
   },
@@ -1702,7 +1702,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794405753.1165671,
+    "generated_at": 1794405756.474045,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-1m-720k-host-cc-20261111-evening/28800/high": {
@@ -1818,8 +1818,8 @@
   "combined_plan_positions_completed": 10,
   "campaign": {
     "controller_alive": true,
-    "status": "control_validated",
-    "task": "embedding-drift-monitor"
+    "status": "validating_controls",
+    "task": "batched-eval-parity"
   },
   "transport_transition": {
     "status": "remaining_campaign_started",
@@ -1930,8 +1930,8 @@
     },
     {
       "path": "browser-supervisor-state.json",
-      "sha256": "6113c855c382957c66414f1b3b90a1275265aaabd5739f88b2b37447df0df85b",
-      "size": 101
+      "sha256": "fe01a62c369a4af401c9ef4f75df028d5cf1770ace353f62d66eb3f6117dcfb2",
+      "size": 102
     },
     {
       "path": "campaign-error-before-transport-fix.json",
@@ -1945,8 +1945,8 @@
     },
     {
       "path": "campaign-state.json",
-      "sha256": "a8bca6fc56b4ca59a0c045896b3a2963d44dd86554e8052c1753ce19081e0353",
-      "size": 6562
+      "sha256": "02d4f6efbdcb6faf7c57de001ad43e772797e5c4a8234c37ed0bb3ab8631fc2f",
+      "size": 6561
     },
     {
       "path": "cdp-observer-process.json",
@@ -1955,7 +1955,7 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "17fa7be45befc38d11b1408ae39959d4b0b62744937aa2e1ecf2bf0acdb8620d",
+      "sha256": "676412a22122b043b8d4cf9cc7b06bb2e6067ac4961b55d80a290f0e751a3a9c",
       "size": 134
     },
     {
