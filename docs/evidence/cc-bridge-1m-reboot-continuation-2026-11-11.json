@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794360580.4905665,
+  "checkpoint_at": 1794360603.6795824,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-1m-20261111-0801",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -780,8 +780,8 @@
     "host_memory_limit_bytes": "30064771072"
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794360282.7874615,
-    "commit": "f5bceb0cb61a45639b600079c81816902dc7cb09",
+    "attempted_at": 1794360580.534372,
+    "commit": "a41976448e702c25d905a8c7312873afde7affcf",
     "pushed": true,
     "returncode": 0
   },
@@ -926,7 +926,7 @@
     }
   ],
   "results": {
-    "generated_at": 1794360580.4974878,
+    "generated_at": 1794360603.6858172,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
@@ -960,13 +960,40 @@
       "idle_seconds": 3600.0
     },
     "pool_states": {
-      "ready": 5
+      "ready": 3,
+      "busy": 2
     },
     "recovering_tabs": []
   },
   "bridge_activity": {
-    "events_last_300s": {},
-    "active": [],
+    "events_last_300s": {
+      "request": 2,
+      "payload": 2,
+      "browser_start": 2,
+      "browser_tab": 2
+    },
+    "active": [
+      {
+        "id": "0bb589dc",
+        "retry_count": 0,
+        "phase": "browser_tab",
+        "attempt": 1,
+        "reasoning_effort": "max",
+        "tab_id": "kpool=4",
+        "age_seconds": 4.9,
+        "activity_age_seconds": 4.8
+      },
+      {
+        "id": "1a542886",
+        "retry_count": 0,
+        "phase": "browser_tab",
+        "attempt": 1,
+        "reasoning_effort": "high",
+        "tab_id": "kpool=5",
+        "age_seconds": 4.8,
+        "activity_age_seconds": 4.8
+      }
+    ],
     "recent_errors": [],
     "recent_upstream_errors": [],
     "recent_retries": []
@@ -1034,8 +1061,8 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "ac1f445d5e094702ba4ae5c05b124754d92fde8f2c248ad7aa1ed64b6b92c578",
-      "size": 134
+      "sha256": "3da69f9a32ada49bb5241787b5a61b28048686345eaf2b9a7ffa7f22211d432e",
+      "size": 133
     },
     {
       "path": "checkpoint-permission-regression.log",
@@ -1114,8 +1141,13 @@
     },
     {
       "path": "next-uid.json",
-      "sha256": "58feef9701da76fc0b24d067b20dee159ce205089ba27d5a6e381622ec9fd49f",
+      "sha256": "05fafd366421858fb0bb638ab8b22bc11b927db0844ed3193d764e0fe1fc7c9a",
       "size": 20
+    },
+    {
+      "path": "path-cc-live-smoke-process.json",
+      "sha256": "243bda9760fe572e9b94e617f14ba6084a169754a294f5ebb1931ebb82244bfc",
+      "size": 320
     },
     {
       "path": "reboot-resume-regression.log",
