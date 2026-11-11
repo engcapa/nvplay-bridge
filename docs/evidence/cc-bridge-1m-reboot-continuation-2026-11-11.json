@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794360677.5687094,
+  "checkpoint_at": 1794360681.1499515,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-1m-20261111-0801",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -780,10 +780,10 @@
     "host_memory_limit_bytes": "30064771072"
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794360630.772401,
-    "commit": "ecd4bb700b900e1fe304d96e6610745d3d9a52f3",
-    "pushed": true,
-    "returncode": 0
+    "attempted_at": 1794360677.6130855,
+    "commit": "7710844df4578a6a9c6bac8e513e8abb95bb41af",
+    "pushed": false,
+    "returncode": 1
   },
   "smoke": {
     "recorded_at": 1794360629.277258,
@@ -1243,7 +1243,7 @@
     }
   ],
   "results": {
-    "generated_at": 1794360677.5772464,
+    "generated_at": 1794360681.156527,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
@@ -1256,7 +1256,7 @@
   "campaign": {
     "controller_alive": true,
     "status": "preparing",
-    "task": "session-window-debug"
+    "task": "embedding-drift-monitor"
   },
   "reboot_stop": {
     "stop_at": 1794380400.0,
@@ -1338,8 +1338,8 @@
     },
     {
       "path": "campaign-state.json",
-      "sha256": "45905145e7d86f8e491b91d66042d74cd637e8265fa63a219a12af6ccfd8a1a5",
-      "size": 4919
+      "sha256": "ebbfb976e8e6e92eb1cc5a6fbae666c0772300fe03cd20711d4534dd107bcd9b",
+      "size": 4921
     },
     {
       "path": "cc-upgrade-state.json",
@@ -1363,8 +1363,8 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "bbecfdf6c2de4b5acc41a4c6787f8c1dc230701820324fa748312070060d55aa",
-      "size": 133
+      "sha256": "34e0328cc0bbc368e381ecb4fbb69009d64b9ebf5932c4e06fda9c92e7f6a084",
+      "size": 135
     },
     {
       "path": "checkpoint-permission-regression.log",
@@ -1453,8 +1453,8 @@
     },
     {
       "path": "path-cc-runtime-isolation.json",
-      "sha256": "b061556049d8ad00c5dc2727d69f10721990304ba91fc0b134757bcf43ca6beb",
-      "size": 1036
+      "sha256": "27aa50797f4a9535895253e48bfba6fce0604c3676ceb7f8c014ae66a5fc0839",
+      "size": 1082
     },
     {
       "path": "reboot-resume-regression.log",
