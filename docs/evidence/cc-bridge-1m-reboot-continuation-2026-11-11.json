@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794355853.9056149,
+  "checkpoint_at": 1794355864.5167394,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-1m-20261111-0801",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -540,15 +540,27 @@
     "host_memory_limit_bytes": "30064771072"
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794355843.549974,
-    "commit": "d61a9cb9eaa0e9d22be7cba92f1aeee65d745f7c",
+    "attempted_at": 1794355853.9287403,
+    "commit": "277cf9f38e009731ad43bbd2b3eb917a5941d12f",
     "pushed": true,
     "returncode": 0
   },
-  "controls": {},
+  "controls": {
+    "session-window-debug": {
+      "valid": true,
+      "baseline": {
+        "score": 0,
+        "infrastructure_error": null
+      },
+      "oracle": {
+        "score": 1,
+        "infrastructure_error": null
+      }
+    }
+  },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794355853.906353,
+    "generated_at": 1794355864.5175416,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
@@ -560,14 +572,14 @@
   "combined_plan_positions_completed": 7,
   "campaign": {
     "controller_alive": true,
-    "status": "validating_controls",
+    "status": "control_validated",
     "task": "session-window-debug"
   },
   "reboot_stop": {
     "stop_at": 1794380400.0,
     "armed": true
   },
-  "status": "preparing_environment",
+  "status": "validating_controls",
   "bridge_health": {
     "status": "ok",
     "model": "moonshotai/kimi-k3.1-pro",
@@ -648,8 +660,8 @@
     },
     {
       "path": "campaign-state.json",
-      "sha256": "b63e1f023077ee9906a63acb71557ad4bccb998f0f982129fa597dc2d6af219d",
-      "size": 3730
+      "sha256": "b32f9cf385501a2586eba400bc82ec82adf3b5f7c0501fcd1646fbd884fbab2f",
+      "size": 3729
     },
     {
       "path": "cdp-observer-process.json",
@@ -658,13 +670,18 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "ae1fe6e5ab6aa25d98fd450e38f6b3743f148bf335fc40cac556140eaa19adc8",
-      "size": 133
+      "sha256": "e319c83fc533db8acf2ee116b45ac1ec5098f4cc0edc10c52d3eb54b8a7a0e2e",
+      "size": 134
     },
     {
       "path": "checkpoint-process.json",
       "sha256": "6f9c8e4dddca2325d87d96c8f49d16e5c991c3df8dbd81d87116c1f21813b1e8",
       "size": 566
+    },
+    {
+      "path": "controls/session-window-debug/result.json",
+      "sha256": "188fbabcf664c689810d979eda60594144c3178794efe0754e77c74613780f30",
+      "size": 591
     },
     {
       "path": "download-manifest.json",
