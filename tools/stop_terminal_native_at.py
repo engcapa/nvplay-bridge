@@ -108,6 +108,7 @@ def pause(base: Path, output: Path, deadline: float) -> dict:
     # Stop schedulers first so a signal to an agent cannot cause grading or
     # start another slot. Only use current, recorded kernel identities.
     for filename, command in (("transport-transition-process.json", "advance_terminal_native_transport.py"),
+                              ("path-cc-live-smoke-process.json", "smoke_terminal_native.py"),
                               ("campaign-launch-process.json", "run_terminal_native_campaign.py")):
         record = read(base / filename)
         if not all(key in record for key in ("pid", "boot_id", "start_ticks")):
