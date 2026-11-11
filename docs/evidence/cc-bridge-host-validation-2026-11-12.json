@@ -1043,5 +1043,36 @@
       "sha256": "16eda78e4ffb5b2950bf336688ea815316c2471c5f6517ee56d118b4c205ed34",
       "size": 1823
     }
+  },
+  "first_formal_live_runtime": {
+    "verified_at": 1794441436.5524673,
+    "passed": true,
+    "stage": "formal-1m-720k-host-cc-20261112",
+    "attempt": "runs/formal-1m-720k-host-cc-20261112/session-window-debug--max--r2",
+    "agent_wall_clock_timeout_seconds": null,
+    "scope": "Kernel status and controller launch record; process environ/exe are protected by host ptrace permissions",
+    "observations": [
+      {
+        "pid": 93288,
+        "uid": 20012,
+        "comm": "claude",
+        "kernel_status": {
+          "Uid": "20012\t20012\t20012\t20012",
+          "TracerPid": "0",
+          "NoNewPrivs": "1",
+          "VmRSS": "196592 kB",
+          "Threads": "8"
+        },
+        "recorded_launch_flags": {
+          "--model": "kimi-k3.1-pro[1m]",
+          "--effort": "max",
+          "--autocompact": "720000"
+        },
+        "recorded_bootstrap_environment": {
+          "API_TIMEOUT_MS": "29400000",
+          "API_FORCE_IDLE_TIMEOUT": "0"
+        }
+      }
+    ]
   }
 }
