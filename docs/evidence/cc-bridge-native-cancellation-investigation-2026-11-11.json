@@ -1,5 +1,5 @@
 {
-  "recorded_at": 1794376192.7419612,
+  "recorded_at": 1794376631.3176813,
   "status": "native_idle_override_validated_locally_waiting_natural_stage_boundary",
   "cc_version": "2.1.322",
   "cc_sha256": "bfb3703ad5380242328459bc62ada4bde8ae7ba57c6e1eeadb9c00e08874c478",
@@ -171,7 +171,8 @@
     "Observed cancellations are not explained by a universal 300-second CLI cutoff.",
     "Do not apply speculative timeout changes to running formal attempts; all errors and cancellations remain recorded.",
     "430-second local headers delay reproduces early retry around 361 seconds; a matched API_FORCE_IDLE_TIMEOUT=0 comparison is running. Do not yet claim the configuration fixes it.",
-    "Matched 430-second probe with API_FORCE_IDLE_TIMEOUT=0 passed in 430.833 seconds with one nonstream request. The old native default did not survive the same delay. Override is validated locally; real formal deployment awaits the existing high session natural completion."
+    "Matched 430-second probe with API_FORCE_IDLE_TIMEOUT=0 passed in 430.833 seconds with one nonstream request. The old native default did not survive the same delay. Override is validated locally; real formal deployment awaits the existing high session natural completion.",
+    "HTTP/1.1 confirmation also passed: 430.766 seconds, one stream and one nonstream request; no early close or extra retry. All probes are local, zero NVIDIA requests."
   ],
   "disabled_native_idle_comparison": {
     "directory": "logs/eval-cc-1m-20261111-0801/path-cc-headers-430-no-native-idle",
@@ -240,8 +241,66 @@
   },
   "http11_confirmation": {
     "directory": "logs/eval-cc-1m-20261111-0801/path-cc-headers-430-no-native-idle-http11",
-    "status": "running",
-    "nvidia_requests": 0
+    "status": "passed",
+    "nvidia_requests": 0,
+    "identity": {
+      "probe_sha256": "ac4895db2624e69296794deb702f5d58cd001d41c925204c238ab9578956ff0e",
+      "pinned_cli_sha256": "bfb3703ad5380242328459bc62ada4bde8ae7ba57c6e1eeadb9c00e08874c478",
+      "node_version": null,
+      "delay_seconds": 430.0,
+      "nvidia_requests": 0,
+      "delay_phase": "headers",
+      "native_idle_timeout_disabled": true,
+      "production_environment_supplied": true,
+      "http_version": "1.1",
+      "native_cli_version": "2.1.322 (Claude Code)"
+    },
+    "result": {
+      "results": [
+        {
+          "case": "native-proot",
+          "process_environment_timeout": true,
+          "adapter": false,
+          "exit_code": 0,
+          "duration_seconds": 430.766,
+          "answer": "CONTROLLED_DELAYED_HEADERS_OK",
+          "is_error": false,
+          "success": true,
+          "request_counts": {
+            "stream": 1,
+            "nonstream": 1
+          },
+          "delay_phase": "headers",
+          "delay_completed": true,
+          "closed_during_delay": false,
+          "received_delayed_headers": true,
+          "closed_before_delayed_headers": false
+        }
+      ],
+      "nvidia_requests": 0
+    },
+    "fingerprints": [
+      {
+        "path": "logs/eval-cc-1m-20261111-0801/path-cc-headers-430-no-native-idle-http11/identity.json",
+        "size": 439,
+        "sha256": "18625816799f49cce6a548e0c94de81fe47a73b71a275ea3d7e11a300570d5e3"
+      },
+      {
+        "path": "logs/eval-cc-1m-20261111-0801/path-cc-headers-430-no-native-idle-http11/result.json",
+        "size": 573,
+        "sha256": "306bd5c454e9a0d1f653459391ab25ed82c4f581d996e779ebe2a140e0f72f93"
+      },
+      {
+        "path": "logs/eval-cc-1m-20261111-0801/path-cc-headers-430-no-native-idle-http11/events.json",
+        "size": 435,
+        "sha256": "78896ce0f603a472f6c5716e671df66afd0c9cd49c552d08809c5eb90ea2482a"
+      },
+      {
+        "path": "logs/eval-cc-1m-20261111-0801/path-cc-headers-430-no-native-idle-http11/probe-source.py",
+        "size": 18168,
+        "sha256": "ac4895db2624e69296794deb702f5d58cd001d41c925204c238ab9578956ff0e"
+      }
+    ]
   },
   "regression": {
     "command": "python3 -m unittest discover -s tests -p 'test_*.py'",
