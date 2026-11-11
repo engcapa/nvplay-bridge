@@ -177,9 +177,9 @@ def main():
             record["stopped_checkpoint"] = stop(checkpoint_service)
     # The controller and periodic writer share checkpoint-push.log. Run both
     # with the same permissions; save() still runs Git as the repository owner.
-    checkpoint = start_process(base, "checkpoint", [sys.executable, "-u", "tools/checkpoint_terminal_native.py",
+    checkpoint = start_process(base, "checkpoint", [sys.executable, "-u", "tools/watch_checkpoint_terminal_native.py",
         "--base", str(base), "--output", str(output), "--health-url", health_url,
-        "--interval", "120", "--commit", "--push"])
+        "--commit", "--push"])
     write_json(state_path, {"status": "switching_bridge", "at": time.time()})
     write_json(base / "bridge-runtime-before-transport-fix.json", old_runtime)
     record["stopped_bridge"] = stop(service)
