@@ -1,6 +1,6 @@
 {
   "recorded_at": 1794391646.790471,
-  "status": "formal_host_evaluation_running",
+  "status": "first_host_attempt_completed_bridge_rollout_in_progress",
   "requested_by_user": true,
   "stage": "formal-1m-720k-host-cc-20261111-evening",
   "preserved_previous_positions": 9,
@@ -602,5 +602,40 @@
     },
     "finish": "tool_calls",
     "full_attempt_scored": false
+  },
+  "first_formal_completed": {
+    "review": {
+      "attempt": "runs/formal-1m-720k-host-cc-20261111-evening/ks-solver-cpp--high--r1",
+      "task": "ks-solver-cpp",
+      "control": null,
+      "effort": "high",
+      "repeat": 1,
+      "artifact_score": 0,
+      "infrastructure_error": null,
+      "changed_original_files": [],
+      "added_files": [],
+      "removed_original_files": [],
+      "declared_read_only_files_unchanged": {},
+      "read_only_check_scope": "not checked",
+      "artifact_errors_present": false,
+      "verifier": null,
+      "client_terminal": {
+        "exit_code": 1,
+        "timed_out": false,
+        "subtype": "success",
+        "is_error": true,
+        "terminal_reason": "api_error",
+        "api_error_status": 400,
+        "prompt_too_long": false,
+        "reported_context_window_tokens": [
+          1000000
+        ]
+      }
+    },
+    "review_sha256": "2b96093c568d409d18a1dae411fce5f72f336f71d9b7d91728c09107bf43f2e6",
+    "result_sha256": "7739302451de2396d3cb006a8ded06b0d068ca89561261820f8cd09012d6ebb8",
+    "agent_duration_seconds": 6821.841,
+    "historical_positions_preserved": 9,
+    "completed_total": 10
   }
 }

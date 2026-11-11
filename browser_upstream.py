@@ -49,11 +49,11 @@ def _matches_hint(url: str, hint: str) -> bool:
 
 PATCH_JS = r"""
 (() => {
-  if (window.__bridgeVersion === 3) return 'already';
+  if (window.__bridgeVersion === 4) return 'already';
   if (window.__bridgeInstalled && !window.__bridgeOriginalFetch) return 'reload-required';
   const prev = window.__bridgeOriginalFetch || window.fetch.bind(window);
   window.__bridgeOriginalFetch = prev;
-  window.__bridgeVersion = 3;
+  window.__bridgeVersion = 4;
   window.__bridgeInstalled = true;
   const encoder = new TextEncoder();
   window.__bridgeArm = (id, body, limit) => {
@@ -115,6 +115,10 @@ PATCH_JS = r"""
     p.then(async r => {
       b.status = r.status;
       b.ct = r.headers.get('content-type');
+      // The UI can abort its own signal as soon as error headers arrive.
+      // Keep the clone alive for the bridge's bounded error-body collection;
+      // __bridgeAbort still cancels the controller on client cancel/deadline.
+      if (!r.ok) originalSignal.removeEventListener('abort', relay);
       try {
         const reader = r.clone().body.getReader();
         b.reader = reader;
