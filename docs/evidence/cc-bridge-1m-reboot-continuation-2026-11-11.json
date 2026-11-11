@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794360740.9898102,
+  "checkpoint_at": 1794360776.4111495,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-1m-20261111-0801",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -780,8 +780,8 @@
     "host_memory_limit_bytes": "30064771072"
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794360700.9351404,
-    "commit": "eea9ac200f73647f4fef84aafbbc6935e2b44298",
+    "attempted_at": 1794360741.0465891,
+    "commit": "38dfebae8a80ac3dacd8ddcd894711f786febffb",
     "pushed": true,
     "returncode": 0
   },
@@ -1243,7 +1243,7 @@
     }
   ],
   "results": {
-    "generated_at": 1794360740.9963646,
+    "generated_at": 1794360776.4173014,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
@@ -1255,8 +1255,8 @@
   "combined_plan_positions_completed": 7,
   "campaign": {
     "controller_alive": true,
-    "status": "control_validated",
-    "task": "session-window-debug"
+    "status": "validating_controls",
+    "task": "embedding-drift-monitor"
   },
   "reboot_stop": {
     "stop_at": 1794380400.0,
@@ -1338,8 +1338,8 @@
     },
     {
       "path": "campaign-state.json",
-      "sha256": "0f092289807b62f4005ba2eb8c18f707eef4b6286ba413d88ee3fb31c0e3081e",
-      "size": 4927
+      "sha256": "bf867ecfb4926aa8d1f9da571d9e584f0216a485206376877c8f00547a3622ea",
+      "size": 4931
     },
     {
       "path": "cc-upgrade-state.json",
@@ -1363,7 +1363,7 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "7b3d01731ff440aef37f88ba30fd63c859efdf9455535daa2ef4512e20234d0a",
+      "sha256": "39d59fb7af0f0c09a23ccfbef308f706712723aebfddc4e2b48fe77e203edfae",
       "size": 134
     },
     {
@@ -1478,8 +1478,8 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "ed5cb74ed9b10a76dade6acb982d159992325719cb33880f7a56ff62ad0e0ab4",
-      "size": 807
+      "sha256": "1e9c7b75b9b07ffb13dd0e43b70bb23890c6d2ea24eb7f38ca15ff2a9c03fb7e",
+      "size": 808
     },
     {
       "path": "settings-formal-high.json",
@@ -1710,6 +1710,16 @@
       "archive": "agent-root.tar.gz",
       "sha256": "a7962c1408f1bfa15da2aa2395671960e97f42695366e12294b13239e06fb46d",
       "bytes": 523851440,
+      "tar_compare_passed_before_reclaim": true,
+      "restore": "sudo tar -xpf agent-root.tar.gz -C ."
+    },
+    {
+      "directory": "smoke/max",
+      "archived_at": 1794360776.0512934,
+      "root": "agent-root",
+      "archive": "agent-root.tar.gz",
+      "sha256": "9b5dfc0d91393a44716e79e7d6b4d57c8b23b0f808ebc1aa759b621606d4b458",
+      "bytes": 523851722,
       "tar_compare_passed_before_reclaim": true,
       "restore": "sudo tar -xpf agent-root.tar.gz -C ."
     }
