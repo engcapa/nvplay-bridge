@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794391315.942394,
+  "checkpoint_at": 1794391427.0915425,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261111-evening",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -955,16 +955,43 @@
     "host_cpu_period": "100000",
     "host_memory_limit_bytes": "34359738368"
   },
+  "host_environment": {
+    "host_toolchain": "/var/tmp/nvplay-bridge-host-runtime-hxg8p7cs",
+    "host_cli": "/var/tmp/nvplay-bridge-host-runtime-hxg8p7cs/bin/claude",
+    "host_toolchain_identity": {
+      "tree_sha256": "5e4f8e3dcba3c3b71169856986e8fc48a1ea58a83727f75f2d00428e150ecd48",
+      "files": 7358
+    },
+    "host_python": {
+      "3.11": "/var/tmp/nvplay-bridge-host-runtime-hxg8p7cs/python/3.11/bin/python3.11",
+      "3.12": "/var/tmp/nvplay-bridge-host-runtime-hxg8p7cs/python/3.12/bin/python3.12"
+    },
+    "host_os_release": "PRETTY_NAME=\"Ubuntu 22.04.5 LTS\"\nNAME=\"Ubuntu\"\nVERSION_ID=\"22.04\"\nVERSION=\"22.04.5 LTS (Jammy Jellyfish)\"\nVERSION_CODENAME=jammy\nID=ubuntu\nID_LIKE=debian\nHOME_URL=\"https://www.ubuntu.com/\"\nSUPPORT_URL=\"https://help.ubuntu.com/\"\nBUG_REPORT_URL=\"https://bugs.launchpad.net/ubuntu/\"\nPRIVACY_POLICY_URL=\"https://www.ubuntu.com/legal/terms-and-policies/privacy-policy\"\nUBUNTU_CODENAME=jammy\n",
+    "host_gcc_version": "gcc (Ubuntu 11.4.0-1ubuntu1~22.04.3) 11.4.0",
+    "host_libc_version": "ldd (Ubuntu GLIBC 2.35-0ubuntu3.8) 2.35",
+    "agent_concurrency": 1,
+    "app_path": "/app",
+    "path_translation": false,
+    "host_filesystem_visible": true,
+    "real_proc_binding": false,
+    "isolation_boundary": "Real dedicated Unix UID and protected source directories; shared host filesystem, kernel and network"
+  },
+  "control_transition": {
+    "previous_stage": "formal-1m-720k-path-cc-noidle-20261111-evening",
+    "stage": "formal-1m-720k-host-cc-20261111-evening",
+    "previous_controls": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261111-evening/controls-history/formal-1m-720k-path-cc-noidle-20261111-evening--1794391309941791025",
+    "fresh_controls_required": true
+  },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794391162.1554432,
-    "commit": "627afa3941407392361bb1e3bffe503fb31dc451",
+    "attempted_at": 1794391316.1350946,
+    "commit": "a2e1405f6d265b679990e979b12341fd831bfcec",
     "pushed": true,
     "returncode": 0
   },
   "controls": {},
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794391315.9447842,
+    "generated_at": 1794391427.0940623,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
@@ -997,13 +1024,32 @@
       "idle_seconds": 3600.0
     },
     "pool_states": {
-      "ready": 5
+      "ready": 4,
+      "busy": 1
     },
     "recovering_tabs": []
   },
   "bridge_activity": {
-    "events_last_300s": {},
-    "active": [],
+    "events_last_300s": {
+      "request": 1,
+      "payload": 1,
+      "browser_start": 1,
+      "browser_lease": 1,
+      "browser_tab": 1,
+      "browser_sent": 1
+    },
+    "active": [
+      {
+        "id": "50ca18e61e27464bb3189630",
+        "retry_count": 0,
+        "phase": "browser_sent",
+        "attempt": 1,
+        "reasoning_effort": "high",
+        "tab_id": "kpool=4",
+        "age_seconds": 1.1,
+        "activity_age_seconds": 0.2
+      }
+    ],
     "recent_errors": [],
     "recent_upstream_errors": [],
     "recent_retries": []
@@ -1041,8 +1087,8 @@
     },
     {
       "path": "browser-supervisor-state.json",
-      "sha256": "1445e8d6861c2efa79f697c3d77b2e671907762dc13deef4390e76f6392f3031",
-      "size": 102
+      "sha256": "f443215eb0e322c15a8d28d771da53510af0e1b2725a2936d1d784855132ff6d",
+      "size": 101
     },
     {
       "path": "cdp-observer-process.json",
@@ -1051,12 +1097,12 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "dbbd76d938992f51f3435b2d3327abfe3f1aa2b2678f51f45359fdcc1cddcb5a",
+      "sha256": "b3a6cf0dbd90137ee5299ca634ddbd653b87d59234a537ea92306515f448a046",
       "size": 134
     },
     {
       "path": "checkpoint-process.json",
-      "sha256": "d65cc3cc1e741ec63a8e213802020cc8d67636a5dc230c7eb2d3e34ec8688577",
+      "sha256": "a67f8aa070dd5df1249d08189d865ece8ad324edd18fae2a073efe21f99ac31d",
       "size": 470
     },
     {
@@ -1065,9 +1111,19 @@
       "size": 214
     },
     {
+      "path": "direct-host-checkpoint-regression.log",
+      "sha256": "44d75c4d3b3c45be2b6be88acfdb3b40cc4a56d984571da0396be1c5a15df7c4",
+      "size": 1975
+    },
+    {
       "path": "direct-host-configuration-regression.log",
       "sha256": "bba69393211f4e9c0af4bc3ed09a15509753129438f4a83e1fe47a01ef65333e",
       "size": 105
+    },
+    {
+      "path": "direct-host-continuation-regression.log",
+      "sha256": "0f7e4b97443e54aca647179972594d13bb587afcbf151fab8228148587ea844a",
+      "size": 103
     },
     {
       "path": "direct-host-full-regression.log",
@@ -1141,7 +1197,7 @@
     },
     {
       "path": "next-uid.json",
-      "sha256": "6374f76111c1a8827aa7e1fbc749fbe6cfc6c483a496eb3d17405e3f6f9bd025",
+      "sha256": "8579449cf0333c1c9fd1ee1c2f1cd92d34e228ca3dcd71d83d8bdea6cd9fc1c9",
       "size": 20
     },
     {
@@ -1151,8 +1207,8 @@
     },
     {
       "path": "path-cc-live-smoke-process.json",
-      "sha256": "eb97c1f2961fda24ae22fe543d19725c3ee857877c0278de1a2965bb0fd8b186",
-      "size": 305
+      "sha256": "395c91a028727fab3072d31bd61d8e9bffbe062310b70378da55177eb23f4d0d",
+      "size": 306
     },
     {
       "path": "preformal-regression.log",
@@ -1171,8 +1227,8 @@
     },
     {
       "path": "reboot-stop-process.json",
-      "sha256": "3399efac8c9171309858f488797842cd43f18359b04937ede399127ebf860fa7",
-      "size": 479
+      "sha256": "7fbf868d3536f435a52666ccb5b75730ff048eaffb26122055a9a93e30bbda4d",
+      "size": 480
     },
     {
       "path": "reboot-stop-request-before-checkpoint-fix.json",
@@ -1181,8 +1237,8 @@
     },
     {
       "path": "reboot-stop-request.json",
-      "sha256": "2b80c7dd3db3ea5b9cdca21d23d81b485621c87ab0bca1aced2c5748169573a9",
-      "size": 232
+      "sha256": "d720bb4ec75f2243efb2aeddd74f222effd96adeef083c47cd8d67b339fe4503",
+      "size": 233
     },
     {
       "path": "rebuild-comparison.json",
@@ -1196,7 +1252,7 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "0eb089a068c9bf5f092f7b763518c2608e19b966177846025750fe02208868cb",
+      "sha256": "7298a50c5fda85230a917836d18d18b0ee3af14f6fee0540f908ce8c2db7511b",
       "size": 681
     },
     {
