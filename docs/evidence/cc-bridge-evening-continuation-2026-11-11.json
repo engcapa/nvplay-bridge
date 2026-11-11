@@ -1,0 +1,67 @@
+{
+  "schema_version": 2,
+  "checkpoint_at": 1794388025.7087898,
+  "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261111-evening",
+  "raw_logs_survive_cleanup": false,
+  "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
+  "historical_completed_observations_preserved": 12,
+  "historical_administrative_interruptions_excluded": 2,
+  "external_proxy": "http://127.0.0.1:31128",
+  "local_bridge_and_cdp_direct": true,
+  "other_projects_in_scope": false,
+  "status": "restoring_environment",
+  "controls": {},
+  "interrupted_attempts_excluded_from_grades": [],
+  "results": {
+    "generated_at": 1794388025.7090862,
+    "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
+    "totals": {},
+    "attempts": [],
+    "pending": []
+  },
+  "new_formal_attempts_planned": 30,
+  "new_formal_attempts_completed": 0,
+  "preserved_prior_attempts_completed": 0,
+  "combined_plan_positions_completed": 0,
+  "campaign": {
+    "controller_alive": false
+  },
+  "reboot_stop": {
+    "stop_at": 1794413157.0,
+    "armed": true
+  },
+  "bridge_health": {
+    "status": "unreachable",
+    "error_type": "URLError"
+  },
+  "bridge_activity": {
+    "events_last_300s": {},
+    "active": [],
+    "recent_errors": [],
+    "recent_upstream_errors": [],
+    "recent_retries": []
+  },
+  "evidence_fingerprints": [
+    {
+      "path": "checkpoint-process.json",
+      "sha256": "3ba1d7d652e162cd45ccf18d931e5a76f0a63e6939bbd8b4385a478cdc758cd9",
+      "size": 470
+    },
+    {
+      "path": "reboot-stop-process.json",
+      "sha256": "c0c4db9456fde646f0f1703ceea7e3f7416f1da661f3b28546a5580b7062bc00",
+      "size": 479
+    },
+    {
+      "path": "reboot-stop-request.json",
+      "sha256": "48ede280b0c414085d3053731567864ac7f79b5684cd04aaf0ce207d5fc52d59",
+      "size": 232
+    },
+    {
+      "path": "session-request.json",
+      "sha256": "ec2324d41521e1b33d151c642aa830ee9816ce77de603e683ac12e5657666fba",
+      "size": 322
+    }
+  ],
+  "compressed_root_evidence": []
+}
