@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794390721.200071,
+  "checkpoint_at": 1794390734.7866113,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261111-evening",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -716,8 +716,8 @@
     "host_memory_limit_bytes": "34359738368"
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794390627.3919497,
-    "commit": "0bfb8b8374fa9333e87f510da09b8d15b0861512",
+    "attempted_at": 1794390721.3877673,
+    "commit": "a82710684e337b1df8166ba0d4f007e33c9fc502",
     "pushed": true,
     "returncode": 0
   },
@@ -1121,6 +1121,17 @@
         "infrastructure_error": null
       }
     },
+    "ks-solver-cpp": {
+      "valid": true,
+      "baseline": {
+        "score": 0,
+        "infrastructure_error": null
+      },
+      "oracle": {
+        "score": 1,
+        "infrastructure_error": null
+      }
+    },
     "mvcc-lsm-compaction": {
       "valid": true,
       "baseline": {
@@ -1146,7 +1157,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794390721.2030473,
+    "generated_at": 1794390734.7884574,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
@@ -1163,7 +1174,7 @@
     "stop_at": 1794413157.0,
     "armed": true
   },
-  "status": "validating_controls",
+  "status": "controls_validated",
   "bridge_health": {
     "status": "ok",
     "model": "moonshotai/kimi-k3.1-pro",
@@ -1223,8 +1234,8 @@
     },
     {
       "path": "browser-supervisor-state.json",
-      "sha256": "e7768b776e074e61fe2ba4061739ec5d75b6465696ff3a2d710275709b656472",
-      "size": 101
+      "sha256": "1bb347152c640c469a7807e3f6a4e20441101bb6bad5153f98684882c80a41d6",
+      "size": 102
     },
     {
       "path": "cdp-observer-process.json",
@@ -1233,7 +1244,7 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "eef22d74bf1cc925f6ade575a156a91cd222af89aad61138d719b1993187eb67",
+      "sha256": "a1f59135116d56f2d16b02c6bf8f285de34443d54ed81c9d05cdf586af0aa9ea",
       "size": 134
     },
     {
@@ -1243,8 +1254,8 @@
     },
     {
       "path": "control-validation.log",
-      "sha256": "86268e39592155c7b89fbd935ea28233b2c9b4d622774545796f47bda40d4d8a",
-      "size": 177
+      "sha256": "61fd9e21bf3a59602f90d9c5662b833284e11b71d71602d9a953bb4baa0ad347",
+      "size": 214
     },
     {
       "path": "controls/batched-eval-parity/result.json",
@@ -1254,6 +1265,11 @@
     {
       "path": "controls/embedding-drift-monitor/result.json",
       "sha256": "b2e96fa10d1cab28eb0f03043e78418fc228a6c0c9ef51260f7d0e86fa6bf624",
+      "size": 592
+    },
+    {
+      "path": "controls/ks-solver-cpp/result.json",
+      "sha256": "01d223c8c5296ab8dd112c9dbf8ab5ac5b9252dd85073fc775c97466ea72c1f6",
       "size": 592
     },
     {
