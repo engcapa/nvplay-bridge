@@ -80,8 +80,11 @@ class Fixture(BaseHTTPRequestHandler):
             else:
                 body = frame(tool, "tool_calls") + b"data: [DONE]\n\n"
                 kind = "complete_tool"
+            if broken and active["fault"] == "sse-503":
+                body += b'data: {"error":{"message":"Service temporarily unavailable","type":"service_unavailable","code":503}}\n\n'
             fixture_events.append({"ts": time.time(), "case": active["name"],
                                    "request": active["requests"], "kind": kind,
+                                   "fault": active["fault"] if broken else None,
                                    "max_tokens": request.get("max_tokens"),
                                    "model": request.get("model"),
                                    "reasoning_effort": request.get("reasoning_effort")})
@@ -89,11 +92,12 @@ class Fixture(BaseHTTPRequestHandler):
             time.sleep(0.2)
         self.send_response(200)
         self.send_header("Content-Type", "text/event-stream")
-        self.send_header("Content-Length", str(len(body) + 100000 if broken else len(body)))
+        truncated = broken and active["fault"] == "reader-error"
+        self.send_header("Content-Length", str(len(body) + 100000 if truncated else len(body)))
         self.end_headers()
         self.wfile.write(body)
         self.wfile.flush()
-        if broken:
+        if truncated:
             time.sleep(0.2 if active.get("coalesce_reader_error") else 1)
             self.close_connection = True
             self.connection.shutdown(socket.SHUT_RDWR)
@@ -126,6 +130,9 @@ def main():
     parser.add_argument("--unlimited-agent-wait", action="store_true")
     parser.add_argument("--coalesce-reader-error", action="store_true",
                         help="Let data and a reader error accumulate before the next CDP poll")
+    parser.add_argument("--fault", choices=("reader-error", "sse-503"), default="reader-error")
+    parser.add_argument("--require-automatic-recovery", action="store_true",
+                        help="Fail if CC needs a manually resumed turn")
     args = parser.parse_args()
     if not 0 <= args.fixed_max_tokens <= bridge.BROWSER_MAX_TOKENS:
         parser.error("fixed output cap must be between zero and BROWSER_MAX_TOKENS")
@@ -211,6 +218,7 @@ def main():
             "cc_model": args.model, "effort": args.effort,
             "auto_compact_window": args.auto_compact_window,
             "agent_timeout_seconds": None if args.unlimited_agent_wait else 300,
+            "fault": args.fault, "messages_defer_output": bridge.BROWSER_MESSAGES_DEFER_OUTPUT,
             "coalesce_reader_error": args.coalesce_reader_error})
         os.chdir(HERE)
         for flavor, cli in flavors.items():
@@ -221,7 +229,7 @@ def main():
                 counter = out / "counter.txt"
                 incomplete_counter = out / "incomplete-counter.txt"
                 with lock:
-                    active.update(name=name, mode=mode, requests=0,
+                    active.update(name=name, mode=mode, fault=args.fault, requests=0,
                                   coalesce_reader_error=args.coalesce_reader_error,
                                   command=counter_command(counter),
                                   incomplete_command=counter_command(incomplete_counter))
@@ -272,6 +280,9 @@ def main():
                         and MARKER in (final_client.get("result") or "")}
                 row["observed_provider_limits"] = sorted({event["max_tokens"] for event in events})
                 row["fixed_max_tokens"] = args.fixed_max_tokens
+                row["fault"] = args.fault
+                if args.require_automatic_recovery:
+                    row["success"] = row["success"] and row["automatic_recovery"]
                 row["coalesced_error_drains"] = [item for item in drains if item["case"] == name]
                 if args.coalesce_reader_error:
                     row["success"] = row["success"] and any(item["data_chars"] > 0 for item in row["coalesced_error_drains"])

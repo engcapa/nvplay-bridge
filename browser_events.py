@@ -8,7 +8,8 @@ import threading
 import time
 from collections.abc import AsyncIterator, Callable
 
-from browser_upstream import BrowserCancelled, BrowserError, BrowserFetchError, BrowserHTTPError, ERROR_BODY_CHARS
+from browser_upstream import (BrowserCancelled, BrowserError, BrowserFetchError,
+                             BrowserHTTPError, BrowserStreamError, ERROR_BODY_CHARS)
 from stream_support import SSEDecoder
 
 BACKPRESSURE_TIMEOUT = 30.0
@@ -84,7 +85,7 @@ async def browser_events(browser, payload: dict, timeout: float, heartbeat: floa
                     if event["type"] == "error":
                         return
             if not finished:
-                raise BrowserError("上游响应缺少 finish_reason，可能已截断")
+                raise BrowserStreamError("上游响应缺少 finish_reason，可能已截断", "missing_finish")
         except BrowserCancelled:
             pass
         except Exception as exc:
@@ -96,6 +97,8 @@ async def browser_events(browser, payload: dict, timeout: float, heartbeat: floa
                     error["http_status"] = exc.status
                 if isinstance(exc, BrowserFetchError):
                     error["fetch_failed"] = True
+                if isinstance(exc, BrowserStreamError):
+                    error["stream_failure"] = exc.reason
                 terminal_error.append(error)
         finally:
             try:

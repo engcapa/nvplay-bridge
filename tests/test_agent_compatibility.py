@@ -17,7 +17,7 @@ class ToolIdentityTests(unittest.IsolatedAsyncioTestCase):
     async def test_history_policy_preserves_visible_history_and_current_reasoning_in_all_formats(self):
         seen = []
 
-        async def source(payload, headers, *, buffered=True):
+        async def source(payload, headers, *, buffered=True, defer_output=False):
             seen.append(deepcopy(payload))
             yield {"type": "thinking", "text": "CURRENT_REASONING"}
             yield {"type": "text", "text": "CURRENT_ANSWER"}
@@ -74,7 +74,7 @@ class ToolIdentityTests(unittest.IsolatedAsyncioTestCase):
                    "reasoning_effort": "max", "max_tokens": 65536, "seed": 0}
         original = deepcopy(payload)
 
-        async def source(request, headers, *, buffered=True):
+        async def source(request, headers, *, buffered=True, defer_output=False):
             self.assertNotIn("reasoning_content", request["messages"][0])
             self.assertEqual({k: v for k, v in request.items() if k != "messages"},
                              {k: v for k, v in original.items() if k != "messages"})
@@ -88,7 +88,7 @@ class ToolIdentityTests(unittest.IsolatedAsyncioTestCase):
     async def test_invalid_tool_arguments_fail_without_silent_empty_object(self):
         value = {"args": '{"path":'}
 
-        async def source(payload, headers, *, buffered=True):
+        async def source(payload, headers, *, buffered=True, defer_output=False):
             yield {"type": "tool", "index": 0, "id": "Read:0", "name": "read", "args": value["args"]}
             yield {"type": "finish", "reason": "tool_calls"}
 
@@ -104,7 +104,7 @@ class ToolIdentityTests(unittest.IsolatedAsyncioTestCase):
     async def test_explicit_seed_zero_is_forwarded_and_invalid_types_rejected(self):
         seen = []
 
-        async def source(payload, headers, *, buffered=True):
+        async def source(payload, headers, *, buffered=True, defer_output=False):
             seen.append(deepcopy(payload))
             yield {"type": "text", "text": "OK"}
             yield {"type": "finish", "reason": "stop"}
@@ -130,7 +130,7 @@ class ToolIdentityTests(unittest.IsolatedAsyncioTestCase):
     async def test_ids_unique_in_all_routes_and_formats_with_unchanged_arguments(self):
         closed = []
 
-        async def source(payload, headers, *, buffered=True):
+        async def source(payload, headers, *, buffered=True, defer_output=False):
             try:
                 yield {"type": "text", "text": "正文 中文🙂"}
                 for index in (0, 1):
@@ -201,7 +201,7 @@ class ToolIdentityTests(unittest.IsolatedAsyncioTestCase):
     async def test_early_close_releases_upstream_source(self):
         closed = []
 
-        async def source(payload, headers, *, buffered=True):
+        async def source(payload, headers, *, buffered=True, defer_output=False):
             try:
                 yield {"type": "thinking", "text": "partial"}
                 yield {"type": "finish", "reason": "stop"}
