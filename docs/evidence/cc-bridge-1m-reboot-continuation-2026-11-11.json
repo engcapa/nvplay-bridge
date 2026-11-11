@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794356099.8943453,
+  "checkpoint_at": 1794356122.192892,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-1m-20261111-0801",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -571,7 +571,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794356099.8953054,
+    "generated_at": 1794356122.1937332,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
@@ -583,8 +583,8 @@
   "combined_plan_positions_completed": 7,
   "campaign": {
     "controller_alive": true,
-    "status": "control_validated",
-    "task": "embedding-drift-monitor"
+    "status": "validating_controls",
+    "task": "batched-eval-parity"
   },
   "reboot_stop": {
     "stop_at": 1794380400.0,
@@ -655,8 +655,8 @@
     },
     {
       "path": "campaign-state.json",
-      "sha256": "3526434b7e2e995eb3b0d3b103ada84eaca0bb9490dc812d396b0bc55c67ac60",
-      "size": 3732
+      "sha256": "ea8975f3a44ac3ca2bd127409e93da59c48b7e84c24e988d8d403add37bb80eb",
+      "size": 3730
     },
     {
       "path": "cdp-observer-process.json",
@@ -735,7 +735,7 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "8d39bfa1f0f24316766652a0158f631a83324f2d0a592eec46622328a6f501b6",
+      "sha256": "6a6f4cfac6f243e6408a765959630d4c5a01451b85946d883b799f685695d540",
       "size": 811
     },
     {
@@ -784,6 +784,16 @@
       "bytes": 555075936,
       "tar_compare_passed_before_reclaim": true,
       "restore": "sudo tar -xpf agent-root.tar.gz -C ."
+    },
+    {
+      "directory": "controls/embedding-drift-monitor/oracle",
+      "archived_at": 1794356121.7326448,
+      "root": "verifier-root",
+      "archive": "verifier-root.tar.gz",
+      "sha256": "30103a9b8114adcaba25bae7a769207fd0f061ecc7f464a497bf524050ea74e0",
+      "bytes": 564524042,
+      "tar_compare_passed_before_reclaim": true,
+      "restore": "sudo tar -xpf verifier-root.tar.gz -C ."
     },
     {
       "directory": "controls/session-window-debug/baseline",
