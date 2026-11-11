@@ -7,3 +7,5 @@
 本轮目录为 `logs/eval-1m-20261111-evening/`，持续归档为 [本轮 checkpoint](evidence/cc-bridge-evening-continuation-2026-11-11.json)。新阶段使用普通用户 PATH 中实际的 Claude Code，冻结可执行文件、运行器和 bridge 源码身份；模型 `kimi-k3.1-pro[1m]`，自动压缩窗口 720000，CC 输出环境 128000，bridge 固定请求 131072，原生 idle 限制通过 `API_FORCE_IDLE_TIMEOUT=0` 关闭。新 high/max 真实工具烟测和全部对照通过后计分。
 
 外网使用 `http://127.0.0.1:31128`，本地 bridge/CDP 直连。每次实质进展或最多 5 分钟保存 checkpoint，提交后立即推送。发现 bridge 问题先保留失败证据，再修复、验证并在独立阶段继续，已完成位置不择优覆盖。
+
+17:10 恢复检查：独立 bridge/CDP 已启动，实际 health 为输出固定 131072、总请求 28800 秒、首字节/idle 各 3600 秒。浏览器监督及资源监控已启动。发现启动器只记 PID，缺少监督器要求的 boot ID/start ticks；已修复并补记本轮实际进程身份。真实子进程测试验证记录与内核一致、复用 PID 会被拒绝且不会被误停。247 项已有 unittest 通过（24.879 秒），新增身份回归通过；首次宽泛 pytest 收集到了依赖其它端口的手动 pool 脚本而失败，已改用 README 指定的 `test_*.py` 回归命令，未将其计为 bridge 故障。
