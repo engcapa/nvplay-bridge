@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794360270.1036057,
+  "checkpoint_at": 1794360282.7479415,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-1m-20261111-0801",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -540,8 +540,8 @@
     "host_memory_limit_bytes": "30064771072"
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794360256.3178508,
-    "commit": "12b47eedba4bd784edae755af3bc41d6683a2af7",
+    "attempted_at": 1794360270.1467774,
+    "commit": "f6647e4dee4f98fa59b0862dd34f6aa3877f76ef",
     "pushed": true,
     "returncode": 0
   },
@@ -886,40 +886,57 @@
       }
     }
   },
-  "interrupted_attempts_excluded_from_grades": [],
+  "interrupted_attempts_excluded_from_grades": [
+    {
+      "status": "administratively_interrupted",
+      "score": null,
+      "excluded_from_model_grades": true,
+      "recorded_at": 1794360275.3121872,
+      "requested_stop_at": 1794360275.312171,
+      "reason": "user requested current PATH Claude Code; administrative client upgrade from 2.1.110 to 2.1.322",
+      "task": "mvcc-lsm-compaction",
+      "effort": "max",
+      "stage": "formal-1m-720k-drain-v3-reboot-20261111",
+      "repeat": 1,
+      "original_attempt": "runs/formal-1m-720k-drain-v3-reboot-20261111/mvcc-lsm-compaction--max--r1",
+      "archive": "runs-interrupted/formal-1m-720k-drain-v3-reboot-20261111/mvcc-lsm-compaction--max--r1--1794360275312184563",
+      "progress_at_stop": {
+        "status": "agent_running",
+        "started_at": 1794357008.487839,
+        "elapsed_seconds": 3266.6,
+        "tool_calls": 65,
+        "last_tool": "Bash"
+      },
+      "bridge": {
+        "logical_requests": 39,
+        "upstream_attempts": 39,
+        "errors": 0,
+        "retries": 0,
+        "cancelled": 1,
+        "unfinished": 0
+      }
+    }
+  ],
   "results": {
-    "generated_at": 1794360270.1134257,
+    "generated_at": 1794360282.7540226,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
-    "pending": [
-      {
-        "attempt": "runs/formal-1m-720k-drain-v3-reboot-20261111/mvcc-lsm-compaction--max--r1",
-        "status": "agent_running",
-        "task": "mvcc-lsm-compaction",
-        "effort": "max",
-        "started_at": 1794357008.487839,
-        "elapsed_seconds": 3261.6,
-        "tool_calls": 65,
-        "last_tool": "Bash"
-      }
-    ]
+    "pending": []
   },
   "new_formal_attempts_planned": 23,
   "new_formal_attempts_completed": 0,
   "preserved_prior_attempts_completed": 7,
   "combined_plan_positions_completed": 7,
   "campaign": {
-    "controller_alive": true,
-    "status": "formal_running",
-    "task": "mvcc-lsm-compaction",
-    "repeat": 1
+    "controller_alive": false,
+    "status": "upgrading_cc"
   },
   "reboot_stop": {
     "stop_at": 1794380400.0,
     "armed": true
   },
-  "status": "formal_running",
+  "status": "controls_validated",
   "bridge_health": {
     "status": "ok",
     "model": "moonshotai/kimi-k3.1-pro",
@@ -935,52 +952,30 @@
       "idle_seconds": 3600.0
     },
     "pool_states": {
-      "ready": 4,
-      "busy": 1
+      "ready": 5
     },
     "recovering_tabs": []
   },
   "bridge_activity": {
     "events_last_300s": {
-      "browser_first_data": 5,
-      "browser_progress": 45,
-      "browser_first_content": 5,
-      "browser_buffer": 4,
-      "browser_pool_release": 4,
+      "browser_progress": 44,
+      "browser_buffer": 5,
+      "browser_pool_release": 5,
       "browser_done": 4,
       "request": 4,
       "payload": 4,
       "browser_start": 4,
-      "browser_tab": 4
+      "browser_tab": 4,
+      "browser_first_data": 4,
+      "browser_first_content": 4,
+      "browser_abort": 1,
+      "pool_recovery_start": 1,
+      "browser_cancelled": 1,
+      "pool_activation": 2,
+      "pool_page_ready": 1,
+      "pool_ready": 1
     },
-    "active": [
-      {
-        "id": "bd2f2649",
-        "retry_count": 0,
-        "phase": "browser_progress",
-        "attempt": 1,
-        "reasoning_effort": "max",
-        "tab_id": "kpool=3",
-        "counts": {
-          "thinking_chars": 1010,
-          "text_chars": 0,
-          "tool_calls": 0
-        },
-        "usage": {
-          "prompt_tokens": 86327,
-          "completion_tokens": 204,
-          "total_tokens": 86531,
-          "prompt_tokens_details": {
-            "cached_tokens": 85760
-          },
-          "completion_tokens_details": {
-            "reasoning_tokens": 204
-          }
-        },
-        "age_seconds": 12.6,
-        "activity_age_seconds": 2.6
-      }
-    ],
+    "active": [],
     "recent_errors": [],
     "recent_upstream_errors": [],
     "recent_retries": []
@@ -1023,8 +1018,13 @@
     },
     {
       "path": "campaign-state.json",
-      "sha256": "8bf5e885dfc96483ca8bc875c37b2256651b28d817fe174cb6ec08bfa2db0f0d",
-      "size": 3740
+      "sha256": "55c7dd8e3ef01d1c0eaf4f7e3d8036527c0bc49da9ca319d8e3e567bcb5a2ac4",
+      "size": 67
+    },
+    {
+      "path": "cc-upgrade-state.json",
+      "sha256": "ba0c6b82dc24904c7d304f214b77d58f89894aae0104b81b83c59614c0b0b9e9",
+      "size": 1575
     },
     {
       "path": "cdp-observer-process.json",
@@ -1043,7 +1043,7 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "60d7a210b73f39a1cbf26a65f403e71555b3e733db5d6d0f6971fd808905d6fc",
+      "sha256": "777fc09d97f407eea1555692140503322dfb1f76c708ea3bdcd06689e8466a29",
       "size": 134
     },
     {
@@ -1143,18 +1143,8 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "3bdf6e8d10d59c1d09b58f6423813d564183360e2c61682bc96a94ed5dba0377",
-      "size": 821
-    },
-    {
-      "path": "runs/formal-1m-720k-drain-v3-reboot-20261111/mvcc-lsm-compaction--max--r1/identity.json",
-      "sha256": "29f6577e7f37190cebb158ff149d13ca179ace9c873da760d7b80ca2f4e6ac7e",
-      "size": 3496
-    },
-    {
-      "path": "runs/formal-1m-720k-drain-v3-reboot-20261111/mvcc-lsm-compaction--max--r1/request-protocol.json",
-      "sha256": "3695fcf45dbb86188d7ccbbf1c375d2032a7763a98cb6fefd8cccdb480ebccaa",
-      "size": 999
+      "sha256": "e7bbb58b5ac0f3588221dd6130ac0583a18fdb6d966862b48b344d002644b80e",
+      "size": 766
     },
     {
       "path": "settings-formal-high.json",
