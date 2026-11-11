@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794368288.794045,
+  "checkpoint_at": 1794368323.3031218,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-1m-20261111-0801",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -780,8 +780,8 @@
     "host_memory_limit_bytes": "30064771072"
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794367989.0538456,
-    "commit": "941d6dfa84d0e9bf16793e5e2050a17b63d917c1",
+    "attempted_at": 1794368289.1031046,
+    "commit": "a52fe16ab2350bcbeec988c6ce76b8d3556e9df6",
     "pushed": true,
     "returncode": 0
   },
@@ -1246,7 +1246,7 @@
     }
   ],
   "results": {
-    "generated_at": 1794368289.0502815,
+    "generated_at": 1794368323.5616446,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-1m-720k-path-cc-2-1-322-20261111/28800/max": {
@@ -1361,7 +1361,7 @@
         "task": "ks-solver-cpp",
         "effort": "high",
         "started_at": 1794366750.3032668,
-        "elapsed_seconds": 1538.5,
+        "elapsed_seconds": 1573.0,
         "tool_calls": 2,
         "last_tool": "Read"
       },
@@ -1371,7 +1371,7 @@
         "task": "ks-solver-cpp",
         "effort": "max",
         "started_at": 1794366750.2963288,
-        "elapsed_seconds": 1538.6,
+        "elapsed_seconds": 1573.1,
         "tool_calls": 1,
         "last_tool": "Read"
       }
@@ -1425,23 +1425,23 @@
         "reasoning_effort": "high",
         "tab_id": "kpool=3",
         "counts": {
-          "thinking_chars": 146289,
+          "thinking_chars": 148054,
           "text_chars": 0,
           "tool_calls": 0
         },
         "usage": {
           "prompt_tokens": 5608,
-          "completion_tokens": 41762,
-          "total_tokens": 47370,
+          "completion_tokens": 42447,
+          "total_tokens": 48055,
           "prompt_tokens_details": {
             "cached_tokens": 0
           },
           "completion_tokens_details": {
-            "reasoning_tokens": 41762
+            "reasoning_tokens": 42447
           }
         },
-        "age_seconds": 1524.5,
-        "activity_age_seconds": 4.3
+        "age_seconds": 1559.0,
+        "activity_age_seconds": 3.2
       },
       {
         "id": "113ba4f0",
@@ -1451,23 +1451,23 @@
         "reasoning_effort": "max",
         "tab_id": "kpool=5",
         "counts": {
-          "thinking_chars": 158786,
+          "thinking_chars": 160977,
           "text_chars": 0,
           "tool_calls": 0
         },
         "usage": {
           "prompt_tokens": 5449,
-          "completion_tokens": 48389,
-          "total_tokens": 53838,
+          "completion_tokens": 49388,
+          "total_tokens": 54837,
           "prompt_tokens_details": {
             "cached_tokens": 0
           },
           "completion_tokens_details": {
-            "reasoning_tokens": 48389
+            "reasoning_tokens": 49388
           }
         },
-        "age_seconds": 1524.3,
-        "activity_age_seconds": 4.3
+        "age_seconds": 1558.8,
+        "activity_age_seconds": 3.5
       }
     ],
     "recent_errors": [],
@@ -1537,7 +1537,7 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "ce890cb6f602e5f99f30df9b5139bb6599fa6973dd5d444f15b1a5703de14868",
+      "sha256": "a9ac33f10e17a5479b0e0a09d03e3b2a976a28f8b32dcd49ef085de36cff025e",
       "size": 134
     },
     {
@@ -1657,8 +1657,8 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "52884497d0c082a8cfe735b989cbbe6c7c10158a5082593bcbbeef9f946b222a",
-      "size": 817
+      "sha256": "83e2d195801e3a43a76ae0a307a3602f744063e6b11988e926a678d712b67cca",
+      "size": 818
     },
     {
       "path": "runs/formal-1m-720k-path-cc-2-1-322-20261111/ks-solver-cpp--high--r1/identity.json",
