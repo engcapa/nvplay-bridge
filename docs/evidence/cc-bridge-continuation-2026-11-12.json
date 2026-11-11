@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794441253.548044,
+  "checkpoint_at": 1794441266.7644944,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261112",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -854,8 +854,8 @@
     "isolation_boundary": "Real dedicated Unix UID and protected source directories; shared host filesystem, kernel and network"
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794441188.189603,
-    "commit": "44b3ffe6e83c126d55df91a0df03bbf5292764ab",
+    "attempted_at": 1794441253.582117,
+    "commit": "a718747c6f3a4e1b0f21ae5d4dd051821b31bdae",
     "pushed": true,
     "returncode": 0
   },
@@ -1310,7 +1310,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794441253.5497851,
+    "generated_at": 1794441266.7663436,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
@@ -1390,7 +1390,7 @@
     },
     {
       "path": "browser-supervisor-state.json",
-      "sha256": "01f2aad8e3f57c6652cec357e4fcd3e273a5da37293cc5721db0483f1338576a",
+      "sha256": "2e4fb58b3687b9fcdc97c89820b24410dc94d5503fde41b60606d1ae4c33e63c",
       "size": 102
     },
     {
@@ -1410,7 +1410,7 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "a57cef407ee5e11d70b25d9cdda5ad9eae89eccb8146d68e66b1f404ac0b9f22",
+      "sha256": "0931f6a312ee893a14d08d2f716bee5169490d6b9e52153f660ebdd699a866fd",
       "size": 133
     },
     {
@@ -1654,6 +1654,16 @@
       "bytes": 564524883,
       "tar_compare_passed_before_reclaim": true,
       "restore": "sudo tar -xpf verifier-root.tar.gz -C ."
+    },
+    {
+      "directory": "controls/ks-solver-cpp/baseline",
+      "archived_at": 1794441257.1486495,
+      "root": "agent-root",
+      "archive": "agent-root.tar.gz",
+      "sha256": "7f0735bb6b0e2e015587efd4d680938ce943c6c66ed088a593282c2bcccf1b07",
+      "bytes": 4262279,
+      "tar_compare_passed_before_reclaim": true,
+      "restore": "sudo tar -xpf agent-root.tar.gz -C ."
     },
     {
       "directory": "controls/mvcc-lsm-compaction/baseline",
