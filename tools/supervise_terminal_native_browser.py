@@ -1,8 +1,8 @@
 """Restore this evaluation's browser after exit, without interrupting live CC.
 
 Only a recorded browser that has exited and an unavailable local CDP endpoint
-authorize a restart. A live browser is never killed. The existing reboot
-deadline and pause record take precedence over recovery.
+authorize a restart. A live browser is never killed. An optional reboot
+deadline and any pause record take precedence over recovery.
 """
 
 from __future__ import annotations
@@ -31,8 +31,13 @@ def read(path: Path) -> dict:
 
 
 def may_recover(base: Path, now: float) -> bool:
-    deadline = read(base / "reboot-stop-request.json").get("stop_at")
-    return not (base / "pause-state.json").exists() and deadline is not None and now < deadline
+    if (base / "pause-state.json").exists():
+        return False
+    stop_request = base / "reboot-stop-request.json"
+    if not stop_request.exists():
+        return True
+    deadline = read(stop_request).get("stop_at")
+    return deadline is not None and now < deadline
 
 
 def owner_environment(base: Path) -> dict:

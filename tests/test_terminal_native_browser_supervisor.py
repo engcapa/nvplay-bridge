@@ -36,6 +36,21 @@ class BrowserSupervisorTests(unittest.TestCase):
         (self.base / "pause-state.json").write_text("{}")
         self.assertFalse(supervisor.may_recover(self.base, 100))
 
+    def test_campaign_without_deadline_still_recovers_exited_browser(self):
+        (self.base / "reboot-stop-request.json").unlink()
+        with patch.object(supervisor, "process_identity", return_value=None), \
+             patch.object(supervisor.LOCAL_HTTP, "open", side_effect=OSError("CDP unavailable")), \
+             patch.object(supervisor, "owner_environment", return_value={"HOME": "/ordinary-user"}), \
+             patch.object(supervisor, "start_process", return_value=Mock(pid=43)) as start:
+            self.assertEqual(supervisor.tick(self.base)["status"], "browser_restarted")
+            start.assert_called_once()
+        (self.base / "pause-state.json").write_text("{}")
+        self.assertFalse(supervisor.may_recover(self.base, 100))
+
+    def test_existing_stop_request_without_a_deadline_prevents_recovery(self):
+        (self.base / "reboot-stop-request.json").write_text("{}")
+        self.assertFalse(supervisor.may_recover(self.base, 100))
+
     def test_live_browser_with_unavailable_cdp_is_never_killed_or_replaced(self):
         identity = {key: self.record[key] for key in ("pid", "boot_id", "start_ticks")}
         with patch.object(supervisor.time, "time", return_value=100), \
