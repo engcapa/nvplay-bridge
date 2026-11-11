@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794405714.5646365,
+  "checkpoint_at": 1794405718.5133686,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261111-evening",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -1257,8 +1257,8 @@
     "fresh_controls_required": true
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794405706.9459324,
-    "commit": "ea312d7c76705681f17430c8890b6a165ad2a079",
+    "attempted_at": 1794405714.7193186,
+    "commit": "c84a91eb07be5e613f37020a1ac2a864383e794a",
     "pushed": true,
     "returncode": 0
   },
@@ -1702,7 +1702,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794405714.5871809,
+    "generated_at": 1794405718.5338106,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-1m-720k-host-cc-20261111-evening/28800/high": {
@@ -1817,10 +1817,9 @@
   "preserved_prior_attempts_completed": 9,
   "combined_plan_positions_completed": 10,
   "campaign": {
-    "controller_alive": false,
-    "status": "formal_running",
-    "task": "ks-solver-cpp",
-    "repeat": 1
+    "controller_alive": true,
+    "status": "preparing",
+    "task": "session-window-debug"
   },
   "transport_transition": {
     "status": "remaining_campaign_started",
@@ -1931,8 +1930,8 @@
     },
     {
       "path": "browser-supervisor-state.json",
-      "sha256": "e09337492d36331dd5de07fe77b67f19eb9fa3f3ae456c7722a4a1e06a25c1b7",
-      "size": 102
+      "sha256": "d717ba714d7ccf6b33ca12c06af3dcfb8d5965ad309b3496e8b4255a3a61dfc3",
+      "size": 101
     },
     {
       "path": "campaign-error-before-transport-fix.json",
@@ -1946,8 +1945,8 @@
     },
     {
       "path": "campaign-state.json",
-      "sha256": "547470525ebb0b2c1b0d70a94d5fd7a516321c00bc0bcbdd6847441768487139",
-      "size": 6003
+      "sha256": "f32afbf20bc4be99bc3062bcadcaf59a69dea3685753721656c2541fd88c8bdc",
+      "size": 6552
     },
     {
       "path": "cdp-observer-process.json",
@@ -1956,7 +1955,7 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "772b7f3f2b295e40e0281dab70fa63da13fe7759bba4d37fdafd64b290c37d35",
+      "sha256": "22e291621ee954d50c86d09fdd0746b1b31b73a906d8b10f07f0a1ba72456429",
       "size": 134
     },
     {
