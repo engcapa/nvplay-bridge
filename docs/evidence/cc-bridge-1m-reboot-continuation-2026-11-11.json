@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794356438.0301635,
+  "checkpoint_at": 1794356620.8584235,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-1m-20261111-0801",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -540,8 +540,8 @@
     "host_memory_limit_bytes": "30064771072"
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794356324.2168455,
-    "commit": "60b7c33e98302f5218b75b4be670a343c6c08e9f",
+    "attempted_at": 1794356438.0541046,
+    "commit": "08f4fa030d9da01a1ed3692a94c6f5483e4293ed",
     "pushed": true,
     "returncode": 0
   },
@@ -568,6 +568,17 @@
         "infrastructure_error": null
       }
     },
+    "mvcc-lsm-compaction": {
+      "valid": true,
+      "baseline": {
+        "score": 0,
+        "infrastructure_error": null
+      },
+      "oracle": {
+        "score": 1,
+        "infrastructure_error": null
+      }
+    },
     "session-window-debug": {
       "valid": true,
       "baseline": {
@@ -582,7 +593,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794356438.0310287,
+    "generated_at": 1794356620.8593378,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
@@ -594,7 +605,7 @@
   "combined_plan_positions_completed": 7,
   "campaign": {
     "controller_alive": true,
-    "status": "validating_controls",
+    "status": "control_validated",
     "task": "mvcc-lsm-compaction"
   },
   "reboot_stop": {
@@ -666,8 +677,8 @@
     },
     {
       "path": "campaign-state.json",
-      "sha256": "394b4475f6e508c6f47c1a8cbc5b545af0e6148856f436a007efacc59dc30973",
-      "size": 3729
+      "sha256": "b23a8d586c1deb50b05af33d0570023cf6e2fc9e90dea6a98b1e3d960bbe7d01",
+      "size": 3726
     },
     {
       "path": "cdp-observer-process.json",
@@ -676,7 +687,7 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "19be830ecf2b8b3059a93fe04250908987b8719eb6a888f7327305d0fc5b3190",
+      "sha256": "7158ae268bd1ac005a8df0e38747f3820e0f8ffe96ece85857e7d3563789f1dc",
       "size": 134
     },
     {
@@ -693,6 +704,11 @@
       "path": "controls/embedding-drift-monitor/result.json",
       "sha256": "47a7ee5c1c0103c467bb02f30b6a508c725eed6bf5cf96b8ba89411c4e10e753",
       "size": 589
+    },
+    {
+      "path": "controls/mvcc-lsm-compaction/result.json",
+      "sha256": "ab01d106b5a3261596c7201122fbf7380765d2a26eb5d1f246a15745f943d788",
+      "size": 592
     },
     {
       "path": "controls/session-window-debug/result.json",
@@ -751,8 +767,8 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "a3b0dc23a60283e9df6ef9d2b3dac4f72656c63ead8aa14c885bbd86d492e160",
-      "size": 806
+      "sha256": "be106cacbda78c3eb126f7b60482d2dd4947a01755ae985202ac590b9a854c01",
+      "size": 808
     },
     {
       "path": "settings-formal-high.json",
