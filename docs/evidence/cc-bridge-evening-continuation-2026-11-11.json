@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794405576.050718,
+  "checkpoint_at": 1794405579.3305874,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261111-evening",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -997,8 +997,8 @@
     "fresh_controls_required": true
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794405572.8349047,
-    "commit": "9dcb90d063c8635df55e251039980bdab8ac74de",
+    "attempted_at": 1794405576.253027,
+    "commit": "be79fc156c3d4f92abb6535090b96211036ff318",
     "pushed": true,
     "returncode": 0
   },
@@ -1422,7 +1422,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794405576.0683458,
+    "generated_at": 1794405579.3492844,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-1m-720k-host-cc-20261111-evening/28800/high": {
@@ -1573,7 +1573,7 @@
   },
   "bridge_activity": {
     "events_last_300s": {
-      "browser_progress": 14,
+      "browser_progress": 13,
       "browser_buffer": 4,
       "browser_pool_release": 4,
       "browser_output_ready": 4,
@@ -1645,7 +1645,7 @@
     },
     {
       "path": "browser-supervisor-state.json",
-      "sha256": "1eb044dfc69cee924b55c14fc58c3a080d980c67a5275f804839ff77587f9af9",
+      "sha256": "7c4e4f0decc49836ad3759f64b4c8784276d7a761bfd599b49c6174e76bf2d08",
       "size": 102
     },
     {
@@ -1670,8 +1670,8 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "0998b7ef2bc04e1dfc043206d61a741d1b2adfc2d75bd98fcc3cc51e19549e4f",
-      "size": 134
+      "sha256": "fce33a65c1ad304a0c49415e9418735ba4474b8f1fac25a1288c9fa6f9778d6f",
+      "size": 133
     },
     {
       "path": "checkpoint-process.json",
@@ -1954,9 +1954,14 @@
       "size": 16371
     },
     {
+      "path": "transport-before-checkpoint.json",
+      "sha256": "c880a35f7e6982ac1ba3aca972119f8c83ebd3f090d75d073edab10f6e3563a3",
+      "size": 89107
+    },
+    {
       "path": "transport-transition-process.json",
-      "sha256": "e0bbb6c411236e5b9bba66a59324d5a458eac618abec7cd9481a045dc874b4d9",
-      "size": 883
+      "sha256": "8aaaeba1b3bede8753e580ac8865c4af4337076b976cc1208d3559af642f7177",
+      "size": 345
     },
     {
       "path": "transport-transition-state.json",
