@@ -235,7 +235,7 @@ def continue_schedule(formal: dict, checkpoint: Path) -> dict:
     prior_stage = protocol.get("formal_native_subset", {}).get("stage")
     prior_runtime = protocol.get("cc_runtime_by_stage", {}).get(prior_stage, {})
     known_cli = protocol["cc_version"] == "2.1.110" or (
-        prior_runtime.get("kind") == "path-native-proot"
+        prior_runtime.get("kind") in ("path-native-proot", "path-native-host")
         and prior_runtime.get("version") == protocol["cc_version"]
         and re.fullmatch(r"[0-9a-f]{64}", prior_runtime.get("sha256", "")) is not None)
     if (protocol["source_commit"] != "452bf305c6daa62fc59061d22133a7cbc7c1572e"

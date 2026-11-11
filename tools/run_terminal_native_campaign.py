@@ -77,7 +77,7 @@ def main():
             archive_root(root)
         for name, repeat, efforts in runner.attempt_batches(evaluation.plan, stage, formal["repeats_per_effort"]):
             checkpoint("formal_running", task=name, repeat=repeat)
-            with ThreadPoolExecutor(max_workers=2) as pool:
+            with ThreadPoolExecutor(max_workers=formal.get("agent_concurrency", 2)) as pool:
                 futures = []
                 for effort in efforts:
                     if args.resume and evaluation.resume_attempt(name, effort, stage, repeat,

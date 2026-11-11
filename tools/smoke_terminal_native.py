@@ -43,8 +43,8 @@ def smoke(evaluation, effort):
         "Use the Bash tool to run Python 3 to compute the SHA256 of /app/smoke-input.bin. "
         "Write the lowercase 64-character digest to /app/answer.txt, then reply with only that digest. "
         "Do not use any other agent, network, or package installation.\n")
-    command = bootstrap + ["-p", "--output-format", "stream-json", "--verbose", "--settings", "/eval/settings.json",
-        "--setting-sources", "", "--strict-mcp-config", "--mcp-config", "/eval/mcp.json",
+    command = bootstrap + ["-p", "--output-format", "stream-json", "--verbose", "--settings", evaluation.config_path(root, "/eval/settings.json", stage),
+        "--setting-sources", "", "--strict-mcp-config", "--mcp-config", evaluation.config_path(root, "/eval/mcp.json", stage),
         "--permission-mode", "bypassPermissions", "--disable-slash-commands",
         "--tools", "Bash,Read,Write,Edit,Glob,Grep", "--model", launch["model"], "--effort", effort]
     command += evaluation.compaction_arguments(stage, launch)
@@ -54,7 +54,7 @@ def smoke(evaluation, effort):
     if version.split()[0] != identity["cc_version"]:
         raise RuntimeError(f"CC smoke version mismatch: {version}")
     started = time.time()
-    process = run_logged(evaluation.agent_command(root, "cd /app && " + shlex.join(command) + " < /eval/prompt.txt",
+    process = run_logged(evaluation.agent_command(root, "cd /app && " + shlex.join(command) + " < " + shlex.quote(evaluation.config_path(root, "/eval/prompt.txt", stage)),
                                        stage=stage,
                                        uid=uid, environment=env, cpus=1, cpu_offset=1 if effort == "max" else 0),
                          output / "cc.jsonl", evaluation.agent_timeout(stage, 28800), output / "agent-state.json", uid,
@@ -100,7 +100,7 @@ def main():
     if os.geteuid() != 0:
         parser.error("native root creation needs sudo; CC itself uses a dedicated ordinary UID")
     evaluation = Evaluation(args.base)
-    with ThreadPoolExecutor(max_workers=len(args.efforts)) as pool:
+    with ThreadPoolExecutor(max_workers=min(len(args.efforts), evaluation.plan["formal_native_subset"].get("agent_concurrency", 2))) as pool:
         results = list(pool.map(lambda effort: smoke(evaluation, effort), args.efforts))
     result = {"recorded_at": time.time(), "passed": all(row["passed"] for row in results), "efforts": results,
               "stage": evaluation.plan["formal_native_subset"]["stage"]}

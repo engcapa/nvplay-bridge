@@ -306,6 +306,8 @@ Live regression scripts send requests only when executed directly.
 
 For supervised CC benchmark runs without Docker, see the
 [native Terminal-Bench evaluation guide](docs/terminal-bench-native.md).
+New runs execute CC directly on the host under a dedicated UID with a private
+home and Python venv; they do not use PRoot. Historical results retain their original runtime stages.
 The adapted subset scores are separate from the official AA Intelligence Index.
 
 For a deterministic check against a running Brave/CDP instance, run

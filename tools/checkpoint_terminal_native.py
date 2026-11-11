@@ -104,6 +104,8 @@ def collect(base: Path, health_url: str) -> dict:
                            ("download-manifest.json", "downloads"),
                            ("wheel-manifest.json", "wheels"),
                            ("host-resources.json", "host_resources"),
+                           ("host-toolchain-manifest.json", "host_environment"),
+                           ("host-control-transition.json", "control_transition"),
                            ("checkpoint-git-sync.json", "previous_checkpoint_git_sync"),
                            ("smoke-result.json", "smoke"), ("cc-upgrade-state.json", "cc_upgrade")):
         path = base / filename

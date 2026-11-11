@@ -97,6 +97,25 @@ class PathConfigureTests(unittest.TestCase):
             self.configure()
         self.assertEqual((self.base / "evaluation-plan.json").read_bytes(), original)
 
+    def test_direct_host_transition_preserves_old_controls_and_failed_slot(self):
+        controls = self.base / "controls/fixture"
+        controls.mkdir(parents=True)
+        (controls / "result.json").write_text('{"valid":true}')
+        with patch.object(upgrade, "summarize", return_value=self.report), \
+             patch.object(upgrade, "campaign_progress", return_value={"controller_alive": False}), \
+             patch.object(upgrade.subprocess, "check_output", return_value="2.1.322 (Claude Code)"), \
+             patch.object(upgrade.native_host_cc, "prepare_toolchain", return_value={"host_cli": "/verified/claude"}), \
+             patch.object(upgrade, "verify_runtime"):
+            result = upgrade.configure(self.base, self.cli, None, "formal-host-new", host_direct=True)
+        plan = json.loads((self.base / "evaluation-plan.json").read_text())
+        self.assertEqual(result["runtime"]["kind"], "path-native-host")
+        self.assertNotIn("proot_path", result["runtime"])
+        self.assertEqual(plan["formal_native_subset"]["agent_concurrency"], 1)
+        self.assertEqual(result["remaining_positions"], 1)
+        self.assertEqual(plan["formal_native_subset"]["preserved_local_schedule"][0]["stage"], "formal-legacy")
+        self.assertTrue(next((self.base / "controls-history").glob("*/fixture/result.json")).is_file())
+        self.assertFalse((self.base / "controls").exists())
+
 
 if __name__ == "__main__":
     unittest.main()

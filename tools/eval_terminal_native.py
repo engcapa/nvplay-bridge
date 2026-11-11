@@ -23,6 +23,7 @@ import time
 import tomllib
 
 import native_path_cc
+import native_host_cc
 
 from native_eval_support import (
     allocate_uid, bridge_activity, cc_result, clone_root, copy_artifact, copy_tree,
@@ -33,6 +34,7 @@ from native_eval_support import (
 NODE_NETWORK_DIRECTORY = Path(__file__).with_name("cc_node_runtime").resolve()
 TOOLING_SOURCES = (Path(__file__).resolve(), Path(__file__).with_name("native_eval_support.py").resolve(),
                    Path(native_path_cc.__file__).resolve(),
+                   Path(native_host_cc.__file__).resolve(),
                    *(NODE_NETWORK_DIRECTORY / name for name in ("timeout.cjs", "package.json", "package-lock.json")))
 
 
@@ -182,6 +184,8 @@ class Evaluation:
 
     def create_agent_root(self, source: Path, output: Path, uid: int, stage: str) -> Path:
         if spec := self.native_runtime(stage):
+            if spec["kind"] == native_host_cc.KIND:
+                return native_host_cc.create_agent_root(source, output, uid, spec)
             return native_path_cc.create_agent_root(source, output, uid, spec)
         root = output / "agent-root"
         clone_root(source, root)
@@ -191,16 +195,21 @@ class Evaluation:
                       environment: dict | None = None, cpus: int | None = None, cpu_offset: int = 0) -> list[str]:
         spec = self.plan.get("cc_runtime_by_stage", {}).get(stage)
         if spec:
+            if spec["kind"] == native_host_cc.KIND:
+                return native_host_cc.shell_command(root, command, uid=uid, spec=spec,
+                           environment=environment, cpus=cpus, cpu_offset=cpu_offset)
             return native_path_cc.shell_command(root, command, uid=uid, spec=spec,
                        environment=environment, cpus=cpus, cpu_offset=cpu_offset)
         return shell_command(root, command, uid=uid, environment=environment, cpus=cpus, cpu_offset=cpu_offset)
 
     def cc_bootstrap(self, root: Path, stage: str, settings: dict) -> tuple[list[str], dict, dict | None]:
-        if self.plan.get("cc_runtime_by_stage", {}).get(stage):
+        if runtime := self.plan.get("cc_runtime_by_stage", {}).get(stage):
             environment = {key: settings["env"][key] for key in ("API_TIMEOUT_MS", "ANTHROPIC_BASE_URL")}
             if "API_FORCE_IDLE_TIMEOUT" in settings["env"]:
                 environment["API_FORCE_IDLE_TIMEOUT"] = settings["env"]["API_FORCE_IDLE_TIMEOUT"]
-            return [native_path_cc.GUEST_CLI], environment, None
+            if runtime["kind"] == native_host_cc.KIND:
+                environment.update(DISABLE_AUTOUPDATER="1", CLAUDE_CODE_DISABLE_AUTO_MEMORY="1")
+            return [runtime["host_cli"] if runtime["kind"] == native_host_cc.KIND else native_path_cc.GUEST_CLI], environment, None
         adapter = self.network_adapter(stage)
         if not adapter:
             return ["claude"], {}, None
@@ -215,6 +224,10 @@ class Evaluation:
         if self.plan.get("cc_runtime_by_stage", {}).get(stage) and launch["automatic_compaction_enabled"]:
             return ["--autocompact", str(launch["auto_compact_window_tokens"])]
         return []
+
+    def config_path(self, root: Path, path: str, stage: str) -> str:
+        runtime = self.plan.get("cc_runtime_by_stage", {}).get(stage, {})
+        return str(root / path.lstrip("/")) if runtime.get("kind") == native_host_cc.KIND else path
 
     def task(self, name: str) -> dict:
         return tomllib.loads((self.dataset / name / "task.toml").read_text())
@@ -469,22 +482,43 @@ class Evaluation:
             print(json.dumps({"archived_control": str(archived)}), flush=True)
         path.mkdir(parents=True, exist_ok=True)
         results = {}
+        plan = getattr(self, "plan", {})
+        stage = plan.get("formal_native_subset", {}).get("stage")
+        direct = plan.get("cc_runtime_by_stage", {}).get(stage, {}).get("kind") == native_host_cc.KIND
         for mode in ("baseline", "oracle"):
             output = path / mode
             output.mkdir(exist_ok=True)
-            agent = output / "agent-root"
-            clone_root(self.base / "templates" / name / "agent", agent)
+            if direct:
+                uid = allocate_uid(self.base)
+                agent = self.create_agent_root(self.base / "templates" / name / "agent", output, uid, stage)
+                write_json(output / "identity.json", self.identity(stage))
+            else:
+                agent = output / "agent-root"
+                clone_root(self.base / "templates" / name / "agent", agent)
             if mode == "oracle":
                 copy_tree(self.dataset / name / "solution", agent / "solution")
-                process = run_logged(shell_command(agent, "cd /app && bash /solution/solve.sh",
-                                                   environment=RECIPES[name].get("environment", {})),
-                                     output / "oracle.log", 1800)
+                if direct:
+                    native_host_cc.link_solution(agent)
+                    try:
+                        process = run_logged(self.agent_command(agent, "cd /app && bash /solution/solve.sh",
+                            stage=stage, uid=uid, environment=RECIPES[name].get("environment", {})),
+                            output / "oracle.log", 1800, output / "agent-state.json", uid, cwd=agent)
+                    finally:
+                        agent = native_path_cc.return_agent_root(output)
+                else:
+                    process = run_logged(shell_command(agent, "cd /app && bash /solution/solve.sh",
+                                                       environment=RECIPES[name].get("environment", {})),
+                                         output / "oracle.log", 1800)
                 if process["exit_code"]:
                     raise RuntimeError(f"oracle setup failed: {output / 'oracle.log'}")
+            elif direct:
+                agent = native_path_cc.return_agent_root(output)
             results[mode] = self.grade(name, agent, output)
             if results[mode]["infrastructure_error"]:
                 raise RuntimeError(f"control verifier failed: {output}")
         results["valid"] = results["baseline"]["score"] == 0 and results["oracle"]["score"] == 1
+        if direct:
+            results["execution_kind"] = "direct host reference setup; unchanged isolated original verifier"
         write_json(path / "result.json", results)
         if not results["valid"]:
             raise RuntimeError(f"baseline/oracle control mismatch: {path}")
@@ -536,8 +570,8 @@ class Evaluation:
         write_json(config / "mcp.json", {"mcpServers": {}})
         (config / "instruction.md").write_bytes((self.dataset / name / "instruction.md").read_bytes())
         args = bootstrap + ["-p", "--output-format", "stream-json", "--verbose",
-                "--settings", "/eval/settings.json", "--setting-sources", "",
-                "--strict-mcp-config", "--mcp-config", "/eval/mcp.json",
+                "--settings", self.config_path(root, "/eval/settings.json", stage), "--setting-sources", "",
+                "--strict-mcp-config", "--mcp-config", self.config_path(root, "/eval/mcp.json", stage),
                 "--permission-mode", "bypassPermissions", "--disable-slash-commands",
                 "--tools", "Bash,Read,Write,Edit,Glob,Grep", "--model", launch["model"],
                 "--effort", effort, "--max-turns", "500"]
@@ -547,7 +581,7 @@ class Evaluation:
                   if wall_timeout is not None else "The runner imposes no automatic wall-clock cutoff for this attempt. ")
         prefix += "Work independently. Do not retrieve benchmark solutions, tests or task-specific online hints.\n\n"
         (config / "prompt.txt").write_text(prefix + (config / "instruction.md").read_text())
-        command = "cd /app && " + shlex.join(args) + " < /eval/prompt.txt"
+        command = "cd /app && " + shlex.join(args) + " < " + shlex.quote(self.config_path(root, "/eval/prompt.txt", stage))
         env = {**RECIPES[name].get("environment", {}), **bootstrap_env}
         actual_version = subprocess.check_output(
             self.agent_command(root, shlex.join(bootstrap + ["--version"]), uid=uid, environment=env, stage=stage),
@@ -633,7 +667,7 @@ def main() -> None:
         # Pair efforts on each task. At most one attempt for each effort runs at
         # once, so bridge requests can be attributed by effort and time window.
         for name, repeat, efforts in attempt_batches(evaluation.plan, args.stage, args.repeats, args.tasks):
-            with ThreadPoolExecutor(max_workers=2) as pool:
+            with ThreadPoolExecutor(max_workers=evaluation.plan.get("formal_native_subset", {}).get("agent_concurrency", 2)) as pool:
                 futures = []
                 for effort in efforts:
                     if args.resume and evaluation.resume_attempt(name, effort, args.stage, repeat,

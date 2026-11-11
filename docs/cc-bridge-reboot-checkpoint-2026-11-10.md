@@ -1,5 +1,7 @@
 # CC + bridge 评测重启检查点（2026-11-10）
 
+**2026-11-11 18:03 按用户要求改为容器内直接运行 CC，后续不再使用 PRoot。** 历史 **9/30** 保留，新阶段 `formal-1m-720k-host-cc-20261111-evening` 继续剩余 21 个位置；重新运行真实 high/max 烟测和原始评分对照。CC 使用独立 UID、HOME 和 venv，`/app` 独占链接要求两档串行；原始判分器继续独立验收。自动停机仍为 **11 月 12 日 00:05:57（北京时间）**。新方式见 [运行说明](terminal-bench-native.md#当前方式容器内直接运行-cc)，当前进度见 [本轮 checkpoint](evidence/cc-bridge-evening-continuation-2026-11-11.json)。
+
 **2026-11-11 17:06 已再次恢复。** 保留累计完成的 **9/30**，重建环境后从 `ks-solver-cpp` high / r1 继续。用户要求约 7 小时后主动停止，已安排 **2026-11-12 00:05:57（北京时间）** 自动停机并保存提交推送。新阶段启用原生 idle 修复，模型 `kimi-k3.1-pro[1m]`、压缩窗口 720000、128K 输出配置；详见 [本轮记录](cc-bridge-evening-continuation-2026-11-11.md) 和 [持续 checkpoint](evidence/cc-bridge-evening-continuation-2026-11-11.json)。下面的 15:00 暂停是上一轮历史状态。
 
 **2026-11-11 15:00 已按约定暂停，可以重启容器。** 最终 checkpoint `8ecacda` 已推送，累计完成 **9/30**；KS high / r1 在 136 次工具调用后按行政停止记录，未判分。已核对评测、自动 checkpoint、bridge、浏览器、监督与监控进程全部退出，8083/9225 关闭，无遗留请求。完整终态见 [本轮检查点](evidence/cc-bridge-1m-reboot-continuation-2026-11-11.json)。
