@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794355798.99767,
+  "checkpoint_at": 1794355819.978572,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-1m-20261111-0801",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -540,15 +540,15 @@
     "host_memory_limit_bytes": "30064771072"
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794355788.881087,
-    "commit": "10efa038b8205d2cdebd1bb7dfe4b50ef83c4a18",
+    "attempted_at": 1794355799.0211477,
+    "commit": "1bc2756db30a8f863288b971927b394c35c3d5ff",
     "pushed": true,
     "returncode": 0
   },
   "controls": {},
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794355798.9984386,
+    "generated_at": 1794355819.9793024,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
@@ -561,7 +561,7 @@
   "campaign": {
     "controller_alive": true,
     "status": "preparing",
-    "task": "embedding-drift-monitor"
+    "task": "batched-eval-parity"
   },
   "reboot_stop": {
     "stop_at": 1794380400.0,
@@ -648,8 +648,8 @@
     },
     {
       "path": "campaign-state.json",
-      "sha256": "de218ca135a9c24369984a4103fa7ded34f3a558441f62735cd84e5c90f85c2e",
-      "size": 3724
+      "sha256": "fa5c0f71bbd06b70355bb54eef07d09361cc6388eac88520322daf5377047ee1",
+      "size": 3720
     },
     {
       "path": "cdp-observer-process.json",
@@ -658,8 +658,8 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "e8bad0736f66f0b7c69dcc0defd3e384a6b89bd83f65489f3880eafab40edc24",
-      "size": 133
+      "sha256": "1276dc9b2cc142ebd08da8fdc2c4ab6438fa16ca2c084969c9987781b786648b",
+      "size": 134
     },
     {
       "path": "checkpoint-process.json",
@@ -713,8 +713,8 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "4067ec16680a57d4080ecd7d1290ee6da12971f193be54fd610f9fcc9babfe3b",
-      "size": 715
+      "sha256": "ef75e3fc9253772918dba4045738eb0c0d2f431c7a20d27d999fe10ca0163531",
+      "size": 802
     },
     {
       "path": "settings-formal-high.json",
