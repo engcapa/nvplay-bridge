@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794440500.6856873,
+  "checkpoint_at": 1794440519.4204347,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261112",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -854,8 +854,8 @@
     "isolation_boundary": "Real dedicated Unix UID and protected source directories; shared host filesystem, kernel and network"
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794440467.4465027,
-    "commit": "f69fe5d5234bf4ae259d229799fe1e94a7583e9c",
+    "attempted_at": 1794440500.715863,
+    "commit": "e0a451bdec1d03cce120e995e53d50693f0bbf70",
     "pushed": true,
     "returncode": 0
   },
@@ -1266,7 +1266,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794440500.6881769,
+    "generated_at": 1794440519.421995,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
@@ -1278,8 +1278,8 @@
   "combined_plan_positions_completed": 11,
   "campaign": {
     "controller_alive": true,
-    "status": "control_validated",
-    "task": "session-window-debug"
+    "status": "validating_controls",
+    "task": "embedding-drift-monitor"
   },
   "status": "validating_controls",
   "bridge_health": {
@@ -1365,8 +1365,8 @@
     },
     {
       "path": "browser-supervisor-state.json",
-      "sha256": "e7b18254bafa4be853cadad6b18c05d91ea4c29ed5056603a1916957f5b4851d",
-      "size": 100
+      "sha256": "07fd5e9152a96491c4d52403de152954fc323d35d866232bb6f50692e9939487",
+      "size": 102
     },
     {
       "path": "campaign-launch-process.json",
@@ -1375,8 +1375,8 @@
     },
     {
       "path": "campaign-state.json",
-      "sha256": "c5f5dc087e94ff010892b86a83c9860acacb2eae07ee8f81c0b8596e78d01dc1",
-      "size": 6535
+      "sha256": "8116f6f3b0f1af8b6d951ab5e6dfaec52dd00bebbecc255755f6c0dd6dc63e4b",
+      "size": 6540
     },
     {
       "path": "cdp-observer-process.json",
@@ -1385,8 +1385,8 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "9006274000d445275c809a76034258a7a12347acb437e97ba4adbec42d9c2474",
-      "size": 134
+      "sha256": "935fa26319b373fe89447c73ba8e71d57ea9a82c1888a8d5912ed29af5c172f1",
+      "size": 133
     },
     {
       "path": "checkpoint-process.json",
@@ -1542,6 +1542,36 @@
       "archive": "agent-root.tar.gz",
       "sha256": "6e1204941bbed2df0aa227fdb030e41432ed5ecb78487a042c5ff336aafba345",
       "bytes": 4265366,
+      "tar_compare_passed_before_reclaim": true,
+      "restore": "sudo tar -xpf agent-root.tar.gz -C ."
+    },
+    {
+      "directory": "controls/session-window-debug/oracle",
+      "archived_at": 1794440518.4711914,
+      "root": "verifier-root",
+      "archive": "verifier-root.tar.gz",
+      "sha256": "659eaa59c1a55b7f2eb811d0e303560ac136bab771dcdf26838f1cde4d0ac4b5",
+      "bytes": 486829709,
+      "tar_compare_passed_before_reclaim": true,
+      "restore": "sudo tar -xpf verifier-root.tar.gz -C ."
+    },
+    {
+      "directory": "smoke/high",
+      "archived_at": 1794440519.127003,
+      "root": "agent-root",
+      "archive": "agent-root.tar.gz",
+      "sha256": "ad9c2cbeb8b0813188069696e57677ce7fd1b64cbbcf9ddf10933d327583e3ca",
+      "bytes": 4278506,
+      "tar_compare_passed_before_reclaim": true,
+      "restore": "sudo tar -xpf agent-root.tar.gz -C ."
+    },
+    {
+      "directory": "smoke/max",
+      "archived_at": 1794440519.4052536,
+      "root": "agent-root",
+      "archive": "agent-root.tar.gz",
+      "sha256": "b98907605e63176cf147bfe0db7eb3f12900ebed4b395e9595f8cd7c366e7620",
+      "bytes": 4279588,
       "tar_compare_passed_before_reclaim": true,
       "restore": "sudo tar -xpf agent-root.tar.gz -C ."
     }
