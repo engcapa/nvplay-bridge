@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794402984.8642247,
+  "checkpoint_at": 1794402988.422686,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261111-evening",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -997,8 +997,8 @@
     "fresh_controls_required": true
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794402980.3889205,
-    "commit": "64c2aa7b54725c0c9d0b06e289b48f3af3b36bb1",
+    "attempted_at": 1794402985.0968802,
+    "commit": "254a4327f7cd26ebcbd07d3edc204bb80192fd8b",
     "pushed": true,
     "returncode": 0
   },
@@ -1422,7 +1422,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794402984.878355,
+    "generated_at": 1794402988.437622,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-1m-720k-host-cc-20261111-evening/28800/high": {
@@ -1543,9 +1543,8 @@
     "repeat": 1
   },
   "transport_transition": {
-    "status": "waiting_for_natural_completion",
-    "at": 1794402984.2044818,
-    "current_agent_signalled": false
+    "status": "archiving_completed_attempts",
+    "at": 1794402988.4226258
   },
   "reboot_stop": {
     "stop_at": 1794413157.0,
@@ -1636,7 +1635,7 @@
     },
     {
       "path": "browser-supervisor-state.json",
-      "sha256": "65f339179cbc79a7313ca84f0a21663c7b598492db318d67093f88e37331eb47",
+      "sha256": "6a791af54b60b5cca5655e3a4ee1393687a63e491951a6e415ceb7045e0a7d09",
       "size": 102
     },
     {
@@ -1661,7 +1660,7 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "acbf559041de37ca896e32166a911b2fff574a78810e3d916cdf4b922114269a",
+      "sha256": "3dc70ec200c5a6450f9dd83a7c2b20b2dd5fb6145409434e8537af2cfbdb562f",
       "size": 134
     },
     {
@@ -1946,8 +1945,8 @@
     },
     {
       "path": "transport-transition-state.json",
-      "sha256": "9a647e16f72428df846393e9f7ec9284de8da569d15d2517965113a040e44cd1",
-      "size": 113
+      "sha256": "55f6a538d3a8d519d48682d41cefb23f52905c5a518be99bda82703d30391f9d",
+      "size": 75
     },
     {
       "path": "unittest-regression.log",
