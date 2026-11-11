@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794392664.817683,
+  "checkpoint_at": 1794392728.7867126,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261111-evening",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -983,8 +983,8 @@
     "fresh_controls_required": true
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794392645.2159903,
-    "commit": "d11d41b6ce41cb2f7b625adf9eecf57821e68020",
+    "attempted_at": 1794392664.9457562,
+    "commit": "2cc7cedf4359884683dc7f2fb3ecee86e57acbb3",
     "pushed": true,
     "returncode": 0
   },
@@ -1386,7 +1386,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794392664.8213956,
+    "generated_at": 1794392728.7889714,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
@@ -1465,7 +1465,7 @@
     },
     {
       "path": "browser-supervisor-state.json",
-      "sha256": "8546f1ce12ca30f0beb3666362694fa81159890190dc64831419fc356f3b9999",
+      "sha256": "8b59165748b86afdf0c905d63ff0fe687f5d2ce762a859033e176162c5bc9ab5",
       "size": 102
     },
     {
@@ -1485,7 +1485,7 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "f0f127fc8afa96ca4509d4428abb3de68819cc36e95d83348a1c7e1b9738633e",
+      "sha256": "aa877daa96b1fc56993af33c2155b3661f8cafa9fc0a3886d48fc7b249adb29b",
       "size": 134
     },
     {
@@ -1660,7 +1660,7 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "48e0b3badea5906927af4d687e9f51ee154e9bf3153d35ca6b9a1ea072c785b0",
+      "sha256": "dfda43d5c48005351baa825ff72bf18c627c20a9eafcfbb5c22312a0f3d808d0",
       "size": 772
     },
     {
@@ -1714,6 +1714,16 @@
       "bytes": 33650838,
       "tar_compare_passed_before_reclaim": true,
       "restore": "sudo tar -xpf agent-root.tar.gz -C ."
+    },
+    {
+      "directory": "controls/batched-eval-parity/baseline",
+      "archived_at": 1794392724.9665194,
+      "root": "verifier-root",
+      "archive": "verifier-root.tar.gz",
+      "sha256": "cc693201cfbaa14f60135e289d927945d050c2c2ca4367770c71af18845e137d",
+      "bytes": 513249758,
+      "tar_compare_passed_before_reclaim": true,
+      "restore": "sudo tar -xpf verifier-root.tar.gz -C ."
     },
     {
       "directory": "controls/embedding-drift-monitor/baseline",
