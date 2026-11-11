@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794374729.6356306,
+  "checkpoint_at": 1794374756.4029152,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-1m-20261111-0801",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -780,8 +780,8 @@
     "host_memory_limit_bytes": "30064771072"
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794374669.2291367,
-    "commit": "f67b57fdab9c064200956301e64f0789b80461a4",
+    "attempted_at": 1794374731.061019,
+    "commit": "9300336ca0540bd9545b78c31a34510a11d544c2",
     "pushed": true,
     "returncode": 0
   },
@@ -1246,7 +1246,7 @@
     }
   ],
   "results": {
-    "generated_at": 1794374730.9659889,
+    "generated_at": 1794374758.013651,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-1m-720k-path-cc-2-1-322-20261111/28800/max": {
@@ -1361,8 +1361,8 @@
         "task": "ks-solver-cpp",
         "effort": "high",
         "started_at": 1794366750.3032668,
-        "elapsed_seconds": 7979.4,
-        "tool_calls": 27,
+        "elapsed_seconds": 8006.1,
+        "tool_calls": 28,
         "last_tool": "Bash"
       },
       {
@@ -1371,7 +1371,7 @@
         "task": "ks-solver-cpp",
         "effort": "max",
         "started_at": 1794366750.2963288,
-        "elapsed_seconds": 7980.0,
+        "elapsed_seconds": 8006.9,
         "tool_calls": 2,
         "last_tool": "Bash"
       }
@@ -1414,7 +1414,7 @@
   },
   "bridge_activity": {
     "events_last_300s": {
-      "browser_progress": 106,
+      "browser_progress": 104,
       "browser_buffer": 8,
       "browser_pool_release": 8,
       "browser_done": 7,
@@ -1441,33 +1441,33 @@
         "reasoning_effort": "max",
         "tab_id": "kpool=4",
         "counts": {
-          "thinking_chars": 3012,
+          "thinking_chars": 4698,
           "text_chars": 0,
           "tool_calls": 0
         },
         "usage": {
           "prompt_tokens": 5773,
-          "completion_tokens": 668,
-          "total_tokens": 6441,
+          "completion_tokens": 1027,
+          "total_tokens": 6800,
           "prompt_tokens_details": {
             "cached_tokens": 0
           },
           "completion_tokens_details": {
-            "reasoning_tokens": 668
+            "reasoning_tokens": 1027
           }
         },
-        "age_seconds": 63.8,
-        "activity_age_seconds": 2.3
+        "age_seconds": 90.6,
+        "activity_age_seconds": -1.6
       },
       {
-        "id": "a1148d4d",
+        "id": "58d2d948",
         "retry_count": 0,
         "phase": "browser_tab",
         "attempt": 1,
         "reasoning_effort": "high",
-        "tab_id": "kpool=2",
-        "age_seconds": 4.8,
-        "activity_age_seconds": 4.8
+        "tab_id": "kpool=5",
+        "age_seconds": 6.4,
+        "activity_age_seconds": 6.4
       }
     ],
     "recent_errors": [],
@@ -1532,8 +1532,8 @@
     },
     {
       "path": "browser-supervisor-state.json",
-      "sha256": "67653f3179b97a18793d8cc67b946c0d2714da61a8bfc2c759bcb3c81ce598fe",
-      "size": 102
+      "sha256": "a7927309af54e3400a1f952d943711be38dbabcc74998795a1032686dba61c19",
+      "size": 103
     },
     {
       "path": "campaign-launch-process.json",
@@ -1572,8 +1572,8 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "c2f4165100a6f7a1820762cebf92de896096416f0dcf97223220e8cd03bd3a3f",
-      "size": 134
+      "sha256": "284e8178ed81f4cab346878ff25fa2f1819abfed17c0f5ed53299c1afe4b2905",
+      "size": 133
     },
     {
       "path": "checkpoint-permission-regression.log",
@@ -1707,8 +1707,8 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "e53ec4cc5c7ec1ff96e2d0171a757c092fef71330d16331d74d2ed0b6962c869",
-      "size": 818
+      "sha256": "799927a342fd6540bae94cb076a56304c4e79022ce09ef6d06c7e55332177bb7",
+      "size": 819
     },
     {
       "path": "runs/formal-1m-720k-path-cc-2-1-322-20261111/ks-solver-cpp--high--r1/identity.json",
