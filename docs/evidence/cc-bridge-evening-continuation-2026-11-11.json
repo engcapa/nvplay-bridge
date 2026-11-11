@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794400236.5615585,
+  "checkpoint_at": 1794400249.849302,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261111-evening",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -983,8 +983,8 @@
     "fresh_controls_required": true
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794400222.1969206,
-    "commit": "a8d1ebf6f4e4dea43a660d1c47d5b894adc110ad",
+    "attempted_at": 1794400237.0508695,
+    "commit": "5b0a3f44c7e5c9729b0ad128fb95918005319842",
     "pushed": true,
     "returncode": 0
   },
@@ -1408,41 +1408,136 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794400236.9492073,
+    "generated_at": 1794400249.8632176,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
-    "totals": {},
-    "attempts": [],
-    "pending": [
-      {
-        "attempt": "runs/formal-1m-720k-host-cc-20261111-evening/ks-solver-cpp--high--r1",
-        "status": "grading",
-        "task": "ks-solver-cpp",
-        "effort": "high",
-        "tool_calls": 3,
-        "last_tool": "Bash"
+    "totals": {
+      "formal-1m-720k-host-cc-20261111-evening/28800/high": {
+        "attempts": 1,
+        "valid_grades": 1,
+        "infrastructure_errors": 0,
+        "artifact_passes": 0,
+        "artifact_pass_at_1": 0.0,
+        "end_to_end_passes": 0,
+        "end_to_end_pass_rate": 0.0,
+        "agent_seconds": 6821.841,
+        "logical_requests": 8,
+        "bridge_errors": 5,
+        "bridge_errors_after_content": 0,
+        "bridge_errors_before_content": 5,
+        "bridge_retries": 7,
+        "http_failures_retried": 7,
+        "requests_recovered_after_retry": 1,
+        "cancelled_requests": 0,
+        "transport": {
+          "attempts_with_evidence": 1,
+          "max_output_tokens": [
+            131072
+          ],
+          "http_status_counts": {
+            "400": 3,
+            "500": 9
+          },
+          "timed_http_failures": 12,
+          "http_failed_attempt_seconds": 1918.89,
+          "completed_requests": 3,
+          "observed_usage": {
+            "prompt_tokens": 16253,
+            "completion_tokens": 71613,
+            "total_tokens": 87866,
+            "reasoning_tokens": 71330
+          },
+          "requests_with_partial_usage": 0,
+          "requests_without_observed_usage": 5,
+          "longest_completed_request_seconds": 4584.249
+        },
+        "usage": {
+          "prompt_tokens": 16253,
+          "completion_tokens": 71613,
+          "total_tokens": 87866,
+          "reasoning_tokens": 71330
+        }
       }
-    ]
+    },
+    "attempts": [
+      {
+        "task": "ks-solver-cpp",
+        "stage": "formal-1m-720k-host-cc-20261111-evening",
+        "effort": "high",
+        "repeat": 1,
+        "budget_seconds": 28800,
+        "agent_wall_clock_timeout_seconds": null,
+        "artifact_score": 0,
+        "infrastructure_error": null,
+        "end_to_end_success": false,
+        "agent_seconds": 6821.841,
+        "agent_timed_out": false,
+        "cc_subtype": "success",
+        "cc_turns": 4,
+        "logical_requests": 8,
+        "upstream_attempts": 15,
+        "bridge_errors": 5,
+        "bridge_errors_after_content": 0,
+        "bridge_errors_before_content": 5,
+        "bridge_retries": 7,
+        "http_failures_retried": 7,
+        "requests_recovered_after_retry": 1,
+        "bridge_cancelled": 0,
+        "bridge_unfinished": [],
+        "transport": {
+          "max_output_tokens": [
+            131072
+          ],
+          "http_status_counts": {
+            "400": 3,
+            "500": 9
+          },
+          "timed_http_failures": 12,
+          "http_failed_attempt_seconds": 1918.89,
+          "completed_requests": 3,
+          "completed_request_seconds": 5200.555,
+          "longest_completed_request_seconds": 4584.249,
+          "observed_usage": {
+            "prompt_tokens": 16253,
+            "completion_tokens": 71613,
+            "total_tokens": 87866,
+            "cached_prompt_tokens": 0,
+            "reasoning_tokens": 71330
+          },
+          "requests_with_partial_usage": 0,
+          "requests_without_observed_usage": 5
+        },
+        "usage": {
+          "prompt_tokens": 16253,
+          "completion_tokens": 71613,
+          "total_tokens": 87866,
+          "cached_prompt_tokens": 0,
+          "reasoning_tokens": 71330
+        },
+        "source_head": "73d9155d3365f0fe3f20263241ed00e35933cb78"
+      }
+    ],
+    "pending": []
   },
   "new_formal_attempts_planned": 21,
-  "new_formal_attempts_completed": 0,
+  "new_formal_attempts_completed": 1,
   "preserved_prior_attempts_completed": 9,
-  "combined_plan_positions_completed": 9,
+  "combined_plan_positions_completed": 10,
   "campaign": {
-    "controller_alive": true,
+    "controller_alive": false,
     "status": "formal_running",
     "task": "ks-solver-cpp",
     "repeat": 1
   },
   "transport_transition": {
     "status": "waiting_for_natural_completion",
-    "at": 1794400224.104073,
+    "at": 1794400239.1067324,
     "current_agent_signalled": false
   },
   "reboot_stop": {
     "stop_at": 1794413157.0,
     "armed": true
   },
-  "status": "formal_running",
+  "status": "formal_incomplete",
   "bridge_health": {
     "status": "ok",
     "model": "moonshotai/kimi-k3.1-pro",
@@ -1641,8 +1736,13 @@
     },
     {
       "path": "browser-supervisor-state.json",
-      "sha256": "f77e73dcc30f6a7646c98e21d727ae5a72f107bd88c6f52c8660134bb15a5f3b",
-      "size": 100
+      "sha256": "fc916b327255892a60e1d61e3dcd04cc9922a65c02f34711fc2b340cd6dcc600",
+      "size": 102
+    },
+    {
+      "path": "campaign-error.json",
+      "sha256": "02c59652142690e2d1f964cd11183b136228d57d04145da4fe9c09f2e2b2bc06",
+      "size": 164
     },
     {
       "path": "campaign-launch-process.json",
@@ -1661,7 +1761,7 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "a17fcdd692023894d5e0df95541359b41901bc40da5fc6e3ad28a5c4ad8c1826",
+      "sha256": "b3a7d481bead3b0b0c319d668a3ee2fc3cbdbcbbdd58d2e8836896cc5b3d2ef4",
       "size": 134
     },
     {
@@ -1860,6 +1960,16 @@
       "size": 782
     },
     {
+      "path": "runs/formal-1m-720k-host-cc-20261111-evening/ks-solver-cpp--high--r1/artifacts.json",
+      "sha256": "a444662e54e2bb988c5e11909df332d6de7b58773d7036ad0e24dc75479e8032",
+      "size": 127
+    },
+    {
+      "path": "runs/formal-1m-720k-host-cc-20261111-evening/ks-solver-cpp--high--r1/grade.json",
+      "sha256": "cd31aa3646ff4b68de0efbf88886f11b13bb4465e1736a8aae6dfd9186837c55",
+      "size": 250
+    },
+    {
       "path": "runs/formal-1m-720k-host-cc-20261111-evening/ks-solver-cpp--high--r1/identity.json",
       "sha256": "1096cba044b0781a830599784b65ede197711a57d949f19ee8a59e4746273297",
       "size": 5456
@@ -1868,6 +1978,11 @@
       "path": "runs/formal-1m-720k-host-cc-20261111-evening/ks-solver-cpp--high--r1/request-protocol.json",
       "sha256": "074d5a3018950996054530ec277bc8be5815a5f2731d3fbceabba12cc807985f",
       "size": 2861
+    },
+    {
+      "path": "runs/formal-1m-720k-host-cc-20261111-evening/ks-solver-cpp--high--r1/result.json",
+      "sha256": "7739302451de2396d3cb006a8ded06b0d068ca89561261820f8cd09012d6ebb8",
+      "size": 12227
     },
     {
       "path": "service-identity-regression.log",
@@ -1906,8 +2021,8 @@
     },
     {
       "path": "transport-transition-state.json",
-      "sha256": "f64ad6472312fe15cea810fe236df02697368ab55d2edcc800664a14132df588",
-      "size": 112
+      "sha256": "e91c6b792a2a3429dab841b19876c9e690cda79acc7fa0ce8e4506cf0ec5ef1a",
+      "size": 113
     },
     {
       "path": "unittest-regression.log",
