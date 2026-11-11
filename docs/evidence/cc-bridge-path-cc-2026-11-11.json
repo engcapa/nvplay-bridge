@@ -615,9 +615,24 @@
       "path": "path-cc-runtime-isolation.json",
       "sha256": "27aa50797f4a9535895253e48bfba6fce0604c3676ceb7f8c014ae66a5fc0839",
       "size": 1082
+    },
+    {
+      "path": "path-cc-delayed-headers-v2/identity.json",
+      "sha256": "744240ea8a6f0fa677b8daaaa5f30123a23b5daaa20e999e5233dff6a0d1a3a2",
+      "size": 303
+    },
+    {
+      "path": "path-cc-delayed-headers-v2/events.json",
+      "sha256": "cd7dbd62f5f6f0ef2e33130e1856dfcb4ea5c66eb55dbb2928d85163ff38f848",
+      "size": 435
+    },
+    {
+      "path": "path-cc-delayed-headers-v2/result.json",
+      "sha256": "a1f3006cd9503e274803f7d53c7bdca02d937bf3dda41dc56aab6a51da280e4a",
+      "size": 474
     }
   ],
-  "updated_at": 1794361024.2965748,
+  "updated_at": 1794361141.2805285,
   "live_runtime_isolation": {
     "readable_private_paths": [],
     "real_uid": 20006,
@@ -821,7 +836,7 @@
         "task": "mvcc-lsm-compaction",
         "effort": "max",
         "started_at": 1794360810.819098,
-        "elapsed_seconds": 213.8,
+        "elapsed_seconds": 330.5,
         "tool_calls": 17,
         "last_tool": "Bash"
       }
@@ -839,9 +854,70 @@
     }
   },
   "long_headers_probe": {
-    "status": "running",
+    "status": "passed",
     "delay_seconds": 310,
     "local_only": true,
-    "upstream_requests": 0
+    "upstream_requests": 0,
+    "identity": {
+      "probe_sha256": "5bade363d081679c7b2ce19541424124129d3889d33e7a406fffb4ffff4d9891",
+      "pinned_cli_sha256": "bfb3703ad5380242328459bc62ada4bde8ae7ba57c6e1eeadb9c00e08874c478",
+      "node_version": null,
+      "delay_seconds": 310.0,
+      "nvidia_requests": 0,
+      "native_cli_version": "2.1.322 (Claude Code)"
+    },
+    "result": {
+      "results": [
+        {
+          "case": "native-proot",
+          "process_environment_timeout": true,
+          "adapter": false,
+          "exit_code": 0,
+          "duration_seconds": 310.568,
+          "answer": "CONTROLLED_DELAYED_HEADERS_OK",
+          "is_error": false,
+          "success": true,
+          "request_counts": {
+            "stream": 1,
+            "nonstream": 1
+          },
+          "received_delayed_headers": true,
+          "closed_before_delayed_headers": false
+        }
+      ],
+      "nvidia_requests": 0
+    },
+    "events": [
+      {
+        "ts": 1794360785.1617448,
+        "case": "native-proot",
+        "event": "request",
+        "kind": "stream",
+        "number": 1,
+        "max_tokens": 131072
+      },
+      {
+        "ts": 1794360785.1703641,
+        "case": "native-proot",
+        "event": "request",
+        "kind": "nonstream",
+        "number": 1,
+        "max_tokens": 64000
+      },
+      {
+        "ts": 1794361095.3118174,
+        "case": "native-proot",
+        "event": "delay_completed",
+        "seconds": 310.0
+      }
+    ],
+    "scope": "real unmodified native PATH CLI in isolated PRoot with API_TIMEOUT_MS; does not establish an eight-hour endpoint boundary"
+  },
+  "deadline_cleanup_scope_check": {
+    "recorded_at": 1794361141.3348255,
+    "uid": 20006,
+    "matching_active_processes": 3,
+    "passed": true,
+    "deadline_unchanged": 1794380400
   }
 }
