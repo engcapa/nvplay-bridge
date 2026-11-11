@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794390613.832264,
+  "checkpoint_at": 1794390627.2778213,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261111-evening",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -716,8 +716,8 @@
     "host_memory_limit_bytes": "34359738368"
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794390570.1957486,
-    "commit": "382d51f1cd9d83d67452cfb24e177af9b94a45c5",
+    "attempted_at": 1794390613.9304705,
+    "commit": "06818587d21d6a3121207f829afa4cf1a2602375",
     "pushed": true,
     "returncode": 0
   },
@@ -1146,7 +1146,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794390613.8355758,
+    "generated_at": 1794390627.2811806,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
@@ -1223,8 +1223,8 @@
     },
     {
       "path": "browser-supervisor-state.json",
-      "sha256": "6ee8428f9c0f4101c5e22d78b0bc40786d176aff8ff9bea9ff9701636053434c",
-      "size": 102
+      "sha256": "35f187f57b79e960b222a42676cfa76abd878cddd32f7e57edd590b455a56d10",
+      "size": 101
     },
     {
       "path": "cdp-observer-process.json",
@@ -1233,7 +1233,7 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "20562eed7fa8505218b0b11462983e1084dcc0e8604d9a5e9d6338495e4180df",
+      "sha256": "cf9805e9037b58c85579c179ae8ad40d93eab532894a2524e6b758f6d67e6a34",
       "size": 134
     },
     {
@@ -1363,7 +1363,7 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "bfaec4bda723f9a53382c9356f127af00f683d017eed224b8f2b4260f42223b5",
+      "sha256": "0e6c01e435f21d14b4931ffafd9a6571ba925d8b43ce5f3eb6e3a44d896fee6d",
       "size": 681
     },
     {
@@ -1467,6 +1467,16 @@
       "bytes": 486843448,
       "tar_compare_passed_before_reclaim": true,
       "restore": "sudo tar -xpf verifier-root.tar.gz -C ."
+    },
+    {
+      "directory": "controls/session-window-debug/oracle",
+      "archived_at": 1794390625.5697997,
+      "root": "agent-root",
+      "archive": "agent-root.tar.gz",
+      "sha256": "9274352e9f3c187268ef75195696392acb0d60fa65590a8a1ead8ad14a6d0ea5",
+      "bytes": 353003758,
+      "tar_compare_passed_before_reclaim": true,
+      "restore": "sudo tar -xpf agent-root.tar.gz -C ."
     }
   ]
 }
