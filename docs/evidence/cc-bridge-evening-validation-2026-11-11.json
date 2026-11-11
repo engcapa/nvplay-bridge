@@ -1,0 +1,71 @@
+{
+  "unit_regression": {
+    "command": "PYTHONPATH=. python3 -m unittest discover -s tests -p 'test_*.py'",
+    "passed": 247,
+    "seconds": 24.879
+  },
+  "service_identity": {
+    "commit": "c86a5f9",
+    "passed": 1,
+    "real_child_process_verified": true,
+    "recycled_pid_rejected_without_signalling": true
+  },
+  "node_network_regression": {
+    "passed": 1,
+    "duration_ms": 7226.240489
+  },
+  "fixed_proot_source_commit": "25dc6a3134891f98a79f57ce1c2c1b23ff15cad1",
+  "evidence_fingerprints": {
+    "unittest-regression.log": {
+      "sha256": "bcf4fd5d688b5555c5d8ca09399ed49cdeeb6399316dfea7d8d32a0c97c58858",
+      "size": 3217
+    },
+    "service-identity-regression.log": {
+      "sha256": "46df4f0edcf4a6f9a32504da3478dd3a1a7db82b7890d0c616cbb1a0a9b16b2a",
+      "size": 98
+    },
+    "node-network-regression.log": {
+      "sha256": "5af1a9e4d2e0fcee2a7bb2c4fd3ebcfc9c7807bf7544e76c3d42703762fbe7a8",
+      "size": 235
+    },
+    "browser-http-validation.log": {
+      "sha256": "99e6eca0bb25d307f774f3d16a04f4eb6986eb2bd568d27438f18efef2f7d07d",
+      "size": 328
+    }
+  },
+  "real_cdp_error_probe": {
+    "passed": 4,
+    "cases": [
+      {
+        "endpoint": "messages",
+        "error_kind": "pool",
+        "requests": 2,
+        "result": "pass"
+      },
+      {
+        "endpoint": "responses",
+        "error_kind": "pool",
+        "requests": 2,
+        "result": "pass"
+      },
+      {
+        "endpoint": "messages",
+        "error_kind": "generic",
+        "requests": 2,
+        "result": "pass"
+      },
+      {
+        "endpoint": "responses",
+        "error_kind": "generic",
+        "requests": 2,
+        "result": "pass"
+      }
+    ],
+    "local_fixture_only": true,
+    "production_pool_not_modified": true
+  },
+  "node_adapter": {
+    "tree_sha256": "2a6ca0d5c23145f875c4b65c50645c1480526f86e45d7b455542b597e504716f",
+    "files": 208
+  }
+}
