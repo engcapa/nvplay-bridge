@@ -26,11 +26,28 @@ class PathConfigureTests(unittest.TestCase):
         (self.base / "evaluation-plan.json").write_text(json.dumps(self.plan))
         self.report = {"attempts": [{**slots[0], "stage": "formal-legacy", "artifact_score": 0}], "pending": []}
 
-    def configure(self, *, alive=False):
+    def configure(self, *, alive=False, disable_native_idle_timeout=False):
         with patch.object(upgrade, "summarize", return_value=self.report), \
              patch.object(upgrade, "campaign_progress", return_value={"controller_alive": alive}), \
              patch.object(upgrade.subprocess, "check_output", side_effect=["2.1.322 (Claude Code)", "PRoot 5.5.0"]):
-            return upgrade.configure(self.base, self.cli, self.proot, "formal-path-new")
+            return upgrade.configure(self.base, self.cli, self.proot, "formal-path-new",
+                                     disable_native_idle_timeout=disable_native_idle_timeout)
+
+    def test_idle_fix_creates_a_distinct_protocol_and_keeps_old_results(self):
+        for effort in ("high", "max"):
+            (self.base / f"settings-formal-{effort}.json").write_text(json.dumps({
+                "env": {"API_TIMEOUT_MS": "29400000", "KEEP_ORIGINAL": effort}}))
+        self.configure(disable_native_idle_timeout=True)
+        plan = json.loads((self.base / "evaluation-plan.json").read_text())
+        self.assertTrue(plan["formal_native_subset"]["cc_native_idle_timeout_disabled"])
+        self.assertNotIn("cc_native_idle_timeout_disabled",
+                         plan["protocol_history"][0]["formal_native_subset"])
+        self.assertEqual(plan["formal_native_subset"]["preserved_local_schedule"][0]["stage"],
+                         "formal-legacy")
+        for effort in ("high", "max"):
+            env = json.loads((self.base / f"settings-formal-{effort}.json").read_text())["env"]
+            self.assertEqual(env, {"API_TIMEOUT_MS": "29400000", "KEEP_ORIGINAL": effort,
+                                   "API_FORCE_IDLE_TIMEOUT": "0"})
 
     def test_preserves_failed_completed_slot_and_retires_old_smoke(self):
         smoke = self.base / "smoke"

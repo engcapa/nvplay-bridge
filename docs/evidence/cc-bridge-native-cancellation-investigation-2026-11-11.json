@@ -1,6 +1,6 @@
 {
-  "recorded_at": 1794375595.625008,
-  "status": "investigating_client_cancellations_no_live_configuration_change",
+  "recorded_at": 1794376192.7419612,
+  "status": "native_idle_override_validated_locally_waiting_natural_stage_boundary",
   "cc_version": "2.1.322",
   "cc_sha256": "bfb3703ad5380242328459bc62ada4bde8ae7ba57c6e1eeadb9c00e08874c478",
   "observed_max_nonstream_requests": [
@@ -170,13 +170,230 @@
     "310-second local body delay passed with production request environment and native CLI/PRoot.",
     "Observed cancellations are not explained by a universal 300-second CLI cutoff.",
     "Do not apply speculative timeout changes to running formal attempts; all errors and cancellations remain recorded.",
-    "430-second local headers delay reproduces early retry around 361 seconds; a matched API_FORCE_IDLE_TIMEOUT=0 comparison is running. Do not yet claim the configuration fixes it."
+    "430-second local headers delay reproduces early retry around 361 seconds; a matched API_FORCE_IDLE_TIMEOUT=0 comparison is running. Do not yet claim the configuration fixes it.",
+    "Matched 430-second probe with API_FORCE_IDLE_TIMEOUT=0 passed in 430.833 seconds with one nonstream request. The old native default did not survive the same delay. Override is validated locally; real formal deployment awaits the existing high session natural completion."
   ],
   "disabled_native_idle_comparison": {
     "directory": "logs/eval-cc-1m-20261111-0801/path-cc-headers-430-no-native-idle",
     "delay_seconds": 430,
     "API_FORCE_IDLE_TIMEOUT": "0",
+    "status": "passed",
+    "nvidia_requests": 0,
+    "identity": {
+      "probe_sha256": "ac4895db2624e69296794deb702f5d58cd001d41c925204c238ab9578956ff0e",
+      "pinned_cli_sha256": "bfb3703ad5380242328459bc62ada4bde8ae7ba57c6e1eeadb9c00e08874c478",
+      "node_version": null,
+      "delay_seconds": 430.0,
+      "nvidia_requests": 0,
+      "delay_phase": "headers",
+      "native_idle_timeout_disabled": true,
+      "production_environment_supplied": true,
+      "http_version": "1.0",
+      "native_cli_version": "2.1.322 (Claude Code)"
+    },
+    "result": {
+      "results": [
+        {
+          "case": "native-proot",
+          "process_environment_timeout": true,
+          "adapter": false,
+          "exit_code": 0,
+          "duration_seconds": 430.833,
+          "answer": "CONTROLLED_DELAYED_HEADERS_OK",
+          "is_error": false,
+          "success": true,
+          "request_counts": {
+            "stream": 1,
+            "nonstream": 1
+          },
+          "delay_phase": "headers",
+          "delay_completed": true,
+          "closed_during_delay": false,
+          "received_delayed_headers": true,
+          "closed_before_delayed_headers": false
+        }
+      ],
+      "nvidia_requests": 0
+    },
+    "fingerprints": [
+      {
+        "path": "logs/eval-cc-1m-20261111-0801/path-cc-headers-430-no-native-idle/identity.json",
+        "size": 439,
+        "sha256": "ea2fcfa5f350c951dc7a70e3352f65d72da66395f6f168b7294b0bbaa121cb40"
+      },
+      {
+        "path": "logs/eval-cc-1m-20261111-0801/path-cc-headers-430-no-native-idle/result.json",
+        "size": 573,
+        "sha256": "9665fe1dc2c5671c2dd97134f42b99c715fa2ab2e33dab667077b20555ff6c72"
+      },
+      {
+        "path": "logs/eval-cc-1m-20261111-0801/path-cc-headers-430-no-native-idle/events.json",
+        "size": 433,
+        "sha256": "1b6e04e3a5d57fc5e13b0fece9d419aa6dd3a9762df342d0d9590abb23a2afc5"
+      },
+      {
+        "path": "logs/eval-cc-1m-20261111-0801/path-cc-headers-430-no-native-idle/probe-source.py",
+        "size": 18168,
+        "sha256": "ac4895db2624e69296794deb702f5d58cd001d41c925204c238ab9578956ff0e"
+      }
+    ]
+  },
+  "http11_confirmation": {
+    "directory": "logs/eval-cc-1m-20261111-0801/path-cc-headers-430-no-native-idle-http11",
     "status": "running",
     "nvidia_requests": 0
+  },
+  "regression": {
+    "command": "python3 -m unittest discover -s tests -p 'test_*.py'",
+    "tests": 235,
+    "passed": true,
+    "seconds": 16.104,
+    "log_sha256": "922380744ae5cc769c679bff187becf09e780f0ba8571762038b13d47f6d0525"
+  },
+  "ks_max_r1_terminal": {
+    "agent": {
+      "exit_code": 1,
+      "timed_out": false,
+      "timeout_seconds": null,
+      "started_at": 1794366750.2971702,
+      "finished_at": 1794375822.550411,
+      "duration_seconds": 9072.253
+    },
+    "score": 0,
+    "infrastructure_error": null,
+    "end_to_end_success": false,
+    "requests": 14,
+    "bridge_errors": 6,
+    "cancellations": 5,
+    "unfinished_requests": 0,
+    "cc_api_retry_events": 9,
+    "result_sha256": "6dc6547fb5881c4ac4115cc7d7977a59cdb8ab2c3fcda2480c6971391749281f",
+    "old_stage_preserved": true
+  },
+  "confirmed_full_output_request": [
+    {
+      "event": "browser_start",
+      "ts": 1794366764.5244648,
+      "id": "113ba4f0",
+      "sec": 0.0,
+      "max_tokens": 131072,
+      "reasoning_effort": "max"
+    },
+    {
+      "event": "browser_done",
+      "ts": 1794371891.1840723,
+      "id": "113ba4f0",
+      "sec": 5126.66,
+      "usage": {
+        "prompt_tokens": 5449,
+        "completion_tokens": 131072,
+        "total_tokens": 136521,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 131072
+        }
+      },
+      "counts": {
+        "thinking_chars": 369059,
+        "text_chars": 0,
+        "tool_calls": 0
+      }
+    }
+  ],
+  "full_output_limitation": "131072 output tokens, all reasoning; not a complete solution and not evidence of 1M input capacity.",
+  "cancelled_request_partial_usage": {
+    "7c9d17c3": {
+      "event": "browser_progress",
+      "ts": 1794374249.7544577,
+      "usage": {
+        "prompt_tokens": 5773,
+        "completion_tokens": 8319,
+        "total_tokens": 14092,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 8319
+        }
+      },
+      "partial": true
+    },
+    "68aaf890": {
+      "event": "browser_progress",
+      "ts": 1794374628.9633172,
+      "usage": {
+        "prompt_tokens": 5773,
+        "completion_tokens": 9768,
+        "total_tokens": 15541,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 9768
+        }
+      },
+      "partial": true
+    },
+    "b052b321": {
+      "event": "browser_progress",
+      "ts": 1794375023.4873273,
+      "usage": {
+        "prompt_tokens": 5773,
+        "completion_tokens": 5972,
+        "total_tokens": 11745,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 5972
+        }
+      },
+      "partial": true
+    },
+    "57460e97": {
+      "event": "browser_progress",
+      "ts": 1794375420.5507789,
+      "usage": {
+        "prompt_tokens": 5773,
+        "completion_tokens": 8047,
+        "total_tokens": 13820,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 8047
+        }
+      },
+      "partial": true
+    },
+    "ce1150da": {
+      "event": "browser_progress",
+      "ts": 1794375818.7041032,
+      "usage": {
+        "prompt_tokens": 5773,
+        "completion_tokens": 9524,
+        "total_tokens": 15297,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 9524
+        }
+      },
+      "partial": true
+    }
+  },
+  "partial_usage_limitation": "Supplemental last observed usage from progress events. Original frozen result aggregates omit usage on cancellation; these partial observations are not final or billed totals.",
+  "deployment": {
+    "status": "not_applied_to_live_high_attempt",
+    "next_stage": "formal-1m-720k-path-cc-2-1-322-noidle-20261111",
+    "settings_env": {
+      "API_FORCE_IDLE_TIMEOUT": "0"
+    },
+    "requires_fresh_smoke": true,
+    "old_failed_position_will_not_be_overwritten": true,
+    "administrative_stop_at": 1794380400
   }
 }
