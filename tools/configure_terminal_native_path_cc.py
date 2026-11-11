@@ -52,7 +52,7 @@ def configure(base: Path, cli: Path, proot: Path, stage: str, *, proot_source_co
         if not native_executable:
             raise ValueError("this runtime requires the user's native Claude executable")
         proot_output = subprocess.check_output([str(translator), "--version"], text=True)
-        match = re.search(r"\b(\d+\.\d+\.\d+)\b", proot_output)
+        match = re.search(r"\bv?(\d+\.\d+\.\d+)\b", proot_output)
         if not match or tuple(map(int, match[1].split("."))) < (5, 5, 0):
             raise ValueError("use PRoot 5.5.0 or later for native file-query compatibility")
         snapshot = base / "path-cc-runtime" / stage / "claude"
