@@ -1,0 +1,138 @@
+{
+  "recorded_at": 1794440290.4584181,
+  "passed": true,
+  "scope": "Rebuild fixes, local CDP regression and short upstream preflight; formal CC tools and benchmark grades remain pending",
+  "source_module_sha256": {
+    "nvplay_bridge.py": "aa17c1389fe59f0ee3f69da0ef8d06578c699940472ad742a78aa3be8f9a090d",
+    "browser_upstream.py": "922a19176d73b0325710d54263873293dab044c6e2aae2c77da4764479a28322",
+    "browser_events.py": "5e745cce57f3c0ac3f04d8193802c987c59b3bde00ed8a5c97668ba4de8bbdb3",
+    "stream_support.py": "8631dd909e24192413855c353285d4c0703f86082b3722ead1140a820c0a2d32",
+    "responses_api.py": "da451613bf0a1c4aa12ef03effc4d5ffe1ea330fb48006f9d09925233f9580c6",
+    "responses_support.py": "ed907b22106ff58923efa5431c20422e59bfdeb9a719b0766969522e444f033e"
+  },
+  "source_fixes": [
+    "74a2a29",
+    "4d2ded9"
+  ],
+  "unit_tests": {
+    "passed": 290,
+    "seconds": 21.828,
+    "command": "PYTHONPATH=. python3 -m unittest discover -s tests -p 'test_*.py'"
+  },
+  "real_local_cdp_probes": {
+    "http_errors_and_retry": 4,
+    "frontend_error_header_abort_and_client_cancel": 4,
+    "passed": true
+  },
+  "browser_supervisor": {
+    "missing_deadline_reproduced": true,
+    "fixed": true,
+    "pause_and_deadline_preserved": true
+  },
+  "apt_recovery": {
+    "failure": "HTTP 404 for historical pinned Perl archive on current mirror",
+    "fallback": "https://snapshot.ubuntu.com/ubuntu/20261110T000000Z/",
+    "pinned_versions_unchanged": true,
+    "archives": {
+      "perl=5.38.2-3.2ubuntu0.6": {
+        "sha256": "1a2341674a1c69e3247537ab243dc3d5878b74a39a696964232e1a4f5a27502d",
+        "historical_sha256_matches": true
+      },
+      "perl-base=5.38.2-3.2ubuntu0.6": {
+        "sha256": "50e1b2c2646387a94664fbea144af1d1b16cf6e0778426baa198166ca3246697",
+        "historical_sha256_matches": true
+      },
+      "perl-modules-5.38=5.38.2-3.2ubuntu0.6": {
+        "sha256": "9c4c90145209d4f85be9255417008e8decb9cd5d189f446fd39ad096e31199cf",
+        "historical_sha256_matches": true
+      },
+      "libperl5.38t64=5.38.2-3.2ubuntu0.6": {
+        "sha256": "e9e5ac9a657e0cacf5f0de977c1573c696ee74515d5136c4e9a0ce9467d32ae7",
+        "historical_sha256_matches": true
+      }
+    }
+  },
+  "upstream_preflight": {
+    "started_at": 1794439975.9945273,
+    "duration_seconds": 63.966,
+    "http_status": 200,
+    "passed": true,
+    "response_sha256": "3ebd1456b6499437b377f80a48b59cec0f08710fe16f9f3e59f79d9076390210",
+    "response_chars": 396,
+    "usage": {
+      "input_tokens": 91,
+      "output_tokens": 41
+    },
+    "stop_reason": "end_turn"
+  },
+  "preflight_client_error": {
+    "http_model_with_local_1m_suffix_rejected": true,
+    "status": 404,
+    "upstream_attempts": 0,
+    "corrected_to_cc_wire_model": true,
+    "separate_failed_evidence_preserved": true
+  },
+  "bridge_health": {
+    "status": "ok",
+    "instance_id": "1bee1eb81b34",
+    "pid": 42167,
+    "browser_output_tokens": {
+      "maximum": 131072,
+      "fixed": 131072
+    },
+    "browser_timeouts": {
+      "total_seconds": 28800,
+      "first_byte_seconds": 3600.0,
+      "idle_seconds": 3600.0
+    }
+  },
+  "formal_readiness": {
+    "preserved_positions": 11,
+    "remaining_positions": 19,
+    "host_cc_snapshot_pending": true,
+    "tool_smoke_pending": true,
+    "original_controls_pending": true
+  },
+  "evidence_fingerprints": {
+    "restore-regression.log": {
+      "sha256": "c23ab618d10a0e50e102abf9ed072fc8081638ba268b167a479d69f23d5d66fb",
+      "size": 3255
+    },
+    "supervisor-no-deadline-before.log": {
+      "sha256": "b21ce615c8beba34f4bb8a7551468f4c1f89960776188b15c3d0064b753d0c6a",
+      "size": 869
+    },
+    "supervisor-no-deadline-after.log": {
+      "sha256": "4190e6532da5d52050bd5ea71ff40310f4ffe0846610b4b159650675a5a9c2b2",
+      "size": 105
+    },
+    "rebuild-fixes-regression.log": {
+      "sha256": "dd818658e9c8008cb354da9371485cb574dabd3d7c356cdfa1c694608942fdca",
+      "size": 113
+    },
+    "rebuild-complete-regression.log": {
+      "sha256": "4dde4b362139785fa536923bccc8317b2bafbfcac05178a239f4ca8d17ef9604",
+      "size": 3259
+    },
+    "browser-http-errors-validation.log": {
+      "sha256": "99e6eca0bb25d307f774f3d16a04f4eb6986eb2bd568d27438f18efef2f7d07d",
+      "size": 328
+    },
+    "browser-http-abort-body-validation.log": {
+      "sha256": "dbd83c16091bc070437c1cc18e0dd2ae0f2c2070701f0007e07e842b322c8b65",
+      "size": 421
+    },
+    "upstream-preflight.json": {
+      "sha256": "e1fc379d1035e29469e01c013f22d28d5635d20b5255a5e30f2a1b043202ca6e",
+      "size": 318
+    },
+    "upstream-preflight-invalid-client-alias.json": {
+      "sha256": "bd513b9b2979875b30c94bfea0bee06339e5d125568da6b43abaa8293cc29ed1",
+      "size": 262
+    },
+    "provision-base.log": {
+      "sha256": "7fdcbde928bd938a7577cbde8ae9beb793c771913b355b252b54316d91e32c92",
+      "size": 3243
+    }
+  }
+}
