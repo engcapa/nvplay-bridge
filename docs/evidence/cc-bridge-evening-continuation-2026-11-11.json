@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794393316.6464949,
+  "checkpoint_at": 1794393325.280786,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261111-evening",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -983,8 +983,8 @@
     "fresh_controls_required": true
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794393229.2020836,
-    "commit": "3054568185a813bf364fe673ab3e45a8ea1edd51",
+    "attempted_at": 1794393316.6915472,
+    "commit": "5e6fe944aeec590de3891c3905e862d98a5e59af",
     "pushed": true,
     "returncode": 0
   },
@@ -1408,7 +1408,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794393316.6494503,
+    "generated_at": 1794393325.2839398,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
@@ -1487,8 +1487,8 @@
     },
     {
       "path": "browser-supervisor-state.json",
-      "sha256": "148454f621c078422807fd81a097cdec4ff1e2a55bb7400be0e881ce1cd8896c",
-      "size": 102
+      "sha256": "136e96e5769560f060f9b706e3e0fe56a5002c7357a4892c319f41ce96fa0974",
+      "size": 101
     },
     {
       "path": "campaign-launch-process.json",
@@ -1507,7 +1507,7 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "ae5cfe46e1f68629314e13ebdf58ff0469d7647e9e82e548e85b8cecbde60dba",
+      "sha256": "12d5625031dd146854dcc76cfca9ba843587f855576d9d9bfcf46966f806fd88",
       "size": 134
     },
     {
@@ -1692,8 +1692,8 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "d05e4d7dd99ae7c47e8d852185a2c268085f3c288e9830f73876f32b4c8d0eec",
-      "size": 768
+      "sha256": "315f889ca9f1d424e70e04e8c8315bbe31bbb76f17bbeac963500f6a68fcc13b",
+      "size": 765
     },
     {
       "path": "service-identity-regression.log",
@@ -1816,6 +1816,16 @@
       "bytes": 564527937,
       "tar_compare_passed_before_reclaim": true,
       "restore": "sudo tar -xpf verifier-root.tar.gz -C ."
+    },
+    {
+      "directory": "controls/ks-solver-cpp/baseline",
+      "archived_at": 1794393321.0524786,
+      "root": "agent-root",
+      "archive": "agent-root.tar.gz",
+      "sha256": "22377a09fb2952423a1f09882f4bf9a7f86291922c290e36c05c3205a1408e3f",
+      "bytes": 4247975,
+      "tar_compare_passed_before_reclaim": true,
+      "restore": "sudo tar -xpf agent-root.tar.gz -C ."
     },
     {
       "directory": "controls/mvcc-lsm-compaction/baseline",
