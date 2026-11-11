@@ -577,5 +577,30 @@
     "bridge_process_restarted": false,
     "deployed_bridge_source_head": "73d9155d3365f0fe3f20263241ed00e35933cb78",
     "scope": "Repository merge only; deployed evaluation bridge remains the frozen stage runtime."
+  },
+  "long_formal_request_completed": {
+    "event": "browser_done",
+    "ts": 1794398610.8075507,
+    "id": "9dd9a9ba8d1e435384de0f45",
+    "sec": 4584.249,
+    "attempt": 1,
+    "counts": {
+      "thinking_chars": 227481,
+      "text_chars": 194,
+      "tool_calls": 1
+    },
+    "usage": {
+      "prompt_tokens": 5811,
+      "completion_tokens": 71152,
+      "total_tokens": 76963,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 71040
+      }
+    },
+    "finish": "tool_calls",
+    "full_attempt_scored": false
   }
 }
