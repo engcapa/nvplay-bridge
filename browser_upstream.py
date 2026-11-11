@@ -453,8 +453,22 @@ class BrowserUpstream:
             if time.monotonic() >= read_deadline:
                 reason = "body_timeout"
                 break
-            state = self._eval(f"window.__bridgeDrain({request_id},{DRAIN_BYTES})",
-                               timeout=max(0.001, min(5, read_deadline - time.monotonic())))
+            try:
+                state = self._eval(f"window.__bridgeDrain({request_id},{DRAIN_BYTES})",
+                                   timeout=max(0.001, min(5, read_deadline - time.monotonic())))
+            except (BrowserError, OSError, ValueError, websocket.WebSocketException) as exc:
+                # Headers already confirmed the HTTP error. Losing the CDP
+                # connection while collecting its body must not lose that status
+                # or bypass the retry policy. Cancellation/deadlines still win.
+                _check(cancel, deadline)
+                reason = "cdp_read_error"
+                self.needs_refresh = True
+                self.close()
+                if trace:
+                    trace("browser_http_body_error", status=status, error_type=type(exc).__name__,
+                          error=str(exc)[:500], cdp_phase=getattr(exc, "cdp_phase", None),
+                          cdp_method=getattr(exc, "cdp_method", None))
+                break
         detail = body or state.get("error") or "empty error response body"
         if reason != "complete":
             detail += f" [error body: {reason}]"

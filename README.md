@@ -328,6 +328,13 @@ Snapshots also list upstream HTTP failures and retry decisions separately.
 arguments. A successful `browser_done` records upstream completion;
 `messages_done` records successful Messages conversion. Check `messages_failed`
 when upstream completed but the client received an SSE error.
+Each metadata record and `/health` identify the bridge process with `instance_id`
+and `pid`. Startup/shutdown markers keep requests from a previous process out of
+the active snapshot after a restart. `http_complete.client_disconnected` means
+the disconnect arrived before the final response body; normal connection teardown
+after a completed response is not counted as a cancellation. If CDP fails while
+reading an already confirmed HTTP error body, the bridge retains the HTTP status
+and partial body for its retry policy and refreshes that tab before reuse.
 Active entries retain their reasoning effort, retry count and last retry reason
 across attempts, including when those earlier events fall outside the lookback.
 For browser-level stream failures, `python3 tools/monitor_cdp_network.py --output logs/cdp-network.jsonl`
