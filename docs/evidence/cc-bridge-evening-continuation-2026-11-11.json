@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794400385.125753,
+  "checkpoint_at": 1794400398.8376222,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261111-evening",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -783,13 +783,13 @@
     "ks-solver-cpp": "b8bbc32eebe857adbb08af43dd21194216066039512216da3cc604c3f8603899"
   },
   "bridge_runtime": {
-    "started_at": 1794388052.2079363,
-    "source_head": "73d9155d3365f0fe3f20263241ed00e35933cb78",
+    "started_at": 1794400385.2510784,
+    "source_head": "144f5b0e660dc05addc73780d5e5cb6bdc52056b",
     "source_module_sha256": {
-      "nvplay_bridge.py": "fb387b96a871c09e9355e5e081c5a538fff2ffb496a5e21fc9157757420aeef1",
-      "browser_upstream.py": "349f9b596a72334fb8b7741f60e0720c0e6b5d2df1511a7a1f91c9f118e9e2aa",
-      "browser_events.py": "ec4973bbbe19b1b4c466eeccc369245976b0fd41eef0be2274316166d5c47040",
-      "stream_support.py": "f46b07b3cdf1e4cae0f409caf26c0a279bd57477f5259ee8bba045c14f95f602",
+      "nvplay_bridge.py": "40e502b1d99573b5f5b3bb4006c097c7f89af849a53ee2069381855bc6d752ab",
+      "browser_upstream.py": "ddad081474e7f6c3d0902a20ce66cde7eb6e69bdcd66cc2f5507706da3074306",
+      "browser_events.py": "5e745cce57f3c0ac3f04d8193802c987c59b3bde00ed8a5c97668ba4de8bbdb3",
+      "stream_support.py": "8631dd909e24192413855c353285d4c0703f86082b3722ead1140a820c0a2d32",
       "responses_api.py": "da451613bf0a1c4aa12ef03effc4d5ffe1ea330fb48006f9d09925233f9580c6",
       "responses_support.py": "ed907b22106ff58923efa5431c20422e59bfdeb9a719b0766969522e444f033e"
     },
@@ -812,7 +812,9 @@
     "idle_timeout_seconds": 3600,
     "cdp_port": 9225,
     "bridge_port": 8083,
-    "pid": 28132,
+    "pid": 335320,
+    "boot_id": "a5433646-d26c-4433-92b6-b498d40bdf91",
+    "start_ticks": "1388854",
     "health_at_start": {
       "status": "ok",
       "upstream_kind": "browser",
@@ -831,10 +833,22 @@
         "total_seconds": 28800,
         "first_byte_seconds": 3600.0,
         "idle_seconds": 3600.0
+      },
+      "browser_messages_delivery": {
+        "thinking": "live",
+        "defer_output": true,
+        "stream_retries": 2
+      },
+      "browser_retry_policy": {
+        "http_5xx_retries": 2,
+        "http_5xx_initial_backoff_seconds": 5.0,
+        "stream_retries": 2,
+        "stream_initial_backoff_seconds": 5.0,
+        "backoff_cap_seconds": 30,
+        "jitter_max_seconds": 1,
+        "failed_pool_tabs": "refresh_before_reuse"
       }
-    },
-    "boot_id": "a5433646-d26c-4433-92b6-b498d40bdf91",
-    "start_ticks": "155552"
+    }
   },
   "native_environment": {
     "recorded_at": 1794389597.0582933,
@@ -983,8 +997,8 @@
     "fresh_controls_required": true
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794400320.1214018,
-    "commit": "144f5b0e660dc05addc73780d5e5cb6bdc52056b",
+    "attempted_at": 1794400385.3792164,
+    "commit": "85c03b0fb9896ea11f923da6fd1d3e03d3c7afc7",
     "pushed": true,
     "returncode": 0
   },
@@ -1408,7 +1422,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794400385.1432755,
+    "generated_at": 1794400398.8516555,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-1m-720k-host-cc-20261111-evening/28800/high": {
@@ -1529,8 +1543,8 @@
     "repeat": 1
   },
   "transport_transition": {
-    "status": "switching_bridge",
-    "at": 1794400385.0467165
+    "status": "validating_actual_rollout",
+    "at": 1794400387.2850568
   },
   "reboot_stop": {
     "stop_at": 1794413157.0,
@@ -1538,8 +1552,21 @@
   },
   "status": "formal_incomplete",
   "bridge_health": {
-    "status": "unreachable",
-    "error_type": "URLError"
+    "status": "ok",
+    "model": "moonshotai/kimi-k3.1-pro",
+    "upstream_kind": "browser",
+    "history_reasoning": "preserve",
+    "browser_output_tokens": {
+      "maximum": 131072,
+      "fixed": 131072
+    },
+    "browser_timeouts": {
+      "total_seconds": 28800,
+      "first_byte_seconds": 3600.0,
+      "idle_seconds": 3600.0
+    },
+    "pool_states": {},
+    "recovering_tabs": []
   },
   "bridge_activity": {
     "events_last_300s": {
@@ -1678,13 +1705,13 @@
     },
     {
       "path": "bridge-runtime.json",
-      "sha256": "bc4182549a4cfe9c41f8d79bc1c3d8d11361a54f09ff7f905c72759516a83aa7",
-      "size": 2034
+      "sha256": "871308890ce609d9fb82115a930afea16e75e2638165d6352625fc69fe9008a6",
+      "size": 2456
     },
     {
       "path": "bridge-server-process.json",
-      "sha256": "911671d8651b52f2383e74c5e727cf1a678e3ee07014850116216951fef0a162",
-      "size": 311
+      "sha256": "bc73f795ebab16507f1b96026d870c387b651ef03b5e5eafcf8f3e46839b4087",
+      "size": 327
     },
     {
       "path": "browser-http-validation.log",
@@ -1698,7 +1725,7 @@
     },
     {
       "path": "browser-supervisor-state.json",
-      "sha256": "90e6e31608ca43e4ef36b0585420ac1c215a3fd43c2b42096c50aa86affc893f",
+      "sha256": "1cb72761f84f5572c18a250677ed83557c4c27a2b1167edd4561463fdf5e9631",
       "size": 102
     },
     {
@@ -1723,7 +1750,7 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "46290cf772ca7c14f33899c20537d815984a61edc836b6f0addb53bcc96b5158",
+      "sha256": "14553dc86309c4476e9bcc16a020103ef437413286298f4f4a31ff5f40bdde8a",
       "size": 134
     },
     {
@@ -1993,8 +2020,8 @@
     },
     {
       "path": "transport-transition-state.json",
-      "sha256": "46a3cdf7a95840e44e5c9a7bd0f836a1b1baf7d4a05cb62bedfc20df4e7e019d",
-      "size": 63
+      "sha256": "e357337be9e254534900f900f2b5e2ed88e631166c9cb7dc67c258a8175b271d",
+      "size": 72
     },
     {
       "path": "unittest-regression.log",
