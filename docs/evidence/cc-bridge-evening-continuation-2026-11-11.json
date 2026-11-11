@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794405770.9052205,
+  "checkpoint_at": 1794405773.9901247,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261111-evening",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -1257,8 +1257,8 @@
     "fresh_controls_required": true
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794405767.517805,
-    "commit": "61dc3b440330ea1360d82bf7222e8d1507e6a18d",
+    "attempted_at": 1794405771.0496078,
+    "commit": "b779eb207b8f881a370d6983084b9e217574a14e",
     "pushed": true,
     "returncode": 0
   },
@@ -1702,7 +1702,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794405770.926463,
+    "generated_at": 1794405774.01115,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-1m-720k-host-cc-20261111-evening/28800/high": {
@@ -1818,8 +1818,8 @@
   "combined_plan_positions_completed": 10,
   "campaign": {
     "controller_alive": true,
-    "status": "control_validated",
-    "task": "mvcc-lsm-compaction"
+    "status": "validating_controls",
+    "task": "ks-solver-cpp"
   },
   "transport_transition": {
     "status": "remaining_campaign_started",
@@ -1945,8 +1945,8 @@
     },
     {
       "path": "campaign-state.json",
-      "sha256": "10d466072aa80f7f828441476b0b3d0d209b73fb998f8a1399287718b142f323",
-      "size": 6559
+      "sha256": "2c549344c2aeef937a628bcb144914a7ddd12db6707e51e3d43e927574f16bd4",
+      "size": 6555
     },
     {
       "path": "cdp-observer-process.json",
@@ -1955,8 +1955,8 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "dc392cf5825b746550686c3add0412d10e238768aa103bfbf170d95db5da3348",
-      "size": 133
+      "sha256": "d6d5472b4568175b9edb788ffc1f7610a10118e915b24992dab65fac5aedab0a",
+      "size": 134
     },
     {
       "path": "checkpoint-process.json",
