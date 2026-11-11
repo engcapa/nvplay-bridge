@@ -1,0 +1,244 @@
+{
+  "recorded_at": 1794360485.7245808,
+  "status": "runtime_integration_in_progress",
+  "path_runtime": {
+    "kind": "path-native-proot",
+    "source_path": "/home/zhyhang/dev/node/bin/claude",
+    "resolved_source": "/home/zhyhang/dev/node/lib/node_modules/@anthropic-ai/claude-code/bin/claude.exe",
+    "version": "2.1.322",
+    "sha256": "bfb3703ad5380242328459bc62ada4bde8ae7ba57c6e1eeadb9c00e08874c478",
+    "size": 341914128,
+    "snapshot_path": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-1m-20261111-0801/path-cc-runtime/claude",
+    "guest_cli": "/opt/path-claude/claude",
+    "proot_path": "/usr/local/libexec/nvplay-proot-5.5.0",
+    "proot_sha256": "80e9379be022ae9c44f0c44c8866fe86f813391d0b6d3d9a9af0650654c59af0",
+    "proot_version": "5.5.0",
+    "proot_source_commit": "25dc6a3134891f98a79f57ce1c2c1b23ff15cad1",
+    "real_proc_binding": true,
+    "real_dedicated_uid": true,
+    "no_new_privileges": true,
+    "host_cwd_inside_agent_root": true,
+    "isolation_boundary": "Real Unix UID and private source directory permissions; PRoot supplies path translation only"
+  },
+  "local_configuration_probe": {
+    "passed": true,
+    "cases": [
+      {
+        "case": "small-context",
+        "passed": true,
+        "exit_code": 0,
+        "seconds": 0.568,
+        "synthetic_input_tokens": 1000,
+        "automatic_compaction_enabled": true,
+        "configured_window_tokens": 720000,
+        "reported_context_windows": [
+          1000000
+        ],
+        "compaction_boundaries": 0,
+        "compaction_attempts": 0,
+        "compaction_failures": [],
+        "requests": [
+          {
+            "number": 1,
+            "model": "kimi-k3.1-pro",
+            "max_tokens": 131072,
+            "stream": true,
+            "bridge_alias_accepted": true,
+            "system_sha256": "df172261533d3a53e954dfdbf42fd58228099015952a9e14272660349798b5c6",
+            "message_count": 2
+          },
+          {
+            "number": 2,
+            "model": "kimi-k3.1-pro",
+            "max_tokens": 131072,
+            "stream": true,
+            "bridge_alias_accepted": true,
+            "system_sha256": "df172261533d3a53e954dfdbf42fd58228099015952a9e14272660349798b5c6",
+            "message_count": 4
+          }
+        ],
+        "cc_is_error": false,
+        "cc_log_sha256": "bf2d4b55716d5c89bf4fb627072d29b69343bb6a51ecd32402acea4de6711239"
+      },
+      {
+        "case": "below-compact-trigger",
+        "passed": true,
+        "exit_code": 0,
+        "seconds": 0.573,
+        "synthetic_input_tokens": 686000,
+        "automatic_compaction_enabled": true,
+        "configured_window_tokens": 720000,
+        "reported_context_windows": [
+          1000000
+        ],
+        "compaction_boundaries": 0,
+        "compaction_attempts": 0,
+        "compaction_failures": [],
+        "requests": [
+          {
+            "number": 1,
+            "model": "kimi-k3.1-pro",
+            "max_tokens": 131072,
+            "stream": true,
+            "bridge_alias_accepted": true,
+            "system_sha256": "df172261533d3a53e954dfdbf42fd58228099015952a9e14272660349798b5c6",
+            "message_count": 2
+          },
+          {
+            "number": 2,
+            "model": "kimi-k3.1-pro",
+            "max_tokens": 131072,
+            "stream": true,
+            "bridge_alias_accepted": true,
+            "system_sha256": "df172261533d3a53e954dfdbf42fd58228099015952a9e14272660349798b5c6",
+            "message_count": 4
+          }
+        ],
+        "cc_is_error": false,
+        "cc_log_sha256": "be0589541ee35ed24b00e1c042c52b7c4b9ddcc24edf5e747bc8520b72ba6cb5"
+      },
+      {
+        "case": "automatic-compaction",
+        "passed": true,
+        "exit_code": 0,
+        "seconds": 0.624,
+        "synthetic_input_tokens": 688000,
+        "automatic_compaction_enabled": true,
+        "configured_window_tokens": 720000,
+        "reported_context_windows": [
+          1000000
+        ],
+        "compaction_boundaries": 0,
+        "compaction_attempts": 1,
+        "compaction_failures": [
+          "too_few_groups"
+        ],
+        "requests": [
+          {
+            "number": 1,
+            "model": "kimi-k3.1-pro",
+            "max_tokens": 131072,
+            "stream": true,
+            "bridge_alias_accepted": true,
+            "system_sha256": "df172261533d3a53e954dfdbf42fd58228099015952a9e14272660349798b5c6",
+            "message_count": 2
+          },
+          {
+            "number": 2,
+            "model": "kimi-k3.1-pro",
+            "max_tokens": 131072,
+            "stream": true,
+            "bridge_alias_accepted": true,
+            "system_sha256": "df172261533d3a53e954dfdbf42fd58228099015952a9e14272660349798b5c6",
+            "message_count": 4
+          }
+        ],
+        "cc_is_error": false,
+        "cc_log_sha256": "c7df120e60b35d4cea22a5de58db2d912017dee4252d593da5c016118b6b388a"
+      },
+      {
+        "case": "disabled-control",
+        "passed": true,
+        "exit_code": 0,
+        "seconds": 0.585,
+        "synthetic_input_tokens": 688000,
+        "automatic_compaction_enabled": false,
+        "configured_window_tokens": 720000,
+        "reported_context_windows": [
+          1000000
+        ],
+        "compaction_boundaries": 0,
+        "compaction_attempts": 0,
+        "compaction_failures": [],
+        "requests": [
+          {
+            "number": 1,
+            "model": "kimi-k3.1-pro",
+            "max_tokens": 131072,
+            "stream": true,
+            "bridge_alias_accepted": true,
+            "system_sha256": "df172261533d3a53e954dfdbf42fd58228099015952a9e14272660349798b5c6",
+            "message_count": 2
+          },
+          {
+            "number": 2,
+            "model": "kimi-k3.1-pro",
+            "max_tokens": 131072,
+            "stream": true,
+            "bridge_alias_accepted": true,
+            "system_sha256": "df172261533d3a53e954dfdbf42fd58228099015952a9e14272660349798b5c6",
+            "message_count": 4
+          }
+        ],
+        "cc_is_error": false,
+        "cc_log_sha256": "eebd46650d986fc49c3b8ae850101d01be776cde50b5b3ed007fc15acfe3bb9b"
+      }
+    ],
+    "cli_sha256": "bfb3703ad5380242328459bc62ada4bde8ae7ba57c6e1eeadb9c00e08874c478",
+    "probe_sha256": "8e5f1ba188c2bb2fc39d2779b7a43d78272c111d06a2caf393a37e07ccad1976",
+    "upstream_requests": 0,
+    "actual_large_payload_capacity_tested": false,
+    "scope": "Native client tool execution, output/context configuration, and compaction trigger decisions; tiny fixture may have too few groups to complete compaction"
+  },
+  "administrative_version_boundary": {
+    "status": "upgrading_cc",
+    "at": 1794360275.3182395,
+    "from_version": "2.1.110",
+    "to_version": "2.1.322",
+    "stopped_controller": {
+      "record": "campaign-launch-process.json",
+      "identity": {
+        "pid": 39019,
+        "boot_id": "cac08d61-c715-4c07-aaa6-acca085402b0",
+        "start_ticks": "122543"
+      },
+      "stopped_at": 1794360275.0728855,
+      "signal": "SIGTERM"
+    },
+    "signalled_agent_pids": [
+      75445,
+      75446
+    ],
+    "interrupted": [
+      {
+        "status": "administratively_interrupted",
+        "score": null,
+        "excluded_from_model_grades": true,
+        "recorded_at": 1794360275.3121872,
+        "requested_stop_at": 1794360275.312171,
+        "reason": "user requested current PATH Claude Code; administrative client upgrade from 2.1.110 to 2.1.322",
+        "task": "mvcc-lsm-compaction",
+        "effort": "max",
+        "stage": "formal-1m-720k-drain-v3-reboot-20261111",
+        "repeat": 1,
+        "original_attempt": "runs/formal-1m-720k-drain-v3-reboot-20261111/mvcc-lsm-compaction--max--r1",
+        "archive": "runs-interrupted/formal-1m-720k-drain-v3-reboot-20261111/mvcc-lsm-compaction--max--r1--1794360275312184563",
+        "progress_at_stop": {
+          "status": "agent_running",
+          "started_at": 1794357008.487839,
+          "elapsed_seconds": 3266.6,
+          "tool_calls": 65,
+          "last_tool": "Bash"
+        },
+        "bridge": {
+          "logical_requests": 39,
+          "upstream_attempts": 39,
+          "errors": 0,
+          "retries": 0,
+          "cancelled": 1,
+          "unfinished": 0
+        }
+      }
+    ],
+    "deadline_unchanged": 1794380400
+  },
+  "deadline_unchanged": 1794380400,
+  "latest_client_formal_attempts_completed": 0,
+  "preserved_historical_completed_positions": 7,
+  "compatibility": {
+    "plain_chroot": "native Bun cannot resolve cwd without real proc",
+    "system_proot_5_1_0": "configuration stat fails; not used for evaluation",
+    "proot_5_5_0": "local native CC Bash/API execution and compaction-trigger probes pass"
+  },
+  "raw_test_and_model_contents_in_public_evidence": false
+}

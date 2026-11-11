@@ -22,6 +22,8 @@ import tarfile
 import time
 import tomllib
 
+import native_path_cc
+
 from native_eval_support import (
     allocate_uid, bridge_activity, cc_result, clone_root, copy_artifact, copy_tree,
     file_hashes, reward_result, run_logged, select_python, shell_command, write_json,
@@ -30,6 +32,7 @@ from native_eval_support import (
 
 NODE_NETWORK_DIRECTORY = Path(__file__).with_name("cc_node_runtime").resolve()
 TOOLING_SOURCES = (Path(__file__).resolve(), Path(__file__).with_name("native_eval_support.py").resolve(),
+                   Path(native_path_cc.__file__).resolve(),
                    *(NODE_NETWORK_DIRECTORY / name for name in ("timeout.cjs", "package.json", "package-lock.json")))
 
 
@@ -163,11 +166,53 @@ class Evaluation:
         if self._tooling_hashes() != self._source_identity["runner_sha256"]:
             raise RuntimeError("runner source changed after initialization; start a new process before another attempt")
         identity = deepcopy(self._source_identity)
+        identity["cc_version"] = self.plan.get("cc_versions_by_stage", {}).get(stage, identity["cc_version"])
         runtime = self.plan.get("bridge_runtime_by_stage", {}).get(stage)
         if runtime:
             identity["bridge_head"] = runtime["source_head"]
             identity["bridge_runtime"] = deepcopy(runtime)
+        if cc_runtime := self.plan.get("cc_runtime_by_stage", {}).get(stage):
+            identity["cc_version"] = cc_runtime["version"]
+            identity["cc_runtime"] = deepcopy(cc_runtime)
         return identity
+
+    def native_runtime(self, stage: str) -> dict | None:
+        spec = self.plan.get("cc_runtime_by_stage", {}).get(stage)
+        return native_path_cc.verify_runtime(spec) if spec else None
+
+    def create_agent_root(self, source: Path, output: Path, uid: int, stage: str) -> Path:
+        if spec := self.native_runtime(stage):
+            return native_path_cc.create_agent_root(source, output, uid, spec)
+        root = output / "agent-root"
+        clone_root(source, root)
+        return root
+
+    def agent_command(self, root: Path, command: str, *, stage: str, uid: int,
+                      environment: dict | None = None, cpus: int | None = None, cpu_offset: int = 0) -> list[str]:
+        spec = self.plan.get("cc_runtime_by_stage", {}).get(stage)
+        if spec:
+            return native_path_cc.shell_command(root, command, uid=uid, spec=spec,
+                       environment=environment, cpus=cpus, cpu_offset=cpu_offset)
+        return shell_command(root, command, uid=uid, environment=environment, cpus=cpus, cpu_offset=cpu_offset)
+
+    def cc_bootstrap(self, root: Path, stage: str, settings: dict) -> tuple[list[str], dict, dict | None]:
+        if self.plan.get("cc_runtime_by_stage", {}).get(stage):
+            return [native_path_cc.GUEST_CLI], {key: settings["env"][key] for key in
+                        ("API_TIMEOUT_MS", "ANTHROPIC_BASE_URL")}, None
+        adapter = self.network_adapter(stage)
+        if not adapter:
+            return ["claude"], {}, None
+        target = root / "opt/cc-node-runtime"
+        copy_tree(NODE_NETWORK_DIRECTORY, target)
+        if network_tree_identity(target)["tree_sha256"] != adapter["tree_sha256"]:
+            raise RuntimeError("CC network adapter changed while copying the installed tree")
+        return ["node", "--require", adapter["require"], adapter["cli"]], {
+            key: settings["env"][key] for key in ("API_TIMEOUT_MS", "ANTHROPIC_BASE_URL")}, adapter
+
+    def compaction_arguments(self, stage: str, launch: dict) -> list[str]:
+        if self.plan.get("cc_runtime_by_stage", {}).get(stage) and launch["automatic_compaction_enabled"]:
+            return ["--autocompact", str(launch["auto_compact_window_tokens"])]
+        return []
 
     def task(self, name: str) -> dict:
         return tomllib.loads((self.dataset / name / "task.toml").read_text())
@@ -264,6 +309,9 @@ class Evaluation:
             if process_identity(owner["pid"]) == owner:
                 raise RuntimeError(f"incomplete attempt still has a live controller: {output}")
         state_path = output / "agent-state.json"
+        runtime_path = output / "runtime-root.json"
+        if runtime_path.exists():
+            native_path_cc.return_agent_root(output)
         if state_path.exists():
             state = json.loads(state_path.read_text())
             for argument in state.get("command", []):
@@ -454,8 +502,7 @@ class Evaluation:
         output.mkdir(parents=True)
         write_json(output / "owner.json", process_identity(os.getpid()))
         write_json(output / "identity.json", identity)
-        root = output / "agent-root"
-        clone_root(self.base / "templates" / name / "agent", root)
+        root = self.create_agent_root(self.base / "templates" / name / "agent", output, uid, stage)
         home = root / "home/agent"
         for directory in (root / "app", home):
             subprocess.run(["chown", "-R", f"{uid}:{uid}", str(directory)], check=True)
@@ -467,15 +514,7 @@ class Evaluation:
         config.mkdir()
         launch = self.cc_launch_configuration(settings, stage)
         write_json(config / "settings.json", settings)
-        bootstrap = ["claude"]
-        bootstrap_env = {}
-        if adapter:
-            target = root / "opt/cc-node-runtime"
-            copy_tree(NODE_NETWORK_DIRECTORY, target)
-            if network_tree_identity(target)["tree_sha256"] != adapter["tree_sha256"]:
-                raise RuntimeError("CC network adapter changed while copying the installed tree")
-            bootstrap = ["node", "--require", adapter["require"], adapter["cli"]]
-            bootstrap_env = {key: settings["env"][key] for key in ("API_TIMEOUT_MS", "ANTHROPIC_BASE_URL")}
+        bootstrap, bootstrap_env, adapter = self.cc_bootstrap(root, stage, settings)
         write_json(output / "request-protocol.json", {
             "settings_sha256": hashlib.sha256((config / "settings.json").read_bytes()).hexdigest(),
             "cc_output_environment_tokens": settings["env"].get("CLAUDE_CODE_MAX_OUTPUT_TOKENS"),
@@ -484,6 +523,7 @@ class Evaluation:
             "cc_launch_configuration": launch,
             "agent_budget_seconds": budget, "cc_network_adapter": adapter,
             "agent_wall_clock_timeout_seconds": wall_timeout,
+            "cc_runtime": identity.get("cc_runtime"),
             "cc_bootstrap": bootstrap, "bootstrap_environment": bootstrap_env})
         write_json(config / "mcp.json", {"mcpServers": {}})
         (config / "instruction.md").write_bytes((self.dataset / name / "instruction.md").read_bytes())
@@ -493,6 +533,7 @@ class Evaluation:
                 "--permission-mode", "bypassPermissions", "--disable-slash-commands",
                 "--tools", "Bash,Read,Write,Edit,Glob,Grep", "--model", launch["model"],
                 "--effort", effort, "--max-turns", "500"]
+        args += self.compaction_arguments(stage, launch)
         # Only runner budget information is appended; no task-specific hints.
         prefix = (f"The runner enforces a {wall_timeout}-second wall-clock limit for this {stage} attempt. "
                   if wall_timeout is not None else "The runner imposes no automatic wall-clock cutoff for this attempt. ")
@@ -501,8 +542,9 @@ class Evaluation:
         command = "cd /app && " + shlex.join(args) + " < /eval/prompt.txt"
         env = {**RECIPES[name].get("environment", {}), **bootstrap_env}
         actual_version = subprocess.check_output(
-            shell_command(root, shlex.join(bootstrap + ["--version"]), uid=uid, environment=env), text=True).strip()
-        if actual_version.split()[0] != self.plan["cc_version"]:
+            self.agent_command(root, shlex.join(bootstrap + ["--version"]), uid=uid, environment=env, stage=stage),
+            cwd=root if identity.get("cc_runtime") else None, text=True).strip()
+        if actual_version.split()[0] != identity["cc_version"]:
             raise RuntimeError(f"CC version mismatch: {actual_version}")
         started = time.time()
         write_json(output / "status.json", {"status": "agent_running", "task": name,
@@ -510,9 +552,11 @@ class Evaluation:
         print(json.dumps({"attempt_started": name, "effort": effort, "repeat": repeat,
                           "budget": budget, "uid": uid}), flush=True)
         cpus = self.task(name)["environment"]["cpus"]
-        process = run_logged(shell_command(root, command, uid=uid, environment=env,
+        process = run_logged(self.agent_command(root, command, uid=uid, environment=env, stage=stage,
                                            cpus=cpus, cpu_offset=cpus if effort == "max" else 0),
-                             output / "cc.jsonl", wall_timeout, output / "agent-state.json", uid)
+                             output / "cc.jsonl", wall_timeout, output / "agent-state.json", uid,
+                             cwd=root if identity.get("cc_runtime") else None)
+        root = native_path_cc.return_agent_root(output)
         client = cc_result(output / "cc.jsonl")
         write_json(output / "status.json", {"status": "grading", "task": name, "effort": effort})
         # The verifier replaces this attempt's agent on the same disjoint CPU

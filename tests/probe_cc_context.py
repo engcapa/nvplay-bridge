@@ -20,7 +20,7 @@ import time
 REPO = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO / "tools"))
 sys.path.insert(0, str(REPO))
-from native_eval_support import cc_result, write_json
+from native_eval_support import cc_result, kill_uid, write_json
 import nvplay_bridge as bridge
 
 MODEL = "kimi-k3.1-pro[1m]"
@@ -31,7 +31,13 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--pinned-cli", type=Path, required=True)
+    parser.add_argument("--native-root", type=Path,
+                        help="Run the exact native binary at /opt/path-claude/claude using PRoot")
+    parser.add_argument("--uid", type=int, help="Dedicated ordinary UID for the native probe")
+    parser.add_argument("--proot", default="proot", help="Verified PRoot executable (native mode only)")
     args = parser.parse_args()
+    if args.native_root and (os.geteuid() != 0 or args.uid is None or not 20000 <= args.uid <= 29999):
+        parser.error("native probes need sudo and a dedicated evaluation UID")
     out = args.output.resolve()
     out.mkdir(parents=True, exist_ok=False)
     state, rows = {}, []
@@ -112,21 +118,41 @@ def main():
                                                          "output_config": {"effort": "high"}})}
             if not enabled:
                 env["DISABLE_AUTO_COMPACT"] = "1"
-            write_json(directory / "settings.json", {"env": env, "model": MODEL, "enabledPlugins": {}})
-            write_json(directory / "mcp.json", {"mcpServers": {}})
-            command = [shutil.which("node"), str(args.pinned_cli.resolve()), "-p",
+            config_directory = directory
+            if args.native_root:
+                config_directory = args.native_root / "eval" / out.name / case
+                config_directory.mkdir(parents=True)
+                env["CLAUDE_CONFIG_DIR"] = f"/home/agent/probe-{case}"
+            write_json(config_directory / "settings.json", {"env": env, "model": MODEL, "enabledPlugins": {}})
+            write_json(config_directory / "mcp.json", {"mcpServers": {}})
+            bootstrap = (["/opt/path-claude/claude"] if args.native_root else
+                         [shutil.which("node"), str(args.pinned_cli.resolve())])
+            config_path = f"/eval/{out.name}/{case}" if args.native_root else str(directory)
+            command = bootstrap + ["-p",
                 "Execute the provided local Bash tool once, then finish with CONTROLLED_CONTEXT_OK.",
-                "--output-format", "stream-json", "--verbose", "--settings", str(directory / "settings.json"),
-                "--setting-sources", "", "--strict-mcp-config", "--mcp-config", str(directory / "mcp.json"),
+                "--output-format", "stream-json", "--verbose", "--settings", f"{config_path}/settings.json",
+                "--setting-sources", "", "--strict-mcp-config", "--mcp-config", f"{config_path}/mcp.json",
                 "--permission-mode", "bypassPermissions", "--disable-slash-commands", "--tools", "Bash",
                 "--model", MODEL, "--effort", "high", "--max-turns", "10"]
+            if args.native_root:
+                if enabled:
+                    command += ["--autocompact", "720000"]
+                command = ["setpriv", f"--reuid={args.uid}", f"--regid={args.uid}", "--clear-groups",
+                           "--no-new-privs", args.proot, "-r", str(args.native_root.resolve()),
+                           "-b", "/proc", "-w", "/app", "/usr/bin/env", "-i",
+                           "PATH=/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin", "HOME=/home/agent",
+                           "LANG=C.UTF-8", *(f"{key}={value}" for key, value in env.items()), *command]
             # Isolate from the host's CC environment, while retaining its executable/library paths.
             clean = {k: v for k, v in os.environ.items()
                      if not k.startswith(("CLAUDE", "ANTHROPIC", "DISABLE_AUTO_COMPACT", "DISABLE_COMPACT"))}
             with (directory / "cc.jsonl").open("wb") as log:
                 started = time.time()
-                process = subprocess.run(command, cwd=directory, env={**clean, **env},
-                                         stdout=log, stderr=subprocess.STDOUT, timeout=180)
+                try:
+                    process = subprocess.run(command, cwd=args.native_root or directory, env={**clean, **env},
+                                             stdout=log, stderr=subprocess.STDOUT, timeout=180)
+                finally:
+                    if args.native_root:
+                        kill_uid(args.uid)
             client = cc_result(directory / "cc.jsonl") or {}
             events = []
             for line in (directory / "cc.jsonl").read_text().splitlines():
@@ -135,17 +161,21 @@ def main():
                 except ValueError:
                     pass
             boundaries = sum(e.get("type") == "system" and e.get("subtype") == "compact_boundary" for e in events)
+            compact_attempts = sum(e.get("type") == "system" and e.get("status") == "compacting" for e in events)
+            compact_failures = [e.get("compact_error") for e in events if e.get("compact_result") == "failed"]
             windows = sorted({v.get("contextWindow") for v in client.get("modelUsage", {}).values()
                               if v.get("contextWindow")})
             requests = list(state["requests"])
             passed = (process.returncode == 0 and not client.get("is_error", True)
                       and MARKER in client.get("result", "") and windows == [1000000]
                       and all(r["bridge_alias_accepted"] and r["max_tokens"] == 131072 for r in requests)
-                      and bool(boundaries) == (enabled and tokens > 687000))
+                      and bool(compact_attempts if args.native_root else boundaries) == (enabled and tokens > 687000)
+                      and (not compact_failures or (args.native_root and compact_failures == ["too_few_groups"])))
             row = {"case": case, "passed": passed, "exit_code": process.returncode,
                    "seconds": round(time.time() - started, 3), "synthetic_input_tokens": tokens,
                    "automatic_compaction_enabled": enabled, "configured_window_tokens": 720000,
                    "reported_context_windows": windows, "compaction_boundaries": boundaries,
+                   "compaction_attempts": compact_attempts, "compaction_failures": compact_failures,
                    "requests": requests, "cc_is_error": client.get("is_error"),
                    "cc_log_sha256": hashlib.sha256((directory / "cc.jsonl").read_bytes()).hexdigest()}
             rows.append(row)
@@ -159,6 +189,8 @@ def main():
               "cli_sha256": hashlib.sha256(args.pinned_cli.read_bytes()).hexdigest(),
               "probe_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
               "upstream_requests": 0, "actual_large_payload_capacity_tested": False}
+    if args.native_root:
+        result["scope"] = "Native client tool execution, output/context configuration, and compaction trigger decisions; tiny fixture may have too few groups to complete compaction"
     write_json(out / "result.json", result)
     if not result["passed"]:
         raise SystemExit(1)

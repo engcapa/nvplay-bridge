@@ -126,15 +126,17 @@ def allocate_uid(base: Path) -> int:
 
 
 def run_logged(args: list[str], log: Path, timeout: float | None,
-               state: Path | None = None, uid: int | None = None) -> dict:
+               state: Path | None = None, uid: int | None = None, *, cwd: Path | None = None) -> dict:
     started = time.time()
     timed_out = False
     log.parent.mkdir(parents=True, exist_ok=True)
     with log.open("wb") as output:
         child = subprocess.Popen(args, stdin=subprocess.DEVNULL, stdout=output,
-                                 stderr=subprocess.STDOUT, start_new_session=True)
+                                 stderr=subprocess.STDOUT, start_new_session=True, cwd=cwd)
         if state:
-            write_json(state, {"pid": child.pid, "started_at": started, "command": args})
+            write_json(state, {"pid": child.pid, "started_at": started, "command": args,
+                               **({"uid": uid} if uid is not None else {}),
+                               **({"host_cwd": str(cwd)} if cwd is not None else {})})
         try:
             code = child.wait(timeout=timeout)
         except subprocess.TimeoutExpired:

@@ -15,6 +15,7 @@ from checkpoint_terminal_native import save
 from eval_terminal_native import process_identity
 from monitor_bridge import LogTail, snapshot
 from native_eval_support import bridge_activity, write_json
+from native_path_cc import return_agent_root, runtime_root
 from pause_terminal_native_services import SERVICES, identify, stop
 from report_terminal_native import summarize
 
@@ -66,12 +67,13 @@ def stop_attempt_processes(uids: set[int], roots: set[str], sessions: set[int]):
     return sorted(signalled)
 
 
-def capture_incomplete(base: Path, directory: Path, observation: dict, *, deadline: float) -> dict:
+def capture_incomplete(base: Path, directory: Path, observation: dict, *, deadline: float,
+                       reason: str = "user requested container reboot") -> dict:
     stage = directory.parent.name
     task, effort, repeat = directory.name.rsplit("--", 2)
     archive = base / "runs-interrupted" / stage / f"{directory.name}--{time.time_ns()}"
     entry = {"status": "administratively_interrupted", "score": None, "excluded_from_model_grades": True,
-             "recorded_at": time.time(), "requested_stop_at": deadline, "reason": "user requested container reboot",
+             "recorded_at": time.time(), "requested_stop_at": deadline, "reason": reason,
              "task": task, "effort": effort, "stage": stage, "repeat": int(repeat.removeprefix("r")),
              "original_attempt": str(directory.relative_to(base)), "archive": str(archive.relative_to(base)),
              "progress_at_stop": {key: observation[key] for key in ("status", "started_at", "elapsed_seconds",
@@ -128,7 +130,9 @@ def pause(base: Path, output: Path, deadline: float) -> dict:
     uids, roots = set(), set()
     for directory in directories:
         for role in ("agent", "verifier"):
-            root = directory / f"{role}-root"
+            root, native_uid = runtime_root(directory) if role == "agent" else (directory / "verifier-root", None)
+            if native_uid is not None:
+                uids.add(native_uid)
             if root.is_symlink():
                 raise RuntimeError("refusing to interrupt an aliased evaluation root")
             if root.is_dir():
@@ -137,16 +141,22 @@ def pause(base: Path, output: Path, deadline: float) -> dict:
             if not state:
                 continue
             args = state["command"]
-            if str(root) not in args:
+            launch_root = read(directory / "runtime-root.json").get("root") if native_uid is not None else None
+            if str(root) not in args and (not launch_root or launch_root not in args):
                 raise RuntimeError("attempt process record does not match its root")
             for arg in args:
-                if arg.startswith("--userspec="):
+                if arg.startswith(("--userspec=", "--reuid=")):
                     uid = int(arg.split("=", 1)[1].split(":", 1)[0])
                     if role == "agent":
                         if not 20000 <= uid <= 29999:
                             raise RuntimeError("refusing to signal an unreserved agent UID")
+                        if native_uid is not None and uid != native_uid:
+                            raise RuntimeError("native CC process UID does not match its root marker")
                         uids.add(uid)
     signalled = stop_attempt_processes(uids, roots, scheduler_sessions)
+    for directory in directories:
+        if (directory / "runtime-root.json").is_file():
+            return_agent_root(directory)
     # Give a periodic checkpoint already writing Git state time to finish;
     # take the lock before stopping it so it cannot start a new write.
     with (base / "checkpoint.lock").open("a+") as lock:

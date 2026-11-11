@@ -60,8 +60,15 @@ def main():
                 archive_root(root)
         smoke = base / "smoke-result.json"
         if smoke.exists():
-            if not json.loads(smoke.read_text()).get("passed"):
+            smoke_data = json.loads(smoke.read_text())
+            if not smoke_data.get("passed"):
                 raise RuntimeError("previous smoke failed; preserve and diagnose it before another smoke")
+            if stage in evaluation.plan.get("cc_runtime_by_stage", {}):
+                runtime = evaluation.plan["cc_runtime_by_stage"][stage]
+                if (smoke_data.get("stage") != stage or any(
+                        row.get("source_identity", {}).get("cc_runtime") != runtime
+                        for row in smoke_data.get("efforts", [])) or len(smoke_data.get("efforts", [])) != 2):
+                    raise RuntimeError("live smoke belongs to another CC runtime/stage")
         else:
             checkpoint("validating_live_tools")
             subprocess.run(["python3", "tools/smoke_terminal_native.py", "--base", str(base)], check=True)

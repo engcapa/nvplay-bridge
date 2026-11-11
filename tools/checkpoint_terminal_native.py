@@ -73,7 +73,8 @@ def collect(base: Path, health_url: str) -> dict:
         result["protocol"] = {key: plan[key] for key in (
             "source_commit", "source_archive_sha256", "cc_version", "model", "efforts", "pilot_tasks",
             "formal_repeats", "formal_task_budget_seconds", "formal_native_subset",
-            "restart_relationship", "bridge_runtime_by_stage", "continuation", "protocol_history") if key in plan}
+            "restart_relationship", "bridge_runtime_by_stage", "cc_runtime_by_stage", "cc_versions_by_stage",
+            "continuation", "protocol_history") if key in plan}
         result["task_manifest_sha256"] = {
             task: hashlib.sha256(json.dumps(files, sort_keys=True).encode()).hexdigest()
             for task, files in plan.get("task_identities", {}).items()}
@@ -85,7 +86,7 @@ def collect(base: Path, health_url: str) -> dict:
                            ("wheel-manifest.json", "wheels"),
                            ("host-resources.json", "host_resources"),
                            ("checkpoint-git-sync.json", "previous_checkpoint_git_sync"),
-                           ("smoke-result.json", "smoke")):
+                           ("smoke-result.json", "smoke"), ("cc-upgrade-state.json", "cc_upgrade")):
         path = base / filename
         if path.exists():
             result[key] = json.loads(path.read_text())
@@ -141,6 +142,8 @@ def collect(base: Path, health_url: str) -> dict:
         result["status"] = "formal_paused"
     elif report["attempts"]:
         result["status"] = "formal_incomplete"
+    elif result["campaign"].get("status") == "upgrading_cc":
+        result["status"] = "upgrading_cc"
     elif controls:
         result["status"] = ("controls_validated" if len(controls) == len(result.get("protocol", {}).get("pilot_tasks", []))
                             and all(value["valid"] for value in controls.values()) else "validating_controls")
@@ -180,7 +183,7 @@ def progress_key(data: dict) -> dict:
     activity = data.get("bridge_activity", {})
     return {**{key: data.get(key) for key in ("status", "protocol", "campaign", "controls", "bridge_runtime",
                 "interrupted_attempts_excluded_from_grades", "administrative_pause", "reboot_stop",
-                "compressed_root_evidence")},
+                "compressed_root_evidence", "cc_upgrade")},
             "transition": data.get("transport_transition", {}).get("status"),
             "attempts": report.get("attempts", []),
             "pending": [{k: row.get(k) for k in ("attempt", "status", "started_at", "tool_calls")}
