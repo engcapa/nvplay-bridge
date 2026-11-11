@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794388761.3455174,
+  "checkpoint_at": 1794389061.3479502,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261111-evening",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -677,15 +677,15 @@
     "host_memory_limit_bytes": "34359738368"
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794388638.4940522,
-    "commit": "c1040b46443d7471d4696b2140f442d280f759e3",
+    "attempted_at": 1794388761.4556231,
+    "commit": "a49547eb96cdc06b95409d084fb46492557c1727",
     "pushed": true,
     "returncode": 0
   },
   "controls": {},
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794388761.3466144,
+    "generated_at": 1794389061.3489435,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
@@ -760,7 +760,7 @@
     },
     {
       "path": "browser-supervisor-state.json",
-      "sha256": "d5d758fb7524c888d8d3098ca6f3070a35469b4647e1d6c665506491db094022",
+      "sha256": "690ca883d190587b2341eb88d7e82bfc3218c04511a1b2439e104dc1b0ab4bfd",
       "size": 102
     },
     {
@@ -770,7 +770,7 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "feb13928da3bfa44a9f818e94627e6683be35938a7c2ea78975cc62e4814b49e",
+      "sha256": "774073ac6053734a34a832ce6601cfa4821d8f7d82059536a936f6ed38626dee",
       "size": 134
     },
     {
@@ -804,6 +804,11 @@
       "size": 4351
     },
     {
+      "path": "isolation-preflight.json",
+      "sha256": "6b9008d0733b91f0bba920ddd6a02b1d39e2d03d2375e97d490261cdbc63932b",
+      "size": 1557
+    },
+    {
       "path": "node-network-regression.log",
       "sha256": "5af1a9e4d2e0fcee2a7bb2c4fd3ebcfc9c7807bf7544e76c3d42703762fbe7a8",
       "size": 235
@@ -835,7 +840,7 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "db8e46c0f803ada0174b292eca7aa97beb9217ceb654bc1cf4a4534b779b3045",
+      "sha256": "41cafb54c1614b197f13ff0040568b2d27ccb753b0f2e2e7f099cea88379265c",
       "size": 674
     },
     {
