@@ -87,5 +87,59 @@
     "regression_tests_passed": 6,
     "new_cases": 2,
     "failure_reproduced_before_fix": true
+  },
+  "isolation_preflight": {
+    "recorded_at": 1794388814.2327561,
+    "passed": true,
+    "real_uid_permission_checks": [
+      {
+        "uid": 20000,
+        "groups": [],
+        "paths": [
+          {
+            "path": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261111-evening/terminal-bench/tasks",
+            "readable": false,
+            "reason": "PermissionError"
+          },
+          {
+            "path": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261111-evening/evaluation-plan.json",
+            "readable": false,
+            "reason": "PermissionError"
+          },
+          {
+            "path": "/home/zhyhang/code/person/nvplay-bridge/docs/evidence/cc-bridge-1m-reboot-continuation-2026-11-11.json",
+            "readable": false,
+            "reason": "PermissionError"
+          }
+        ]
+      },
+      {
+        "uid": 20001,
+        "groups": [],
+        "paths": [
+          {
+            "path": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261111-evening/terminal-bench/tasks",
+            "readable": false,
+            "reason": "PermissionError"
+          },
+          {
+            "path": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261111-evening/evaluation-plan.json",
+            "readable": false,
+            "reason": "PermissionError"
+          },
+          {
+            "path": "/home/zhyhang/code/person/nvplay-bridge/docs/evidence/cc-bridge-1m-reboot-continuation-2026-11-11.json",
+            "readable": false,
+            "reason": "PermissionError"
+          }
+        ]
+      }
+    ],
+    "scope": "host protected task sources and archives; PRoot is a path translator"
+  },
+  "container_root_mount_capability": {
+    "CAP_SYS_ADMIN_effective": false,
+    "CAP_SYS_ADMIN_bounding": false,
+    "reason_for_proot": "native Claude needs real /proc; PRoot translates paths without mount privileges; real UID permissions isolate benchmark sources"
   }
 }
