@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794392160.5067146,
+  "checkpoint_at": 1794392219.1367946,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261111-evening",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -983,8 +983,8 @@
     "fresh_controls_required": true
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794392147.1393945,
-    "commit": "d813c4b8bc96911cd224d2b4872e179709f05a59",
+    "attempted_at": 1794392160.6275103,
+    "commit": "d366635a418e897c29ca42f501b92b406a0d0aca",
     "pushed": true,
     "returncode": 0
   },
@@ -1375,7 +1375,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794392160.5096684,
+    "generated_at": 1794392219.1405847,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
@@ -1387,8 +1387,8 @@
   "combined_plan_positions_completed": 9,
   "campaign": {
     "controller_alive": true,
-    "status": "control_validated",
-    "task": "embedding-drift-monitor"
+    "status": "validating_controls",
+    "task": "batched-eval-parity"
   },
   "reboot_stop": {
     "stop_at": 1794413157.0,
@@ -1454,7 +1454,7 @@
     },
     {
       "path": "browser-supervisor-state.json",
-      "sha256": "d1f29004ab30cd3cc6c62d6321225f5a7f8a2a3041fae5fa8290de194353b1e9",
+      "sha256": "495b15f4ba47c9a41c4b1ab63c08a09fb07eb5a03fc4b7547cc9f5e3304bb852",
       "size": 102
     },
     {
@@ -1464,8 +1464,8 @@
     },
     {
       "path": "campaign-state.json",
-      "sha256": "1c89f27a97c12c4cb8a737c6a67688866d83b5c0526d54697c6853cca5be6f49",
-      "size": 6001
+      "sha256": "ec6d17705ea3aa816442f36fecfb0668efc72ff193b8e79e882876b24e449f40",
+      "size": 6000
     },
     {
       "path": "cdp-observer-process.json",
@@ -1474,7 +1474,7 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "e40477436350af02ceffcdb50dfc260b16d858e617b86615d7eb5ccb0415dacc",
+      "sha256": "8bfa7b4bfc9ba7b700564d374ed36cfdd6bc1d5b27e4d5833ce7052ceab8b437",
       "size": 134
     },
     {
@@ -1644,7 +1644,7 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "16c72661184f1cdf23e527257de1f9417dbd79d545b87ed58578d08c0d523db0",
+      "sha256": "0cc73644babc26e533599895caf25644d310bd304a4fd3256074e0679c216b6d",
       "size": 775
     },
     {
@@ -1718,6 +1718,16 @@
       "bytes": 77299351,
       "tar_compare_passed_before_reclaim": true,
       "restore": "sudo tar -xpf agent-root.tar.gz -C ."
+    },
+    {
+      "directory": "controls/embedding-drift-monitor/oracle",
+      "archived_at": 1794392218.4878674,
+      "root": "verifier-root",
+      "archive": "verifier-root.tar.gz",
+      "sha256": "e5388578ac4a1eb10ca1e9b8d4e6393015b51939a420eb6fdea4c1f36012ebb7",
+      "bytes": 564527937,
+      "tar_compare_passed_before_reclaim": true,
+      "restore": "sudo tar -xpf verifier-root.tar.gz -C ."
     },
     {
       "directory": "controls/session-window-debug/baseline",
