@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794440519.4204347,
+  "checkpoint_at": 1794440561.8422213,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261112",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -854,8 +854,8 @@
     "isolation_boundary": "Real dedicated Unix UID and protected source directories; shared host filesystem, kernel and network"
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794440500.715863,
-    "commit": "e0a451bdec1d03cce120e995e53d50693f0bbf70",
+    "attempted_at": 1794440519.449135,
+    "commit": "bec9fa811b4c719bd1e17fe8cba6d6dfd53258ef",
     "pushed": true,
     "returncode": 0
   },
@@ -1252,6 +1252,17 @@
     ]
   },
   "controls": {
+    "embedding-drift-monitor": {
+      "valid": true,
+      "baseline": {
+        "score": 0,
+        "infrastructure_error": null
+      },
+      "oracle": {
+        "score": 1,
+        "infrastructure_error": null
+      }
+    },
     "session-window-debug": {
       "valid": true,
       "baseline": {
@@ -1266,7 +1277,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794440519.421995,
+    "generated_at": 1794440561.843798,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
@@ -1278,7 +1289,7 @@
   "combined_plan_positions_completed": 11,
   "campaign": {
     "controller_alive": true,
-    "status": "validating_controls",
+    "status": "control_validated",
     "task": "embedding-drift-monitor"
   },
   "status": "validating_controls",
@@ -1365,7 +1376,7 @@
     },
     {
       "path": "browser-supervisor-state.json",
-      "sha256": "07fd5e9152a96491c4d52403de152954fc323d35d866232bb6f50692e9939487",
+      "sha256": "5c51ef1917e8be62ee109e41afac10f354a7a752a999f64056e6491cbbd0b6a6",
       "size": 102
     },
     {
@@ -1375,8 +1386,8 @@
     },
     {
       "path": "campaign-state.json",
-      "sha256": "8116f6f3b0f1af8b6d951ab5e6dfaec52dd00bebbecc255755f6c0dd6dc63e4b",
-      "size": 6540
+      "sha256": "71af5497430a7914fe6faaa66bcbd8f6738518ccb30f90cf81fd03edf1eae3dc",
+      "size": 6537
     },
     {
       "path": "cdp-observer-process.json",
@@ -1385,13 +1396,18 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "935fa26319b373fe89447c73ba8e71d57ea9a82c1888a8d5912ed29af5c172f1",
+      "sha256": "6045d17f830e86d6e3df89a2b4c15a4d949a121351d9350c696c22f192757a0f",
       "size": 133
     },
     {
       "path": "checkpoint-process.json",
       "sha256": "528482d772de8c3dd33f4ed24df67eeaceaa67edcb1b3f454965a2d6a70072b5",
       "size": 476
+    },
+    {
+      "path": "controls/embedding-drift-monitor/result.json",
+      "sha256": "a865b2c0ac339e51f6dc81291ff905ca1506d5312250a6263aa95affb6c2ff39",
+      "size": 681
     },
     {
       "path": "controls/session-window-debug/result.json",
@@ -1435,7 +1451,7 @@
     },
     {
       "path": "next-uid.json",
-      "sha256": "58feef9701da76fc0b24d067b20dee159ce205089ba27d5a6e381622ec9fd49f",
+      "sha256": "05fafd366421858fb0bb638ab8b22bc11b927db0844ed3193d764e0fe1fc7c9a",
       "size": 20
     },
     {
@@ -1465,8 +1481,8 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "80a5bdbc9c39c65aef4b9c35418a5ace0d4ebf62f0033aa38757a2520db0e807",
-      "size": 808
+      "sha256": "aeb87818f1065c0510982ebe706e2f05526ee30eec96c1f334fa6346fcaee122",
+      "size": 813
     },
     {
       "path": "restore-fixed-regression.log",
