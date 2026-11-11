@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794393101.644967,
+  "checkpoint_at": 1794393105.478609,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261111-evening",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -983,8 +983,8 @@
     "fresh_controls_required": true
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794393091.9195824,
-    "commit": "07603e249454b296006d176607f69a57a483579e",
+    "attempted_at": 1794393101.7400868,
+    "commit": "7accb1988b5c0d6bbcfce3661426a2504052b2df",
     "pushed": true,
     "returncode": 0
   },
@@ -1397,7 +1397,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794393101.6476936,
+    "generated_at": 1794393105.4823096,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
@@ -1476,8 +1476,8 @@
     },
     {
       "path": "browser-supervisor-state.json",
-      "sha256": "ee29b0b66fdd77774b4929215ab6150af834f2d80d68a10cc31c025a6242126b",
-      "size": 101
+      "sha256": "2587e916b210f9380b0d5cd63a781b7f316e65af5afaebd9111b33a1f6dd83ae",
+      "size": 100
     },
     {
       "path": "campaign-launch-process.json",
@@ -1496,7 +1496,7 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "f15b268d1c6da856aa70f786cbb528256e5bb0fec07e2d06ab8b557332e4de7a",
+      "sha256": "5b0b7330091f8084c377f5ef82bdfcad31730ee02fdbec8d75aa1fb1542c924f",
       "size": 134
     },
     {
@@ -1800,6 +1800,16 @@
       "bytes": 564527937,
       "tar_compare_passed_before_reclaim": true,
       "restore": "sudo tar -xpf verifier-root.tar.gz -C ."
+    },
+    {
+      "directory": "controls/mvcc-lsm-compaction/baseline",
+      "archived_at": 1794393105.2178504,
+      "root": "agent-root",
+      "archive": "agent-root.tar.gz",
+      "sha256": "5efe3cc7d6b905746ff53c954700887e5e66f95b5564d9694315d5699435eccf",
+      "bytes": 4253682,
+      "tar_compare_passed_before_reclaim": true,
+      "restore": "sudo tar -xpf agent-root.tar.gz -C ."
     },
     {
       "directory": "controls/session-window-debug/baseline",
