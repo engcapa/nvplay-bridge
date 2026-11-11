@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794360630.712152,
+  "checkpoint_at": 1794360677.5687094,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-1m-20261111-0801",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -780,8 +780,8 @@
     "host_memory_limit_bytes": "30064771072"
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794360617.136703,
-    "commit": "0590fb691bc770a8142ddc34348196f67bd99c2d",
+    "attempted_at": 1794360630.772401,
+    "commit": "ecd4bb700b900e1fe304d96e6610745d3d9a52f3",
     "pushed": true,
     "returncode": 0
   },
@@ -1243,7 +1243,7 @@
     }
   ],
   "results": {
-    "generated_at": 1794360630.7185194,
+    "generated_at": 1794360677.5772464,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
@@ -1254,14 +1254,15 @@
   "preserved_prior_attempts_completed": 7,
   "combined_plan_positions_completed": 7,
   "campaign": {
-    "controller_alive": false,
-    "status": "upgrading_cc"
+    "controller_alive": true,
+    "status": "preparing",
+    "task": "session-window-debug"
   },
   "reboot_stop": {
     "stop_at": 1794380400.0,
     "armed": true
   },
-  "status": "upgrading_cc",
+  "status": "controls_validated",
   "bridge_health": {
     "status": "ok",
     "model": "moonshotai/kimi-k3.1-pro",
@@ -1332,13 +1333,13 @@
     },
     {
       "path": "campaign-launch-process.json",
-      "sha256": "5db5155580b4bda1637c38a9e90eca720a76b4753db5e0df43030ca4b4bf5724",
-      "size": 490
+      "sha256": "63803af97735b10849afed207cdfdfc319a4a026c51d33a703317925ab11ed29",
+      "size": 506
     },
     {
       "path": "campaign-state.json",
-      "sha256": "55c7dd8e3ef01d1c0eaf4f7e3d8036527c0bc49da9ca319d8e3e567bcb5a2ac4",
-      "size": 67
+      "sha256": "45905145e7d86f8e491b91d66042d74cd637e8265fa63a219a12af6ccfd8a1a5",
+      "size": 4919
     },
     {
       "path": "cc-upgrade-state.json",
@@ -1362,7 +1363,7 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "c9779a509cc7be30c926a267634260e4d2ccf31a24abdb8096434be62fa7a09e",
+      "sha256": "bbecfdf6c2de4b5acc41a4c6787f8c1dc230701820324fa748312070060d55aa",
       "size": 133
     },
     {
@@ -1451,19 +1452,24 @@
       "size": 320
     },
     {
+      "path": "path-cc-runtime-isolation.json",
+      "sha256": "b061556049d8ad00c5dc2727d69f10721990304ba91fc0b134757bcf43ca6beb",
+      "size": 1036
+    },
+    {
       "path": "reboot-resume-regression.log",
       "sha256": "2867271377ddbc4f5396563d1adba89ce9bcf83127d0c173244e21bace31d409",
       "size": 3187
     },
     {
       "path": "reboot-stop-process.json",
-      "sha256": "10aaff14929f4220e022da4012e6766ee01f95d1beb3813e23bf4e0215b02503",
-      "size": 496
+      "sha256": "c65742d3605708395e3ad60a8119bb70b2894df50de9be689e1fb8bcd639f908",
+      "size": 495
     },
     {
       "path": "reboot-stop-request.json",
-      "sha256": "ebe4f860fc1c468bc8d37d05ade46238a02add2a25e7c8c3f0bf2f693ce7752f",
-      "size": 233
+      "sha256": "ce375b858ff8aad50743617bbb9c0b1cf08c13ee7891b499afd9454bc79b36bf",
+      "size": 234
     },
     {
       "path": "resource-monitor-process.json",
@@ -1472,7 +1478,7 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "b8de323004e166399d2cf50023e4b6cf4447d0b848c30ed07ffa1638792ece0b",
+      "sha256": "ab945803d21dea3a15425069dbde03a29f41b59325438a895ec3681c9aa809af",
       "size": 767
     },
     {
