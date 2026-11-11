@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794391981.8485367,
+  "checkpoint_at": 1794392067.6769447,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261111-evening",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -983,8 +983,8 @@
     "fresh_controls_required": true
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794391978.76975,
-    "commit": "d38bd62fd695d823578a5e553b7dd8f476fe0013",
+    "attempted_at": 1794391981.9597514,
+    "commit": "761e450004fe9a764bb9363c743853c3eb31730c",
     "pushed": true,
     "returncode": 0
   },
@@ -1350,6 +1350,17 @@
     ]
   },
   "controls": {
+    "embedding-drift-monitor": {
+      "valid": true,
+      "baseline": {
+        "score": 0,
+        "infrastructure_error": null
+      },
+      "oracle": {
+        "score": 1,
+        "infrastructure_error": null
+      }
+    },
     "session-window-debug": {
       "valid": true,
       "baseline": {
@@ -1364,7 +1375,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794391981.8521655,
+    "generated_at": 1794392067.6803212,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
@@ -1376,7 +1387,7 @@
   "combined_plan_positions_completed": 9,
   "campaign": {
     "controller_alive": true,
-    "status": "validating_controls",
+    "status": "control_validated",
     "task": "embedding-drift-monitor"
   },
   "reboot_stop": {
@@ -1404,17 +1415,7 @@
     "recovering_tabs": []
   },
   "bridge_activity": {
-    "events_last_300s": {
-      "browser_first_data": 1,
-      "browser_progress": 1,
-      "browser_first_content": 1,
-      "messages_first_block": 1,
-      "browser_buffer": 1,
-      "browser_pool_release": 1,
-      "browser_done": 1,
-      "messages_done": 1,
-      "http_complete": 1
-    },
+    "events_last_300s": {},
     "active": [],
     "recent_errors": [],
     "recent_upstream_errors": [],
@@ -1453,7 +1454,7 @@
     },
     {
       "path": "browser-supervisor-state.json",
-      "sha256": "41ad66a53aa7cc9e5d7e9bfdec9cbe635b34f0f42e55f24aba48d8b1bf5e6c9c",
+      "sha256": "41a123cdbabf39b6fb8d303f2dc1948aac5e0ea9f79c4a9670b4159fb3ee6274",
       "size": 102
     },
     {
@@ -1463,8 +1464,8 @@
     },
     {
       "path": "campaign-state.json",
-      "sha256": "c0aea68de8a280d726ef6b7f34b0190a54c5db2b3260adfd9e778a4a4842c11d",
-      "size": 6004
+      "sha256": "1c89f27a97c12c4cb8a737c6a67688866d83b5c0526d54697c6853cca5be6f49",
+      "size": 6001
     },
     {
       "path": "cdp-observer-process.json",
@@ -1473,8 +1474,8 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "7c345f25cd59f6ad532624553ed37663a928d9194c2d25a8b1e0bb8aac00f276",
-      "size": 132
+      "sha256": "e4e582eb641a57919b3faad61c19ea9bb60f0e5dee15d30d2537bd58405b51a2",
+      "size": 134
     },
     {
       "path": "checkpoint-process.json",
@@ -1485,6 +1486,11 @@
       "path": "control-validation.log",
       "sha256": "61fd9e21bf3a59602f90d9c5662b833284e11b71d71602d9a953bb4baa0ad347",
       "size": 214
+    },
+    {
+      "path": "controls/embedding-drift-monitor/result.json",
+      "sha256": "eff5d0df93ce02836a8d2c128f54c01dfa21a01c7adf689e92652bff17fe458f",
+      "size": 681
     },
     {
       "path": "controls/session-window-debug/result.json",
@@ -1583,7 +1589,7 @@
     },
     {
       "path": "next-uid.json",
-      "sha256": "05fafd366421858fb0bb638ab8b22bc11b927db0844ed3193d764e0fe1fc7c9a",
+      "sha256": "51a6ac0a599ce81d59ff0eb8d01445ec5db56cfee11296cbc605459404423413",
       "size": 20
     },
     {
@@ -1638,8 +1644,8 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "7ac765459715054d8505bbfe2712653c80195dd7e96bb6e5634382ef4c53b969",
-      "size": 773
+      "sha256": "ca3625722b8aeb93dc32d74d28ca62cb3bb900f4887aec941117ea075dfb283f",
+      "size": 778
     },
     {
       "path": "service-identity-regression.log",
