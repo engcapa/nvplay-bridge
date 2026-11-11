@@ -1,5 +1,5 @@
 {
-  "recorded_at": 1794376631.3176813,
+  "recorded_at": 1794376947.5420947,
   "status": "native_idle_override_validated_locally_waiting_natural_stage_boundary",
   "cc_version": "2.1.322",
   "cc_sha256": "bfb3703ad5380242328459bc62ada4bde8ae7ba57c6e1eeadb9c00e08874c478",
@@ -454,5 +454,12 @@
     "requires_fresh_smoke": true,
     "old_failed_position_will_not_be_overwritten": true,
     "administrative_stop_at": 1794380400
+  },
+  "regression_followup": {
+    "tests": 236,
+    "passed": true,
+    "seconds": 16.774,
+    "log_sha256": "1ca8a212775bdbe6a8f4e66e1f1e0c4410b05d2b2abfaa5affe0937b4360cc14",
+    "additional_check": "A partially written settings update cannot enable the idle override under an old frozen protocol; required API routing/timeout bootstrap keys remain mandatory."
   }
 }

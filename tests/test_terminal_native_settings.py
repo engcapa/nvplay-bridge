@@ -93,6 +93,14 @@ class NativeRequestSettingTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "native idle timeout protocol"):
             self.evaluation.request_settings("high", stage)
 
+    def test_partial_configuration_cannot_apply_idle_override_to_old_protocol(self):
+        path = self.base / "settings-formal-high.json"
+        settings = json.loads(path.read_text())
+        settings["env"]["API_FORCE_IDLE_TIMEOUT"] = "0"
+        path.write_text(json.dumps(settings))
+        with self.assertRaisesRegex(ValueError, "not recorded in the frozen protocol"):
+            self.evaluation.request_settings("high", "formal")
+
     def test_fixed_protocol_refuses_an_unconfigured_bridge_runtime(self):
         self.evaluation.plan["formal_native_subset"].update(
             stage="formal-128k-fixed", bridge_fixed_max_output_tokens=131072)
