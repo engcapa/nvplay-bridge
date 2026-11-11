@@ -1,5 +1,8 @@
 # CC + bridge 评测重启检查点（2026-11-10）
 
+**2026-11-11 22:04 最新交接：修复版已恢复正式续评，累计完成 10/30。** 当前 `session-window-debug` high/r2 在本容器直接运行，阶段 `formal-1m-720k-host-body-read-clean-20261111`，剩余 20 个位置。新 high/max 烟测分别 20.182 / 64.175 秒，均无错误或重试；已完成的失败位置和未通过的部署验证全部保留。查看 [实际切换证据](evidence/cc-bridge-http-error-body-rollout-2026-11-11.json)、[诊断修复](evidence/cc-bridge-http-error-body-abort-2026-11-11.json) 和 [持续 checkpoint](evidence/cc-bridge-evening-continuation-2026-11-11.json)。7 小时截止仍为 **2026-11-12 00:05:57（北京时间）**。
+
+
 **2026-11-11 21:20 最新交接：累计完成 10/30。** CC 已改为本容器直接运行，后续不再使用 PRoot。KS high/r1 新结果为产物 0 分、客户端 API 400 退出，未超时；该失败与原 9 个完成位置全部保留，下一计分位置为 `session-window-debug` high/r2，剩余 20 个位置。真实长请求已正常完成 71152 输出 token（约 76.4 分钟），完整结果见 [本轮记录](cc-bridge-evening-continuation-2026-11-11.md)。
 
 已按用户要求在自然结束后重启 bridge 加载优化，随后发现并修复 HTTP 错误正文被前端取消吞掉的诊断缺陷；修复通过 280 项回归及真实 CDP 验证，并已实际部署补丁版本 4。因确认的缺陷修复，上一轮重复失败的部署烟测按行政中断归档，得分为空；当前新 high/max 真实烟测仍在进行，通过后才恢复计分。切换和验证细节见 [修复证据](evidence/cc-bridge-http-error-body-abort-2026-11-11.json) 与 [持续 checkpoint](evidence/cc-bridge-evening-continuation-2026-11-11.json)。原 7 小时绝对截止仍为 **2026-11-12 00:05:57（北京时间）**，不会因等待、重启或修复延长。

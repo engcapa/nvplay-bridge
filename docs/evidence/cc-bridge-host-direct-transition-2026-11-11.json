@@ -1,6 +1,6 @@
 {
   "recorded_at": 1794391646.790471,
-  "status": "first_host_attempt_completed_bridge_rollout_in_progress",
+  "status": "host_formal_evaluation_resumed_with_verified_bridge_fix",
   "requested_by_user": true,
   "stage": "formal-1m-720k-host-cc-20261111-evening",
   "preserved_previous_positions": 9,
@@ -637,5 +637,8 @@
     "agent_duration_seconds": 6821.841,
     "historical_positions_preserved": 9,
     "completed_total": 10
-  }
+  },
+  "resumed_stage": "formal-1m-720k-host-body-read-clean-20261111",
+  "completed_total_at_resume": 10,
+  "remaining_positions_at_resume": 20
 }

@@ -1,6 +1,6 @@
 {
   "recorded_at": 1794400907.8512783,
-  "status": "fix_deployed_functional_checks_pass_strict_revalidation_pending",
+  "status": "deployed_fix_passed_live_validation_formal_evaluation_resumed",
   "observed_task": "ks-solver-cpp--high--r1",
   "observed_http_statuses": [
     500,
@@ -142,9 +142,9 @@
   "validation_interruption_reason": "Verified HTTP error-body cancellation fix is ready; preserve failed validation before re-evaluation",
   "cc_wall_clock_timeout_triggered": false,
   "actual_deployment": {
-    "recorded_at": 1794403077.9246023,
-    "pid": 380319,
-    "source_head": "427504fe2cefbf7948776251187600249a29f4af",
+    "recorded_at": 1794405876.9843009,
+    "pid": 457990,
+    "source_head": "e21bfd3096761cd5dbe2553bc0cc43ee4841442f",
     "source_module_sha256": {
       "nvplay_bridge.py": "40e502b1d99573b5f5b3bb4006c097c7f89af849a53ee2069381855bc6d752ab",
       "browser_upstream.py": "8dd872e1fba62e0752efa5355e010d8e78fdfc4e3855e02c6f58a306a4fd9f1d",
@@ -153,14 +153,89 @@
       "responses_api.py": "da451613bf0a1c4aa12ef03effc4d5ffe1ea330fb48006f9d09925233f9580c6",
       "responses_support.py": "ed907b22106ff58923efa5431c20422e59bfdeb9a719b0766969522e444f033e"
     },
-    "observed_patch_versions": {
-      "4": 3,
-      "3": 3,
-      "2": 3,
-      "1": 4,
-      "5": 3
-    },
-    "high_max_live_smoke_passed": false
+    "high_max_live_smoke_passed": true,
+    "actual_rollout_smoke": [
+      {
+        "effort": "high",
+        "passed": true,
+        "process": {
+          "exit_code": 0,
+          "timed_out": false,
+          "timeout_seconds": null,
+          "started_at": 1794405613.4696784,
+          "finished_at": 1794405633.6512275,
+          "duration_seconds": 20.182
+        },
+        "logical_requests": 2,
+        "errors": 0,
+        "retries": 0,
+        "unfinished": [],
+        "reported_context_windows": [
+          1000000
+        ]
+      },
+      {
+        "effort": "max",
+        "passed": true,
+        "process": {
+          "exit_code": 0,
+          "timed_out": false,
+          "timeout_seconds": null,
+          "started_at": 1794405641.7355225,
+          "finished_at": 1794405705.9110103,
+          "duration_seconds": 64.175
+        },
+        "logical_requests": 2,
+        "errors": 0,
+        "retries": 0,
+        "unfinished": [],
+        "reported_context_windows": [
+          1000000
+        ]
+      }
+    ]
   },
-  "strict_validation_history": "cc-bridge-host-rollout-validation-failures-2026-11-11.json"
+  "strict_validation_history": "cc-bridge-host-rollout-validation-failures-2026-11-11.json",
+  "deployment_history": [
+    {
+      "recorded_at": 1794403077.9246023,
+      "pid": 380319,
+      "source_head": "427504fe2cefbf7948776251187600249a29f4af",
+      "source_module_sha256": {
+        "nvplay_bridge.py": "40e502b1d99573b5f5b3bb4006c097c7f89af849a53ee2069381855bc6d752ab",
+        "browser_upstream.py": "8dd872e1fba62e0752efa5355e010d8e78fdfc4e3855e02c6f58a306a4fd9f1d",
+        "browser_events.py": "5e745cce57f3c0ac3f04d8193802c987c59b3bde00ed8a5c97668ba4de8bbdb3",
+        "stream_support.py": "8631dd909e24192413855c353285d4c0703f86082b3722ead1140a820c0a2d32",
+        "responses_api.py": "da451613bf0a1c4aa12ef03effc4d5ffe1ea330fb48006f9d09925233f9580c6",
+        "responses_support.py": "ed907b22106ff58923efa5431c20422e59bfdeb9a719b0766969522e444f033e"
+      },
+      "observed_patch_versions": {
+        "4": 3,
+        "3": 3,
+        "2": 3,
+        "1": 4,
+        "5": 3
+      },
+      "high_max_live_smoke_passed": false
+    }
+  ],
+  "validated_stage": "formal-1m-720k-host-body-read-clean-20261111",
+  "first_resumed_formal_protocol": {
+    "attempt": "runs/formal-1m-720k-host-body-read-clean-20261111/session-window-debug--high--r2",
+    "started_at": 1794405794.5208192,
+    "protocol_sha256": "074d5a3018950996054530ec277bc8be5815a5f2731d3fbceabba12cc807985f",
+    "runtime_kind": "path-native-host",
+    "cc_version": "2.1.322",
+    "cc_launch_configuration": {
+      "model": "kimi-k3.1-pro[1m]",
+      "automatic_compaction_enabled": true,
+      "auto_compact_window_tokens": 720000
+    },
+    "agent_wall_clock_timeout_seconds": null,
+    "output_environment_tokens": "128000",
+    "max_tokens": 131072,
+    "native_idle_timeout_disabled": true,
+    "contains_proot": false,
+    "contains_chroot": false
+  }
 }
