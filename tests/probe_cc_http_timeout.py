@@ -1,8 +1,8 @@
-"""Opt-in real-CC fallback/header-timeout probe against a local Messages fixture.
+"""Opt-in real-CC fallback/transport-timeout probe against a local Messages fixture.
 
 No benchmark input, model invocation, or NVIDIA endpoint is used. The first
-stream fails, and the first non-streaming response withholds headers beyond
-Node fetch's default five-minute timeout. Later requests complete immediately.
+stream fails, and the first non-streaming response delays headers or its body.
+Later requests complete immediately.
 """
 
 import argparse
@@ -22,6 +22,7 @@ import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tools"))
 from native_eval_support import kill_uid
+from native_path_cc import uid_processes
 
 MARKER = "CONTROLLED_DELAYED_HEADERS_OK"
 
@@ -41,9 +42,18 @@ def main():
     parser.add_argument("--native-root", type=Path, help="Isolated native PATH runtime; runs only this case")
     parser.add_argument("--uid", type=int)
     parser.add_argument("--proot", default="proot")
+    parser.add_argument("--delay-phase", choices=("headers", "body"), default="headers")
+    parser.add_argument("--http-version", choices=("1.0", "1.1"), default="1.0")
+    parser.add_argument("--settings-env", type=Path, help="Copy real request environment, replacing fixture routing/auth")
+    parser.add_argument("--disable-native-idle-timeout", action="store_true")
     parser.add_argument("--cases", nargs="+", choices=(
         "node-settings", "node-process-env", "node-adapter", "native-settings"))
     args = parser.parse_args()
+    if not args.native_root and (args.delay_phase != "headers" or args.settings_env
+                                 or args.disable_native_idle_timeout):
+        parser.error("body/environment options require --native-root")
+    if args.delay_seconds <= 0:
+        parser.error("--delay-seconds must be positive")
     out = args.output.resolve()
     out.mkdir(parents=True, exist_ok=False)
     pinned = [shutil.which("node"), str(args.pinned_cli.resolve())]
@@ -63,6 +73,8 @@ def main():
     if args.native_root:
         if os.geteuid() != 0 or args.uid is None or not 20000 <= args.uid <= 29999:
             parser.error("native PRoot probe needs sudo and a dedicated evaluation UID")
+        if uid_processes(args.uid):
+            parser.error("native PRoot probe UID is already active")
         cases = [("native-proot", ["/opt/path-claude/claude"], True, False)]
     diagnostics = out / "observe-undici.cjs"
     diagnostics.write_text('''// Passive network diagnostics: no request headers or body are captured.
@@ -85,6 +97,7 @@ require('node:diagnostics_channel').channel('undici:request:error').subscribe(({
             (out / "events.json").write_text(json.dumps(events, indent=2) + "\n")
 
     class Fixture(BaseHTTPRequestHandler):
+        protocol_version = f"HTTP/{args.http_version}"
         protocol_version = "HTTP/1.1"
 
         def do_HEAD(self):
@@ -110,14 +123,35 @@ require('node:diagnostics_channel').channel('undici:request:error').subscribe(({
                        "stop_reason": "end_turn", "stop_sequence": None,
                        "usage": {"input_tokens": 64, "output_tokens": 8}}
             if name == "native-proot" and sum(states[name].values()) == 2:
+                delayed_body = json.dumps(message).encode()
+                if args.delay_phase == "body":
+                    self.send_response(200)
+                    self.send_header("Content-Type", "application/json")
+                    self.send_header("Content-Length", str(len(delayed_body) + 1))
+                    self.end_headers()
+                    self.wfile.write(b" ")
+                    self.wfile.flush()
+                    record(case=name, event="body_headers_sent", number=number)
                 deadline = time.monotonic() + args.delay_seconds
                 while time.monotonic() < deadline:
                     if select.select([self.connection], [], [], .2)[0]:
-                        if not self.connection.recv(1, socket.MSG_PEEK):
-                            record(case=name, event="peer_closed_before_headers", kind=kind, number=number)
+                        try:
+                            closed = not self.connection.recv(1, socket.MSG_PEEK)
+                        except ConnectionResetError:
+                            closed = True
+                        if closed:
+                            record(case=name, event="peer_closed_during_delay", phase=args.delay_phase,
+                                   kind=kind, number=number)
                             self.close_connection = True
                             return
                 record(case=name, event="delay_completed", seconds=args.delay_seconds)
+                if args.delay_phase == "body":
+                    try:
+                        self.wfile.write(delayed_body)
+                        self.wfile.flush()
+                    except (BrokenPipeError, ConnectionResetError):
+                        pass
+                    return
             if stream and number == 1:
                 data = (sse("message_start", {"type": "message_start", "message": {
                     **message, "content": [], "stop_reason": None}})
@@ -195,6 +229,14 @@ require('node:diagnostics_channel').channel('undici:request:error').subscribe(({
                 "output_config": {"effort": "low"}}), "DISABLE_AUTOUPDATER": "1",
             "DISABLE_AUTO_COMPACT": "1"}, "enabledPlugins": {}}
         if args.native_root:
+            if args.settings_env:
+                production = json.loads(args.settings_env.read_text())["env"]
+                protected = {key: settings["env"][key] for key in (
+                    "ANTHROPIC_BASE_URL", "ANTHROPIC_AUTH_TOKEN", "CLAUDE_CONFIG_DIR")}
+                settings["env"] = {**production, **protected, "DISABLE_AUTOUPDATER": "1",
+                                   "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1", "DISABLE_AUTO_COMPACT": "1"}
+            if args.disable_native_idle_timeout:
+                settings["env"]["API_FORCE_IDLE_TIMEOUT"] = "0"
             settings["env"]["CLAUDE_CONFIG_DIR"] = f"/home/agent/{out.name}"
         (folder / "settings.json").write_text(json.dumps(settings))
         (folder / "mcp.json").write_text('{"mcpServers":{}}')
@@ -216,7 +258,8 @@ require('node:diagnostics_channel').channel('undici:request:error').subscribe(({
                        "--no-new-privs", args.proot, "-r", str(args.native_root.resolve()), "-b", "/proc",
                        "-w", "/app", "/usr/bin/env", "-i", "PATH=/usr/local/bin:/usr/bin:/bin",
                        "HOME=/home/agent", "LANG=C.UTF-8", "API_TIMEOUT_MS=29400000",
-                       f"ANTHROPIC_BASE_URL=http://127.0.0.1:{server.server_port}/{name}", *command]
+                       f"ANTHROPIC_BASE_URL=http://127.0.0.1:{server.server_port}/{name}",
+                       *(["API_FORCE_IDLE_TIMEOUT=0"] if args.disable_native_idle_timeout else []), *command]
         started = time.time()
         with (folder / "cc.jsonl").open("w") as log:
             child = subprocess.Popen(command, env=env, cwd=args.native_root or folder,
@@ -245,12 +288,17 @@ require('node:diagnostics_channel').channel('undici:request:error').subscribe(({
                    and MARKER in (result or {}).get("result", ""), "request_counts": states[name]}
         with lock:
             case_events = [event for event in events if event.get("case") == name]
-        row["received_delayed_headers"] = any(event["event"] == "delay_completed" for event in case_events)
-        row["closed_before_delayed_headers"] = any(
-            event["event"] == "peer_closed_before_headers" for event in case_events)
+        row["delay_phase"] = args.delay_phase
+        row["delay_completed"] = any(event["event"] == "delay_completed" for event in case_events)
+        row["closed_during_delay"] = any(
+            event["event"] in ("peer_closed_before_headers", "peer_closed_during_delay")
+            for event in case_events)
+        if args.delay_phase == "headers":
+            row["received_delayed_headers"] = row["delay_completed"]
+            row["closed_before_delayed_headers"] = row["closed_during_delay"]
         if adapter or args.native_root:
-            row["success"] = (row["success"] and row["received_delayed_headers"]
-                and not row["closed_before_delayed_headers"]
+            row["success"] = (row["success"] and row["delay_completed"]
+                and not row["closed_during_delay"]
                 and (args.native_root is not None or states[name]["nonstream"] == 1))
         (folder / "result.json").write_text(json.dumps(row, indent=2) + "\n")
         print(json.dumps(row), flush=True)
@@ -261,6 +309,8 @@ require('node:diagnostics_channel').channel('undici:request:error').subscribe(({
         "node_version": (subprocess.check_output(pinned[:1] + ["--version"], text=True).strip()
                          if not args.native_root else None),
         "delay_seconds": args.delay_seconds, "nvidia_requests": 0}
+    identity.update(delay_phase=args.delay_phase, native_idle_timeout_disabled=args.disable_native_idle_timeout,
+                    production_environment_supplied=bool(args.settings_env), http_version=args.http_version)
     if args.native_root:
         identity["native_cli_version"] = subprocess.check_output([str(args.pinned_cli), "--version"], text=True).strip()
     if args.adapter:

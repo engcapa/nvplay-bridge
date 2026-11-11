@@ -1,0 +1,2333 @@
+{
+  "recorded_at": 1794373878.1056054,
+  "status": "recovered_both_cc_sessions_continuing",
+  "old_browser_process": {
+    "pid": 21946,
+    "args": [
+      "/home/zhyhang/code/person/nvplay-bridge/.brave/brave",
+      "--no-sandbox",
+      "--user-data-dir=/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-1m-20261111-0801/brave-profile",
+      "--remote-debugging-port=9225",
+      "--remote-allow-origins=*",
+      "--proxy-server=http://127.0.0.1:31128",
+      "--no-first-run",
+      "--no-default-browser-check",
+      "--disable-extensions",
+      "--disable-background-timer-throttling",
+      "--disable-renderer-backgrounding",
+      "--disable-backgrounding-occluded-windows",
+      "--window-size=1280,900",
+      "https://build.nvidia.com/moonshotai/kimi-k3_1-pro/playground"
+    ],
+    "started_at": 1794355334.7603977,
+    "boot_id": "cac08d61-c715-4c07-aaa6-acca085402b0",
+    "start_ticks": "77141"
+  },
+  "cdp_port": 9225,
+  "port_unreachable": true,
+  "old_browser_pid_absent": true,
+  "cause": "unknown; browser exited around 13:02 local; no cgroup OOM kill recorded",
+  "memory_oom_control": "oom_kill_disable 0\nunder_oom 0\noom_kill 0\n",
+  "recent_operational_events": [
+    {
+      "ts": 1794373329.1481316,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=3",
+      "recovery_attempt": 1
+    },
+    {
+      "ts": 1794373329.1486166,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=3",
+      "recovery_attempt": 1,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373329.1487086,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=3",
+      "recovery_attempt": 2
+    },
+    {
+      "ts": 1794373329.1488802,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=3",
+      "recovery_attempt": 2,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373329.1489475,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=5",
+      "recovery_attempt": 1
+    },
+    {
+      "ts": 1794373329.1490595,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=5",
+      "recovery_attempt": 1,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373329.149096,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=5",
+      "recovery_attempt": 2
+    },
+    {
+      "ts": 1794373329.1491942,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=5",
+      "recovery_attempt": 2,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373329.2369115,
+      "event": "browser_error",
+      "id": "e0cd8843",
+      "attempt": 1,
+      "status": 502,
+      "committed": true,
+      "error_sha256": "1392261ef9e8b2d811be11a7e1bb60638d6a36ac1da6ac59eb24086648daab8b"
+    },
+    {
+      "ts": 1794373329.238439,
+      "event": "browser_error",
+      "id": "1b9dbdad",
+      "attempt": 1,
+      "status": 502,
+      "committed": true,
+      "error_sha256": "1392261ef9e8b2d811be11a7e1bb60638d6a36ac1da6ac59eb24086648daab8b"
+    },
+    {
+      "ts": 1794373329.3416314,
+      "event": "browser_start",
+      "id": "aeb316c1",
+      "attempt": 1,
+      "reasoning_effort": "high"
+    },
+    {
+      "ts": 1794373329.3422923,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=4",
+      "recovery_attempt": 1
+    },
+    {
+      "ts": 1794373329.342692,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=4",
+      "recovery_attempt": 1,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373329.3427885,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=4",
+      "recovery_attempt": 2
+    },
+    {
+      "ts": 1794373329.343002,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=4",
+      "recovery_attempt": 2,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373329.3430576,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=1",
+      "recovery_attempt": 1
+    },
+    {
+      "ts": 1794373329.3431628,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=1",
+      "recovery_attempt": 1,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373329.3431969,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=1",
+      "recovery_attempt": 2
+    },
+    {
+      "ts": 1794373329.3433118,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=1",
+      "recovery_attempt": 2,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373329.3433614,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=2",
+      "recovery_attempt": 1
+    },
+    {
+      "ts": 1794373329.343467,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=2",
+      "recovery_attempt": 1,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373329.3434994,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=2",
+      "recovery_attempt": 2
+    },
+    {
+      "ts": 1794373329.3436036,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=2",
+      "recovery_attempt": 2,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373329.3594985,
+      "event": "browser_start",
+      "id": "e322e1d2",
+      "attempt": 1,
+      "reasoning_effort": "max"
+    },
+    {
+      "ts": 1794373334.3465185,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=3",
+      "recovery_attempt": 1
+    },
+    {
+      "ts": 1794373334.3468344,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=3",
+      "recovery_attempt": 1,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373334.3468938,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=3",
+      "recovery_attempt": 2
+    },
+    {
+      "ts": 1794373334.3470035,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=3",
+      "recovery_attempt": 2,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373334.3470545,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=5",
+      "recovery_attempt": 1
+    },
+    {
+      "ts": 1794373334.3471723,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=5",
+      "recovery_attempt": 1,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373334.347212,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=5",
+      "recovery_attempt": 2
+    },
+    {
+      "ts": 1794373334.3473308,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=5",
+      "recovery_attempt": 2,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373334.3473752,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=4",
+      "recovery_attempt": 1
+    },
+    {
+      "ts": 1794373334.3474667,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=4",
+      "recovery_attempt": 1,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373334.3474994,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=4",
+      "recovery_attempt": 2
+    },
+    {
+      "ts": 1794373334.3476026,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=4",
+      "recovery_attempt": 2,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373334.347648,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=1",
+      "recovery_attempt": 1
+    },
+    {
+      "ts": 1794373334.3477576,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=1",
+      "recovery_attempt": 1,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373334.3477883,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=1",
+      "recovery_attempt": 2
+    },
+    {
+      "ts": 1794373334.347871,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=1",
+      "recovery_attempt": 2,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373334.3479104,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=2",
+      "recovery_attempt": 1
+    },
+    {
+      "ts": 1794373334.3479962,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=2",
+      "recovery_attempt": 1,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373334.3480256,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=2",
+      "recovery_attempt": 2
+    },
+    {
+      "ts": 1794373334.3481064,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=2",
+      "recovery_attempt": 2,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373344.353881,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=3",
+      "recovery_attempt": 1
+    },
+    {
+      "ts": 1794373344.354305,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=3",
+      "recovery_attempt": 1,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373344.3543985,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=3",
+      "recovery_attempt": 2
+    },
+    {
+      "ts": 1794373344.3546162,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=3",
+      "recovery_attempt": 2,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373344.3547094,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=5",
+      "recovery_attempt": 1
+    },
+    {
+      "ts": 1794373344.354887,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=5",
+      "recovery_attempt": 1,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373344.3549504,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=5",
+      "recovery_attempt": 2
+    },
+    {
+      "ts": 1794373344.355115,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=5",
+      "recovery_attempt": 2,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373344.355188,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=4",
+      "recovery_attempt": 1
+    },
+    {
+      "ts": 1794373344.3553402,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=4",
+      "recovery_attempt": 1,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373344.35541,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=4",
+      "recovery_attempt": 2
+    },
+    {
+      "ts": 1794373344.3555791,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=4",
+      "recovery_attempt": 2,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373344.3556561,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=1",
+      "recovery_attempt": 1
+    },
+    {
+      "ts": 1794373344.355812,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=1",
+      "recovery_attempt": 1,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373344.3558648,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=1",
+      "recovery_attempt": 2
+    },
+    {
+      "ts": 1794373344.3560236,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=1",
+      "recovery_attempt": 2,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373344.3560884,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=2",
+      "recovery_attempt": 1
+    },
+    {
+      "ts": 1794373344.3562317,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=2",
+      "recovery_attempt": 1,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373344.3562834,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=2",
+      "recovery_attempt": 2
+    },
+    {
+      "ts": 1794373344.3564441,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=2",
+      "recovery_attempt": 2,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373364.3668826,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=3",
+      "recovery_attempt": 1
+    },
+    {
+      "ts": 1794373364.367206,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=3",
+      "recovery_attempt": 1,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373364.3672786,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=3",
+      "recovery_attempt": 2
+    },
+    {
+      "ts": 1794373364.3674107,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=3",
+      "recovery_attempt": 2,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373364.367469,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=5",
+      "recovery_attempt": 1
+    },
+    {
+      "ts": 1794373364.3675957,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=5",
+      "recovery_attempt": 1,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373364.3676372,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=5",
+      "recovery_attempt": 2
+    },
+    {
+      "ts": 1794373364.3677356,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=5",
+      "recovery_attempt": 2,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373364.3678038,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=4",
+      "recovery_attempt": 1
+    },
+    {
+      "ts": 1794373364.367949,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=4",
+      "recovery_attempt": 1,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373364.3679867,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=4",
+      "recovery_attempt": 2
+    },
+    {
+      "ts": 1794373364.3680787,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=4",
+      "recovery_attempt": 2,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373364.3681211,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=1",
+      "recovery_attempt": 1
+    },
+    {
+      "ts": 1794373364.3682263,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=1",
+      "recovery_attempt": 1,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373364.3682578,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=1",
+      "recovery_attempt": 2
+    },
+    {
+      "ts": 1794373364.3683412,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=1",
+      "recovery_attempt": 2,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373364.3683918,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=2",
+      "recovery_attempt": 1
+    },
+    {
+      "ts": 1794373364.3684802,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=2",
+      "recovery_attempt": 1,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373364.3685098,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=2",
+      "recovery_attempt": 2
+    },
+    {
+      "ts": 1794373364.3686125,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=2",
+      "recovery_attempt": 2,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373404.3896165,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=3",
+      "recovery_attempt": 1
+    },
+    {
+      "ts": 1794373404.38994,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=3",
+      "recovery_attempt": 1,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373404.3900008,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=3",
+      "recovery_attempt": 2
+    },
+    {
+      "ts": 1794373404.39011,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=3",
+      "recovery_attempt": 2,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373404.3901606,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=5",
+      "recovery_attempt": 1
+    },
+    {
+      "ts": 1794373404.390259,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=5",
+      "recovery_attempt": 1,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373404.3902926,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=5",
+      "recovery_attempt": 2
+    },
+    {
+      "ts": 1794373404.390408,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=5",
+      "recovery_attempt": 2,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373404.3904514,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=4",
+      "recovery_attempt": 1
+    },
+    {
+      "ts": 1794373404.3905442,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=4",
+      "recovery_attempt": 1,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373404.3906076,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=4",
+      "recovery_attempt": 2
+    },
+    {
+      "ts": 1794373404.3907104,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=4",
+      "recovery_attempt": 2,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373404.3907566,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=1",
+      "recovery_attempt": 1
+    },
+    {
+      "ts": 1794373404.3908463,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=1",
+      "recovery_attempt": 1,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373404.3908775,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=1",
+      "recovery_attempt": 2
+    },
+    {
+      "ts": 1794373404.3909621,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=1",
+      "recovery_attempt": 2,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373404.391045,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=2",
+      "recovery_attempt": 1
+    },
+    {
+      "ts": 1794373404.3911393,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=2",
+      "recovery_attempt": 1,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373404.391169,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=2",
+      "recovery_attempt": 2
+    },
+    {
+      "ts": 1794373404.39125,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=2",
+      "recovery_attempt": 2,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373449.4155338,
+      "event": "browser_error",
+      "id": "aeb316c1",
+      "attempt": 1,
+      "status": 502,
+      "committed": false,
+      "error_sha256": "4c75c55cd4863d26fa99c659dafe9c74d56ba88ea3449e0dff3254076e840383"
+    },
+    {
+      "ts": 1794373449.4157367,
+      "event": "browser_error",
+      "id": "e322e1d2",
+      "attempt": 1,
+      "status": 502,
+      "committed": false,
+      "error_sha256": "4c75c55cd4863d26fa99c659dafe9c74d56ba88ea3449e0dff3254076e840383"
+    },
+    {
+      "ts": 1794373450.1500835,
+      "event": "browser_start",
+      "id": "9ae7ccf3",
+      "attempt": 1,
+      "reasoning_effort": "high"
+    },
+    {
+      "ts": 1794373450.1889503,
+      "event": "browser_start",
+      "id": "99b3da0b",
+      "attempt": 1,
+      "reasoning_effort": "max"
+    },
+    {
+      "ts": 1794373464.4237072,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=3",
+      "recovery_attempt": 1
+    },
+    {
+      "ts": 1794373464.424064,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=3",
+      "recovery_attempt": 1,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373464.4241405,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=3",
+      "recovery_attempt": 2
+    },
+    {
+      "ts": 1794373464.424275,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=3",
+      "recovery_attempt": 2,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373464.4243367,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=5",
+      "recovery_attempt": 1
+    },
+    {
+      "ts": 1794373464.4244437,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=5",
+      "recovery_attempt": 1,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373464.4244788,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=5",
+      "recovery_attempt": 2
+    },
+    {
+      "ts": 1794373464.424607,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=5",
+      "recovery_attempt": 2,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373464.4246624,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=4",
+      "recovery_attempt": 1
+    },
+    {
+      "ts": 1794373464.4247751,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=4",
+      "recovery_attempt": 1,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373464.4248118,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=4",
+      "recovery_attempt": 2
+    },
+    {
+      "ts": 1794373464.4249003,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=4",
+      "recovery_attempt": 2,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373464.4249415,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=1",
+      "recovery_attempt": 1
+    },
+    {
+      "ts": 1794373464.4250278,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=1",
+      "recovery_attempt": 1,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373464.4250615,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=1",
+      "recovery_attempt": 2
+    },
+    {
+      "ts": 1794373464.4251451,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=1",
+      "recovery_attempt": 2,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373464.4251845,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=2",
+      "recovery_attempt": 1
+    },
+    {
+      "ts": 1794373464.4252698,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=2",
+      "recovery_attempt": 1,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373464.4253006,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=2",
+      "recovery_attempt": 2
+    },
+    {
+      "ts": 1794373464.4254386,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=2",
+      "recovery_attempt": 2,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373524.4569767,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=3",
+      "recovery_attempt": 1
+    },
+    {
+      "ts": 1794373524.457699,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=3",
+      "recovery_attempt": 1,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373524.4577777,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=3",
+      "recovery_attempt": 2
+    },
+    {
+      "ts": 1794373524.4578965,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=3",
+      "recovery_attempt": 2,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373524.4579475,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=5",
+      "recovery_attempt": 1
+    },
+    {
+      "ts": 1794373524.4580429,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=5",
+      "recovery_attempt": 1,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373524.458075,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=5",
+      "recovery_attempt": 2
+    },
+    {
+      "ts": 1794373524.4581587,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=5",
+      "recovery_attempt": 2,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373524.4582117,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=4",
+      "recovery_attempt": 1
+    },
+    {
+      "ts": 1794373524.4582999,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=4",
+      "recovery_attempt": 1,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373524.4583302,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=4",
+      "recovery_attempt": 2
+    },
+    {
+      "ts": 1794373524.458411,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=4",
+      "recovery_attempt": 2,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373524.45845,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=1",
+      "recovery_attempt": 1
+    },
+    {
+      "ts": 1794373524.4585319,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=1",
+      "recovery_attempt": 1,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373524.458589,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=1",
+      "recovery_attempt": 2
+    },
+    {
+      "ts": 1794373524.4586847,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=1",
+      "recovery_attempt": 2,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373524.458725,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=2",
+      "recovery_attempt": 1
+    },
+    {
+      "ts": 1794373524.4588094,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=2",
+      "recovery_attempt": 1,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373524.4588387,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=2",
+      "recovery_attempt": 2
+    },
+    {
+      "ts": 1794373524.4589229,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=2",
+      "recovery_attempt": 2,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373570.2384071,
+      "event": "browser_error",
+      "id": "9ae7ccf3",
+      "attempt": 1,
+      "status": 502,
+      "committed": false,
+      "error_sha256": "4c75c55cd4863d26fa99c659dafe9c74d56ba88ea3449e0dff3254076e840383"
+    },
+    {
+      "ts": 1794373570.2386067,
+      "event": "browser_error",
+      "id": "99b3da0b",
+      "attempt": 1,
+      "status": 502,
+      "committed": false,
+      "error_sha256": "4c75c55cd4863d26fa99c659dafe9c74d56ba88ea3449e0dff3254076e840383"
+    },
+    {
+      "ts": 1794373571.3426101,
+      "event": "browser_start",
+      "id": "1506993f",
+      "attempt": 1,
+      "reasoning_effort": "max"
+    },
+    {
+      "ts": 1794373571.3869555,
+      "event": "browser_start",
+      "id": "cf9488f2",
+      "attempt": 1,
+      "reasoning_effort": "high"
+    },
+    {
+      "ts": 1794373584.4912226,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=3",
+      "recovery_attempt": 1
+    },
+    {
+      "ts": 1794373584.4916034,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=3",
+      "recovery_attempt": 1,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373584.4916759,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=3",
+      "recovery_attempt": 2
+    },
+    {
+      "ts": 1794373584.4918008,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=3",
+      "recovery_attempt": 2,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373584.4918556,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=5",
+      "recovery_attempt": 1
+    },
+    {
+      "ts": 1794373584.491957,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=5",
+      "recovery_attempt": 1,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373584.4919908,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=5",
+      "recovery_attempt": 2
+    },
+    {
+      "ts": 1794373584.4920976,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=5",
+      "recovery_attempt": 2,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373584.492144,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=4",
+      "recovery_attempt": 1
+    },
+    {
+      "ts": 1794373584.4922352,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=4",
+      "recovery_attempt": 1,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373584.4922662,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=4",
+      "recovery_attempt": 2
+    },
+    {
+      "ts": 1794373584.4923506,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=4",
+      "recovery_attempt": 2,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373584.4923906,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=1",
+      "recovery_attempt": 1
+    },
+    {
+      "ts": 1794373584.492474,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=1",
+      "recovery_attempt": 1,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373584.492507,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=1",
+      "recovery_attempt": 2
+    },
+    {
+      "ts": 1794373584.4926257,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=1",
+      "recovery_attempt": 2,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373584.492675,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=2",
+      "recovery_attempt": 1
+    },
+    {
+      "ts": 1794373584.4927645,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=2",
+      "recovery_attempt": 1,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373584.4927945,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=2",
+      "recovery_attempt": 2
+    },
+    {
+      "ts": 1794373584.4928758,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=2",
+      "recovery_attempt": 2,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373644.524965,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=3",
+      "recovery_attempt": 1
+    },
+    {
+      "ts": 1794373644.525298,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=3",
+      "recovery_attempt": 1,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373644.5253599,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=3",
+      "recovery_attempt": 2
+    },
+    {
+      "ts": 1794373644.5254712,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=3",
+      "recovery_attempt": 2,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373644.5255253,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=5",
+      "recovery_attempt": 1
+    },
+    {
+      "ts": 1794373644.5256448,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=5",
+      "recovery_attempt": 1,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373644.5256817,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=5",
+      "recovery_attempt": 2
+    },
+    {
+      "ts": 1794373644.5257697,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=5",
+      "recovery_attempt": 2,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373644.5258136,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=4",
+      "recovery_attempt": 1
+    },
+    {
+      "ts": 1794373644.5259116,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=4",
+      "recovery_attempt": 1,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373644.5259607,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=4",
+      "recovery_attempt": 2
+    },
+    {
+      "ts": 1794373644.5260603,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=4",
+      "recovery_attempt": 2,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373644.5261028,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=1",
+      "recovery_attempt": 1
+    },
+    {
+      "ts": 1794373644.5261905,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=1",
+      "recovery_attempt": 1,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373644.5262213,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=1",
+      "recovery_attempt": 2
+    },
+    {
+      "ts": 1794373644.526302,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=1",
+      "recovery_attempt": 2,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373644.5263402,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=2",
+      "recovery_attempt": 1
+    },
+    {
+      "ts": 1794373644.5264227,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=2",
+      "recovery_attempt": 1,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373644.526452,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=2",
+      "recovery_attempt": 2
+    },
+    {
+      "ts": 1794373644.5265305,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=2",
+      "recovery_attempt": 2,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373691.4239206,
+      "event": "browser_error",
+      "id": "1506993f",
+      "attempt": 1,
+      "status": 502,
+      "committed": false,
+      "error_sha256": "4c75c55cd4863d26fa99c659dafe9c74d56ba88ea3449e0dff3254076e840383"
+    },
+    {
+      "ts": 1794373691.4868495,
+      "event": "browser_error",
+      "id": "cf9488f2",
+      "attempt": 1,
+      "status": 502,
+      "committed": false,
+      "error_sha256": "4c75c55cd4863d26fa99c659dafe9c74d56ba88ea3449e0dff3254076e840383"
+    },
+    {
+      "ts": 1794373693.6028042,
+      "event": "browser_start",
+      "id": "57d88187",
+      "attempt": 1,
+      "reasoning_effort": "high"
+    },
+    {
+      "ts": 1794373693.817218,
+      "event": "browser_start",
+      "id": "5b2b4b45",
+      "attempt": 1,
+      "reasoning_effort": "max"
+    },
+    {
+      "ts": 1794373704.5583591,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=3",
+      "recovery_attempt": 1
+    },
+    {
+      "ts": 1794373704.558709,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=3",
+      "recovery_attempt": 1,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373704.5587747,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=3",
+      "recovery_attempt": 2
+    },
+    {
+      "ts": 1794373704.5588894,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=3",
+      "recovery_attempt": 2,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373704.5589416,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=5",
+      "recovery_attempt": 1
+    },
+    {
+      "ts": 1794373704.5590384,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=5",
+      "recovery_attempt": 1,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373704.5590737,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=5",
+      "recovery_attempt": 2
+    },
+    {
+      "ts": 1794373704.5591612,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=5",
+      "recovery_attempt": 2,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373704.5592034,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=4",
+      "recovery_attempt": 1
+    },
+    {
+      "ts": 1794373704.5592942,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=4",
+      "recovery_attempt": 1,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373704.5593252,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=4",
+      "recovery_attempt": 2
+    },
+    {
+      "ts": 1794373704.559408,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=4",
+      "recovery_attempt": 2,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373704.5594482,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=1",
+      "recovery_attempt": 1
+    },
+    {
+      "ts": 1794373704.559577,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=1",
+      "recovery_attempt": 1,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373704.5596154,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=1",
+      "recovery_attempt": 2
+    },
+    {
+      "ts": 1794373704.5597034,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=1",
+      "recovery_attempt": 2,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373704.559756,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=2",
+      "recovery_attempt": 1
+    },
+    {
+      "ts": 1794373704.5598438,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=2",
+      "recovery_attempt": 1,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373704.5598733,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=2",
+      "recovery_attempt": 2
+    },
+    {
+      "ts": 1794373704.5599535,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=2",
+      "recovery_attempt": 2,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373764.5910678,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=3",
+      "recovery_attempt": 1
+    },
+    {
+      "ts": 1794373764.5913918,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=3",
+      "recovery_attempt": 1,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373764.5914721,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=3",
+      "recovery_attempt": 2
+    },
+    {
+      "ts": 1794373764.5916104,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=3",
+      "recovery_attempt": 2,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373764.5916696,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=5",
+      "recovery_attempt": 1
+    },
+    {
+      "ts": 1794373764.5917766,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=5",
+      "recovery_attempt": 1,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373764.5918124,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=5",
+      "recovery_attempt": 2
+    },
+    {
+      "ts": 1794373764.5919147,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=5",
+      "recovery_attempt": 2,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373764.5919614,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=4",
+      "recovery_attempt": 1
+    },
+    {
+      "ts": 1794373764.5920541,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=4",
+      "recovery_attempt": 1,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373764.592086,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=4",
+      "recovery_attempt": 2
+    },
+    {
+      "ts": 1794373764.5921693,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=4",
+      "recovery_attempt": 2,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373764.592209,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=1",
+      "recovery_attempt": 1
+    },
+    {
+      "ts": 1794373764.592294,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=1",
+      "recovery_attempt": 1,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373764.5923252,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=1",
+      "recovery_attempt": 2
+    },
+    {
+      "ts": 1794373764.592411,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=1",
+      "recovery_attempt": 2,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373764.592451,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=2",
+      "recovery_attempt": 1
+    },
+    {
+      "ts": 1794373764.5925345,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=2",
+      "recovery_attempt": 1,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373764.5925965,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=2",
+      "recovery_attempt": 2
+    },
+    {
+      "ts": 1794373764.5926914,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=2",
+      "recovery_attempt": 2,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373813.6580408,
+      "event": "browser_error",
+      "id": "57d88187",
+      "attempt": 1,
+      "status": 502,
+      "committed": false,
+      "error_sha256": "4c75c55cd4863d26fa99c659dafe9c74d56ba88ea3449e0dff3254076e840383"
+    },
+    {
+      "ts": 1794373813.9581788,
+      "event": "browser_error",
+      "id": "5b2b4b45",
+      "attempt": 1,
+      "status": 502,
+      "committed": false,
+      "error_sha256": "4c75c55cd4863d26fa99c659dafe9c74d56ba88ea3449e0dff3254076e840383"
+    },
+    {
+      "ts": 1794373817.8741043,
+      "event": "browser_start",
+      "id": "bed8d9ec",
+      "attempt": 1,
+      "reasoning_effort": "high"
+    },
+    {
+      "ts": 1794373818.552845,
+      "event": "browser_start",
+      "id": "01dab876",
+      "attempt": 1,
+      "reasoning_effort": "max"
+    },
+    {
+      "ts": 1794373824.6496205,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=3",
+      "recovery_attempt": 1
+    },
+    {
+      "ts": 1794373824.6499438,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=3",
+      "recovery_attempt": 1,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373824.6500194,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=3",
+      "recovery_attempt": 2
+    },
+    {
+      "ts": 1794373824.650131,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=3",
+      "recovery_attempt": 2,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373824.6501822,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=5",
+      "recovery_attempt": 1
+    },
+    {
+      "ts": 1794373824.6502845,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=5",
+      "recovery_attempt": 1,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373824.650318,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=5",
+      "recovery_attempt": 2
+    },
+    {
+      "ts": 1794373824.6504176,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=5",
+      "recovery_attempt": 2,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373824.650461,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=4",
+      "recovery_attempt": 1
+    },
+    {
+      "ts": 1794373824.6505609,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=4",
+      "recovery_attempt": 1,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373824.6505957,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=4",
+      "recovery_attempt": 2
+    },
+    {
+      "ts": 1794373824.6506836,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=4",
+      "recovery_attempt": 2,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373824.6507244,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=1",
+      "recovery_attempt": 1
+    },
+    {
+      "ts": 1794373824.6508086,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=1",
+      "recovery_attempt": 1,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373824.6508372,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=1",
+      "recovery_attempt": 2
+    },
+    {
+      "ts": 1794373824.6509182,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=1",
+      "recovery_attempt": 2,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373824.6509566,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=2",
+      "recovery_attempt": 1
+    },
+    {
+      "ts": 1794373824.6510396,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=2",
+      "recovery_attempt": 1,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    },
+    {
+      "ts": 1794373824.6510687,
+      "event": "pool_recovery_start",
+      "tab_id": "kpool=2",
+      "recovery_attempt": 2
+    },
+    {
+      "ts": 1794373824.6511497,
+      "event": "pool_recovery_error",
+      "tab_id": "kpool=2",
+      "recovery_attempt": 2,
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null,
+      "error_sha256": "c56d9dc38392336938605a3419f8ac67751ae2b1da54dacc527757de7ebdcbb8"
+    }
+  ],
+  "browser_log_sha256": "f5d110617469635b1b95d72ddc605acf971572ad1f1e2e5d3a6cd54d1d139765",
+  "deadline_unchanged": 1794380400,
+  "browser_restarted_at": 1794373932.721102,
+  "replacement_startup_error": "first recovery inherited root HOME and lacked user X authorization; corrected to repository owner home and Xauthority",
+  "new_browser_process": {
+    "pid": 412974,
+    "boot_id": "cac08d61-c715-4c07-aaa6-acca085402b0",
+    "start_ticks": "1936865",
+    "started_at": 1794373931.9978204,
+    "args": [
+      "/home/zhyhang/code/person/nvplay-bridge/.brave/brave",
+      "--no-sandbox",
+      "--user-data-dir=/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-1m-20261111-0801/brave-profile",
+      "--remote-debugging-port=9225",
+      "--remote-allow-origins=*",
+      "--proxy-server=http://127.0.0.1:31128",
+      "--no-first-run",
+      "--no-default-browser-check",
+      "--disable-extensions",
+      "--disable-background-timer-throttling",
+      "--disable-renderer-backgrounding",
+      "--disable-backgrounding-occluded-windows",
+      "--window-size=1280,900",
+      "https://build.nvidia.com/moonshotai/kimi-k3_1-pro/playground"
+    ]
+  },
+  "new_cdp_version": {
+    "Browser": "Chrome/157.0.8103.39",
+    "Protocol-Version": "1.3",
+    "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/157.0.0.0 Safari/537.36"
+  },
+  "verified_at": 1794374106.9843338,
+  "recovery_events_after_restart": [
+    {
+      "event": "browser_start",
+      "ts": 1794373947.2571332,
+      "id": "e9f5803c",
+      "attempt": 1,
+      "reasoning_effort": "high",
+      "sec": 0.0,
+      "max_tokens": 131072
+    },
+    {
+      "event": "browser_start",
+      "ts": 1794373948.2630286,
+      "id": "7c9d17c3",
+      "attempt": 1,
+      "reasoning_effort": "max",
+      "sec": 0.0,
+      "max_tokens": 131072
+    },
+    {
+      "event": "pool_ready",
+      "ts": 1794373948.416398
+    },
+    {
+      "event": "pool_ready",
+      "ts": 1794373950.874639
+    },
+    {
+      "event": "pool_ready",
+      "ts": 1794373953.0927815
+    },
+    {
+      "event": "browser_first_data",
+      "ts": 1794373955.568257,
+      "id": "7c9d17c3",
+      "attempt": 1,
+      "sec": 7.305
+    },
+    {
+      "event": "pool_ready",
+      "ts": 1794373957.107531
+    },
+    {
+      "event": "browser_first_data",
+      "ts": 1794373958.5562472,
+      "id": "e9f5803c",
+      "attempt": 1,
+      "sec": 11.299
+    },
+    {
+      "event": "pool_ready",
+      "ts": 1794373960.0560725
+    },
+    {
+      "event": "browser_first_content",
+      "ts": 1794374003.579878,
+      "id": "e9f5803c",
+      "attempt": 1,
+      "sec": 56.323
+    },
+    {
+      "event": "browser_done",
+      "ts": 1794374003.7831051,
+      "id": "e9f5803c",
+      "attempt": 1,
+      "sec": 56.526,
+      "counts": {
+        "thinking_chars": 103,
+        "text_chars": 0,
+        "tool_calls": 1
+      },
+      "usage": {
+        "prompt_tokens": 150292,
+        "completion_tokens": 1307,
+        "total_tokens": 151599,
+        "prompt_tokens_details": {
+          "cached_tokens": 150272
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 1302
+        }
+      }
+    },
+    {
+      "event": "browser_start",
+      "ts": 1794374003.9781506,
+      "id": "688d32af",
+      "attempt": 1,
+      "reasoning_effort": "high",
+      "sec": 0.0,
+      "max_tokens": 131072
+    },
+    {
+      "event": "browser_first_data",
+      "ts": 1794374009.7812066,
+      "id": "688d32af",
+      "attempt": 1,
+      "sec": 5.803
+    },
+    {
+      "event": "browser_first_content",
+      "ts": 1794374009.781736,
+      "id": "688d32af",
+      "attempt": 1,
+      "sec": 5.804
+    }
+  ],
+  "active_after_recovery": [
+    {
+      "id": "7c9d17c3",
+      "phase": "browser_progress",
+      "reasoning_effort": "max",
+      "usage": {
+        "prompt_tokens": 5773,
+        "completion_tokens": 4156,
+        "total_tokens": 9929,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 4156
+        }
+      },
+      "age_seconds": 158.7,
+      "activity_age_seconds": 3.1
+    },
+    {
+      "id": "688d32af",
+      "phase": "browser_progress",
+      "reasoning_effort": "high",
+      "usage": {
+        "prompt_tokens": 151654,
+        "completion_tokens": 2642,
+        "total_tokens": 154296,
+        "prompt_tokens_details": {
+          "cached_tokens": 150272
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 2642
+        }
+      },
+      "age_seconds": 103.0,
+      "activity_age_seconds": 0.2
+    }
+  ],
+  "pending_after_recovery": [
+    {
+      "attempt": "runs/formal-1m-720k-path-cc-2-1-322-20261111/ks-solver-cpp--high--r1",
+      "status": "agent_running",
+      "task": "ks-solver-cpp",
+      "effort": "high",
+      "started_at": 1794366750.3032668,
+      "elapsed_seconds": 7356.7,
+      "tool_calls": 16,
+      "last_tool": "Write"
+    },
+    {
+      "attempt": "runs/formal-1m-720k-path-cc-2-1-322-20261111/ks-solver-cpp--max--r1",
+      "status": "agent_running",
+      "task": "ks-solver-cpp",
+      "effort": "max",
+      "started_at": 1794366750.2963288,
+      "elapsed_seconds": 7357.5,
+      "tool_calls": 2,
+      "last_tool": "Bash"
+    }
+  ],
+  "automatic_browser_supervision": {
+    "poll_seconds": 10,
+    "only_restart_recorded_exited_browser": true,
+    "never_kills_live_browser": true,
+    "reattach_cdp_observer_after_restart": true,
+    "checks_deadline_before_restart": true,
+    "tests_passed": 5
+  },
+  "report_interval_seconds": 300,
+  "regression": {
+    "passed": true,
+    "full_python_suite_tests": 233,
+    "seconds": 17.458,
+    "supervisor_targeted_tests": 5
+  },
+  "browser_supervisor_state": {
+    "status": "monitoring",
+    "at": 1794374196.6809444,
+    "browser_pid": 412974,
+    "cdp_ready": true
+  }
+}

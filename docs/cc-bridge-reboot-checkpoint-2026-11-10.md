@@ -1,5 +1,15 @@
 # CC + bridge 评测重启检查点（2026-11-10）
 
+**2026-11-11 15:00 已按约定暂停，可以重启容器。** 最终 checkpoint `8ecacda` 已推送，累计完成 **9/30**；KS high / r1 在 136 次工具调用后按行政停止记录，未判分。已核对评测、自动 checkpoint、bridge、浏览器、监督与监控进程全部退出，8083/9225 关闭，无遗留请求。完整终态见 [本轮检查点](evidence/cc-bridge-1m-reboot-continuation-2026-11-11.json)。
+
+下一次收到继续指令后，从剩余 21 个位置中的 `ks-solver-cpp` high / r1 开始；保留 KS max 的 0 分和其它 8 个完成结果。新阶段应使用当时普通用户 PATH 的 Claude，并按 [原生说明](terminal-bench-native.md#当前-path-原生-cc) 添加 `--disable-native-idle-timeout`，重新完成 high/max 真实烟测。修复已通过 430 秒本地 HTTP/1.0、HTTP/1.1 和真实 max 工具闭环；本次尚未在新的正式计分阶段启用，不能补标到已结束或中断的旧会话。原始日志可能被重启清空，PID、外部 root 与在途 CC 会话不可复用。
+
+**2026-11-11 14:41 最新交接：累计完成 9/30。** 当前用户 PATH CC 为 **2.1.322**，模型 `kimi-k3.1-pro[1m]`、压缩窗口 720000、输出环境 128000 / bridge 请求 131072；当前在途为 `ks-solver-cpp` high / r1，不能提前判分。新版已完成的 `mvcc-lsm-compaction` max / r1 为 15/15、端到端成功；`ks-solver-cpp` max / r1 为 0 分、客户端错误退出，失败保留。历史 7 个位置继续保持原阶段归属，全部最新状态见 [本轮检查点](evidence/cc-bridge-1m-reboot-continuation-2026-11-11.json)。
+
+已发现并验证原生 CC 在长 API 超时下仍约 361 秒提前重试的问题：`API_FORCE_IDLE_TIMEOUT=0` 的 430 秒本地 HTTP/1.0、HTTP/1.1 对照均通过，真实 max 工具烟测也通过；236 项回归通过。新运行器支持 `configure_terminal_native_path_cc.py --disable-native-idle-timeout`，在新阶段同时冻结并注入该值。当前 high 保持旧会话，待自然结束后切换；如先到停机时间，则重启后直接在新阶段启用，保留旧失败和行政中断记录，不覆盖成绩。恢复命令见 [原生说明](terminal-bench-native.md#当前-path-原生-cc)，证据见 [取消调查与复测](evidence/cc-bridge-native-cancellation-investigation-2026-11-11.json)。
+
+本轮仍将于 **15:00 北京时间** 停止调度、在途会话、定时 checkpoint、bridge、浏览器与监督进程，最后提交推送；未完成位置记行政中断、得分为空。最终状态以本轮检查点和后续停机交接为准。
+
 **2026-11-11 09:33 已按用户要求切换当前用户 PATH 的 Claude Code 2.1.322 并恢复正式评测。** 新阶段 `formal-1m-720k-path-cc-2-1-322-20261111`，仍从 `mvcc-lsm-compaction` max / r1 开始；旧版在途会话按客户端升级行政中断，未判分。2.1.322 的 high/max 真实工具 smoke 均通过。详见 [版本切换证据](evidence/cc-bridge-path-cc-2026-11-11.json) 与 [原生新版恢复方法](terminal-bench-native.md#当前-path-原生-cc)。当前停机截止仍为 **15:00 北京时间**，checkpoint 为“有实质进展或距最近一次保存 5 分钟”，提交后立即推送。
 
 **2026-11-11 08:01 再次恢复。** 保留已经完成的 7/30，从 `mvcc-lsm-compaction` max / r1 继续。用户要求约 7 小时后主动暂停，本轮已安排在 15:00（北京时间）停机并推送最终检查点。见 [本轮续评记录](cc-bridge-1m-continuation-2026-11-10.md) 和 [本轮检查点](evidence/cc-bridge-1m-reboot-continuation-2026-11-11.json)。

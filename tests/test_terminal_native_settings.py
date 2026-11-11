@@ -62,6 +62,45 @@ class NativeRequestSettingTests(unittest.TestCase):
             self.assertEqual(self.evaluation.request_settings(effort, "formal-128k-fixed"),
                              self.evaluation.request_settings(effort, "formal"))
 
+    def test_native_idle_override_is_required_by_protocol_and_present_before_cli_start(self):
+        stage = "formal-native-idle-fixed"
+        self.evaluation.plan["formal_native_subset"].update(
+            stage=stage, cc_native_idle_timeout_disabled=True)
+        self.evaluation.plan["cc_runtime_by_stage"] = {
+            stage: {"kind": "path-native-proot", "proot_path": "/verified/proot"}}
+        path = self.base / "settings-formal-high.json"
+        settings = json.loads(path.read_text())
+        settings["env"]["ANTHROPIC_BASE_URL"] = "http://127.0.0.1:8083"
+        for value in (None, "1", "false"):
+            with self.subTest(value=value):
+                settings["env"].pop("API_FORCE_IDLE_TIMEOUT", None)
+                if value is not None:
+                    settings["env"]["API_FORCE_IDLE_TIMEOUT"] = value
+                path.write_text(json.dumps(settings))
+                with self.assertRaisesRegex(ValueError, "native idle timeout protocol"):
+                    self.evaluation.request_settings("high", stage)
+        settings["env"]["API_FORCE_IDLE_TIMEOUT"] = "0"
+        path.write_text(json.dumps(settings))
+        settings = self.evaluation.request_settings("high", stage)
+        _, environment, adapter = self.evaluation.cc_bootstrap(self.base, stage, settings)
+        command = self.evaluation.agent_command(self.base, "claude -p fixture", stage=stage,
+                  uid=20004, environment=environment)
+        self.assertIsNone(adapter)
+        self.assertIn("API_FORCE_IDLE_TIMEOUT=0", command)
+        self.assertIn("API_TIMEOUT_MS=29400000", command)
+        self.assertIn("-i", command)
+        del self.evaluation.plan["cc_runtime_by_stage"][stage]
+        with self.assertRaisesRegex(ValueError, "native idle timeout protocol"):
+            self.evaluation.request_settings("high", stage)
+
+    def test_partial_configuration_cannot_apply_idle_override_to_old_protocol(self):
+        path = self.base / "settings-formal-high.json"
+        settings = json.loads(path.read_text())
+        settings["env"]["API_FORCE_IDLE_TIMEOUT"] = "0"
+        path.write_text(json.dumps(settings))
+        with self.assertRaisesRegex(ValueError, "not recorded in the frozen protocol"):
+            self.evaluation.request_settings("high", "formal")
+
     def test_fixed_protocol_refuses_an_unconfigured_bridge_runtime(self):
         self.evaluation.plan["formal_native_subset"].update(
             stage="formal-128k-fixed", bridge_fixed_max_output_tokens=131072)

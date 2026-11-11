@@ -92,12 +92,16 @@ def smoke(evaluation, effort):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--base", type=Path, required=True)
+    parser.add_argument("--efforts", nargs="+", choices=("high", "max"), default=["high", "max"],
+                        help="Select an isolated supplemental smoke; campaigns require both efforts")
     args = parser.parse_args()
+    if len(set(args.efforts)) != len(args.efforts):
+        parser.error("smoke efforts must be unique")
     if os.geteuid() != 0:
         parser.error("native root creation needs sudo; CC itself uses a dedicated ordinary UID")
     evaluation = Evaluation(args.base)
-    with ThreadPoolExecutor(max_workers=2) as pool:
-        results = list(pool.map(lambda effort: smoke(evaluation, effort), ("high", "max")))
+    with ThreadPoolExecutor(max_workers=len(args.efforts)) as pool:
+        results = list(pool.map(lambda effort: smoke(evaluation, effort), args.efforts))
     result = {"recorded_at": time.time(), "passed": all(row["passed"] for row in results), "efforts": results,
               "stage": evaluation.plan["formal_native_subset"]["stage"]}
     write_json(evaluation.base / "smoke-result.json", result)

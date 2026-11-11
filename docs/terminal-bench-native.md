@@ -39,14 +39,19 @@ sudo -n python3 tools/configure_terminal_native_path_cc.py \
   --base logs/<run> --claude "$(command -v claude)" \
   --proot /usr/local/libexec/nvplay-proot-5.5.0 \
   --proot-source-commit 25dc6a3134891f98a79f57ce1c2c1b23ff15cad1 \
+  --disable-native-idle-timeout \
   --stage formal-1m-720k-path-cc-<new-run>
 ```
 
 该步骤拒绝运行中的控制器和未归档的在途任务，保留已完成位置及旧协议，建立独立的新阶段。基座中的旧 CLI 入口会在每个新 agent root 内指向 PATH 快照；新阶段不加载 Node 网络适配器。`API_TIMEOUT_MS=29400000` 保留，单个正式会话没有墙钟截止，启用压缩时同时传入 `--autocompact 720000`。完成版本切换后仍必须通过新的 high/max 真实工具 smoke，旧版 smoke 不能代替。
 
+`--disable-native-idle-timeout` 为两档冻结 `cc_native_idle_timeout_disabled=true` 和 `API_FORCE_IDLE_TIMEOUT=0`，同时在 CLI 启动前注入该环境值。2.1.322 的本地延迟响应头夹具表明，仅设置长 API 超时仍会约 361 秒提前重试；关闭原生 idle 限制后，同一 430 秒延迟一次回退成功。此配置有独立阶段记录，不能给旧会话补标；它也没有验证八小时等待边界。详情与后续 HTTP/1.1 对照见 [取消调查证据](evidence/cc-bridge-native-cancellation-investigation-2026-11-11.json)。
+
 每个任务在 `/var/tmp/nvplay-bridge-cc-<uid>-<random>/root` 建立独立文件系统，记录到 `runtime-root.json`。先用 `setpriv` 降为真实 UID 20000–29999，清空附加组并启用 `no-new-privs`，再启动 PRoot；host cwd 设在该任务 root 内。PRoot 仅负责路径转换，隔离依赖真实 UID 和目录权限：题库、隐藏测试、参考解、判分 root 和其它任务必须不可被该 UID 读取。本轮 `/home/zhyhang` 为 0750，独立 UID 的实际读取权限检查通过；真实 `/proc` 会暴露部分 host 元数据，因此不能声称与官方容器隔离等同。
 
 CC 自然结束或行政停止后，先确认其 UID 已无活进程，再将外部 root 移回标准 `agent-root`，交给原判分与校验归档流程。`stop_terminal_native_at.py` 同时识别外部 root 和真实 UID；替换停机工具后要按原绝对截止时间重启计时器。重启不能复用旧 PID、外部 root 或会话。
+
+长时间无人操作时，可用 `sudo -n python3 -u tools/supervise_terminal_native_browser.py --base logs/<run>` 监督本轮独立浏览器，每 10 秒检查浏览器内核身份与 CDP。需要先记录 `reboot-stop-request.json` 中的绝对截止时间；工具在截止或出现 pause 标记后退出。启动方式应使用 `advance_terminal_native_transport.start_process(base, "browser-supervisor", ...)` 记录进程身份，使定时停机可一并清理。仅在已记录浏览器确实退出且 CDP 不可用时重启，仍存活的浏览器不受信号干预；新浏览器沿用原 profile、代理和参数，使用普通用户 HOME/Xauthority。旧 CDP 观察器在新池全部标签就绪后重连。bridge 的 HTTP 存活与 CDP/标签可用性应分别检查，不能只看顶层 `status=ok`。
 
 ## 可提交的环境重建与持续检查点
 

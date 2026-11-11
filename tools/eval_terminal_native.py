@@ -197,8 +197,10 @@ class Evaluation:
 
     def cc_bootstrap(self, root: Path, stage: str, settings: dict) -> tuple[list[str], dict, dict | None]:
         if self.plan.get("cc_runtime_by_stage", {}).get(stage):
-            return [native_path_cc.GUEST_CLI], {key: settings["env"][key] for key in
-                        ("API_TIMEOUT_MS", "ANTHROPIC_BASE_URL")}, None
+            environment = {key: settings["env"][key] for key in ("API_TIMEOUT_MS", "ANTHROPIC_BASE_URL")}
+            if "API_FORCE_IDLE_TIMEOUT" in settings["env"]:
+                environment["API_FORCE_IDLE_TIMEOUT"] = settings["env"]["API_FORCE_IDLE_TIMEOUT"]
+            return [native_path_cc.GUEST_CLI], environment, None
         adapter = self.network_adapter(stage)
         if not adapter:
             return ["claude"], {}, None
@@ -245,6 +247,12 @@ class Evaluation:
                         or any(str(env.get(key, "")).lower() in ("1", "true") for key in (
                             "DISABLE_AUTO_COMPACT", "DISABLE_COMPACT", "CLAUDE_CODE_DISABLE_1M_CONTEXT"))))):
                 raise ValueError("formal settings do not match the frozen model/context/compaction protocol")
+        if formal.get("cc_native_idle_timeout_disabled"):
+            if (not self.plan.get("cc_runtime_by_stage", {}).get(stage)
+                    or settings.get("env", {}).get("API_FORCE_IDLE_TIMEOUT") != "0"):
+                raise ValueError("formal settings do not match the frozen native idle timeout protocol")
+        elif formal and "API_FORCE_IDLE_TIMEOUT" in settings.get("env", {}):
+            raise ValueError("native idle timeout override is not recorded in the frozen protocol")
         return settings
 
     def cc_launch_configuration(self, settings: dict, stage: str) -> dict:
