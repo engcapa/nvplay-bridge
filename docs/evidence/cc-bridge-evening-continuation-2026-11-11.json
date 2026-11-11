@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794400249.849302,
+  "checkpoint_at": 1794400309.9774585,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261111-evening",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -983,10 +983,10 @@
     "fresh_controls_required": true
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794400237.0508695,
-    "commit": "5b0a3f44c7e5c9729b0ad128fb95918005319842",
-    "pushed": true,
-    "returncode": 0
+    "attempted_at": 1794400249.9462607,
+    "commit": "74d6911adebb0baafd95028933b35155dac08226",
+    "pushed": false,
+    "error_type": "TimeoutExpired"
   },
   "smoke": {
     "recorded_at": 1794391697.8758824,
@@ -1408,7 +1408,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794400249.8632176,
+    "generated_at": 1794400309.995398,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-1m-720k-host-cc-20261111-evening/28800/high": {
@@ -1736,8 +1736,8 @@
     },
     {
       "path": "browser-supervisor-state.json",
-      "sha256": "fc916b327255892a60e1d61e3dcd04cc9922a65c02f34711fc2b340cd6dcc600",
-      "size": 102
+      "sha256": "6d59923c4e7438592e4a960cff1f0ee9dc806918ea5b7e14a791549982718bd6",
+      "size": 101
     },
     {
       "path": "campaign-error.json",
@@ -1761,8 +1761,8 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "b3a7d481bead3b0b0c319d668a3ee2fc3cbdbcbbdd58d2e8836896cc5b3d2ef4",
-      "size": 134
+      "sha256": "f76f86eb24c5d4da36a94d6b102ec241194af1b444c2ce550ae7d64f9d59b729",
+      "size": 150
     },
     {
       "path": "checkpoint-process.json",
@@ -1956,7 +1956,7 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "fb7ccf38bf57df85bd15b3a3d093ea3641cad82cb1fb5f12337020a974b11e30",
+      "sha256": "16fe6bdfe92459b5bc0c63a1a3c17c9a9ff6006f074ce7bb27bc0d8524fe1c23",
       "size": 782
     },
     {
@@ -2013,6 +2013,11 @@
       "path": "smoke-result.json",
       "sha256": "1b7be30ada6546bc5acd28b09a113b0b1c7ed38ca440656e6e39c51746533209",
       "size": 16371
+    },
+    {
+      "path": "transport-before-checkpoint.json",
+      "sha256": "21756819cd0381c048e449760e50510bc40c618593887361167758aa16993f84",
+      "size": 89581
     },
     {
       "path": "transport-transition-process.json",
