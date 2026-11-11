@@ -28,6 +28,8 @@ exec /usr/local/bin/node /opt/claude-code-2.1.110/package/cli.js "$@"
 
 需要先在普通 UID 下完成一次实际 Bash/文件操作烟测；`claude --version` 成功不能证明工具调用可用。基座及每题安装日志应保存版本、包清单和文件摘要。托管 Python 的包安装只修改任务自己的副本，不修改 host Python。
 
+<a id="当前-path-原生-cc"></a>
+
 ## 当前方式：容器内直接运行 CC
 
 在固定下载、原生基座和模板准备完成后，执行以下命令；默认运行方式也是 `--host-direct`，不需要安装或指定 PRoot：
