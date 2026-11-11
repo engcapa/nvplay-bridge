@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794410686.7383966,
+  "checkpoint_at": 1794410722.7279186,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261111-evening",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -1257,8 +1257,8 @@
     "fresh_controls_required": true
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794410579.2955978,
-    "commit": "d5c105674948d90cb929005b5be84cde16d26dfe",
+    "attempted_at": 1794410687.411979,
+    "commit": "2c4bc6a982a9b0667b3cd5955c06ff0d24737020",
     "pushed": true,
     "returncode": 0
   },
@@ -1702,7 +1702,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794410687.13735,
+    "generated_at": 1794410723.0858,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-1m-720k-host-body-read-clean-20261111/28800/high": {
@@ -1915,9 +1915,9 @@
         "task": "session-window-debug",
         "effort": "max",
         "started_at": 1794407879.5171292,
-        "elapsed_seconds": 2807.3,
-        "tool_calls": 50,
-        "last_tool": "Write"
+        "elapsed_seconds": 2843.2,
+        "tool_calls": 51,
+        "last_tool": "Edit"
       }
     ]
   },
@@ -1955,42 +1955,42 @@
       "idle_seconds": 3600.0
     },
     "pool_states": {
-      "ready": 4,
-      "busy": 1
+      "busy": 1,
+      "ready": 4
     },
     "recovering_tabs": []
   },
   "bridge_activity": {
     "events_last_300s": {
-      "browser_progress": 49,
-      "browser_buffer": 3,
-      "browser_pool_release": 3,
-      "browser_output_ready": 3,
-      "browser_first_content": 3,
-      "browser_done": 3,
-      "tool_call": 3,
-      "messages_done": 3,
-      "http_complete": 3,
-      "tool_result": 3,
-      "request": 3,
-      "payload": 3,
-      "browser_start": 3,
-      "browser_lease": 3,
-      "browser_tab": 3,
-      "browser_sent": 3,
-      "browser_first_data": 2,
-      "messages_first_block": 2
+      "browser_progress": 43,
+      "browser_buffer": 4,
+      "browser_pool_release": 4,
+      "browser_output_ready": 4,
+      "browser_first_content": 4,
+      "browser_done": 4,
+      "tool_call": 4,
+      "messages_done": 4,
+      "http_complete": 4,
+      "tool_result": 4,
+      "request": 4,
+      "payload": 4,
+      "browser_start": 4,
+      "browser_lease": 4,
+      "browser_tab": 4,
+      "browser_sent": 4,
+      "browser_first_data": 3,
+      "messages_first_block": 3
     },
     "active": [
       {
-        "id": "360265e3e76744d6ae6c65ff",
+        "id": "54db17b0b6cb476bbb52b9d1",
         "retry_count": 0,
         "phase": "browser_sent",
         "attempt": 1,
         "reasoning_effort": "max",
-        "tab_id": "kpool=5",
-        "age_seconds": 6.5,
-        "activity_age_seconds": 5.4
+        "tab_id": "kpool=1",
+        "age_seconds": 8.1,
+        "activity_age_seconds": 7.1
       }
     ],
     "recent_errors": [],
@@ -2055,8 +2055,8 @@
     },
     {
       "path": "browser-supervisor-state.json",
-      "sha256": "c84df6ad04bbd0f1a58b68b6e78a66b54399c2df961102bbd73b5be794b38fb5",
-      "size": 102
+      "sha256": "2b5f2026317c93ccc5046e90543a3cdb278be5aa2d4a0a03b9376e358ba3ccd9",
+      "size": 101
     },
     {
       "path": "campaign-error-before-transport-fix.json",
@@ -2080,8 +2080,8 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "9e836d37fd8621617045787828414964c1eec0532187dc7b1ca954a791ed9905",
-      "size": 134
+      "sha256": "688de3e630f80aae33209f95a71b87f0116de8f6292ebadf67f10af2ae8fea53",
+      "size": 133
     },
     {
       "path": "checkpoint-process.json",
@@ -2305,8 +2305,8 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "04096b52b04f33e2dab57e941036c76a19e52e8eda63ba307845d189b9d86151",
-      "size": 790
+      "sha256": "831c6c6a65619bce58735c66620d1193329db5b6435834efc99421d6f447832e",
+      "size": 789
     },
     {
       "path": "rollout-validation-interruption.json",
