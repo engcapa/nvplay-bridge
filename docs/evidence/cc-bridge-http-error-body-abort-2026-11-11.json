@@ -1,6 +1,6 @@
 {
   "recorded_at": 1794400907.8512783,
-  "status": "verified_fix_deployed_live_smoke_pending",
+  "status": "fix_deployed_functional_checks_pass_strict_revalidation_pending",
   "observed_task": "ks-solver-cpp--high--r1",
   "observed_http_statuses": [
     500,
@@ -161,5 +161,6 @@
       "5": 3
     },
     "high_max_live_smoke_passed": false
-  }
+  },
+  "strict_validation_history": "cc-bridge-host-rollout-validation-failures-2026-11-11.json"
 }
