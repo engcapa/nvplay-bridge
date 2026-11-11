@@ -9,6 +9,24 @@ from tools.monitor_bridge import LogTail, snapshot
 
 
 class MonitorTests(unittest.TestCase):
+    def test_client_conversion_and_tool_failures_remain_visible_after_browser_done(self):
+        records = [
+            {"event": "browser_start", "id": "a", "ts": 10},
+            {"event": "browser_done", "id": "a", "ts": 11},
+            {"event": "messages_failed", "request_id": "a", "phase": "conversion", "ts": 12},
+            {"event": "tool_call", "tool_id": "x", "anomaly": "identical_edit", "ts": 13},
+            {"event": "tool_result", "tool_id": "x", "is_error": True, "ts": 14},
+            {"event": "tool_result", "tool_id": "y", "is_error": False, "ts": 15},
+        ]
+        result = snapshot(records, now=16)
+        self.assertEqual(result["active"], [])
+        self.assertEqual(result["recent_errors"], [])
+        self.assertEqual(result["recent_client_errors"], [records[2]])
+        self.assertEqual(result["recent_tool_errors"], records[3:5])
+        later = snapshot(records, now=30, since=20)
+        self.assertEqual(later["recent_client_errors"], [])
+        self.assertEqual(later["recent_tool_errors"], [])
+
     def test_split_utf8_record_is_delivered_once_after_newline(self):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "bridge.jsonl"

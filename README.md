@@ -143,6 +143,27 @@ claude --settings "$REPO\configs\settings-kimi.json" `
 
 Or set the global config with `tools/set_global_cc.py`.
 
+To set Claude Code's per-response output budget, define the environment variable
+before launching CC (Bash):
+
+```bash
+export CLAUDE_CODE_MAX_OUTPUT_TOKENS=128000
+claude --settings "$REPO/configs/settings-kimi.json" --model kimi-k3.1-pro
+```
+
+In PowerShell, use `$env:CLAUDE_CODE_MAX_OUTPUT_TOKENS = "128000"` before the
+same launch command. Alternatively, merge
+`"env": {"CLAUDE_CODE_MAX_OUTPUT_TOKENS": "128000"}` into CC's settings JSON.
+The already-running CC process does not inherit changes exported in another
+terminal; restart or resume CC to apply them. In the locally checked CC 2.1.322,
+the Kimi alias uses an unknown-model output ceiling of **128000**: setting
+`131072` still produced `max_tokens=128000` in isolated local HTTP captures.
+To force exactly **131072** upstream instead, set
+`BROWSER_MAX_TOKENS=131072 BROWSER_FIXED_MAX_TOKENS=131072` in the bridge's
+environment and restart the bridge. This explicitly overrides smaller client
+budgets. These are output ceilings shared by thinking, text and tool arguments;
+they do not force the model to use the full budget or improve generation speed.
+
 The bridge accepts only Kimi model aliases; other model IDs return `404 not_found_error`. It always sends `moonshotai/kimi-k3.1-pro` upstream. Because of that allowlist, every `configs/*.json` must name a Kimi alias — configs that still ask for `sonnet`/`haiku` are rejected.
 
 | Settings file | Effort sent to upstream | Notes |
@@ -186,6 +207,14 @@ The bridge accepts only Kimi model aliases; other model IDs return `404 not_foun
 | `BROWSER_DEBUG_LOG` | empty | JSONL metadata log path |
 | `BROWSER_DEBUG_MESSAGES` | `0` | Log outbound message shapes |
 
+The bridge's default 128K output ceiling is a local limit. Kimi's current
+[K3.1 Pro documentation](https://platform.kimi.com/docs/guide/kimi-k3-1-pro-quickstart)
+lists `max_completion_tokens=131072` by default and a maximum of `1048576`
+for its official API. That maximum has not been verified on NVIDIA Playground.
+Client requests with a smaller budget retain that budget unless
+`BROWSER_FIXED_MAX_TOKENS` explicitly overrides it; thinking and visible output
+share the completion-token budget.
+
 ## API behavior
 
 - `GET /health`, `GET /v1/models`
@@ -200,6 +229,7 @@ The bridge accepts only Kimi model aliases; other model IDs return `404 not_foun
 - Kimi's official K3.1 Pro API documentation requires preserving complete assistant messages, including reasoning, for multi-turn and tool use. The NVIDIA UI was observed to omit old reasoning in a local mocked follow-up, and one repair-task experiment succeeded with omission. This does not establish a general quality benefit; keep `preserve` as the default. See [history policy and evidence](docs/agent-compatibility.md).
 - Tool invocation IDs are fresh across responses in Messages and Responses, for both SSE and JSON. Tool names, arguments and returned text are preserved.
 - Invalid/non-object tool parameter JSON fails explicitly; Messages JSON aggregation does not silently replace malformed arguments with `{}`.
+- Messages preserves `max_tokens` as the stop reason when upstream reports `length`, including responses containing tools. JSON aggregation also rejects missing finish markers or tool metadata.
 - Browser mode forwards thinking, text and the first tool's arguments as they arrive; interleaved additional tools are buffered and emitted as consecutive content blocks.
 - Browser mode sends `event: ping` every 10s without downstream data, including while queuing and retrying.
 - Placeholder/empty responses may retry once before streaming content is delivered. After thinking/text/tool content has been delivered, errors end the stream without replacing the answer. Non-streaming requests retain the empty-response retry.
@@ -264,6 +294,7 @@ $env:PYTHONPATH = $REPO     # add ";$REPO\vendor" only if you have an offline bu
 & $PY tests\test_agent_compatibility.py
 & $PY tests\test_browser_http_errors.py
 & $PY tests\test_monitor_bridge.py
+& $PY tests\test_messages_diagnostics.py
 ```
 
 The offline suite can also be discovered with
@@ -283,6 +314,11 @@ It sends no NVIDIA inference requests and does not use the production pool tabs.
 `python3 tools/monitor_bridge.py --snapshot` reports recent active requests,
 their age and last activity, token usage, terminal errors and pool health.
 Snapshots also list upstream HTTP failures and retry decisions separately.
+`recent_client_errors` includes response conversion failures, and
+`recent_tool_errors` includes tool failures reported by CC and identical Edit
+arguments. A successful `browser_done` records upstream completion;
+`messages_done` records successful Messages conversion. Check `messages_failed`
+when upstream completed but the client received an SSE error.
 Active entries retain their reasoning effort, retry count and last retry reason
 across attempts, including when those earlier events fall outside the lookback.
 For browser-level stream failures, `python3 tools/monitor_cdp_network.py --output logs/cdp-network.jsonl`
@@ -342,3 +378,18 @@ Tab refresh integration test (uses a temporary `?ktest=1` tab):
 [`docs/streaming-regression-report.md`](docs/streaming-regression-report.md) for
 streaming validation and [`docs/regression-report.md`](docs/regression-report.md)
 for the earlier regression results.
+
+Messages and Responses requests return `request-id` and `x-request-id` headers.
+The same `request_id` links request/payload, browser and conversion events.
+`browser_lease`, `browser_tab`, `browser_sent` and `browser_first_data` separate
+queue wait, page preparation, send triggering and upstream first-byte time.
+`http_complete` records HTTP status, response-body completion and disconnects;
+HTTP 200 alone does not establish successful SSE completion.
+
+Messages `tool_call` records contain the tool ID, name and SHA-256 of its
+canonical JSON arguments (`ensure_ascii=False`, sorted keys, compact separators).
+They record `anomaly=identical_edit` when Edit's old and new strings match.
+`tool_result` records classify the latest tool results in the next CC request.
+These diagnostics do not log argument contents, source code or command output.
+CC may add default fields such as `replace_all=false` in its execution records;
+account for those defaults when comparing argument hashes.

@@ -482,6 +482,8 @@ class BrowserUpstream:
                 _pause(cancel, deadline, 0.2)
             if trigger != "clicked":
                 raise BrowserError(f"触发发送失败: {trigger}")
+            if trace:
+                trace("browser_sent", tab_id=self.hint)
 
             first_deadline = time.monotonic() + FIRST_BYTE_TIMEOUT
             last_data: float | None = None
@@ -871,6 +873,8 @@ class BrowserPool:
                     raise
                 self._states[hint] = "busy"
                 self._cancels[hint] = cancel
+            if trace:
+                trace("browser_lease", tab_id=hint)
             retry = False
             try:
                 # Stale/dirty entries must never delay a healthy queued tab.

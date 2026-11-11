@@ -61,6 +61,8 @@ def snapshot(records, now=None, since=None):
     errors = []
     upstream_errors = []
     retries = []
+    client_errors = []
+    tool_errors = []
     for record in records:
         kind = record.get("event", "?")
         recent = since is None or record.get("ts", 0) >= since
@@ -87,6 +89,11 @@ def snapshot(records, now=None, since=None):
             active.pop(request_id, None)
         if recent and kind in ("browser_error", "pool_recovery_error"):
             errors.append(record)
+        if recent and kind in ("messages_failed", "responses_failed"):
+            client_errors.append(record)
+        if recent and ((kind == "tool_result" and record.get("is_error"))
+                       or (kind == "tool_call" and record.get("anomaly"))):
+            tool_errors.append(record)
         if recent and kind in ("browser_http_error", "upstream_retry"):
             tagged = dict(record)
             if request_id in active and "reasoning_effort" in active[request_id]:
@@ -96,7 +103,8 @@ def snapshot(records, now=None, since=None):
         request["age_seconds"] = round(now - request.pop("started"), 1)
         request["activity_age_seconds"] = round(now - request.pop("last_activity"), 1)
     return {"events": dict(counts), "active": list(active.values()), "recent_errors": errors[-10:],
-            "recent_upstream_errors": upstream_errors[-10:], "recent_retries": retries[-10:]}
+            "recent_upstream_errors": upstream_errors[-10:], "recent_retries": retries[-10:],
+            "recent_client_errors": client_errors[-10:], "recent_tool_errors": tool_errors[-10:]}
 
 
 def health(url=HEALTH) -> str:

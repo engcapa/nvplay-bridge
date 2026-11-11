@@ -51,9 +51,11 @@ nvplay_bridge.py — Anthropic Messages API 适配层
 from __future__ import annotations
 
 from contextlib import aclosing
+from contextvars import ContextVar
 from stream_support import AnthropicBlocks
 
 import asyncio
+import hashlib
 import json
 import os
 import random
@@ -80,7 +82,7 @@ if UPSTREAM_KIND not in {"openai", "nvcf", "browser"}:
 # 浏览器桥（CDP）模式
 BROWSER_CDP_PORT = int(os.getenv("BROWSER_CDP_PORT", "9222"))
 BROWSER_TARGET_HINT = os.getenv("BROWSER_TARGET_HINT", "kimi-k3_1-pro/playground")
-# Kimi K3.1 Pro 官方最大输出 128K tokens。
+# 本桥默认将输出限制为 128K；这不是 Kimi 官方 API 的能力上限。
 BROWSER_MAX_TOKENS = int(os.getenv("BROWSER_MAX_TOKENS", "131072"))
 BROWSER_FIXED_MAX_TOKENS = int(os.getenv("BROWSER_FIXED_MAX_TOKENS", "0"))
 if not 0 <= BROWSER_FIXED_MAX_TOKENS <= BROWSER_MAX_TOKENS:
@@ -99,17 +101,62 @@ HISTORY_REASONING = os.getenv("HISTORY_REASONING", "preserve").strip().lower()
 if HISTORY_REASONING not in {"preserve", "omit"}:
     raise RuntimeError("HISTORY_REASONING must be 'preserve' or 'omit'")
 BROWSER_DEBUG_MESSAGES = os.getenv("BROWSER_DEBUG_MESSAGES", "") == "1"
+_request_id: ContextVar[str | None] = ContextVar("bridge_request_id", default=None)
 
 
 def _dbg(event: str, **data: Any) -> None:
     if not BROWSER_DEBUG_LOG:
         return
     try:
-        record = {"ts": time.time(), "event": event, **data}
+        request_id = _request_id.get()
+        record = {"ts": time.time(), "event": event,
+                  **({"request_id": request_id} if request_id else {}), **data}
         with open(BROWSER_DEBUG_LOG, "a", encoding="utf-8") as f:
             f.write(json.dumps(record, ensure_ascii=False) + "\n")
     except OSError:
         pass
+
+
+class RequestDiagnosticsMiddleware:
+    """Keep request IDs across streaming tasks without buffering response bodies."""
+
+    def __init__(self, app) -> None:
+        self.app = app
+
+    async def __call__(self, scope, receive, send) -> None:
+        if (scope["type"] != "http" or scope.get("method") != "POST"
+                or scope.get("path") not in ("/v1/messages", "/v1/responses")):
+            await self.app(scope, receive, send)
+            return
+        request_id = uuid.uuid4().hex[:24]
+        token = _request_id.set(request_id)
+        started = time.monotonic()
+        status = None
+        complete = disconnected = False
+
+        async def receive_traced():
+            nonlocal disconnected
+            message = await receive()
+            if message["type"] == "http.disconnect":
+                disconnected = True
+            return message
+
+        async def send_traced(message):
+            nonlocal status, complete
+            if message["type"] == "http.response.start":
+                status = message["status"]
+                message = {**message, "headers": list(message.get("headers", [])) + [
+                    (b"request-id", request_id.encode()), (b"x-request-id", request_id.encode())]}
+            await send(message)
+            if message["type"] == "http.response.body" and not message.get("more_body", False):
+                complete = True
+
+        try:
+            await self.app(scope, receive_traced, send_traced)
+        finally:
+            _dbg("http_complete", path=scope["path"], status=status, body_complete=complete,
+                 client_disconnected=disconnected, sec=round(time.monotonic() - started, 3))
+            _request_id.reset(token)
 
 # OpenAI 兼容模式
 UPSTREAM_BASE = os.getenv("UPSTREAM_BASE_URL", "https://integrate.api.nvidia.com/v1").rstrip("/")
@@ -160,6 +207,7 @@ app = FastAPI(
     version="0.3.0",
     description="Anthropic Messages and OpenAI Responses bridge for Kimi K3.1 Pro via NVIDIA Build Playground",
 )
+app.add_middleware(RequestDiagnosticsMiddleware)
 
 
 class DisconnectStreamingResponse(StreamingResponse):
@@ -358,6 +406,8 @@ def _effort_from_thinking(thinking: Any, allow_medium: bool) -> str | None:
 
 
 def _stop_reason(finish_reason: str | None, has_tools: bool) -> str:
+    if finish_reason == "length":
+        return "max_tokens"
     if has_tools:
         return "tool_use"
     return {
@@ -379,6 +429,53 @@ def error_body(message: str, err_type: str = "api_error") -> dict[str, Any]:
 # --------------------------------------------------------------------------- #
 # 请求转换：Anthropic -> OpenAI
 # --------------------------------------------------------------------------- #
+
+def _log_tool_call(tool_id: str, name: str, arguments: dict[str, Any]) -> None:
+    if not BROWSER_DEBUG_LOG:
+        return
+    # Compare with CC history without recording source code or shell commands.
+    canonical = json.dumps(arguments, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+    anomaly = None
+    if (name == "Edit" and isinstance(arguments.get("old_string"), str)
+            and arguments["old_string"] == arguments.get("new_string")):
+        anomaly = "identical_edit"
+    _dbg("tool_call", tool_id=tool_id, name=name, argument_chars=len(canonical),
+         arguments_sha256=hashlib.sha256(canonical.encode("utf-8")).hexdigest(), anomaly=anomaly)
+
+
+def _log_recent_tool_results(body: dict[str, Any]) -> None:
+    if not BROWSER_DEBUG_LOG:
+        return
+    messages = body.get("messages") or []
+    start = len(messages) - 1
+    while start >= 0 and messages[start].get("role") != "assistant":
+        start -= 1
+    content = messages[start].get("content") if start >= 0 else []
+    names = {block.get("id"): block.get("name") for block in content or []
+             if isinstance(block, dict) and block.get("type") == "tool_use"}
+    for message in messages[start + 1:]:
+        content = message.get("content")
+        if message.get("role") != "user" or not isinstance(content, list):
+            continue
+        for block in content:
+            if not isinstance(block, dict) or block.get("type") != "tool_result":
+                continue
+            is_error = bool(block.get("is_error"))
+            error_kind = None
+            if is_error:
+                text = _text_of(block.get("content"))[:512].lower()
+                error_kind = next((kind for marker, kind in (
+                    ("old_string and new_string are exactly the same", "identical_edit"),
+                    ("string to replace not found", "edit_string_not_found"),
+                    ("file does not exist", "file_not_found"),
+                    ("file has not been read", "file_not_read"),
+                    ("matches of the string to replace", "ambiguous_edit"),
+                    ("exit code", "command_exit"),
+                ) if marker in text), "other")
+            tool_id = block.get("tool_use_id")
+            _dbg("tool_result", tool_id=tool_id, name=names.get(tool_id),
+                 is_error=is_error, error_kind=error_kind)
+
 
 def _message_shape(messages: list[dict[str, Any]]) -> list[dict[str, Any]]:
     shapes: list[dict[str, Any]] = []
@@ -872,7 +969,7 @@ async def _browser_retry_pause(delay: float, deadline: float) -> AsyncIterator[d
 async def _browser_events_with_retry(payload: dict[str, Any], *, buffered: bool) -> AsyncIterator[dict[str, Any]]:
     from browser_events import browser_events
 
-    req_id = uuid.uuid4().hex[:8]
+    req_id = _request_id.get() or uuid.uuid4().hex[:12]
     started = time.monotonic()
     deadline = started + BROWSER_TIMEOUT
     current = payload
@@ -892,7 +989,8 @@ async def _browser_events_with_retry(payload: dict[str, Any], *, buffered: bool)
         last_progress = started
 
         def log(event: str, **data: Any) -> None:
-            _dbg(event, id=req_id, attempt=attempt, sec=round(time.monotonic() - started, 3), **data)
+            _dbg(event, id=req_id, request_id=req_id, attempt=attempt,
+                 sec=round(time.monotonic() - started, 3), **data)
 
         if time.monotonic() >= deadline:
             log("browser_error", error="浏览器请求总时限已到")
@@ -1113,6 +1211,7 @@ async def stream_anthropic(
     payload: dict[str, Any], headers: dict[str, str], model: str
 ) -> AsyncIterator[str]:
     blocks = AnthropicBlocks()
+    first_block = False
     yield sse("message_start", {
         "type": "message_start", "message": {
             "id": f"msg_{uuid.uuid4().hex[:24]}", "type": "message", "role": "assistant",
@@ -1124,22 +1223,35 @@ async def stream_anthropic(
         async with aclosing(iter_events(payload, headers, buffered=False)) as source:
             async for event in source:
                 if event["type"] == "error":
+                    _dbg("messages_failed", phase="upstream", stream=True,
+                         error=event["message"][:1500], finish=blocks.reason)
                     yield sse("error", error_body(event["message"]))
                     return
                 for kind, data in blocks.feed(event):
+                    if kind == "content_block_start" and not first_block:
+                        first_block = True
+                        _dbg("messages_first_block", kind=data["content_block"]["type"])
                     yield sse(kind, data)
         for kind, data in blocks.finish():
             yield sse(kind, data)
     except (ValueError, httpx.HTTPError) as exc:
+        _dbg("messages_failed", phase="conversion", stream=True,
+             error=str(exc)[:1500], finish=blocks.reason, tools=len(blocks.tools))
         yield sse("error", error_body(f"upstream stream error: {exc}"))
         return
+    if BROWSER_DEBUG_LOG:
+        for slot in blocks.tools.values():
+            _log_tool_call(slot["id"], slot["name"], json.loads(slot["args"] or "{}"))
+    stop_reason = _stop_reason(blocks.reason, bool(blocks.tools))
     yield sse("message_delta", {
         "type": "message_delta",
-        "delta": {"stop_reason": _stop_reason(blocks.reason, bool(blocks.tools)), "stop_sequence": None},
+        "delta": {"stop_reason": stop_reason, "stop_sequence": None},
         "usage": {"input_tokens": blocks.usage.get("prompt_tokens", 0),
                   "output_tokens": blocks.usage.get("completion_tokens", 0)},
     })
     yield sse("message_stop", {"type": "message_stop"})
+    _dbg("messages_done", stream=True, stop_reason=stop_reason,
+         blocks=blocks.index + 1, tools=len(blocks.tools), usage=blocks.usage)
 
 
 async def aggregate(payload: dict[str, Any], headers: dict[str, str], model: str) -> dict[str, Any]:
@@ -1171,18 +1283,24 @@ async def aggregate(payload: dict[str, Any], headers: dict[str, str], model: str
                 if ev["args"]:
                     slot["args"] += ev["args"]
 
+    if not finish:
+        raise UpstreamError(502, "upstream ended without finish_reason")
     content: list[dict[str, Any]] = []
     if thinking_parts:
         content.append({"type": "thinking", "thinking": "".join(thinking_parts), "signature": ""})
     if text_parts:
         content.append({"type": "text", "text": "".join(text_parts)})
     for _, slot in sorted(tools.items()):
+        if not slot["id"] or not slot["name"]:
+            raise UpstreamError(502, "upstream tool is missing id/name")
+        arguments = _loads(slot["args"])
+        _log_tool_call(slot["id"], slot["name"], arguments)
         content.append(
             {
                 "type": "tool_use",
-                "id": slot["id"] or f"toolu_{uuid.uuid4().hex[:24]}",
-                "name": slot["name"] or "unknown",
-                "input": _loads(slot["args"]),
+                "id": slot["id"],
+                "name": slot["name"],
+                "input": arguments,
             }
         )
     if not content:
@@ -1293,6 +1411,7 @@ async def create_message(request: Request):
     body["model"] = model
 
     try:
+        _log_recent_tool_results(body)
         payload = build_payload(body)
         headers = build_headers()
     except ConfigError as exc:
@@ -1317,15 +1436,19 @@ async def create_message(request: Request):
             return JSONResponse(status_code=499, content=error_body("client disconnected"))
         message = await generation
     except UpstreamError as exc:
+        _dbg("messages_failed", phase="upstream_or_conversion", stream=False, error=exc.message[:1500])
         status = 502 if exc.status >= 500 else exc.status
         return JSONResponse(status_code=status, content=error_body(exc.message))
     except httpx.HTTPError as exc:
+        _dbg("messages_failed", phase="upstream", stream=False, error=str(exc)[:1500])
         return JSONResponse(status_code=502, content=error_body(f"upstream error: {exc}"))
     finally:
         generation.cancel()
         disconnected.cancel()
         await asyncio.gather(generation, disconnected, return_exceptions=True)
 
+    _dbg("messages_done", stream=False, stop_reason=message["stop_reason"],
+         blocks=len(message["content"]), usage=message["usage"])
     return JSONResponse(content=message)
 
 
