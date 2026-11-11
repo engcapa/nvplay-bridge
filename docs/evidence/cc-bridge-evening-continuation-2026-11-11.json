@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794390277.2020426,
+  "checkpoint_at": 1794390360.430467,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261111-evening",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -716,8 +716,8 @@
     "host_memory_limit_bytes": "34359738368"
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794390194.0409596,
-    "commit": "029026b967a544b57da83ee8f1903f50f7f62691",
+    "attempted_at": 1794390277.3504033,
+    "commit": "999c2fc318fe5dca33cf38a1ab9842ce5fa5decf",
     "pushed": true,
     "returncode": 0
   },
@@ -1135,7 +1135,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794390277.2055538,
+    "generated_at": 1794390360.433362,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
@@ -1212,7 +1212,7 @@
     },
     {
       "path": "browser-supervisor-state.json",
-      "sha256": "46e621df43ae53b686e2566d02724c8982e0651fa551f2ea6c76658f4ba53f08",
+      "sha256": "cf48911bf140e14b11b034ac6f0eed6ba6bddb75a99a76cabc54dc461ce6f309",
       "size": 102
     },
     {
@@ -1222,7 +1222,7 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "93f94509f5b028d158053f65e847910846b76dda42a280b538f150687273a703",
+      "sha256": "66e54127e5ff4cb62f16e5d6c99dd682d62b98e302dcd732c88e65eb4601f538",
       "size": 134
     },
     {
@@ -1347,8 +1347,8 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "f0c035de47d912dab72fd2a3545e45f09c6650b71f88ac6546f9e0603c814bec",
-      "size": 681
+      "sha256": "8ed36a193aea8196f730451e322850f4f62e98e6781aed78cf72209cef3e191e",
+      "size": 680
     },
     {
       "path": "service-identity-regression.log",
@@ -1411,6 +1411,16 @@
       "bytes": 564528829,
       "tar_compare_passed_before_reclaim": true,
       "restore": "sudo tar -xpf verifier-root.tar.gz -C ."
+    },
+    {
+      "directory": "controls/embedding-drift-monitor/oracle",
+      "archived_at": 1794390356.3234954,
+      "root": "agent-root",
+      "archive": "agent-root.tar.gz",
+      "sha256": "161b573a5bfea060ab5ef2e285bc080c1a6d07eb1ce439874ddb40d26ff7460e",
+      "bytes": 555067833,
+      "tar_compare_passed_before_reclaim": true,
+      "restore": "sudo tar -xpf agent-root.tar.gz -C ."
     }
   ]
 }
