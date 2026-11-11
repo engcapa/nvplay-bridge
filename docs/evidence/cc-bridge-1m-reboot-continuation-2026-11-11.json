@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794378322.7117944,
+  "checkpoint_at": 1794378369.7561753,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-1m-20261111-0801",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -780,8 +780,8 @@
     "host_memory_limit_bytes": "30064771072"
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794378309.8857248,
-    "commit": "df3894e8c294c267342bad7723e66011dfe5e881",
+    "attempted_at": 1794378323.6822116,
+    "commit": "cb07089107b43e2c21360d883fa92a8c6f41fb58",
     "pushed": true,
     "returncode": 0
   },
@@ -1246,7 +1246,7 @@
     }
   ],
   "results": {
-    "generated_at": 1794378323.584938,
+    "generated_at": 1794378370.6577373,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-1m-720k-path-cc-2-1-322-20261111/28800/max": {
@@ -1414,9 +1414,9 @@
         "task": "ks-solver-cpp",
         "effort": "high",
         "started_at": 1794366750.3032668,
-        "elapsed_seconds": 11572.5,
-        "tool_calls": 111,
-        "last_tool": "Bash"
+        "elapsed_seconds": 11619.5,
+        "tool_calls": 112,
+        "last_tool": "Edit"
       }
     ]
   },
@@ -1450,50 +1450,50 @@
       "idle_seconds": 3600.0
     },
     "pool_states": {
-      "ready": 4,
-      "busy": 1
+      "busy": 1,
+      "ready": 4
     },
     "recovering_tabs": []
   },
   "bridge_activity": {
     "events_last_300s": {
-      "browser_progress": 43,
-      "browser_buffer": 19,
-      "browser_pool_release": 19,
-      "browser_done": 19,
-      "request": 19,
-      "payload": 19,
-      "browser_start": 19,
-      "browser_tab": 19,
       "browser_first_data": 19,
-      "browser_first_content": 19
+      "browser_progress": 43,
+      "browser_first_content": 18,
+      "browser_buffer": 18,
+      "browser_pool_release": 18,
+      "browser_done": 18,
+      "request": 18,
+      "payload": 18,
+      "browser_start": 18,
+      "browser_tab": 18
     },
     "active": [
       {
-        "id": "be2c194b",
+        "id": "38e6f8a5",
         "retry_count": 0,
         "phase": "browser_progress",
         "attempt": 1,
         "reasoning_effort": "high",
-        "tab_id": "kpool=3",
+        "tab_id": "kpool=1",
         "counts": {
-          "thinking_chars": 642,
+          "thinking_chars": 0,
           "text_chars": 0,
           "tool_calls": 0
         },
         "usage": {
-          "prompt_tokens": 270749,
-          "completion_tokens": 211,
-          "total_tokens": 270960,
+          "prompt_tokens": 272615,
+          "completion_tokens": 1,
+          "total_tokens": 272616,
           "prompt_tokens_details": {
-            "cached_tokens": 270464
+            "cached_tokens": 270720
           },
           "completion_tokens_details": {
-            "reasoning_tokens": 211
+            "reasoning_tokens": 0
           }
         },
-        "age_seconds": 10.5,
-        "activity_age_seconds": -0.7
+        "age_seconds": 9.5,
+        "activity_age_seconds": 0.6
       }
     ],
     "recent_errors": [],
@@ -1558,8 +1558,8 @@
     },
     {
       "path": "browser-supervisor-state.json",
-      "sha256": "404cfc8141fd3d1f368a92e68bca5df086c98f10cd87952db0d1ad9b10e94d8a",
-      "size": 103
+      "sha256": "fd5488381a8da0ac90b05dd192904a69ec15ab1eddfae195c7666b34a51fdb4c",
+      "size": 102
     },
     {
       "path": "campaign-launch-process.json",
@@ -1598,7 +1598,7 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "a4209b6311dd2be6766a848cc4e67432c88a2f720f32529ada01024642ebda2c",
+      "sha256": "c83e3729dc2dd25b8a5cfc3efb928547c61c3fbd01275a77061acb6755a70721",
       "size": 134
     },
     {
@@ -1738,8 +1738,8 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "7595b33bcfdc56496d3baae580ccd278694bd3cf35b6ecf58598941fc0a61b1e",
-      "size": 819
+      "sha256": "dba1c7ba69089dd30414eb062e6958cb9f807f3fab1fca9b188ee4c7e3446f05",
+      "size": 818
     },
     {
       "path": "runs/formal-1m-720k-path-cc-2-1-322-20261111/ks-solver-cpp--high--r1/identity.json",
