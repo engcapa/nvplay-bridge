@@ -1,5 +1,5 @@
 {
-  "recorded_at": 1794375180.9305782,
+  "recorded_at": 1794375595.625008,
   "status": "investigating_client_cancellations_no_live_configuration_change",
   "cc_version": "2.1.322",
   "cc_sha256": "bfb3703ad5380242328459bc62ada4bde8ae7ba57c6e1eeadb9c00e08874c478",
@@ -105,12 +105,78 @@
   "longer_headers_probe": {
     "directory": "logs/eval-cc-1m-20261111-0801/path-cc-headers-430-production-env",
     "delay_seconds": 430,
-    "status": "running",
-    "nvidia_requests": 0
+    "status": "early_retry_reproduced",
+    "nvidia_requests": 0,
+    "identity": {
+      "probe_sha256": "1f05f25f412f710defae5c541d9c6e968e7d9ad577c02c1c0ad594170425ccee",
+      "pinned_cli_sha256": "bfb3703ad5380242328459bc62ada4bde8ae7ba57c6e1eeadb9c00e08874c478",
+      "node_version": null,
+      "delay_seconds": 430.0,
+      "nvidia_requests": 0,
+      "delay_phase": "headers",
+      "native_idle_timeout_disabled": false,
+      "production_environment_supplied": true,
+      "native_cli_version": "2.1.322 (Claude Code)"
+    },
+    "result": {
+      "results": [
+        {
+          "case": "native-proot",
+          "process_environment_timeout": true,
+          "adapter": false,
+          "exit_code": 0,
+          "duration_seconds": 361.635,
+          "answer": "CONTROLLED_DELAYED_HEADERS_OK",
+          "is_error": false,
+          "success": false,
+          "request_counts": {
+            "stream": 1,
+            "nonstream": 2
+          },
+          "delay_phase": "headers",
+          "delay_completed": false,
+          "closed_during_delay": false,
+          "received_delayed_headers": false,
+          "closed_before_delayed_headers": false
+        }
+      ],
+      "nvidia_requests": 0
+    },
+    "fingerprints": [
+      {
+        "path": "logs/eval-cc-1m-20261111-0801/path-cc-headers-430-production-env/identity.json",
+        "size": 415,
+        "sha256": "ce96663a2b8b957c3f5e4115a49a4c4ef9d603944cc89947d3c65f863d561422"
+      },
+      {
+        "path": "logs/eval-cc-1m-20261111-0801/path-cc-headers-430-production-env/result.json",
+        "size": 576,
+        "sha256": "96dce455221d4d98aaba31e5f71804705181190ab24e408481b16d83706c97ae"
+      },
+      {
+        "path": "logs/eval-cc-1m-20261111-0801/path-cc-headers-430-production-env/events.json",
+        "size": 472,
+        "sha256": "eb0de41e37f80f48ff12777a5f499888cf6141d835fca02726113189b3e1d217"
+      },
+      {
+        "path": "logs/eval-cc-1m-20261111-0801/path-cc-headers-430-production-env/probe-source.py",
+        "size": 17832,
+        "sha256": "1f05f25f412f710defae5c541d9c6e968e7d9ad577c02c1c0ad594170425ccee"
+      }
+    ],
+    "interpretation": "CLI retried after 361.635 seconds (two nonstream requests), before the requested 430-second delay. It eventually returned the fixture marker on the immediate second response. The first socket reset was not caught by the older probe, so closed_during_delay=false does not establish that it stayed connected."
   },
   "conclusions": [
     "310-second local body delay passed with production request environment and native CLI/PRoot.",
     "Observed cancellations are not explained by a universal 300-second CLI cutoff.",
-    "Do not apply speculative timeout changes to running formal attempts; all errors and cancellations remain recorded."
-  ]
+    "Do not apply speculative timeout changes to running formal attempts; all errors and cancellations remain recorded.",
+    "430-second local headers delay reproduces early retry around 361 seconds; a matched API_FORCE_IDLE_TIMEOUT=0 comparison is running. Do not yet claim the configuration fixes it."
+  ],
+  "disabled_native_idle_comparison": {
+    "directory": "logs/eval-cc-1m-20261111-0801/path-cc-headers-430-no-native-idle",
+    "delay_seconds": 430,
+    "API_FORCE_IDLE_TIMEOUT": "0",
+    "status": "running",
+    "nvidia_requests": 0
+  }
 }

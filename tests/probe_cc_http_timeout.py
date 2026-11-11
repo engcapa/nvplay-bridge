@@ -43,6 +43,7 @@ def main():
     parser.add_argument("--uid", type=int)
     parser.add_argument("--proot", default="proot")
     parser.add_argument("--delay-phase", choices=("headers", "body"), default="headers")
+    parser.add_argument("--http-version", choices=("1.0", "1.1"), default="1.0")
     parser.add_argument("--settings-env", type=Path, help="Copy real request environment, replacing fixture routing/auth")
     parser.add_argument("--disable-native-idle-timeout", action="store_true")
     parser.add_argument("--cases", nargs="+", choices=(
@@ -96,6 +97,7 @@ require('node:diagnostics_channel').channel('undici:request:error').subscribe(({
             (out / "events.json").write_text(json.dumps(events, indent=2) + "\n")
 
     class Fixture(BaseHTTPRequestHandler):
+        protocol_version = f"HTTP/{args.http_version}"
         protocol_version = "HTTP/1.1"
 
         def do_HEAD(self):
@@ -133,7 +135,11 @@ require('node:diagnostics_channel').channel('undici:request:error').subscribe(({
                 deadline = time.monotonic() + args.delay_seconds
                 while time.monotonic() < deadline:
                     if select.select([self.connection], [], [], .2)[0]:
-                        if not self.connection.recv(1, socket.MSG_PEEK):
+                        try:
+                            closed = not self.connection.recv(1, socket.MSG_PEEK)
+                        except ConnectionResetError:
+                            closed = True
+                        if closed:
                             record(case=name, event="peer_closed_during_delay", phase=args.delay_phase,
                                    kind=kind, number=number)
                             self.close_connection = True
@@ -304,7 +310,7 @@ require('node:diagnostics_channel').channel('undici:request:error').subscribe(({
                          if not args.native_root else None),
         "delay_seconds": args.delay_seconds, "nvidia_requests": 0}
     identity.update(delay_phase=args.delay_phase, native_idle_timeout_disabled=args.disable_native_idle_timeout,
-                    production_environment_supplied=bool(args.settings_env))
+                    production_environment_supplied=bool(args.settings_env), http_version=args.http_version)
     if args.native_root:
         identity["native_cli_version"] = subprocess.check_output([str(args.pinned_cli), "--version"], text=True).strip()
     if args.adapter:
