@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794406662.5560944,
+  "checkpoint_at": 1794406686.060392,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261111-evening",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -1257,8 +1257,8 @@
     "fresh_controls_required": true
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794406649.6791222,
-    "commit": "0afbab311f36c2cefaba48e4fd93f3e144487183",
+    "attempted_at": 1794406662.8941104,
+    "commit": "440ce9c5972c5dac4ecf0cc7ef81323a9c2571c4",
     "pushed": true,
     "returncode": 0
   },
@@ -1702,7 +1702,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794406662.7360058,
+    "generated_at": 1794406686.2054136,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-1m-720k-host-cc-20261111-evening/28800/high": {
@@ -1817,9 +1817,9 @@
         "task": "session-window-debug",
         "effort": "high",
         "started_at": 1794405794.5199478,
-        "elapsed_seconds": 868.1,
-        "tool_calls": 28,
-        "last_tool": "Bash"
+        "elapsed_seconds": 891.6,
+        "tool_calls": 29,
+        "last_tool": "Glob"
       }
     ]
   },
@@ -1865,50 +1865,34 @@
   "bridge_activity": {
     "events_last_300s": {
       "browser_progress": 49,
-      "browser_buffer": 9,
-      "browser_pool_release": 9,
-      "browser_output_ready": 9,
-      "browser_first_content": 9,
-      "browser_done": 9,
-      "tool_call": 11,
-      "messages_done": 9,
-      "http_complete": 9,
-      "tool_result": 11,
-      "request": 9,
-      "payload": 9,
-      "browser_start": 9,
-      "browser_lease": 9,
-      "browser_tab": 9,
-      "browser_sent": 9,
+      "browser_buffer": 10,
+      "browser_pool_release": 10,
+      "browser_output_ready": 10,
+      "browser_first_content": 10,
+      "browser_done": 10,
+      "tool_call": 12,
+      "messages_done": 10,
+      "http_complete": 10,
+      "tool_result": 12,
+      "request": 10,
+      "payload": 10,
+      "browser_start": 10,
+      "browser_lease": 10,
+      "browser_tab": 10,
+      "browser_sent": 10,
       "browser_first_data": 9,
       "messages_first_block": 9
     },
     "active": [
       {
-        "id": "a0e1b5a2daae4d10b64590e8",
+        "id": "229d3f0ce1894fa2aa891eb1",
         "retry_count": 0,
-        "phase": "browser_progress",
+        "phase": "browser_sent",
         "attempt": 1,
         "reasoning_effort": "high",
-        "tab_id": "kpool=4",
-        "counts": {
-          "thinking_chars": 173,
-          "text_chars": 0,
-          "tool_calls": 0
-        },
-        "usage": {
-          "prompt_tokens": 39475,
-          "completion_tokens": 43,
-          "total_tokens": 39518,
-          "prompt_tokens_details": {
-            "cached_tokens": 38784
-          },
-          "completion_tokens_details": {
-            "reasoning_tokens": 43
-          }
-        },
-        "age_seconds": 7.3,
-        "activity_age_seconds": 2.3
+        "tab_id": "kpool=5",
+        "age_seconds": 3.0,
+        "activity_age_seconds": 1.9
       }
     ],
     "recent_errors": [],
@@ -1968,7 +1952,7 @@
     },
     {
       "path": "browser-supervisor-state.json",
-      "sha256": "f87bfa9bc15ac9ce1f571ab53613cc86774fecf65f3d8a82bef46f78f45e384a",
+      "sha256": "c2c132106497fe7dc1528213cfdc3c84a495a21e02518f25fbd468bcd9a2bb8f",
       "size": 102
     },
     {
@@ -1993,7 +1977,7 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "89aa4fe9c054fcee237374cea229c028790ef021989b55d331223d1fb6a97757",
+      "sha256": "a90a89ac0e3ebcc9dd616115019295aeaa8a5b088cc349a2e0e926a24113cd92",
       "size": 134
     },
     {
@@ -2213,8 +2197,8 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "cb222e874ec04b57249f97f9728e64ef2ded45474b1c986615a436e049ff7e79",
-      "size": 790
+      "sha256": "dc48264d0a0d520475a9bc4cb2811dcfd7df9e91b3cf06a100d9897ff5484ad5",
+      "size": 789
     },
     {
       "path": "rollout-validation-interruption.json",
