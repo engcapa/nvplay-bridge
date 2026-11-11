@@ -1,6 +1,6 @@
 {
   "recorded_at": 1794391646.790471,
-  "status": "host_controls_validated",
+  "status": "formal_host_evaluation_running",
   "requested_by_user": true,
   "stage": "formal-1m-720k-host-cc-20261111-evening",
   "preserved_previous_positions": 9,
@@ -509,5 +509,40 @@
     "infrastructure_errors": 0,
     "artifact_errors": 0,
     "scope": "saved copied-artifact hashes and original verifier results; not a semantic code review"
+  },
+  "first_formal_attempt": {
+    "attempt": "runs/formal-1m-720k-host-cc-20261111-evening/ks-solver-cpp--high--r1",
+    "started_at": 1794393408.959663,
+    "agent_wall_clock_timeout_seconds": null,
+    "cc_launch_configuration": {
+      "model": "kimi-k3.1-pro[1m]",
+      "automatic_compaction_enabled": true,
+      "auto_compact_window_tokens": 720000
+    },
+    "cc_output_environment_tokens": "128000",
+    "max_tokens": 131072,
+    "protocol_sha256": "074d5a3018950996054530ec277bc8be5815a5f2731d3fbceabba12cc807985f",
+    "observed_process": {
+      "recorded_at": 1794393492.8855991,
+      "uid": 20014,
+      "pid": 181619,
+      "tracer_pid": 0,
+      "no_new_privileges": true,
+      "contains_proot": false,
+      "contains_chroot": false,
+      "native_idle_disabled_in_launch": true,
+      "model": "kimi-k3.1-pro[1m]",
+      "auto_compact_window_tokens": 720000
+    },
+    "observed_bridge_starts": [
+      {
+        "event": "browser_start",
+        "ts": 1794393409.3087218,
+        "id": "6ac963cb8cf54ea0a66e4cdf",
+        "attempt": 1,
+        "reasoning_effort": "high",
+        "max_tokens": 131072
+      }
+    ]
   }
 }
