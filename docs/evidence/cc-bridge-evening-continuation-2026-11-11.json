@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794413137.3995733,
+  "checkpoint_at": 1794413159.6555054,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261111-evening",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -1257,8 +1257,8 @@
     "fresh_controls_required": true
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794413102.4883146,
-    "commit": "6fd75c239ba73bf9fc1589c9a05b1d2d26ea37fe",
+    "attempted_at": 1794413137.9649858,
+    "commit": "1b9c9202b9bff0dccefb8cdb39bb374ad2d7250b",
     "pushed": true,
     "returncode": 0
   },
@@ -1700,9 +1700,39 @@
       }
     }
   },
-  "interrupted_attempts_excluded_from_grades": [],
+  "interrupted_attempts_excluded_from_grades": [
+    {
+      "status": "administratively_interrupted",
+      "score": null,
+      "excluded_from_model_grades": true,
+      "recorded_at": 1794413159.6059587,
+      "requested_stop_at": 1794413157.0,
+      "reason": "user requested container reboot",
+      "task": "session-window-debug",
+      "effort": "max",
+      "stage": "formal-1m-720k-host-body-read-clean-20261111",
+      "repeat": 2,
+      "original_attempt": "runs/formal-1m-720k-host-body-read-clean-20261111/session-window-debug--max--r2",
+      "archive": "runs-interrupted/formal-1m-720k-host-body-read-clean-20261111/session-window-debug--max--r2--1794413159605954613",
+      "progress_at_stop": {
+        "status": "agent_running",
+        "started_at": 1794407879.5171292,
+        "elapsed_seconds": 5277.7,
+        "tool_calls": 56,
+        "last_tool": "Glob"
+      },
+      "bridge": {
+        "logical_requests": 54,
+        "upstream_attempts": 63,
+        "errors": 6,
+        "retries": 9,
+        "cancelled": 1,
+        "unfinished": 0
+      }
+    }
+  ],
   "results": {
-    "generated_at": 1794413137.78432,
+    "generated_at": 1794413159.7006004,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-1m-720k-host-body-read-clean-20261111/28800/high": {
@@ -1908,25 +1938,14 @@
         "source_head": "73d9155d3365f0fe3f20263241ed00e35933cb78"
       }
     ],
-    "pending": [
-      {
-        "attempt": "runs/formal-1m-720k-host-body-read-clean-20261111/session-window-debug--max--r2",
-        "status": "agent_running",
-        "task": "session-window-debug",
-        "effort": "max",
-        "started_at": 1794407879.5171292,
-        "elapsed_seconds": 5257.9,
-        "tool_calls": 56,
-        "last_tool": "Glob"
-      }
-    ]
+    "pending": []
   },
   "new_formal_attempts_planned": 21,
   "new_formal_attempts_completed": 2,
   "preserved_prior_attempts_completed": 9,
   "combined_plan_positions_completed": 11,
   "campaign": {
-    "controller_alive": true,
+    "controller_alive": false,
     "status": "formal_running",
     "task": "session-window-debug",
     "repeat": 2
@@ -1937,65 +1956,46 @@
   },
   "reboot_stop": {
     "stop_at": 1794413157.0,
-    "armed": true
+    "armed": false
   },
-  "status": "formal_running",
+  "administrative_pause": {
+    "status": "paused_for_reboot",
+    "paused_at": 1794413159.654964,
+    "requested_stop_at": 1794413157.0,
+    "completed": 2,
+    "interrupted_attempts": 1,
+    "reason": "user requested stop for container reboot"
+  },
+  "status": "formal_paused",
   "bridge_health": {
-    "status": "ok",
-    "model": "moonshotai/kimi-k3.1-pro",
-    "upstream_kind": "browser",
-    "history_reasoning": "preserve",
-    "browser_output_tokens": {
-      "maximum": 131072,
-      "fixed": 131072
-    },
-    "browser_timeouts": {
-      "total_seconds": 28800,
-      "first_byte_seconds": 3600.0,
-      "idle_seconds": 3600.0
-    },
-    "pool_states": {
-      "ready": 4,
-      "busy": 1
-    },
-    "recovering_tabs": []
+    "status": "unreachable",
+    "error_type": "URLError"
   },
   "bridge_activity": {
     "events_last_300s": {
-      "browser_http_error": 4,
-      "browser_abort": 4,
-      "browser_buffer": 4,
-      "browser_pool_release": 4,
-      "pool_recovery_start": 4,
-      "upstream_retry": 1,
-      "pool_activation": 6,
-      "pool_page_ready": 4,
-      "pool_ready": 4,
       "browser_start": 4,
       "browser_lease": 4,
       "browser_tab": 4,
       "browser_sent": 4,
+      "browser_http_error": 3,
+      "browser_abort": 4,
+      "browser_buffer": 4,
+      "browser_pool_release": 4,
+      "pool_recovery_start": 4,
       "upstream_retry_skipped": 1,
       "browser_error": 3,
       "messages_failed": 3,
-      "http_complete": 3,
+      "http_complete": 4,
+      "pool_activation": 5,
       "tool_result": 6,
       "request": 3,
       "browser_output_limit_override": 3,
-      "payload": 3
+      "payload": 3,
+      "pool_page_ready": 3,
+      "pool_ready": 3,
+      "browser_cancelled": 1
     },
-    "active": [
-      {
-        "id": "e07352eda8264c91896c78a0",
-        "retry_count": 0,
-        "phase": "browser_sent",
-        "attempt": 1,
-        "reasoning_effort": "max",
-        "tab_id": "kpool=5",
-        "age_seconds": 5.7,
-        "activity_age_seconds": 4.8
-      }
-    ],
+    "active": [],
     "recent_errors": [
       {
         "event": "browser_error",
@@ -2049,15 +2049,6 @@
     "recent_upstream_errors": [
       {
         "event": "browser_http_error",
-        "ts": 1794412854.1369047,
-        "id": "a56f27e3b30e4f91a97ad946",
-        "attempt": 2,
-        "reasoning_effort": "max",
-        "status": 500,
-        "sec": 309.281
-      },
-      {
-        "event": "browser_http_error",
         "ts": 1794413017.666286,
         "id": "a56f27e3b30e4f91a97ad946",
         "attempt": 3,
@@ -2084,24 +2075,7 @@
         "sec": 29.486
       }
     ],
-    "recent_retries": [
-      {
-        "event": "upstream_retry",
-        "ts": 1794412854.229987,
-        "id": "a56f27e3b30e4f91a97ad946",
-        "attempt": 2,
-        "reasoning_effort": "max",
-        "status": 500,
-        "sec": 309.374,
-        "counts": {
-          "thinking_chars": 0,
-          "text_chars": 0,
-          "tool_calls": 0
-        },
-        "usage": {},
-        "error_sha256": "ff464048538f8e51527470a29fa94e0753f19f595065265334c7b23d20bbb910"
-      }
-    ]
+    "recent_retries": []
   },
   "evidence_fingerprints": [
     {
@@ -2161,7 +2135,7 @@
     },
     {
       "path": "browser-supervisor-state.json",
-      "sha256": "255b2a93a51c08c86cf00083b0eac299a09e59f00478bd433e831f11888a5f49",
+      "sha256": "89224480b0aa94512a2bf12c264db06a9e306f366ddd5c472440b97365a228d6",
       "size": 102
     },
     {
@@ -2186,7 +2160,7 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "113b23b7d7a2bbbadfcd236739cbe15ffd220875db550c85235290e70fea250f",
+      "sha256": "17fcc780e31bbea4026a10c29e6e96cb19f31f567cc40e10767af602986de6d1",
       "size": 134
     },
     {
@@ -2370,6 +2344,11 @@
       "size": 306
     },
     {
+      "path": "pause-state.json",
+      "sha256": "12d9597b00b980353bca65b4618bc38ca04945486d8d52ba8aef05e8db29ad2c",
+      "size": 3574
+    },
+    {
       "path": "preformal-regression.log",
       "sha256": "5aa170e7c417830fbe888992900b56704cfb3d8f586edb4411feebd64541364d",
       "size": 3580
@@ -2416,7 +2395,7 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "26777b53d024a7eba26535a9538fc545d6a147a88d9da9cf74bddf059ede7ede",
+      "sha256": "ccd7116abd778680737ba8fe3e9bd79edbc80280f7ffed9fa137ef515c82d80a",
       "size": 789
     },
     {
@@ -2448,16 +2427,6 @@
       "path": "runs/formal-1m-720k-host-body-read-clean-20261111/session-window-debug--high--r2/result.json",
       "sha256": "31fc4b5288de29803914150b722f05e9f2716eb00ae73fdbdc46a50d20870b35",
       "size": 23401
-    },
-    {
-      "path": "runs/formal-1m-720k-host-body-read-clean-20261111/session-window-debug--max--r2/identity.json",
-      "sha256": "7c0d91c9f6c0d854d7e43f21f47e304f80eb7214eefe18cb8582ec170678afa3",
-      "size": 5979
-    },
-    {
-      "path": "runs/formal-1m-720k-host-body-read-clean-20261111/session-window-debug--max--r2/request-protocol.json",
-      "sha256": "d18b2a881be016e3d702f4eaed4d9eeccaca08e5519eebdbdf447e50e4392f5e",
-      "size": 2860
     },
     {
       "path": "runs/formal-1m-720k-host-cc-20261111-evening/ks-solver-cpp--high--r1/artifacts.json",
