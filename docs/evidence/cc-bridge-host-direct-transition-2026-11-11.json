@@ -1,0 +1,97 @@
+{
+  "recorded_at": 1794391646.790471,
+  "status": "validating_direct_host_execution",
+  "requested_by_user": true,
+  "stage": "formal-1m-720k-host-cc-20261111-evening",
+  "preserved_previous_positions": 9,
+  "remaining_positions": 21,
+  "first_position": {
+    "task": "ks-solver-cpp",
+    "repeat": 1,
+    "effort": "high"
+  },
+  "prior_scored_results_relabelled": false,
+  "agent_runtime": {
+    "kind": "path-native-host",
+    "source_path": "/home/zhyhang/dev/node/bin/claude",
+    "resolved_source": "/home/zhyhang/dev/node/lib/node_modules/@anthropic-ai/claude-code/bin/claude.exe",
+    "version": "2.1.322",
+    "sha256": "bfb3703ad5380242328459bc62ada4bde8ae7ba57c6e1eeadb9c00e08874c478",
+    "size": 341914128,
+    "snapshot_path": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261111-evening/path-cc-runtime/formal-1m-720k-host-cc-20261111-evening/claude",
+    "guest_cli": "/opt/path-claude/claude",
+    "real_proc_binding": false,
+    "real_dedicated_uid": true,
+    "no_new_privileges": true,
+    "host_cwd_inside_agent_root": true,
+    "isolation_boundary": "Real dedicated Unix UID and protected source directories; shared host filesystem, kernel and network",
+    "host_toolchain": "/var/tmp/nvplay-bridge-host-runtime-hxg8p7cs",
+    "host_cli": "/var/tmp/nvplay-bridge-host-runtime-hxg8p7cs/bin/claude",
+    "host_toolchain_identity": {
+      "tree_sha256": "5e4f8e3dcba3c3b71169856986e8fc48a1ea58a83727f75f2d00428e150ecd48",
+      "files": 7358
+    },
+    "host_python": {
+      "3.11": "/var/tmp/nvplay-bridge-host-runtime-hxg8p7cs/python/3.11/bin/python3.11",
+      "3.12": "/var/tmp/nvplay-bridge-host-runtime-hxg8p7cs/python/3.12/bin/python3.12"
+    },
+    "host_os_release": "PRETTY_NAME=\"Ubuntu 22.04.5 LTS\"\nNAME=\"Ubuntu\"\nVERSION_ID=\"22.04\"\nVERSION=\"22.04.5 LTS (Jammy Jellyfish)\"\nVERSION_CODENAME=jammy\nID=ubuntu\nID_LIKE=debian\nHOME_URL=\"https://www.ubuntu.com/\"\nSUPPORT_URL=\"https://help.ubuntu.com/\"\nBUG_REPORT_URL=\"https://bugs.launchpad.net/ubuntu/\"\nPRIVACY_POLICY_URL=\"https://www.ubuntu.com/legal/terms-and-policies/privacy-policy\"\nUBUNTU_CODENAME=jammy\n",
+    "host_gcc_version": "gcc (Ubuntu 11.4.0-1ubuntu1~22.04.3) 11.4.0",
+    "host_libc_version": "ldd (Ubuntu GLIBC 2.35-0ubuntu3.8) 2.35",
+    "agent_concurrency": 1,
+    "app_path": "/app",
+    "path_translation": false,
+    "host_filesystem_visible": true
+  },
+  "agent_concurrency": 1,
+  "verifier": "unchanged original verifier in fresh chroot; reference setup now runs directly on host",
+  "stop_at": 1794413157.0,
+  "full_regression": {
+    "passed": 256,
+    "seconds": 25.363
+  },
+  "additional_control_shutdown_test_passed": 1,
+  "old_controls_and_smoke_preserved": true,
+  "evidence_fingerprints": {
+    "direct-host-full-regression.log": {
+      "sha256": "bd73b0a3b197b7e2dcba9ceffb9982c4455a0e5a59560e7d7fe00546e7516a9c",
+      "size": 3584
+    },
+    "direct-host-lifecycle-regression.log": {
+      "sha256": "e73c3805f810fdcf3d0167ced7085c48306c9482a952ffb710551d230cdb3e51",
+      "size": 102
+    },
+    "direct-host-configuration-regression.log": {
+      "sha256": "bba69393211f4e9c0af4bc3ed09a15509753129438f4a83e1fe47a01ef65333e",
+      "size": 105
+    },
+    "direct-host-continuation-regression.log": {
+      "sha256": "0f7e4b97443e54aca647179972594d13bb587afcbf151fab8228148587ea844a",
+      "size": 103
+    },
+    "direct-host-checkpoint-regression.log": {
+      "sha256": "44d75c4d3b3c45be2b6be88acfdb3b40cc4a56d984571da0396be1c5a15df7c4",
+      "size": 1975
+    },
+    "direct-host-stop-regression.log": {
+      "sha256": "c346f1228fe88f4ab3cb336ffa610dc3a34ec7c7bb7d05df7a1c222f2d928881",
+      "size": 98
+    }
+  },
+  "observed_launch": {
+    "high": {
+      "uid": 20002,
+      "contains_proot": false,
+      "contains_chroot": false,
+      "root_recorded_in_arguments": true,
+      "no_new_privileges": true
+    },
+    "max": {
+      "uid": 20003,
+      "contains_proot": false,
+      "contains_chroot": false,
+      "root_recorded_in_arguments": true,
+      "no_new_privileges": true
+    }
+  }
+}
