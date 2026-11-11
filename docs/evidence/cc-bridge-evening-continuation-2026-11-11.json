@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794405706.80346,
+  "checkpoint_at": 1794405714.5646365,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261111-evening",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -1257,8 +1257,8 @@
     "fresh_controls_required": true
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794405700.5027893,
-    "commit": "46a847688fe4f8b6d8ccca451b97b1e314789e2f",
+    "attempted_at": 1794405706.9459324,
+    "commit": "ea312d7c76705681f17430c8890b6a165ad2a079",
     "pushed": true,
     "returncode": 0
   },
@@ -1702,7 +1702,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794405706.8204691,
+    "generated_at": 1794405714.5871809,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-1m-720k-host-cc-20261111-evening/28800/high": {
@@ -1823,8 +1823,8 @@
     "repeat": 1
   },
   "transport_transition": {
-    "status": "validating_actual_rollout",
-    "at": 1794405585.4863803
+    "status": "remaining_campaign_started",
+    "at": 1794405714.5644367
   },
   "reboot_stop": {
     "stop_at": 1794413157.0,
@@ -1941,8 +1941,8 @@
     },
     {
       "path": "campaign-launch-process.json",
-      "sha256": "f4929c5bb30872723dbf677f2d8f8a1255a12ed4cc0255ee72a17161d2247d6e",
-      "size": 474
+      "sha256": "f45df6c2296a8ad67c0acbf9fe26a1cf3571cec2187a56bea5ec183e6f883e1e",
+      "size": 506
     },
     {
       "path": "campaign-state.json",
@@ -1956,7 +1956,7 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "49553f5fe05d32212932cc99ae0cb2ce0d0a88a5d94c4fce2dbe42249b300418",
+      "sha256": "772b7f3f2b295e40e0281dab70fa63da13fe7759bba4d37fdafd64b290c37d35",
       "size": 134
     },
     {
@@ -2176,8 +2176,8 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "6d20acc7a5454d854855fc76e8fa3f6b33e2a3730a4b6c9088239e17e3776cf5",
-      "size": 782
+      "sha256": "0598f718ccd143aa7f533dee4c212aa94763de3091cd871ddef04117142d5797",
+      "size": 783
     },
     {
       "path": "rollout-validation-interruption.json",
@@ -2245,14 +2245,24 @@
       "size": 89107
     },
     {
+      "path": "transport-transition-complete.json",
+      "sha256": "384461477e7612cc3f87bdf2baea124b5737edb169037be698e9b2b49cfcbee1",
+      "size": 473
+    },
+    {
       "path": "transport-transition-process.json",
       "sha256": "8aaaeba1b3bede8753e580ac8865c4af4337076b976cc1208d3559af642f7177",
       "size": 345
     },
     {
+      "path": "transport-transition-push.json",
+      "sha256": "2495450cc9080a7713e1d3bce82d7fc525092bc4b3c57853f733db9c6628f551",
+      "size": 68
+    },
+    {
       "path": "transport-transition-state.json",
-      "sha256": "a270e6d35e8e59954234baf7009e6456a0e310d76ba141f5e3845f57a22ec20c",
-      "size": 72
+      "sha256": "ea1077bb45ef70944c2463fad66cbeeac99fee32fb922e05e5370d3f409bf097",
+      "size": 73
     },
     {
       "path": "unittest-regression.log",
