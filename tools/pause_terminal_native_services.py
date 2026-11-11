@@ -20,6 +20,7 @@ from report_terminal_native import summarize
 
 
 SERVICES = (
+    ("browser-supervisor-process.json", "supervise_terminal_native_browser.py"),
     ("checkpoint-process.json", "checkpoint_terminal_native.py"),
     ("resource-monitor-process.json", "monitor_terminal_native_resources.py"),
     ("cdp-observer-process.json", "monitor_cdp_network.py"),

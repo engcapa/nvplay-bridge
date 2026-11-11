@@ -48,6 +48,8 @@ sudo -n python3 tools/configure_terminal_native_path_cc.py \
 
 CC 自然结束或行政停止后，先确认其 UID 已无活进程，再将外部 root 移回标准 `agent-root`，交给原判分与校验归档流程。`stop_terminal_native_at.py` 同时识别外部 root 和真实 UID；替换停机工具后要按原绝对截止时间重启计时器。重启不能复用旧 PID、外部 root 或会话。
 
+长时间无人操作时，可用 `sudo -n python3 -u tools/supervise_terminal_native_browser.py --base logs/<run>` 监督本轮独立浏览器，每 10 秒检查浏览器内核身份与 CDP。需要先记录 `reboot-stop-request.json` 中的绝对截止时间；工具在截止或出现 pause 标记后退出。启动方式应使用 `advance_terminal_native_transport.start_process(base, "browser-supervisor", ...)` 记录进程身份，使定时停机可一并清理。仅在已记录浏览器确实退出且 CDP 不可用时重启，仍存活的浏览器不受信号干预；新浏览器沿用原 profile、代理和参数，使用普通用户 HOME/Xauthority。旧 CDP 观察器在新池全部标签就绪后重连。bridge 的 HTTP 存活与 CDP/标签可用性应分别检查，不能只看顶层 `status=ok`。
+
 ## 可提交的环境重建与持续检查点
 
 `tools/provision_terminal_native.py` 将下载校验、原生基座与离线 wheel 准备保存在源码中。Ubuntu 与数据集、官方 CC 包、CC CLI 和 Node 二进制均检查固定 SHA256；Python 使用确切补丁版本。apt 包及 wheel 的实际版本和摘要另存 manifest，不假设软件源与上一轮完全相同。
