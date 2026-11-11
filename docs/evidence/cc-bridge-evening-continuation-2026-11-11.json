@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794392147.0204906,
+  "checkpoint_at": 1794392160.5067146,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261111-evening",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -983,8 +983,8 @@
     "fresh_controls_required": true
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794392082.1547916,
-    "commit": "9458ef452491e0297c1fed92191642fa716e0ca6",
+    "attempted_at": 1794392147.1393945,
+    "commit": "d813c4b8bc96911cd224d2b4872e179709f05a59",
     "pushed": true,
     "returncode": 0
   },
@@ -1375,7 +1375,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794392147.0241706,
+    "generated_at": 1794392160.5096684,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
@@ -1454,7 +1454,7 @@
     },
     {
       "path": "browser-supervisor-state.json",
-      "sha256": "3653fe2823d1474826b08fe410b0abfc68d52ebfc33686f077eda003279aabf4",
+      "sha256": "d1f29004ab30cd3cc6c62d6321225f5a7f8a2a3041fae5fa8290de194353b1e9",
       "size": 102
     },
     {
@@ -1474,7 +1474,7 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "71551d10ed62d10d5fbc0d8c52b7feb645a53b039cc571f178599a2ebf61e42e",
+      "sha256": "e40477436350af02ceffcdb50dfc260b16d858e617b86615d7eb5ccb0415dacc",
       "size": 134
     },
     {
@@ -1644,8 +1644,8 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "5a7b84eff8883fc24f3d9bca69a32b0b7ff65196ac9d221388755a464dcc6efd",
-      "size": 776
+      "sha256": "16c72661184f1cdf23e527257de1f9417dbd79d545b87ed58578d08c0d523db0",
+      "size": 775
     },
     {
       "path": "service-identity-regression.log",
@@ -1708,6 +1708,16 @@
       "bytes": 564528830,
       "tar_compare_passed_before_reclaim": true,
       "restore": "sudo tar -xpf verifier-root.tar.gz -C ."
+    },
+    {
+      "directory": "controls/embedding-drift-monitor/oracle",
+      "archived_at": 1794392155.328927,
+      "root": "agent-root",
+      "archive": "agent-root.tar.gz",
+      "sha256": "24919b2f06d8dd98a48e264f9c0d2589cc915c0adb64161083e33318538de671",
+      "bytes": 77299351,
+      "tar_compare_passed_before_reclaim": true,
+      "restore": "sudo tar -xpf agent-root.tar.gz -C ."
     },
     {
       "directory": "controls/session-window-debug/baseline",
