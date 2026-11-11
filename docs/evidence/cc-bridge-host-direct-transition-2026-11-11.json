@@ -1,6 +1,6 @@
 {
   "recorded_at": 1794391646.790471,
-  "status": "validating_direct_host_controls",
+  "status": "host_controls_validated",
   "requested_by_user": true,
   "stage": "formal-1m-720k-host-cc-20261111-evening",
   "preserved_previous_positions": 9,
@@ -463,5 +463,51 @@
       }
     ]
   },
-  "workspace_aliases_cleaned_after_smoke": true
+  "workspace_aliases_cleaned_after_smoke": true,
+  "controls_validated_at": 1794393400.9139807,
+  "controls": [
+    {
+      "task": "batched-eval-parity",
+      "valid": true,
+      "baseline_score": 0,
+      "oracle_score": 1,
+      "result_sha256": "44a1677f5f731696f74aaa12d30e2ecf7529f6ffe96dcd74b1d148316133df93"
+    },
+    {
+      "task": "embedding-drift-monitor",
+      "valid": true,
+      "baseline_score": 0,
+      "oracle_score": 1,
+      "result_sha256": "eff5d0df93ce02836a8d2c128f54c01dfa21a01c7adf689e92652bff17fe458f"
+    },
+    {
+      "task": "ks-solver-cpp",
+      "valid": true,
+      "baseline_score": 0,
+      "oracle_score": 1,
+      "result_sha256": "e382452df5b68d88a579ae87fee2aef92162e5dc2f5a21959ea9ab61086c338b"
+    },
+    {
+      "task": "mvcc-lsm-compaction",
+      "valid": true,
+      "baseline_score": 0,
+      "oracle_score": 1,
+      "result_sha256": "18da60bf53e1c085dfe8f25cb74b428902ae08fe35bb8965f17d32cbe0c06ff0"
+    },
+    {
+      "task": "session-window-debug",
+      "valid": true,
+      "baseline_score": 0,
+      "oracle_score": 1,
+      "result_sha256": "0bc13e7ab26f3486df6ac905cf0abc4c2005539c09cd061b524c99f84358d030"
+    }
+  ],
+  "control_review": {
+    "sha256": "59112a4070f83364cf2cb70943a7562fa3a011e12413e5d01f7941eac195c761",
+    "size": 7646,
+    "positions": 10,
+    "infrastructure_errors": 0,
+    "artifact_errors": 0,
+    "scope": "saved copied-artifact hashes and original verifier results; not a semantic code review"
+  }
 }
