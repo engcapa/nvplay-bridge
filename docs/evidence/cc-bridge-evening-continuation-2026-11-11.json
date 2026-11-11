@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794388134.9821308,
+  "checkpoint_at": 1794388434.9825277,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261111-evening",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -65,15 +65,15 @@
     "start_ticks": "155552"
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794388061.455619,
-    "commit": "6a7579862d64006d7000daec3204f0992b46af75",
+    "attempted_at": 1794388135.0793507,
+    "commit": "0e3d0fdcee24a191572b216d84f6c873c532fb9f",
     "pushed": true,
     "returncode": 0
   },
   "controls": {},
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794388134.9823065,
+    "generated_at": 1794388434.982802,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
@@ -136,19 +136,29 @@
       "size": 311
     },
     {
+      "path": "browser-http-validation.log",
+      "sha256": "99e6eca0bb25d307f774f3d16a04f4eb6986eb2bd568d27438f18efef2f7d07d",
+      "size": 328
+    },
+    {
       "path": "browser-supervisor-process.json",
       "sha256": "2fea9e7ce9a983004906bc46071f5c457be30156a8eaf4a013eef5a0baedc888",
       "size": 317
     },
     {
       "path": "browser-supervisor-state.json",
-      "sha256": "3be494f16310af3a4b6b370c6b5035823e486aa96b32467f771916c7ef519f23",
+      "sha256": "3ca13a0f4a716a6abeeb5e59f9014ce9c874ed11b0cc7066279b04e40f98aa23",
       "size": 102
     },
     {
+      "path": "cdp-observer-process.json",
+      "sha256": "b72e0add5603267e946ef62bf2bde12eb4274619765778407d7ed509b279cbb8",
+      "size": 353
+    },
+    {
       "path": "checkpoint-git-sync.json",
-      "sha256": "758ef44a371b3484b32dd89c87fb042921543ae51214e2702d1911a69aa6bec3",
-      "size": 133
+      "sha256": "aaea52141eddf3e20640b974e72236d638f04eb3068b277835472a6ee2e3b200",
+      "size": 134
     },
     {
       "path": "checkpoint-process.json",
@@ -159,6 +169,11 @@
       "path": "initial-regression.log",
       "sha256": "fa221aa9ee29da3c52d25b29b818a175b4c8f433bb769087f7221b368422c5be",
       "size": 4351
+    },
+    {
+      "path": "node-network-regression.log",
+      "sha256": "5af1a9e4d2e0fcee2a7bb2c4fd3ebcfc9c7807bf7544e76c3d42703762fbe7a8",
+      "size": 235
     },
     {
       "path": "reboot-stop-process.json",
@@ -177,8 +192,13 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "0bbc9fa6850b7d43528ee4b5c79a6aa036cc196a9222f5b3b76d4b9529bb80a4",
-      "size": 674
+      "sha256": "45facb0694da501be04ed72ec957c466fa4334b30f3e3dd25419e2afe49a438e",
+      "size": 673
+    },
+    {
+      "path": "service-identity-regression.log",
+      "sha256": "46df4f0edcf4a6f9a32504da3478dd3a1a7db82b7890d0c616cbb1a0a9b16b2a",
+      "size": 98
     },
     {
       "path": "session-request.json",
