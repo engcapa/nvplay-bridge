@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794393393.9857056,
+  "checkpoint_at": 1794393397.2630312,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261111-evening",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -983,8 +983,8 @@
     "fresh_controls_required": true
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794393371.6344347,
-    "commit": "6951552c1a249278081729c99ee8b209829a020d",
+    "attempted_at": 1794393394.0351562,
+    "commit": "049b493cb9022d8feff7afddaa0543233e639cac",
     "pushed": true,
     "returncode": 0
   },
@@ -1408,7 +1408,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794393393.9878976,
+    "generated_at": 1794393397.2654576,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
@@ -1420,13 +1420,15 @@
   "combined_plan_positions_completed": 9,
   "campaign": {
     "controller_alive": true,
-    "status": "live_tools_validated"
+    "status": "formal_running",
+    "task": "ks-solver-cpp",
+    "repeat": 1
   },
   "reboot_stop": {
     "stop_at": 1794413157.0,
     "armed": true
   },
-  "status": "controls_validated",
+  "status": "formal_running",
   "bridge_health": {
     "status": "ok",
     "model": "moonshotai/kimi-k3.1-pro",
@@ -1496,8 +1498,8 @@
     },
     {
       "path": "campaign-state.json",
-      "sha256": "6ee7613e1505456a1eb5ca894ec1b7d955e48a2866c9ce5ccbc8c2f52ec85a5e",
-      "size": 5968
+      "sha256": "547470525ebb0b2c1b0d70a94d5fd7a516321c00bc0bcbdd6847441768487139",
+      "size": 6003
     },
     {
       "path": "cdp-observer-process.json",
@@ -1506,7 +1508,7 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "01db035c563472e7bd71a962fe3f7f2b8dd2c41fd5afb03d8e7815e63eb1880d",
+      "sha256": "06525e573b82bf19ce2b0abe70b6ad901544045f13e4c09754d1f08a95e9f05e",
       "size": 134
     },
     {
