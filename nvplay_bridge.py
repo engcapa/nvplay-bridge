@@ -52,7 +52,7 @@ from __future__ import annotations
 
 from contextlib import aclosing
 from contextvars import ContextVar
-from stream_support import AnthropicBlocks
+from stream_support import AnthropicBlocks, DeferredEvents
 
 import asyncio
 import hashlib
@@ -93,10 +93,13 @@ BROWSER_POOL_SIZE = int(os.getenv("BROWSER_POOL_SIZE", "5"))
 BROWSER_DEBUG_LOG = os.getenv("BROWSER_DEBUG_LOG", "")
 BROWSER_POOL_TIMEOUT_RETRIES = max(0, int(os.getenv("BROWSER_POOL_TIMEOUT_RETRIES", "2")))
 BROWSER_POOL_TIMEOUT_BACKOFF = max(0.0, float(os.getenv("BROWSER_POOL_TIMEOUT_BACKOFF", "5")))
-BROWSER_HTTP_5XX_RETRIES = max(0, int(os.getenv("BROWSER_HTTP_5XX_RETRIES", "1")))
-BROWSER_HTTP_5XX_BACKOFF = max(0.0, float(os.getenv("BROWSER_HTTP_5XX_BACKOFF", "2")))
+BROWSER_HTTP_5XX_RETRIES = max(0, int(os.getenv("BROWSER_HTTP_5XX_RETRIES", "3")))
+BROWSER_HTTP_5XX_BACKOFF = max(0.0, float(os.getenv("BROWSER_HTTP_5XX_BACKOFF", "5")))
 BROWSER_FETCH_RETRIES = max(0, int(os.getenv("BROWSER_FETCH_RETRIES", "1")))
 BROWSER_FETCH_BACKOFF = max(0.0, float(os.getenv("BROWSER_FETCH_BACKOFF", "2")))
+BROWSER_STREAM_RETRIES = max(0, int(os.getenv("BROWSER_STREAM_RETRIES", "2")))
+BROWSER_STREAM_BACKOFF = max(0.0, float(os.getenv("BROWSER_STREAM_BACKOFF", "5")))
+BROWSER_MESSAGES_DEFER_OUTPUT = os.getenv("BROWSER_MESSAGES_DEFER_OUTPUT", "1") == "1"
 PLACEHOLDER_RETRY = int(os.getenv("PLACEHOLDER_RETRY", "1"))
 LOOP_BREAKER = int(os.getenv("LOOP_BREAKER", "0"))
 HISTORY_REASONING = os.getenv("HISTORY_REASONING", "preserve").strip().lower()
@@ -846,7 +849,16 @@ def _unwrap(chunk: Any) -> dict[str, Any] | None:
 
 def _chunk_events(chunk: Any) -> list[dict[str, Any]]:
     if isinstance(chunk, dict) and chunk.get("error"):
-        return [{"type": "error", "status": 502, "message": json.dumps(chunk["error"], ensure_ascii=False)}]
+        error = chunk["error"]
+        event = {"type": "error", "status": 502, "message": json.dumps(error, ensure_ascii=False)}
+        # This is an error *inside* an HTTP 200 SSE stream, not an HTTP status.
+        if isinstance(error, dict):
+            code = error.get("code", error.get("status"))
+            if isinstance(code, str) and code in ("500", "502", "503", "504"):
+                code = int(code)
+            if type(code) is int:
+                event["sse_error_code"] = code
+        return [event]
 
     obj = _unwrap(chunk)
     if obj is None:
@@ -968,18 +980,20 @@ async def _browser_retry_pause(delay: float, deadline: float) -> AsyncIterator[d
             yield {"type": "ping"}
 
 
-async def _browser_events_with_retry(payload: dict[str, Any], *, buffered: bool) -> AsyncIterator[dict[str, Any]]:
+async def _browser_events_with_retry(payload: dict[str, Any], *, buffered: bool,
+                                     defer_output: bool = False) -> AsyncIterator[dict[str, Any]]:
     from browser_events import browser_events
 
     req_id = _request_id.get() or uuid.uuid4().hex[:12]
     started = time.monotonic()
     deadline = started + BROWSER_TIMEOUT
     current = payload
-    attempt = pool_retries = http_retries = fetch_retries = 0
+    attempt = pool_retries = http_retries = fetch_retries = stream_retries = 0
     placeholder_retried = False
     while True:
         attempt += 1
         committed = False
+        thinking_delivered = False
         has_text = has_tool = False
         marker = "[Tool use interrupted]"
         pending_text = ""
@@ -989,6 +1003,7 @@ async def _browser_events_with_retry(payload: dict[str, Any], *, buffered: bool)
         counts = {"thinking_chars": 0, "text_chars": 0, "tool_calls": 0}
         tool_indexes: set[int] = set()
         last_progress = started
+        last_delivery = time.monotonic()
 
         def log(event: str, **data: Any) -> None:
             _dbg(event, id=req_id, request_id=req_id, attempt=attempt,
@@ -1000,8 +1015,22 @@ async def _browser_events_with_retry(payload: dict[str, Any], *, buffered: bool)
             return
         log("browser_start", max_tokens=current.get("max_tokens"),
             reasoning_effort=current.get("reasoning_effort"),
-            messages=len(current.get("messages") or []), tools=len(current.get("tools") or []))
+            messages=len(current.get("messages") or []), tools=len(current.get("tools") or []),
+            output_deferred=defer_output)
+        deferred = None
+        validator = AnthropicBlocks() if defer_output else None
         try:
+            if defer_output:
+                deferred = DeferredEvents()
+
+            def stage(item: dict[str, Any]) -> bool:
+                """Return true only for leading thinking that can be shown now."""
+                validator.feed(item)
+                if item["type"] == "thinking" and not buffered and not deferred.output_started:
+                    return True
+                deferred.append(item)
+                return False
+
             failure = None
             async with aclosing(browser_events(
                 _get_browser(), current, max(0, deadline - time.monotonic()),
@@ -1014,7 +1043,12 @@ async def _browser_events_with_retry(payload: dict[str, Any], *, buffered: bool)
                         break
                     if kind == "ping":
                         yield event
+                        last_delivery = time.monotonic()
                         continue
+                    if (defer_output and BROWSER_HEARTBEAT_SEC > 0
+                            and time.monotonic() - last_delivery >= BROWSER_HEARTBEAT_SEC):
+                        yield {"type": "ping"}
+                        last_delivery = time.monotonic()
                     if kind == "usage":
                         usage = event["usage"]
                     if kind == "finish":
@@ -1045,6 +1079,12 @@ async def _browser_events_with_retry(payload: dict[str, Any], *, buffered: bool)
                             batch.insert(0, {"type": "text", "text": pending_text})
                             pending_text = ""
                     for item in batch:
+                        if defer_output:
+                            if stage(item):
+                                thinking_delivered = True
+                                yield item
+                                last_delivery = time.monotonic()
+                            continue
                         if buffered and not has_text and not has_tool:
                             buffered_events.append(item)
                             continue
@@ -1061,18 +1101,24 @@ async def _browser_events_with_retry(payload: dict[str, Any], *, buffered: bool)
             if failure is None:
                 if pending_text.strip() and pending_text.strip() != marker:
                     has_text = True
-                    for saved in buffered_events:
-                        yield saved
-                    buffered_events.clear()
-                    committed = True
-                    yield {"type": "text", "text": pending_text}
+                    item = {"type": "text", "text": pending_text}
+                    if defer_output:
+                        stage(item)
+                    else:
+                        for saved in buffered_events:
+                            yield saved
+                        buffered_events.clear()
+                        committed = True
+                        yield item
 
                 bad = not has_text and not has_tool
                 # A streamed partial thinking block at its token limit is a valid truncation.
-                if bad and not (not buffered and committed and finish == "length"):
+                valid_truncation = finish == "length" and (
+                    counts["thinking_chars"] > 0 if defer_output else not buffered and committed)
+                if bad and not valid_truncation:
                     kind = "placeholder" if pending_text.strip() == marker else "empty"
                     log(f"{kind}_detected", counts=counts, finish=finish)
-                    if PLACEHOLDER_RETRY and not placeholder_retried and (buffered or not committed):
+                    if PLACEHOLDER_RETRY and not placeholder_retried and (defer_output or buffered or not committed):
                         placeholder_retried = True
                         current = dict(payload)
                         current["max_tokens"] = min(BROWSER_MAX_TOKENS, max(int(payload.get("max_tokens") or 0), 2048))
@@ -1086,6 +1132,16 @@ async def _browser_events_with_retry(payload: dict[str, Any], *, buffered: bool)
                     return
                 for saved in buffered_events:
                     yield saved
+                if defer_output:
+                    validator.finish()
+                    log("browser_output_ready", deferred_bytes=deferred.size,
+                        thinking_delivered=thinking_delivered, counts=counts, finish=finish)
+                    for saved in deferred:
+                        if saved["type"] in ("thinking", "text", "tool"):
+                            if not committed:
+                                log("browser_first_content")
+                            committed = True
+                        yield saved
                 log("browser_done", counts=counts, finish=finish, usage=usage)
                 return
         except (asyncio.CancelledError, GeneratorExit):
@@ -1093,20 +1149,32 @@ async def _browser_events_with_retry(payload: dict[str, Any], *, buffered: bool)
             raise
         except Exception as exc:
             failure = {"type": "error", "status": int(getattr(exc, "status", 502)), "message": str(exc)}
+            if isinstance(exc, ValueError) and defer_output:
+                failure["phase"] = "conversion"
+                log("browser_validation_failed", error=str(exc), counts=counts, usage=usage)
+        finally:
+            if deferred is not None:
+                deferred.close()
 
         pool_timeout = _is_upstream_pool_timeout(failure)
         http_failure = failure.get("http_status") in (500, 502, 503, 504)
         fetch_failure = failure.get("fetch_failed") is True
-        if pool_timeout or http_failure or fetch_failure:
+        stream_failure = (failure.get("sse_error_code") in (500, 502, 503, 504)
+                          or failure.get("stream_failure") in (
+                              "read", "first_byte_timeout", "idle_timeout", "missing_finish"))
+        if pool_timeout or http_failure or fetch_failure or stream_failure:
             if pool_timeout:
                 retries, limit = pool_retries, BROWSER_POOL_TIMEOUT_RETRIES
                 initial_backoff, policy = BROWSER_POOL_TIMEOUT_BACKOFF, "nvidia_pool_acquire_timeout"
             elif http_failure:
                 retries, limit = http_retries, BROWSER_HTTP_5XX_RETRIES
                 initial_backoff, policy = BROWSER_HTTP_5XX_BACKOFF, "upstream_http_5xx"
-            else:
+            elif fetch_failure:
                 retries, limit = fetch_retries, BROWSER_FETCH_RETRIES
                 initial_backoff, policy = BROWSER_FETCH_BACKOFF, "browser_fetch_failed"
+            else:
+                retries, limit = stream_retries, BROWSER_STREAM_RETRIES
+                initial_backoff, policy = BROWSER_STREAM_BACKOFF, "upstream_stream_failure"
             remaining = max(0, deadline - time.monotonic())
             backoff = min(30.0, initial_backoff * 2 ** min(retries, 6))
             delay = backoff + random.uniform(0, min(1.0, backoff * 0.2))
@@ -1118,11 +1186,16 @@ async def _browser_events_with_retry(payload: dict[str, Any], *, buffered: bool)
                     pool_retries += 1
                 elif http_failure:
                     http_retries += 1
-                else:
+                elif fetch_failure:
                     fetch_retries += 1
+                else:
+                    stream_retries += 1
                 log("upstream_retry", reason=policy, retry=retries + 1,
                     next_attempt=attempt + 1, delay=round(delay, 3), remaining=round(remaining, 3),
-                    status=failure["status"], error=failure["message"], counts=counts, usage=usage)
+                    status=failure["status"], error=failure["message"], counts=counts, usage=usage,
+                    sse_error_code=failure.get("sse_error_code"),
+                    stream_failure=failure.get("stream_failure"),
+                    output_deferred=defer_output, thinking_delivered=thinking_delivered)
                 try:
                     async with aclosing(_browser_retry_pause(delay, deadline)) as pause:
                         async for event in pause:
@@ -1134,13 +1207,15 @@ async def _browser_events_with_retry(payload: dict[str, Any], *, buffered: bool)
             log("upstream_retry_skipped", reason=reason, policy=policy, retries=retries, committed=committed,
                 remaining=round(remaining, 3))
         log("browser_error", error=failure["message"], status=failure["status"],
-            committed=committed, counts=counts, usage=usage)
+            committed=committed, counts=counts, usage=usage,
+            output_deferred=defer_output, thinking_delivered=thinking_delivered,
+            sse_error_code=failure.get("sse_error_code"), stream_failure=failure.get("stream_failure"))
         yield failure
         return
 
 
 async def iter_events(payload: dict[str, Any], headers: dict[str, str], *,
-                      buffered: bool = True) -> AsyncIterator[dict[str, Any]]:
+                      buffered: bool = True, defer_output: bool = False) -> AsyncIterator[dict[str, Any]]:
     """Give each tool invocation a fresh downstream ID in every API format.
 
     Some providers reuse IDs such as Read:0 in successive responses. Claude
@@ -1159,7 +1234,8 @@ async def iter_events(payload: dict[str, Any], headers: dict[str, str], *,
             ]}
             _dbg("history_reasoning_omitted", removed_chars=removed, messages=len(messages))
     tool_ids: dict[int, str] = {}
-    async with aclosing(_iter_upstream_events(payload, headers, buffered=buffered)) as source:
+    async with aclosing(_iter_upstream_events(payload, headers, buffered=buffered,
+                                             defer_output=defer_output)) as source:
         async for event in source:
             if event.get("type") == "tool" and event.get("id"):
                 event = dict(event)
@@ -1168,10 +1244,11 @@ async def iter_events(payload: dict[str, Any], headers: dict[str, str], *,
 
 
 async def _iter_upstream_events(payload: dict[str, Any], headers: dict[str, str], *,
-                               buffered: bool = True) -> AsyncIterator[dict[str, Any]]:
-    """归一化上游增量；仅非流式聚合允许撤回尚未交付的思考后重试。"""
+                               buffered: bool = True, defer_output: bool = False) -> AsyncIterator[dict[str, Any]]:
+    """Normalize events; staged Messages output can retry before delivery."""
     if UPSTREAM_KIND == "browser":
-        async with aclosing(_browser_events_with_retry(payload, buffered=buffered)) as source:
+        async with aclosing(_browser_events_with_retry(payload, buffered=buffered,
+                                                       defer_output=defer_output)) as source:
             async for event in source:
                 yield event
         return
@@ -1230,10 +1307,11 @@ async def stream_anthropic(
         },
     })
     try:
-        async with aclosing(iter_events(payload, headers, buffered=False)) as source:
+        async with aclosing(iter_events(payload, headers, buffered=False,
+                                       defer_output=BROWSER_MESSAGES_DEFER_OUTPUT)) as source:
             async for event in source:
                 if event["type"] == "error":
-                    _dbg("messages_failed", phase="upstream", stream=True,
+                    _dbg("messages_failed", phase=event.get("phase", "upstream"), stream=True,
                          error=event["message"][:1500], finish=blocks.reason)
                     yield sse("error", error_body(event["message"]))
                     return
@@ -1271,7 +1349,7 @@ async def aggregate(payload: dict[str, Any], headers: dict[str, str], model: str
     usage: dict[str, Any] = {}
     finish: str | None = None
 
-    async with aclosing(iter_events(payload, headers)) as source:
+    async with aclosing(iter_events(payload, headers, defer_output=BROWSER_MESSAGES_DEFER_OUTPUT)) as source:
         async for ev in source:
             kind = ev["type"]
             if kind == "error":
@@ -1355,6 +1433,16 @@ async def health() -> dict[str, Any]:
         result["browser_timeouts"] = {
             "total_seconds": BROWSER_TIMEOUT, "first_byte_seconds": FIRST_BYTE_TIMEOUT,
             "idle_seconds": IDLE_TIMEOUT}
+        result["browser_messages_delivery"] = {
+            "thinking": "live", "defer_output": BROWSER_MESSAGES_DEFER_OUTPUT,
+            "stream_retries": BROWSER_STREAM_RETRIES}
+        result["browser_retry_policy"] = {
+            "http_5xx_retries": BROWSER_HTTP_5XX_RETRIES,
+            "http_5xx_initial_backoff_seconds": BROWSER_HTTP_5XX_BACKOFF,
+            "stream_retries": BROWSER_STREAM_RETRIES,
+            "stream_initial_backoff_seconds": BROWSER_STREAM_BACKOFF,
+            "backoff_cap_seconds": 30, "jitter_max_seconds": 1,
+            "failed_pool_tabs": "refresh_before_reuse"}
         if _browser is not None and hasattr(_browser, "status"):
             result["browser_pool"] = _browser.status()
     return result

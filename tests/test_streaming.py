@@ -96,6 +96,11 @@ class ScriptBrowser:
 
 
 class RetryTests(unittest.IsolatedAsyncioTestCase):
+    def setUp(self):
+        settings = patch.object(bridge, "BROWSER_MESSAGES_DEFER_OUTPUT", False)
+        settings.start()
+        self.addCleanup(settings.stop)
+
     async def test_streamed_thinking_is_not_replaced(self):
         browser = ScriptBrowser([[frame({"reasoning_content": "thinking"}, "stop")],
                                  [frame({"content": "replacement"}, "stop")]])
@@ -160,6 +165,11 @@ class FakeCDP(bu.BrowserUpstream):
 
 
 class AsyncBoundaryTests(unittest.IsolatedAsyncioTestCase):
+    def setUp(self):
+        settings = patch.object(bridge, "BROWSER_MESSAGES_DEFER_OUTPUT", False)
+        settings.start()
+        self.addCleanup(settings.stop)
+
     async def test_final_buffer_is_preserved_without_turning_reader_error_into_success(self):
         for delta, expected, finish in (
             ({"content": "RECEIVED_TEXT"}, "RECEIVED_TEXT", "stop"),
@@ -428,7 +438,8 @@ class HTTPStreamingTests(unittest.IsolatedAsyncioTestCase):
         await self.run_gate(False)
 
     async def test_tool_arguments_arrive_over_http_before_generation_finishes(self):
-        await self.run_gate(True)
+        with patch.object(bridge, "BROWSER_MESSAGES_DEFER_OUTPUT", False):
+            await self.run_gate(True)
 
     async def test_http_disconnect_cancels_upstream(self):
         browser = GatedBrowser()

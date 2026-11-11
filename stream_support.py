@@ -3,8 +3,47 @@ from __future__ import annotations
 
 import json
 import re
+import tempfile
 
 MAX_FRAME = 1024 * 1024
+MAX_DEFERRED_OUTPUT = 64 * 1024 * 1024
+
+
+class DeferredEvents:
+    """Stage output on disk above 256 KiB; retain only the final usage/finish."""
+
+    def __init__(self) -> None:
+        self.file = tempfile.SpooledTemporaryFile(max_size=256 * 1024, mode="w+b")
+        self.size = 0
+        self.output_started = False
+        self.usage: dict | None = None
+        self.finish: dict | None = None
+
+    def append(self, event: dict) -> None:
+        if event["type"] == "usage":
+            self.usage = event
+            return
+        if event["type"] == "finish":
+            self.finish = event
+            return
+        data = (json.dumps(event, ensure_ascii=False) + "\n").encode("utf-8")
+        if self.size + len(data) > MAX_DEFERRED_OUTPUT:
+            raise ValueError("deferred upstream output exceeds 64 MiB")
+        self.file.write(data)
+        self.size += len(data)
+        self.output_started |= event["type"] in ("text", "tool")
+
+    def __iter__(self):
+        self.file.seek(0)
+        for line in self.file:
+            yield json.loads(line)
+        if self.finish is not None:
+            yield self.finish
+        if self.usage is not None:
+            yield self.usage
+
+    def close(self) -> None:
+        self.file.close()
 
 
 class SSEDecoder:

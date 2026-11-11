@@ -227,6 +227,14 @@ class BrowserFetchError(BrowserError):
     """The page's fetch rejected before receiving an HTTP response."""
 
 
+class BrowserStreamError(BrowserError):
+    """A response read, data wait or incomplete transport failed."""
+
+    def __init__(self, message: str, reason: str) -> None:
+        super().__init__(message)
+        self.reason = reason
+
+
 def _check(cancel: threading.Event, deadline: float) -> None:
     if cancel.is_set():
         raise BrowserCancelled("客户端已取消请求")
@@ -512,6 +520,8 @@ class BrowserUpstream:
                 # Drain every queued byte before surfacing its terminal error;
                 # the page defers that error while further chunks remain.
                 if state.get("error"):
+                    if str(state["error"]).startswith("TypeError:"):
+                        raise BrowserStreamError(f"上游响应读取失败: {state['error']}", "read")
                     raise BrowserError(f"上游响应读取失败: {state['error']}")
                 if state.get("done"):
                     if status != 200:
@@ -520,9 +530,9 @@ class BrowserUpstream:
                     return
                 now = time.monotonic()
                 if last_data is None and now >= first_deadline:
-                    raise BrowserError("等待上游首个数据超时")
+                    raise BrowserStreamError("等待上游首个数据超时", "first_byte_timeout")
                 if last_data is not None and now - last_data >= IDLE_TIMEOUT:
-                    raise BrowserError("上游响应空闲超时")
+                    raise BrowserStreamError("上游响应空闲超时", "idle_timeout")
                 _pause(cancel, deadline, POLL_INTERVAL)
         finally:
             try:

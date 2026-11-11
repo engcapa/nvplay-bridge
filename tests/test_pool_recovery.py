@@ -417,6 +417,41 @@ class ReadinessTests(unittest.TestCase):
 
 
 class StreamingRecoveryTests(unittest.IsolatedAsyncioTestCase):
+    async def test_http_and_sse_retry_use_healthy_tab_while_failed_tab_refreshes(self):
+        for failure in ("http", "sse"):
+            with self.subTest(failure=failure):
+                pool = MemoryPool(initial_ready={"kpool=1", "kpool=2"})
+                refresh_gate = pool.gates["kpool=1"] = threading.Event()
+
+                def failing_stream(body, timeout, cancel, trace=None):
+                    if failure == "http":
+                        raise bu.BrowserHTTPError(500, 'Retries exhausted: 3/3')
+                    yield 'data: {"choices":[{"delta":{"content":"WITHHELD"}}]}\n\n'
+                    yield 'data: {"error":{"code":503,"message":"Service temporarily unavailable"}}\n\n'
+
+                try:
+                    pool.start()
+                    await asyncio.to_thread(wait_for,
+                        lambda: all(s == "ready" for s in pool.status()["tabs"].values()))
+                    with patch.object(pool.tabs["kpool=1"], "stream", failing_stream), \
+                         patch.multiple(bridge, _browser=pool, BROWSER_TIMEOUT=2,
+                            BROWSER_MESSAGES_DEFER_OUTPUT=True, BROWSER_HEARTBEAT_SEC=0.01,
+                            BROWSER_HTTP_5XX_RETRIES=3, BROWSER_HTTP_5XX_BACKOFF=0.02,
+                            BROWSER_STREAM_RETRIES=2, BROWSER_STREAM_BACKOFF=0.02):
+                        wire = ''.join([chunk async for chunk in bridge.stream_anthropic({}, {}, "kimi-k3.1-pro")])
+                    self.assertIn("RECOVERED", wire)
+                    self.assertNotIn("WITHHELD", wire)
+                    self.assertNotIn("event: error", wire)
+                    self.assertEqual(pool.tabs["kpool=2"].sends, 1)
+                    await asyncio.to_thread(wait_for, lambda: "kpool=1" in pool.recoveries)
+                    self.assertEqual(pool.status()["tabs"]["kpool=1"], "recovering")
+                    self.assertNotIn("kpool=2", pool.recoveries)
+                    refresh_gate.set()
+                    await asyncio.to_thread(wait_for, lambda: pool.status()["tabs"]["kpool=1"] == "ready")
+                finally:
+                    refresh_gate.set()
+                    pool.close()
+
     async def test_same_sse_stream_waits_with_heartbeats_then_delivers_content(self):
         pool = MemoryPool(size=1)
         gate = pool.gates["kpool=1"] = threading.Event()

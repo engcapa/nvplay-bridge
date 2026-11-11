@@ -38,7 +38,7 @@ class MessagesDiagnosticsTests(unittest.IsolatedAsyncioTestCase):
                      "new_string": ('  const label = "更新🙂\\n";\r\n' * 180)}
         serialized = json.dumps(arguments, ensure_ascii=False)
 
-        async def source(payload, headers, *, buffered=True):
+        async def source(payload, headers, *, buffered=True, defer_output=False):
             yield {"type": "thinking", "text": "reviewing"}
             for start in range(0, len(serialized), 17):
                 yield {"type": "tool", "index": 0, "id": "upstream:0" if start == 0 else None,
@@ -75,7 +75,7 @@ class MessagesDiagnosticsTests(unittest.IsolatedAsyncioTestCase):
         self.assertNotIn("SessionResults.tsx", log_text)
         self.assertNotIn("const label", log_text)
 
-    async def test_conversion_failure_is_logged_even_after_browser_success(self):
+    async def test_conversion_failure_is_logged_before_deferred_output_is_delivered(self):
         class MalformedBrowser:
             def stream(self, body, timeout, cancel, trace=None):
                 yield 'data: ' + json.dumps({"choices": [{"delta": {"tool_calls": [{
@@ -88,11 +88,13 @@ class MessagesDiagnosticsTests(unittest.IsolatedAsyncioTestCase):
         self.assertIn("event: error", response.text)
         self.assertNotIn("event: message_stop", response.text)
         records = self.records()
-        done = next(r for r in records if r["event"] == "browser_done")
+        invalid = next(r for r in records if r["event"] == "browser_validation_failed")
         failed = next(r for r in records if r["event"] == "messages_failed")
-        self.assertEqual(done["id"], response.headers["request-id"])
-        self.assertEqual(failed["request_id"], done["id"])
+        self.assertEqual(invalid["id"], response.headers["request-id"])
+        self.assertEqual(failed["request_id"], invalid["id"])
         self.assertEqual(failed["phase"], "conversion")
+        self.assertNotIn("content_block_start", response.text)
+        self.assertFalse(any(r["event"] == "browser_done" for r in records))
         self.assertFalse(any(r["event"] == "messages_done" for r in records))
 
     async def test_json_missing_finish_or_tool_metadata_fails_explicitly(self):
@@ -102,7 +104,7 @@ class MessagesDiagnosticsTests(unittest.IsolatedAsyncioTestCase):
              {"type": "finish", "reason": "tool_calls"}],
         ]
         for events in cases:
-            async def source(payload, headers, *, buffered=True):
+            async def source(payload, headers, *, buffered=True, defer_output=False):
                 for event in events:
                     yield event
             with patch.object(bridge, "_iter_upstream_events", source):
@@ -112,7 +114,7 @@ class MessagesDiagnosticsTests(unittest.IsolatedAsyncioTestCase):
             self.assertIn("upstream", response.json()["error"]["message"])
 
     async def test_concurrent_requests_keep_separate_correlations(self):
-        async def source(payload, headers, *, buffered=True):
+        async def source(payload, headers, *, buffered=True, defer_output=False):
             name = payload["messages"][-1]["content"]
             yield {"type": "text", "text": name}
             await asyncio.sleep(0.01)
