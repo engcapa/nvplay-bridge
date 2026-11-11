@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794440440.9550822,
+  "checkpoint_at": 1794440443.9309003,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261112",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -854,8 +854,8 @@
     "isolation_boundary": "Real dedicated Unix UID and protected source directories; shared host filesystem, kernel and network"
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794440437.4297228,
-    "commit": "8ec79b1437c94ae20bbcfb16cdbdb439d27d3aef",
+    "attempted_at": 1794440440.98274,
+    "commit": "6bfce7968f4d12617d8b4f59d0d38b2204b89377",
     "pushed": true,
     "returncode": 0
   },
@@ -1254,7 +1254,7 @@
   "controls": {},
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794440440.9565248,
+    "generated_at": 1794440443.932376,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
@@ -1266,8 +1266,8 @@
   "combined_plan_positions_completed": 11,
   "campaign": {
     "controller_alive": true,
-    "status": "preparing",
-    "task": "ks-solver-cpp"
+    "status": "validating_controls",
+    "task": "session-window-debug"
   },
   "status": "preparing_environment",
   "bridge_health": {
@@ -1363,8 +1363,8 @@
     },
     {
       "path": "campaign-state.json",
-      "sha256": "364ab37c5aef986b5a5aa63c928d1a18a1816bc7f3a30b8c8399996d26fb7d3b",
-      "size": 6520
+      "sha256": "c4966903ded6b381e4210bb96ce0cb96f9315e60afa6623369fbed09b6764261",
+      "size": 6537
     },
     {
       "path": "cdp-observer-process.json",
@@ -1373,8 +1373,8 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "d95feac0dbdb7754db88e9ea96418d1653d8050ec15f0d930d2ceb544d957843",
-      "size": 134
+      "sha256": "6c721026cd51dc688410a34962f8d8599a014782ded49c6c137d056ee8eea1c0",
+      "size": 132
     },
     {
       "path": "checkpoint-process.json",
