@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794407810.9612727,
+  "checkpoint_at": 1794407826.2067325,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261111-evening",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -1257,8 +1257,8 @@
     "fresh_controls_required": true
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794407787.4395754,
-    "commit": "d8abcbd081a1e2387f2266848b25b480d6d8aef1",
+    "attempted_at": 1794407811.463553,
+    "commit": "fc4c48c6ed746fa897583a140dd861f4c091a386",
     "pushed": true,
     "returncode": 0
   },
@@ -1702,9 +1702,54 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794407811.2587655,
+    "generated_at": 1794407826.2447152,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
+      "formal-1m-720k-host-body-read-clean-20261111/28800/high": {
+        "attempts": 1,
+        "valid_grades": 1,
+        "infrastructure_errors": 0,
+        "artifact_passes": 1,
+        "artifact_pass_at_1": 1.0,
+        "end_to_end_passes": 1,
+        "end_to_end_pass_rate": 1.0,
+        "agent_seconds": 2006.661,
+        "logical_requests": 58,
+        "bridge_errors": 0,
+        "bridge_errors_after_content": 0,
+        "bridge_errors_before_content": 0,
+        "bridge_retries": 0,
+        "http_failures_retried": 0,
+        "requests_recovered_after_retry": 0,
+        "cancelled_requests": 0,
+        "transport": {
+          "attempts_with_evidence": 1,
+          "max_output_tokens": [
+            131072
+          ],
+          "http_status_counts": {},
+          "timed_http_failures": 0,
+          "http_failed_attempt_seconds": 0,
+          "completed_requests": 58,
+          "observed_usage": {
+            "prompt_tokens": 3246685,
+            "completion_tokens": 64850,
+            "total_tokens": 3311535,
+            "cached_prompt_tokens": 3150336,
+            "reasoning_tokens": 52328
+          },
+          "requests_with_partial_usage": 0,
+          "requests_without_observed_usage": 0,
+          "longest_completed_request_seconds": 212.826
+        },
+        "usage": {
+          "prompt_tokens": 3246685,
+          "completion_tokens": 64850,
+          "total_tokens": 3311535,
+          "cached_prompt_tokens": 3150336,
+          "reasoning_tokens": 52328
+        }
+      },
       "formal-1m-720k-host-cc-20261111-evening/28800/high": {
         "attempts": 1,
         "valid_grades": 1,
@@ -1753,6 +1798,59 @@
       }
     },
     "attempts": [
+      {
+        "task": "session-window-debug",
+        "stage": "formal-1m-720k-host-body-read-clean-20261111",
+        "effort": "high",
+        "repeat": 2,
+        "budget_seconds": 28800,
+        "agent_wall_clock_timeout_seconds": null,
+        "artifact_score": 1,
+        "infrastructure_error": null,
+        "end_to_end_success": true,
+        "agent_seconds": 2006.661,
+        "agent_timed_out": false,
+        "cc_subtype": "success",
+        "cc_turns": 78,
+        "logical_requests": 58,
+        "upstream_attempts": 58,
+        "bridge_errors": 0,
+        "bridge_errors_after_content": 0,
+        "bridge_errors_before_content": 0,
+        "bridge_retries": 0,
+        "http_failures_retried": 0,
+        "requests_recovered_after_retry": 0,
+        "bridge_cancelled": 0,
+        "bridge_unfinished": [],
+        "transport": {
+          "max_output_tokens": [
+            131072
+          ],
+          "http_status_counts": {},
+          "timed_http_failures": 0,
+          "http_failed_attempt_seconds": 0,
+          "completed_requests": 58,
+          "completed_request_seconds": 1996.92,
+          "longest_completed_request_seconds": 212.826,
+          "observed_usage": {
+            "prompt_tokens": 3246685,
+            "completion_tokens": 64850,
+            "total_tokens": 3311535,
+            "cached_prompt_tokens": 3150336,
+            "reasoning_tokens": 52328
+          },
+          "requests_with_partial_usage": 0,
+          "requests_without_observed_usage": 0
+        },
+        "usage": {
+          "prompt_tokens": 3246685,
+          "completion_tokens": 64850,
+          "total_tokens": 3311535,
+          "cached_prompt_tokens": 3150336,
+          "reasoning_tokens": 52328
+        },
+        "source_head": "e21bfd3096761cd5dbe2553bc0cc43ee4841442f"
+      },
       {
         "task": "ks-solver-cpp",
         "stage": "formal-1m-720k-host-cc-20261111-evening",
@@ -1810,21 +1908,12 @@
         "source_head": "73d9155d3365f0fe3f20263241ed00e35933cb78"
       }
     ],
-    "pending": [
-      {
-        "attempt": "runs/formal-1m-720k-host-body-read-clean-20261111/session-window-debug--high--r2",
-        "status": "grading",
-        "task": "session-window-debug",
-        "effort": "high",
-        "tool_calls": 77,
-        "last_tool": "Grep"
-      }
-    ]
+    "pending": []
   },
   "new_formal_attempts_planned": 21,
-  "new_formal_attempts_completed": 1,
+  "new_formal_attempts_completed": 2,
   "preserved_prior_attempts_completed": 9,
-  "combined_plan_positions_completed": 10,
+  "combined_plan_positions_completed": 11,
   "campaign": {
     "controller_alive": true,
     "status": "formal_running",
@@ -1861,7 +1950,7 @@
   },
   "bridge_activity": {
     "events_last_300s": {
-      "browser_progress": 43,
+      "browser_progress": 40,
       "browser_buffer": 21,
       "browser_pool_release": 21,
       "browser_output_ready": 21,
@@ -1938,8 +2027,8 @@
     },
     {
       "path": "browser-supervisor-state.json",
-      "sha256": "912068e2d0116c4f37063ed108b3e0d246081a518229a0cb9bc5057c7eea966b",
-      "size": 101
+      "sha256": "1b269dd3af5ac22da751c9c085df798d58b57d0a50c94eb2e99b6bca66e3d0c3",
+      "size": 102
     },
     {
       "path": "campaign-error-before-transport-fix.json",
@@ -1953,8 +2042,8 @@
     },
     {
       "path": "campaign-state.json",
-      "sha256": "f371a46f04a6206e5cc6f5b5c76b2d1be7460137e557c39005f8c2495b7549bd",
-      "size": 6571
+      "sha256": "df5a8574597f4bd1b71d65344114734d8745c51f05c781e1054685f8de9e4adc",
+      "size": 6616
     },
     {
       "path": "cdp-observer-process.json",
@@ -1963,8 +2052,8 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "3216d56e4e5988c722eef55bf7922f51276e2f664708b3e50e9ace7f66ac8b82",
-      "size": 134
+      "sha256": "ef7fd0f29dfccc5c90b1a28032da3732abee0c10978b767ccf3e4cb09f260fb6",
+      "size": 133
     },
     {
       "path": "checkpoint-process.json",
@@ -2192,6 +2281,16 @@
       "size": 3791
     },
     {
+      "path": "runs/formal-1m-720k-host-body-read-clean-20261111/session-window-debug--high--r2/artifacts.json",
+      "sha256": "c4d43f811fd0d594021f8d3c9aad5b766e5af206066d717e4b24e2975446547d",
+      "size": 781
+    },
+    {
+      "path": "runs/formal-1m-720k-host-body-read-clean-20261111/session-window-debug--high--r2/grade.json",
+      "sha256": "192a0cffed4b7f7e3395c5c53038f28f937384d5ed498ccc6bc191a2de8a4157",
+      "size": 250
+    },
+    {
       "path": "runs/formal-1m-720k-host-body-read-clean-20261111/session-window-debug--high--r2/identity.json",
       "sha256": "7c0d91c9f6c0d854d7e43f21f47e304f80eb7214eefe18cb8582ec170678afa3",
       "size": 5979
@@ -2200,6 +2299,11 @@
       "path": "runs/formal-1m-720k-host-body-read-clean-20261111/session-window-debug--high--r2/request-protocol.json",
       "sha256": "074d5a3018950996054530ec277bc8be5815a5f2731d3fbceabba12cc807985f",
       "size": 2861
+    },
+    {
+      "path": "runs/formal-1m-720k-host-body-read-clean-20261111/session-window-debug--high--r2/result.json",
+      "sha256": "31fc4b5288de29803914150b722f05e9f2716eb00ae73fdbdc46a50d20870b35",
+      "size": 23401
     },
     {
       "path": "runs/formal-1m-720k-host-cc-20261111-evening/ks-solver-cpp--high--r1/artifacts.json",
