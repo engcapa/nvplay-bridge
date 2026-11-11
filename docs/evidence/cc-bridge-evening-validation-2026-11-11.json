@@ -55,6 +55,10 @@
     "rebuild-comparison.json": {
       "sha256": "44f5ee10a6995550f88bc86aefb13c08b966427124752b166ae3443053fb827c",
       "size": 203
+    },
+    "preformal-regression.log": {
+      "sha256": "5aa170e7c417830fbe888992900b56704cfb3d8f586edb4411feebd64541364d",
+      "size": 3580
     }
   },
   "real_cdp_error_probe": {
@@ -556,6 +560,19 @@
     "checkpoint_tests_passed": 19,
     "raw_retry_error_bodies_replaced_with_sha256": true,
     "private_evidence_preserved": true,
-    "deadline_rearmed_at_same_absolute_timestamp": 1794413157.0
+    "deadline_rearmed_at_same_absolute_timestamp": 1794413157.0,
+    "historical_export_audit": {
+      "checkpoint_commit": "64209278",
+      "raw_smoke_retry_error_records_before_fix": 3,
+      "content_kind": "NVIDIA pool acquire timeout error bodies; no benchmark prompt or answer",
+      "current_checkpoint_raw_error_records": 0,
+      "current_checkpoint_hashed_error_records": 3,
+      "git_history_not_rewritten": true
+    }
+  },
+  "preformal_full_regression": {
+    "passed": 251,
+    "seconds": 25.255,
+    "command": "PYTHONPATH=. python3 -m unittest discover -s tests -p 'test_*.py'"
   }
 }
