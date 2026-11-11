@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794360805.46574,
+  "checkpoint_at": 1794360809.2019644,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-1m-20261111-0801",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -780,8 +780,8 @@
     "host_memory_limit_bytes": "30064771072"
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794360802.190252,
-    "commit": "bbd9475e89c96ad74e700a92ec82210e4d320b99",
+    "attempted_at": 1794360805.5054016,
+    "commit": "f62d9a6ae0bc7295b4eb76571fcbc9bc90195911",
     "pushed": true,
     "returncode": 0
   },
@@ -1243,11 +1243,17 @@
     }
   ],
   "results": {
-    "generated_at": 1794360805.4719322,
+    "generated_at": 1794360809.2093515,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
-    "pending": []
+    "pending": [
+      {
+        "attempt": "runs/formal-1m-720k-path-cc-2-1-322-20261111/mvcc-lsm-compaction--max--r1",
+        "tool_calls": 0,
+        "last_tool": null
+      }
+    ]
   },
   "new_formal_attempts_planned": 23,
   "new_formal_attempts_completed": 0,
@@ -1364,8 +1370,8 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "5fd99c65f0a6006f8de6b948b56a0309ace4fc1b3a4621ed626c78007a6cb7a7",
-      "size": 133
+      "sha256": "a645ec780d14882d6e2a99ac663fb4c481be65f8ef1b2d494fdf17c72c12c74b",
+      "size": 134
     },
     {
       "path": "checkpoint-permission-regression.log",
@@ -1444,7 +1450,7 @@
     },
     {
       "path": "next-uid.json",
-      "sha256": "05fafd366421858fb0bb638ab8b22bc11b927db0844ed3193d764e0fe1fc7c9a",
+      "sha256": "441dc4e85b2d61cfb02f5878650737a1e71dea890f6ad01ea61b570bc105cbb0",
       "size": 20
     },
     {
@@ -1481,6 +1487,11 @@
       "path": "resource-monitor-state.json",
       "sha256": "c0d592fcc0e5f21cafcaae64b1a36e9f11878c8a80d86211bbbd9034cae006d1",
       "size": 807
+    },
+    {
+      "path": "runs/formal-1m-720k-path-cc-2-1-322-20261111/mvcc-lsm-compaction--max--r1/identity.json",
+      "sha256": "d3314aabf7178007f8d73a7db865d37dfddfff8edef2eb27635ec28ba57f6880",
+      "size": 4408
     },
     {
       "path": "settings-formal-high.json",
