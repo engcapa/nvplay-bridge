@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794372510.9042978,
+  "checkpoint_at": 1794372726.6050518,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-1m-20261111-0801",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -780,8 +780,8 @@
     "host_memory_limit_bytes": "30064771072"
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794372463.759154,
-    "commit": "853f37891007c591d29c62c1f6b19188a7aab05a",
+    "attempted_at": 1794372512.078335,
+    "commit": "692617d66d5de5a72a260490ee807965e14e63cb",
     "pushed": true,
     "returncode": 0
   },
@@ -1246,7 +1246,7 @@
     }
   ],
   "results": {
-    "generated_at": 1794372512.0104284,
+    "generated_at": 1794372727.7672365,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-1m-720k-path-cc-2-1-322-20261111/28800/max": {
@@ -1361,7 +1361,7 @@
         "task": "ks-solver-cpp",
         "effort": "high",
         "started_at": 1794366750.3032668,
-        "elapsed_seconds": 5760.6,
+        "elapsed_seconds": 5976.3,
         "tool_calls": 9,
         "last_tool": "Bash"
       },
@@ -1371,7 +1371,7 @@
         "task": "ks-solver-cpp",
         "effort": "max",
         "started_at": 1794366750.2963288,
-        "elapsed_seconds": 5761.2,
+        "elapsed_seconds": 5976.9,
         "tool_calls": 2,
         "last_tool": "Bash"
       }
@@ -1414,7 +1414,7 @@
   },
   "bridge_activity": {
     "events_last_300s": {
-      "browser_progress": 117
+      "browser_progress": 118
     },
     "active": [
       {
@@ -1425,23 +1425,23 @@
         "reasoning_effort": "high",
         "tab_id": "kpool=1",
         "counts": {
-          "thinking_chars": 88794,
+          "thinking_chars": 105807,
           "text_chars": 0,
           "tool_calls": 0
         },
         "usage": {
           "prompt_tokens": 112732,
-          "completion_tokens": 27633,
-          "total_tokens": 140365,
+          "completion_tokens": 32988,
+          "total_tokens": 145720,
           "prompt_tokens_details": {
             "cached_tokens": 107776
           },
           "completion_tokens_details": {
-            "reasoning_tokens": 27633
+            "reasoning_tokens": 32988
           }
         },
-        "age_seconds": 1190.9,
-        "activity_age_seconds": 1.4
+        "age_seconds": 1406.6,
+        "activity_age_seconds": -1.0
       },
       {
         "id": "e0cd8843",
@@ -1451,23 +1451,23 @@
         "reasoning_effort": "max",
         "tab_id": "kpool=3",
         "counts": {
-          "thinking_chars": 55395,
+          "thinking_chars": 71804,
           "text_chars": 0,
           "tool_calls": 0
         },
         "usage": {
           "prompt_tokens": 5773,
-          "completion_tokens": 16453,
-          "total_tokens": 22226,
+          "completion_tokens": 21721,
+          "total_tokens": 27494,
           "prompt_tokens_details": {
             "cached_tokens": 5376
           },
           "completion_tokens_details": {
-            "reasoning_tokens": 16453
+            "reasoning_tokens": 21721
           }
         },
-        "age_seconds": 607.1,
-        "activity_age_seconds": 1.8
+        "age_seconds": 822.8,
+        "activity_age_seconds": 2.9
       }
     ],
     "recent_errors": [],
@@ -1537,7 +1537,7 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "364b9fe6f50baf1abcde3e4425f265cdf5e7edc600f8619d7caa2a3e710e254c",
+      "sha256": "1f1e1919964baf13f36483fc504620a5ecc43b79eb21625e222b5c422d14c5fc",
       "size": 133
     },
     {
@@ -1667,8 +1667,8 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "c48092329efec41930a01e2d923cc23f062284fc315dc6817538fea54830300e",
-      "size": 819
+      "sha256": "7ed571f7b869b40e461c43e30924ed9f47df8bfa19e1b4a11635d11718602ddf",
+      "size": 817
     },
     {
       "path": "runs/formal-1m-720k-path-cc-2-1-322-20261111/ks-solver-cpp--high--r1/identity.json",
