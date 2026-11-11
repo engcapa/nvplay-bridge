@@ -1,8 +1,23 @@
 {
   "recorded_at": 1794411315.577293,
   "request_id": "a415948433c2473c902a926b",
-  "status": "retry_in_progress",
+  "status": "logical_request_failed_after_retries_cc_started_new_request",
   "events": [
+    {
+      "ts": 1794410892.963129,
+      "event": "browser_start",
+      "id": "a415948433c2473c902a926b",
+      "attempt": 1,
+      "sec": 0.0,
+      "output_deferred": true
+    },
+    {
+      "ts": 1794410922.3953645,
+      "event": "browser_first_data",
+      "id": "a415948433c2473c902a926b",
+      "attempt": 1,
+      "sec": 29.432
+    },
     {
       "ts": 1794411221.3597994,
       "event": "upstream_retry",
@@ -35,9 +50,141 @@
       "output_deferred": true,
       "thinking_delivered": true,
       "error_sha256": "35b8509b1cfb41b65fedb54106ebde69717283a33cffea09635063cf4fe37738"
+    },
+    {
+      "ts": 1794411226.5124955,
+      "event": "browser_start",
+      "id": "a415948433c2473c902a926b",
+      "attempt": 2,
+      "sec": 333.549,
+      "output_deferred": true
+    },
+    {
+      "ts": 1794411362.2897396,
+      "event": "browser_http_error",
+      "id": "a415948433c2473c902a926b",
+      "attempt": 2,
+      "sec": 469.327,
+      "status": 500
+    },
+    {
+      "ts": 1794411362.3547363,
+      "event": "upstream_retry",
+      "id": "a415948433c2473c902a926b",
+      "attempt": 2,
+      "sec": 469.392,
+      "reason": "upstream_http_5xx",
+      "retry": 1,
+      "next_attempt": 3,
+      "delay": 5.195,
+      "status": 500,
+      "counts": {
+        "thinking_chars": 0,
+        "text_chars": 0,
+        "tool_calls": 0
+      },
+      "usage": {},
+      "sse_error_code": null,
+      "stream_failure": null,
+      "output_deferred": true,
+      "thinking_delivered": false,
+      "error_sha256": "ff464048538f8e51527470a29fa94e0753f19f595065265334c7b23d20bbb910"
+    },
+    {
+      "ts": 1794411367.5504944,
+      "event": "browser_start",
+      "id": "a415948433c2473c902a926b",
+      "attempt": 3,
+      "sec": 474.587,
+      "output_deferred": true
+    },
+    {
+      "ts": 1794411493.0415463,
+      "event": "browser_http_error",
+      "id": "a415948433c2473c902a926b",
+      "attempt": 3,
+      "sec": 600.078,
+      "status": 500
+    },
+    {
+      "ts": 1794411493.090212,
+      "event": "upstream_retry",
+      "id": "a415948433c2473c902a926b",
+      "attempt": 3,
+      "sec": 600.127,
+      "reason": "upstream_http_5xx",
+      "retry": 2,
+      "next_attempt": 4,
+      "delay": 10.321,
+      "status": 500,
+      "counts": {
+        "thinking_chars": 0,
+        "text_chars": 0,
+        "tool_calls": 0
+      },
+      "usage": {},
+      "sse_error_code": null,
+      "stream_failure": null,
+      "output_deferred": true,
+      "thinking_delivered": false,
+      "error_sha256": "ff464048538f8e51527470a29fa94e0753f19f595065265334c7b23d20bbb910"
+    },
+    {
+      "ts": 1794411503.4148786,
+      "event": "browser_start",
+      "id": "a415948433c2473c902a926b",
+      "attempt": 4,
+      "sec": 610.452,
+      "output_deferred": true
+    },
+    {
+      "ts": 1794411651.968156,
+      "event": "browser_http_error",
+      "id": "a415948433c2473c902a926b",
+      "attempt": 4,
+      "sec": 759.005,
+      "status": 500
+    },
+    {
+      "ts": 1794411652.069659,
+      "event": "upstream_retry_skipped",
+      "id": "a415948433c2473c902a926b",
+      "attempt": 4,
+      "sec": 759.107,
+      "reason": "retry_limit",
+      "committed": false
+    },
+    {
+      "ts": 1794411652.0697865,
+      "event": "browser_error",
+      "id": "a415948433c2473c902a926b",
+      "attempt": 4,
+      "sec": 759.107,
+      "status": 500,
+      "counts": {
+        "thinking_chars": 0,
+        "text_chars": 0,
+        "tool_calls": 0
+      },
+      "usage": {},
+      "sse_error_code": null,
+      "stream_failure": null,
+      "output_deferred": true,
+      "thinking_delivered": false,
+      "committed": false,
+      "error_sha256": "ff464048538f8e51527470a29fa94e0753f19f595065265334c7b23d20bbb910"
     }
   ],
   "root_cause_claimed": false,
   "administrative_stop_at_unix": 1794413157,
-  "classification": "HTTP 200 response with in-stream SSE error code 503; bridge classified status 502 for client transport and retried."
+  "classification": "HTTP 200 response with in-stream SSE error code 503; bridge classified status 502 for client transport and retried.",
+  "updated_at": 1794411692.7880616,
+  "logical_requests": 1,
+  "upstream_attempts": 4,
+  "bridge_retries": 3,
+  "confirmed_http_500_attempts": 3,
+  "logical_terminal_errors": 1,
+  "cc_session_ended": false,
+  "model_grade": null,
+  "excluded_from_model_grades_until_original_verifier": true
 }
