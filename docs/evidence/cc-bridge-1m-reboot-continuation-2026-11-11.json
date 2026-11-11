@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794356620.8584235,
+  "checkpoint_at": 1794356719.0207424,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-1m-20261111-0801",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -540,8 +540,8 @@
     "host_memory_limit_bytes": "30064771072"
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794356438.0541046,
-    "commit": "08f4fa030d9da01a1ed3692a94c6f5483e4293ed",
+    "attempted_at": 1794356620.882358,
+    "commit": "d2c5a90ebd6cec8b29c5c470cf0ee6ea88dc0046",
     "pushed": true,
     "returncode": 0
   },
@@ -593,7 +593,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794356620.8593378,
+    "generated_at": 1794356719.0216265,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
@@ -605,8 +605,8 @@
   "combined_plan_positions_completed": 7,
   "campaign": {
     "controller_alive": true,
-    "status": "control_validated",
-    "task": "mvcc-lsm-compaction"
+    "status": "validating_controls",
+    "task": "ks-solver-cpp"
   },
   "reboot_stop": {
     "stop_at": 1794380400.0,
@@ -677,8 +677,8 @@
     },
     {
       "path": "campaign-state.json",
-      "sha256": "b23a8d586c1deb50b05af33d0570023cf6e2fc9e90dea6a98b1e3d960bbe7d01",
-      "size": 3726
+      "sha256": "08b43cf6fa73b3b915da0449ca61472d7d39f2f8f3dcbff99bcc0cf480e06c8a",
+      "size": 3724
     },
     {
       "path": "cdp-observer-process.json",
@@ -687,8 +687,8 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "7158ae268bd1ac005a8df0e38747f3820e0f8ffe96ece85857e7d3563789f1dc",
-      "size": 134
+      "sha256": "74cb251fd3746f5d9bf891bafef99f3e39d9dc57c23ce0fd71b343c91647008e",
+      "size": 133
     },
     {
       "path": "checkpoint-process.json",
@@ -767,8 +767,8 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "be106cacbda78c3eb126f7b60482d2dd4947a01755ae985202ac590b9a854c01",
-      "size": 808
+      "sha256": "d68e5893d0d4f3525c5df3df0f331f117335b2559c94e55bef75e40cdc917a00",
+      "size": 806
     },
     {
       "path": "settings-formal-high.json",
@@ -864,6 +864,46 @@
       "archive": "verifier-root.tar.gz",
       "sha256": "30103a9b8114adcaba25bae7a769207fd0f061ecc7f464a497bf524050ea74e0",
       "bytes": 564524042,
+      "tar_compare_passed_before_reclaim": true,
+      "restore": "sudo tar -xpf verifier-root.tar.gz -C ."
+    },
+    {
+      "directory": "controls/mvcc-lsm-compaction/baseline",
+      "archived_at": 1794356644.9551916,
+      "root": "agent-root",
+      "archive": "agent-root.tar.gz",
+      "sha256": "4139e5303fa11941fe3f7d6f523312a91228f7c1a47a209507f9b941c499896a",
+      "bytes": 352998353,
+      "tar_compare_passed_before_reclaim": true,
+      "restore": "sudo tar -xpf agent-root.tar.gz -C ."
+    },
+    {
+      "directory": "controls/mvcc-lsm-compaction/baseline",
+      "archived_at": 1794356671.0568342,
+      "root": "verifier-root",
+      "archive": "verifier-root.tar.gz",
+      "sha256": "722062513164fc6f7d09a2ac23bed7f6a9723cc5a6cd98f63cb73d2d408d9a40",
+      "bytes": 488822758,
+      "tar_compare_passed_before_reclaim": true,
+      "restore": "sudo tar -xpf verifier-root.tar.gz -C ."
+    },
+    {
+      "directory": "controls/mvcc-lsm-compaction/oracle",
+      "archived_at": 1794356692.5323958,
+      "root": "agent-root",
+      "archive": "agent-root.tar.gz",
+      "sha256": "a8b917ff50da84f7df47460ae99a06efaae966edf7d41053bb0f88af3f50d135",
+      "bytes": 354174725,
+      "tar_compare_passed_before_reclaim": true,
+      "restore": "sudo tar -xpf agent-root.tar.gz -C ."
+    },
+    {
+      "directory": "controls/mvcc-lsm-compaction/oracle",
+      "archived_at": 1794356718.633152,
+      "root": "verifier-root",
+      "archive": "verifier-root.tar.gz",
+      "sha256": "9ad736f95ce54f6d9f517cceb36341f8543a8655c59ec3a55b8487c2180252a9",
+      "bytes": 488823948,
       "tar_compare_passed_before_reclaim": true,
       "restore": "sudo tar -xpf verifier-root.tar.gz -C ."
     },
