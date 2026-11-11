@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794441161.484653,
+  "checkpoint_at": 1794441188.1594632,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261112",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -854,8 +854,8 @@
     "isolation_boundary": "Real dedicated Unix UID and protected source directories; shared host filesystem, kernel and network"
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794441138.59872,
-    "commit": "e80a9deb088cc05903f60c1cf37b1561c3c91062",
+    "attempted_at": 1794441161.524149,
+    "commit": "d87063f8c199424341d37b533dc2dccf23b7bbdb",
     "pushed": true,
     "returncode": 0
   },
@@ -1299,7 +1299,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794441161.4862905,
+    "generated_at": 1794441188.1615121,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
@@ -1311,8 +1311,8 @@
   "combined_plan_positions_completed": 11,
   "campaign": {
     "controller_alive": true,
-    "status": "control_validated",
-    "task": "mvcc-lsm-compaction"
+    "status": "validating_controls",
+    "task": "ks-solver-cpp"
   },
   "status": "validating_controls",
   "bridge_health": {
@@ -1379,7 +1379,7 @@
     },
     {
       "path": "browser-supervisor-state.json",
-      "sha256": "03b00815a546d2593e3965c36028bfaa4a8d62502698ba21aa61b38f6b5c9b0d",
+      "sha256": "ac03a3ded641dd0bbb0e534c0d0ac216e28fa1a9b632cade94c0ae4e7867812a",
       "size": 102
     },
     {
@@ -1389,8 +1389,8 @@
     },
     {
       "path": "campaign-state.json",
-      "sha256": "be7614981dd2f23be1f1902213344587de5158847328fb2769a7f3f3b1b486b5",
-      "size": 6534
+      "sha256": "21594b724ecdb213f058a74ccb7fa925b7d90ac4731675bbfc0e493cb5b4c9fa",
+      "size": 6530
     },
     {
       "path": "cdp-observer-process.json",
@@ -1399,8 +1399,8 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "e5be7658f599eda09097d4e43d8ee739d054752aadd4d8ce1bdcd9650bef087d",
-      "size": 132
+      "sha256": "b8a946b2a6743be92c3da6db1993cdd9a07c0a5d6613b991763935d8be2976c3",
+      "size": 133
     },
     {
       "path": "checkpoint-process.json",
@@ -1668,6 +1668,16 @@
       "bytes": 5417610,
       "tar_compare_passed_before_reclaim": true,
       "restore": "sudo tar -xpf agent-root.tar.gz -C ."
+    },
+    {
+      "directory": "controls/mvcc-lsm-compaction/oracle",
+      "archived_at": 1794441187.7495599,
+      "root": "verifier-root",
+      "archive": "verifier-root.tar.gz",
+      "sha256": "e2b32e8116c0c6289773f96cebd82b88f694738d8fa5633fda05282aa55a7358",
+      "bytes": 488823603,
+      "tar_compare_passed_before_reclaim": true,
+      "restore": "sudo tar -xpf verifier-root.tar.gz -C ."
     },
     {
       "directory": "controls/session-window-debug/baseline",
