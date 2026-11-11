@@ -31,6 +31,18 @@
     "browser-http-validation.log": {
       "sha256": "99e6eca0bb25d307f774f3d16a04f4eb6986eb2bd568d27438f18efef2f7d07d",
       "size": 328
+    },
+    "proot-version-before-regression.log": {
+      "sha256": "870743c40f9d13cb8d0245ab9f02b51eb60fcb338632156759bbbcade91a20f8",
+      "size": 1387
+    },
+    "proot-version-regression.log": {
+      "sha256": "87e0fc072e190b6834bcdb944df770cdde91fa9dcf2ead9314a50335f200ed3f",
+      "size": 104
+    },
+    "protocol-configuration.log": {
+      "sha256": "d356b9d96fef580fb7677cf8ab239727c2a1f201685a655d2cdf48c0899aa152",
+      "size": 703
     }
   },
   "real_cdp_error_probe": {
@@ -67,5 +79,13 @@
   "node_adapter": {
     "tree_sha256": "2a6ca0d5c23145f875c4b65c50645c1480526f86e45d7b455542b597e504716f",
     "files": 208
+  },
+  "proot_version_parser_fix": {
+    "before": "correct pinned build v5.5.0-25dc6a31 rejected before any runtime snapshot or scoring",
+    "after": "accept optional v prefix and commit suffix; retain minimum 5.5.0",
+    "commit": "05e3da0",
+    "regression_tests_passed": 6,
+    "new_cases": 2,
+    "failure_reproduced_before_fix": true
   }
 }
