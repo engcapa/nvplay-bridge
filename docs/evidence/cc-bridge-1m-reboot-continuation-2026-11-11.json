@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794366222.439876,
+  "checkpoint_at": 1794366236.031721,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-1m-20261111-0801",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -780,8 +780,8 @@
     "host_memory_limit_bytes": "30064771072"
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794366178.0811994,
-    "commit": "1c9119c49ad080bf939622cf9ac9721a7f335b38",
+    "attempted_at": 1794366222.9567816,
+    "commit": "46986566c9e012e8c21de7b749c2454875ebc1bd",
     "pushed": true,
     "returncode": 0
   },
@@ -1246,7 +1246,7 @@
     }
   ],
   "results": {
-    "generated_at": 1794366222.910232,
+    "generated_at": 1794366236.4879391,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
@@ -1257,8 +1257,8 @@
         "task": "mvcc-lsm-compaction",
         "effort": "max",
         "started_at": 1794360810.819098,
-        "elapsed_seconds": 5411.6,
-        "tool_calls": 86,
+        "elapsed_seconds": 5425.2,
+        "tool_calls": 87,
         "last_tool": "Edit"
       }
     ]
@@ -1301,26 +1301,26 @@
   "bridge_activity": {
     "events_last_300s": {
       "browser_progress": 51,
-      "browser_buffer": 6,
-      "browser_pool_release": 6,
-      "browser_done": 6,
-      "request": 6,
-      "payload": 6,
-      "browser_start": 6,
-      "browser_tab": 6,
-      "browser_first_data": 5,
-      "browser_first_content": 5
+      "browser_buffer": 7,
+      "browser_pool_release": 7,
+      "browser_done": 7,
+      "request": 7,
+      "payload": 7,
+      "browser_start": 7,
+      "browser_tab": 7,
+      "browser_first_data": 6,
+      "browser_first_content": 6
     },
     "active": [
       {
-        "id": "ac3d2a47",
+        "id": "71d9dbc5",
         "retry_count": 0,
         "phase": "browser_tab",
         "attempt": 1,
         "reasoning_effort": "max",
-        "tab_id": "kpool=3",
-        "age_seconds": 1.4,
-        "activity_age_seconds": 1.4
+        "tab_id": "kpool=5",
+        "age_seconds": 1.6,
+        "activity_age_seconds": 1.6
       }
     ],
     "recent_errors": [],
@@ -1390,7 +1390,7 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "a4b341d6d21c88f2cf6139bb90cd4f039f1b86eb5cfc2fa89a53274ba8116478",
+      "sha256": "507336bb0001fa9aa9b07d3a4c20c1c616cea64849bb758a286e1a85f208eae5",
       "size": 134
     },
     {
