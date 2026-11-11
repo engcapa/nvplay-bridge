@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794405764.152982,
+  "checkpoint_at": 1794405767.405197,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261111-evening",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -1257,8 +1257,8 @@
     "fresh_controls_required": true
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794405760.2485025,
-    "commit": "dd88b94f1a18d2fec204157c3b5aa3b4fdfcd0c7",
+    "attempted_at": 1794405764.2956605,
+    "commit": "ec8de7eb59e776beb8facd7b0d4fcd7593bfe520",
     "pushed": true,
     "returncode": 0
   },
@@ -1702,7 +1702,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794405764.1742685,
+    "generated_at": 1794405767.4179847,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-1m-720k-host-cc-20261111-evening/28800/high": {
@@ -1818,8 +1818,8 @@
   "combined_plan_positions_completed": 10,
   "campaign": {
     "controller_alive": true,
-    "status": "control_validated",
-    "task": "batched-eval-parity"
+    "status": "validating_controls",
+    "task": "mvcc-lsm-compaction"
   },
   "transport_transition": {
     "status": "remaining_campaign_started",
@@ -1930,7 +1930,7 @@
     },
     {
       "path": "browser-supervisor-state.json",
-      "sha256": "fe01a62c369a4af401c9ef4f75df028d5cf1770ace353f62d66eb3f6117dcfb2",
+      "sha256": "3b05c4af60d9cf50c6755134867a738b66c04954c260e94fe07641c76379e13a",
       "size": 102
     },
     {
@@ -1945,8 +1945,8 @@
     },
     {
       "path": "campaign-state.json",
-      "sha256": "20555e11a51b89b049aec6e6dc59a4b4a96ddac8bb2cac480414a843c8a61e8e",
-      "size": 6559
+      "sha256": "9d86a8873ff908f174ce4fab7212645b4f5b30d0015e3efa6a35e8fc95c7987a",
+      "size": 6560
     },
     {
       "path": "cdp-observer-process.json",
@@ -1955,7 +1955,7 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "79f5a46940ae40bfef8e7390877abe2efc19b2fb9beedc0c5a1d228b0c10914f",
+      "sha256": "eeb5f203fd83ca8ee08681a6fe3354378f0bd0a5978f16fdaaf8047217a15980",
       "size": 134
     },
     {
