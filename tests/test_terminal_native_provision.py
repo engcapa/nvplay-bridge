@@ -1,14 +1,18 @@
 """Rebuild a benchmark without losing its package pins or completed positions."""
 
 import json
+import hashlib
 from pathlib import Path
+import subprocess
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tools"))
 from eval_terminal_native import DEFAULT_PILOT
 from provision_terminal_native import continue_schedule, fixed_apt_archive
+import provision_terminal_native as provision
 
 
 class FixedAptArchiveTests(unittest.TestCase):
@@ -29,6 +33,41 @@ class FixedAptArchiveTests(unittest.TestCase):
         self.assertEqual(fixed_apt_archive(self.package, description, {})["sha256"], "signed-index-digest")
         with self.assertRaisesRegex(ValueError, "missing from both"):
             fixed_apt_archive(self.package, "", {})
+
+    def test_removed_mirror_archive_recovers_identical_snapshot_bytes(self):
+        with tempfile.TemporaryDirectory() as directory:
+            target = Path(directory) / "pinned.deb"
+            fields = {"filename": "pool/main/p/perl/pinned.deb",
+                      "sha256": hashlib.sha256(b"pinned bytes").hexdigest()}
+
+            def download(command, log):
+                if command[-1].startswith(provision.APT_ARCHIVE_BASE_URLS[0]):
+                    raise subprocess.CalledProcessError(22, command)
+                Path(command[-2]).write_bytes(b"pinned bytes")
+
+            with patch.object(provision, "checked", side_effect=download) as run:
+                url = provision.download_fixed_apt_archive(fields, target, "proxy", Path(directory) / "log")
+            self.assertTrue(url.startswith("https://snapshot.ubuntu.com/"))
+            self.assertEqual(target.read_bytes(), b"pinned bytes")
+            self.assertEqual(run.call_count, 2)
+
+    def test_corrupt_archive_or_non_http_failure_cannot_fall_back_silently(self):
+        with tempfile.TemporaryDirectory() as directory:
+            target = Path(directory) / "pinned.deb"
+            fields = {"filename": "pool/pinned.deb", "sha256": "expected"}
+
+            def corrupt(command, log):
+                Path(command[-2]).write_bytes(b"corrupt")
+
+            with patch.object(provision, "checked", side_effect=corrupt) as run:
+                with self.assertRaisesRegex(ValueError, "differs from authenticated index"):
+                    provision.download_fixed_apt_archive(fields, target, "proxy", Path(directory) / "log")
+                self.assertEqual(run.call_count, 1)
+            with patch.object(provision, "checked", side_effect=subprocess.CalledProcessError(28, "curl")) as run:
+                with self.assertRaises(subprocess.CalledProcessError):
+                    provision.download_fixed_apt_archive(fields, target, "proxy", Path(directory) / "log")
+                self.assertEqual(run.call_count, 1)
+            self.assertFalse(target.exists())
 
 
 class ContinuationTests(unittest.TestCase):

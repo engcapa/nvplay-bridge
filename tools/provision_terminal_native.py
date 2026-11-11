@@ -36,6 +36,10 @@ CLI_SHA256 = "cc686e832fdfb97841608875a918043db5d565a2110821b8fc4cd9fad12ea861"
 # available. Keep the .6 family used by the archived benchmark together.
 APT_FIXED = [f"{name}=5.38.2-3.2ubuntu0.6" for name in
              ("perl", "perl-base", "perl-modules-5.38", "libperl5.38t64")]
+APT_ARCHIVE_BASE_URLS = (
+    "https://archive.ubuntu.com/ubuntu/",
+    "https://snapshot.ubuntu.com/ubuntu/20261110T000000Z/",
+)
 
 
 def fixed_apt_archive(package: str, description: str, archived: dict) -> dict:
@@ -64,6 +68,26 @@ def checked(command, log: Path, *, env=None, cwd=None):
     with log.open("ab") as output:
         subprocess.run(list(map(str, command)), check=True, stdout=output,
                        stderr=subprocess.STDOUT, env=env, cwd=cwd)
+
+
+def download_fixed_apt_archive(fields: dict, target: Path, proxy: str, log: Path) -> str:
+    temporary = target.with_suffix(".deb.part")
+    for index, origin in enumerate(APT_ARCHIVE_BASE_URLS):
+        url = origin + fields["filename"]
+        try:
+            checked(["curl", "--proxy", proxy, "--connect-timeout", "30", "--max-time", "600", "--retry", "4",
+                     "--fail", "--location", "--silent", "--show-error", "--output", temporary, url], log)
+        except subprocess.CalledProcessError as error:
+            # Superseded security packages disappear from the live mirror.
+            # The snapshot must still match the previously authenticated hash.
+            if error.returncode != 22 or index == len(APT_ARCHIVE_BASE_URLS) - 1:
+                raise
+            continue
+        if digest(temporary) != fields["sha256"]:
+            raise ValueError(f"APT archive differs from authenticated index: {fields['filename']}")
+        temporary.rename(target)
+        return url
+    raise RuntimeError("no pinned APT archive source succeeded")
 
 
 def downloads(base: Path, proxy: str):
@@ -126,20 +150,17 @@ def build_base(base: Path, proxy: str, node: Path, uv_wheel: Path):
         description = subprocess.check_output(["chroot", root, "apt-cache", "show", package], text=True)
         fields = fixed_apt_archive(package, description, archive_manifest)
         target = root / "var/cache/apt/archives" / Path(fields["filename"]).name
+        download_url = None
         if not target.exists() or digest(target) != fields["sha256"]:
-            temporary = target.with_suffix(".deb.part")
-            checked(["curl", "--proxy", proxy, "--connect-timeout", "30", "--max-time", "600", "--retry", "4",
-                     "--fail", "--location", "--silent", "--show-error", "--output", temporary,
-                     "https://archive.ubuntu.com/ubuntu/" + fields["filename"]], log)
-            if digest(temporary) != fields["sha256"]:
-                raise ValueError(f"APT archive differs from authenticated index: {package}")
-            temporary.rename(target)
+            download_url = download_fixed_apt_archive(fields, target, proxy, log)
         actual = subprocess.check_output(["chroot", root, "dpkg-deb", "--show",
             "--showformat=${Package}=${Version}", "/var/cache/apt/archives/" + target.name], text=True)
         if actual != package:
             raise ValueError(f"downloaded APT package has unexpected identity: {package}")
         fixed_archives[package] = {"filename": target.name, "sha256": fields["sha256"],
                                    "verification_basis": fields["verification_basis"]}
+        if download_url:
+            fixed_archives[package]["download_url"] = download_url
     checked(apt + ["install", "-y", "--no-install-recommends", "build-essential", "make", "patch",
                    "git", "curl", "ca-certificates", "tmux", "file", "util-linux", "procps",
                    *("/var/cache/apt/archives/" + item["filename"] for item in fixed_archives.values())],
