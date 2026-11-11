@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794356950.5963252,
+  "checkpoint_at": 1794357003.1810248,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-1m-20261111-0801",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -540,8 +540,8 @@
     "host_memory_limit_bytes": "30064771072"
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794356902.7326593,
-    "commit": "8d94abd2bdda6352f700a7b68d68c353fea3a6e9",
+    "attempted_at": 1794356950.627823,
+    "commit": "4fc557a974559d366a63840bf9c1da10b465d5b1",
     "pushed": true,
     "returncode": 0
   },
@@ -888,7 +888,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794356950.5979617,
+    "generated_at": 1794357003.1825378,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
@@ -900,13 +900,15 @@
   "combined_plan_positions_completed": 7,
   "campaign": {
     "controller_alive": true,
-    "status": "live_tools_validated"
+    "status": "formal_running",
+    "task": "mvcc-lsm-compaction",
+    "repeat": 1
   },
   "reboot_stop": {
     "stop_at": 1794380400.0,
     "armed": true
   },
-  "status": "controls_validated",
+  "status": "formal_running",
   "bridge_health": {
     "status": "ok",
     "model": "moonshotai/kimi-k3.1-pro",
@@ -982,8 +984,8 @@
     },
     {
       "path": "campaign-state.json",
-      "sha256": "19ac17b0fb9b49e4529a09fb42c16f440c18d8dd0aa12b4e7123294e424d2e42",
-      "size": 3698
+      "sha256": "8bf5e885dfc96483ca8bc875c37b2256651b28d817fe174cb6ec08bfa2db0f0d",
+      "size": 3740
     },
     {
       "path": "cdp-observer-process.json",
@@ -992,8 +994,8 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "e4ce8c519630c7e2c7e7fc8c38f80d277d8428b705fec466f5274eeebf6d6e93",
-      "size": 134
+      "sha256": "d961c717b319c9941fcd7213e8ddbbdf63f545b9dafb423ffe3707c786d04b5e",
+      "size": 133
     },
     {
       "path": "checkpoint-process.json",
@@ -1082,8 +1084,8 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "3f07e561d1a266f48d9a57d86895d2289efad8aa53810c7d0e86583027e67105",
-      "size": 775
+      "sha256": "9d97a801bd222a1e0db123b57a518599b2072c4382e5ebdf21da49884e54affc",
+      "size": 773
     },
     {
       "path": "settings-formal-high.json",
@@ -1306,6 +1308,26 @@
       "bytes": 486829450,
       "tar_compare_passed_before_reclaim": true,
       "restore": "sudo tar -xpf verifier-root.tar.gz -C ."
+    },
+    {
+      "directory": "smoke/high",
+      "archived_at": 1794356978.8398092,
+      "root": "agent-root",
+      "archive": "agent-root.tar.gz",
+      "sha256": "0f34d70c66a817fb13804a6861080f60a2293e6d5da41f6de54ab81c6fed4664",
+      "bytes": 353467653,
+      "tar_compare_passed_before_reclaim": true,
+      "restore": "sudo tar -xpf agent-root.tar.gz -C ."
+    },
+    {
+      "directory": "smoke/max",
+      "archived_at": 1794357002.8438208,
+      "root": "agent-root",
+      "archive": "agent-root.tar.gz",
+      "sha256": "58203bd3569cb5b7df9e27db198d5b46fe900aa486c50d2675a8a65b8c525aa1",
+      "bytes": 353468579,
+      "tar_compare_passed_before_reclaim": true,
+      "restore": "sudo tar -xpf agent-root.tar.gz -C ."
     }
   ]
 }
