@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794391870.0789886,
+  "checkpoint_at": 1794391923.2192512,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261111-evening",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -983,8 +983,8 @@
     "fresh_controls_required": true
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794391861.034325,
-    "commit": "8209a80f2eb685945304edbda8bd763abb688813",
+    "attempted_at": 1794391870.208951,
+    "commit": "d9d92b1a65937885ee549d4ca11ebe4b6a99a55f",
     "pushed": true,
     "returncode": 0
   },
@@ -1364,7 +1364,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794391870.0819294,
+    "generated_at": 1794391923.2224019,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
@@ -1405,62 +1405,28 @@
   },
   "bridge_activity": {
     "events_last_300s": {
-      "browser_http_error": 1,
-      "browser_abort": 1,
-      "browser_buffer": 3,
-      "browser_pool_release": 3,
-      "pool_recovery_start": 1,
-      "upstream_retry": 1,
-      "pool_activation": 2,
-      "pool_page_ready": 1,
-      "pool_ready": 1,
-      "browser_start": 2,
-      "browser_lease": 2,
-      "browser_tab": 2,
-      "browser_sent": 2,
       "browser_first_data": 2,
       "browser_progress": 4,
       "browser_first_content": 2,
       "messages_first_block": 2,
+      "browser_buffer": 2,
+      "browser_pool_release": 2,
       "browser_done": 2,
       "tool_call": 1,
       "messages_done": 2,
       "http_complete": 2,
       "tool_result": 1,
       "request": 1,
-      "payload": 1
+      "payload": 1,
+      "browser_start": 1,
+      "browser_lease": 1,
+      "browser_tab": 1,
+      "browser_sent": 1
     },
     "active": [],
     "recent_errors": [],
-    "recent_upstream_errors": [
-      {
-        "event": "browser_http_error",
-        "ts": 1794391583.48594,
-        "id": "675f0c0f23b04989a148c495",
-        "attempt": 1,
-        "reasoning_effort": "max",
-        "status": 500,
-        "sec": 49.636
-      }
-    ],
-    "recent_retries": [
-      {
-        "event": "upstream_retry",
-        "ts": 1794391583.5594847,
-        "id": "675f0c0f23b04989a148c495",
-        "attempt": 1,
-        "reasoning_effort": "max",
-        "status": 500,
-        "sec": 49.709,
-        "counts": {
-          "thinking_chars": 0,
-          "text_chars": 0,
-          "tool_calls": 0
-        },
-        "usage": {},
-        "error_sha256": "c0c7c81a82584266f4c648dfdf96793a96b19a92dd951f2aada7e0327ab2c75c"
-      }
-    ]
+    "recent_upstream_errors": [],
+    "recent_retries": []
   },
   "evidence_fingerprints": [
     {
@@ -1495,8 +1461,8 @@
     },
     {
       "path": "browser-supervisor-state.json",
-      "sha256": "69e206281a659e530d0b8ce1d4fb44a9e519944717702f02bf35f39bb5f72527",
-      "size": 100
+      "sha256": "2de9c89d461d43d20867d05829734b0dbb7c205ead34f2e59254c4bdb8400793",
+      "size": 102
     },
     {
       "path": "campaign-launch-process.json",
@@ -1515,7 +1481,7 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "ccb14bfc40e0a54c4ca3ee33ac78b03d4ec625f1877e617c1806f6187f791d44",
+      "sha256": "d3917fe4e8fef57602cbfccdd13c62031a4759c5d6b0848aa8abd7100044870f",
       "size": 133
     },
     {
@@ -1680,8 +1646,8 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "65acaca856d2179a844168afe4ccd1844050f863b3c1e9827a3cf0a76b7a29b5",
-      "size": 774
+      "sha256": "06f2404628f55414cf73359d24faced9bc5f8d9c195f79943cbb84b29e589ae8",
+      "size": 772
     },
     {
       "path": "service-identity-regression.log",
@@ -1732,6 +1698,26 @@
       "archive": "agent-root.tar.gz",
       "sha256": "d59ba2c9f63fb095912bc3488d71e0ce5a383ab6609cdb0a3dd84d1740711482",
       "bytes": 4251603,
+      "tar_compare_passed_before_reclaim": true,
+      "restore": "sudo tar -xpf agent-root.tar.gz -C ."
+    },
+    {
+      "directory": "controls/session-window-debug/baseline",
+      "archived_at": 1794391920.4282486,
+      "root": "verifier-root",
+      "archive": "verifier-root.tar.gz",
+      "sha256": "70041ea053b9f74878287e5791838466807e31f038aecdd8d39af9d8577589db",
+      "bytes": 486843462,
+      "tar_compare_passed_before_reclaim": true,
+      "restore": "sudo tar -xpf verifier-root.tar.gz -C ."
+    },
+    {
+      "directory": "controls/session-window-debug/oracle",
+      "archived_at": 1794391921.4181702,
+      "root": "agent-root",
+      "archive": "agent-root.tar.gz",
+      "sha256": "856707a514d3d1eedf1a27946008b5574274538cae5c988f9f2bea40172f8877",
+      "bytes": 4252012,
       "tar_compare_passed_before_reclaim": true,
       "restore": "sudo tar -xpf agent-root.tar.gz -C ."
     }
