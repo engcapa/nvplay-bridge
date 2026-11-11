@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794392067.6769447,
+  "checkpoint_at": 1794392082.004589,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261111-evening",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -983,8 +983,8 @@
     "fresh_controls_required": true
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794391981.9597514,
-    "commit": "761e450004fe9a764bb9363c743853c3eb31730c",
+    "attempted_at": 1794392067.7803006,
+    "commit": "1a23ba9dc6a0f7cac5db16a159959a92af74b7d5",
     "pushed": true,
     "returncode": 0
   },
@@ -1375,7 +1375,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794392067.6803212,
+    "generated_at": 1794392082.0076008,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
@@ -1454,7 +1454,7 @@
     },
     {
       "path": "browser-supervisor-state.json",
-      "sha256": "41a123cdbabf39b6fb8d303f2dc1948aac5e0ea9f79c4a9670b4159fb3ee6274",
+      "sha256": "c87b026233db582e49170965839c34754ac6344eaeb87a70683bd560c43bf2bc",
       "size": 102
     },
     {
@@ -1474,7 +1474,7 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "e4e582eb641a57919b3faad61c19ea9bb60f0e5dee15d30d2537bd58405b51a2",
+      "sha256": "50a7e4597fb40a5148669870758d2f57e2c7ad4a4db8cb94be96dc0b6383ea95",
       "size": 134
     },
     {
@@ -1689,6 +1689,16 @@
     }
   ],
   "compressed_root_evidence": [
+    {
+      "directory": "controls/embedding-drift-monitor/baseline",
+      "archived_at": 1794392081.716976,
+      "root": "agent-root",
+      "archive": "agent-root.tar.gz",
+      "sha256": "c534afe75c763ab904c57e20e84a820278369bbde28ffafe5150ed1f52bfda08",
+      "bytes": 77295727,
+      "tar_compare_passed_before_reclaim": true,
+      "restore": "sudo tar -xpf agent-root.tar.gz -C ."
+    },
     {
       "directory": "controls/session-window-debug/baseline",
       "archived_at": 1794391865.3579001,
