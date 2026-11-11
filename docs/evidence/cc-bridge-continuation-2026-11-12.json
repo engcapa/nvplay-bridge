@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794440443.9309003,
+  "checkpoint_at": 1794440462.697802,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261112",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -854,8 +854,8 @@
     "isolation_boundary": "Real dedicated Unix UID and protected source directories; shared host filesystem, kernel and network"
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794440440.98274,
-    "commit": "6bfce7968f4d12617d8b4f59d0d38b2204b89377",
+    "attempted_at": 1794440443.958497,
+    "commit": "6ef4e6147a2e5edbc315401f3cee78dc7f932107",
     "pushed": true,
     "returncode": 0
   },
@@ -1251,10 +1251,22 @@
       }
     ]
   },
-  "controls": {},
+  "controls": {
+    "session-window-debug": {
+      "valid": true,
+      "baseline": {
+        "score": 0,
+        "infrastructure_error": null
+      },
+      "oracle": {
+        "score": 1,
+        "infrastructure_error": null
+      }
+    }
+  },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794440443.932376,
+    "generated_at": 1794440462.6994238,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
@@ -1266,10 +1278,10 @@
   "combined_plan_positions_completed": 11,
   "campaign": {
     "controller_alive": true,
-    "status": "validating_controls",
+    "status": "control_validated",
     "task": "session-window-debug"
   },
-  "status": "preparing_environment",
+  "status": "validating_controls",
   "bridge_health": {
     "status": "ok",
     "model": "moonshotai/kimi-k3.1-pro",
@@ -1353,7 +1365,7 @@
     },
     {
       "path": "browser-supervisor-state.json",
-      "sha256": "de8217df4cad098e4a1f85d28b1c2e4d17260fa28f38d46e8779167c3db9b4fa",
+      "sha256": "0d376289a9eba296730326ab3bd37002e2fcf8f9651145654e6681684c60d6fe",
       "size": 102
     },
     {
@@ -1363,8 +1375,8 @@
     },
     {
       "path": "campaign-state.json",
-      "sha256": "c4966903ded6b381e4210bb96ce0cb96f9315e60afa6623369fbed09b6764261",
-      "size": 6537
+      "sha256": "c5f5dc087e94ff010892b86a83c9860acacb2eae07ee8f81c0b8596e78d01dc1",
+      "size": 6535
     },
     {
       "path": "cdp-observer-process.json",
@@ -1373,13 +1385,18 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "6c721026cd51dc688410a34962f8d8599a014782ded49c6c137d056ee8eea1c0",
-      "size": 132
+      "sha256": "6c44ba82f313935f50d68d8ecc46e7768a0b88c2ba1d28b57b708b367f3e4b70",
+      "size": 133
     },
     {
       "path": "checkpoint-process.json",
       "sha256": "528482d772de8c3dd33f4ed24df67eeaceaa67edcb1b3f454965a2d6a70072b5",
       "size": 476
+    },
+    {
+      "path": "controls/session-window-debug/result.json",
+      "sha256": "3395de6dd768f71e73e2d552ff503712bc1074a4ddea9227162be0cda396f52b",
+      "size": 679
     },
     {
       "path": "download-manifest.json",
@@ -1418,7 +1435,7 @@
     },
     {
       "path": "next-uid.json",
-      "sha256": "6374f76111c1a8827aa7e1fbc749fbe6cfc6c483a496eb3d17405e3f6f9bd025",
+      "sha256": "58feef9701da76fc0b24d067b20dee159ce205089ba27d5a6e381622ec9fd49f",
       "size": 20
     },
     {
