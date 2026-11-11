@@ -36,10 +36,10 @@ HTTPS_PROXY=http://127.0.0.1:31128 python3 -m pip download --no-deps --only-bina
 sudo -n python3 tools/provision_terminal_native.py base --base logs/<run> --node /path/to/node-v24.13.0 --uv-wheel logs/<run>/downloads/uv-0.13.7-py3-none-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
 python3 tools/provision_terminal_native.py wheels --base logs/<run>
 python3 tools/start_terminal_native_services.py --base logs/<run> --brave .brave/brave
-python3 tools/checkpoint_terminal_native.py --base logs/<run> --output docs/evidence/<checkpoint>.json --interval 120 --commit
+sudo -n python3 tools/checkpoint_terminal_native.py --base logs/<run> --output docs/evidence/<checkpoint>.json --interval 120 --commit
 ```
 
-用户要求远端持续保存时，在 checkpoint 命令增加 `--push`，在 campaign 命令增加 `--push-checkpoints`。每次提交后立即经指定代理推送；失败保留本地提交，写入私有 `checkpoint-git-sync.json` / `checkpoint-push.log`，下一次检查点再次推送，不终止在途 CC。
+用户要求远端持续保存时，在 checkpoint 命令增加 `--push`，在 campaign 命令增加 `--push-checkpoints`。两者使用相同权限写入共享的本地日志；Git 提交和推送仍使用仓库所有者身份。每次提交后立即经指定代理推送；网络推送失败会保留本地提交，写入私有 `checkpoint-git-sync.json` / `checkpoint-push.log`，下一次检查点再次推送，不终止在途 CC。
 
 2026-11-10 的新上下文阶段使用 `configure --cc-model 'kimi-k3.1-pro[1m]' --auto-compact-window 720000 --no-agent-timeout --continue-checkpoint docs/evidence/cc-bridge-resume-2026-11-10.json`。模型、压缩开关和窗口由计划与设置共同校验，实际启动不再强制禁用压缩；旧阶段继续保留原配置。`--no-agent-timeout` 将 `agent_wall_clock_timeout_seconds` 显式冻结为 null，CC 会话等待自然结束；旧的 `budget_seconds=28800` 只作原协议参考，结果与请求协议同时记录实际超时策略，续跑拒绝混用两种策略的已完成结果。请求级 bridge/API 超时与原始 verifier 限制另行保留。
 
