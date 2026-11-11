@@ -1,5 +1,7 @@
 # CC + bridge 评测重启检查点（2026-11-10）
 
+**2026-11-11 17:06 已再次恢复。** 保留累计完成的 **9/30**，重建环境后从 `ks-solver-cpp` high / r1 继续。用户要求约 7 小时后主动停止，已安排 **2026-11-12 00:05:57（北京时间）** 自动停机并保存提交推送。新阶段启用原生 idle 修复，模型 `kimi-k3.1-pro[1m]`、压缩窗口 720000、128K 输出配置；详见 [本轮记录](cc-bridge-evening-continuation-2026-11-11.md) 和 [持续 checkpoint](evidence/cc-bridge-evening-continuation-2026-11-11.json)。下面的 15:00 暂停是上一轮历史状态。
+
 **2026-11-11 15:00 已按约定暂停，可以重启容器。** 最终 checkpoint `8ecacda` 已推送，累计完成 **9/30**；KS high / r1 在 136 次工具调用后按行政停止记录，未判分。已核对评测、自动 checkpoint、bridge、浏览器、监督与监控进程全部退出，8083/9225 关闭，无遗留请求。完整终态见 [本轮检查点](evidence/cc-bridge-1m-reboot-continuation-2026-11-11.json)。
 
 下一次收到继续指令后，从剩余 21 个位置中的 `ks-solver-cpp` high / r1 开始；保留 KS max 的 0 分和其它 8 个完成结果。新阶段应使用当时普通用户 PATH 的 Claude，并按 [原生说明](terminal-bench-native.md#当前-path-原生-cc) 添加 `--disable-native-idle-timeout`，重新完成 high/max 真实烟测。修复已通过 430 秒本地 HTTP/1.0、HTTP/1.1 和真实 max 工具闭环；本次尚未在新的正式计分阶段启用，不能补标到已结束或中断的旧会话。原始日志可能被重启清空，PID、外部 root 与在途 CC 会话不可复用。
