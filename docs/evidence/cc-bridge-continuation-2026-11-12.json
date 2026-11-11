@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794441329.382168,
+  "checkpoint_at": 1794441333.4595945,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261112",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -854,8 +854,8 @@
     "isolation_boundary": "Real dedicated Unix UID and protected source directories; shared host filesystem, kernel and network"
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794441325.806217,
-    "commit": "09fa470aecdd80ebb65dab311df3cd6bf4ed6430",
+    "attempted_at": 1794441329.4122627,
+    "commit": "80bbcc318e32b403d5a4a979e6c4e33d663c03e8",
     "pushed": true,
     "returncode": 0
   },
@@ -1310,11 +1310,17 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794441329.3838286,
+    "generated_at": 1794441333.4613583,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
-    "pending": []
+    "pending": [
+      {
+        "attempt": "runs/formal-1m-720k-host-cc-20261112/session-window-debug--max--r2",
+        "tool_calls": 0,
+        "last_tool": null
+      }
+    ]
   },
   "new_formal_attempts_planned": 19,
   "new_formal_attempts_completed": 0,
@@ -1391,7 +1397,7 @@
     },
     {
       "path": "browser-supervisor-state.json",
-      "sha256": "3590631b28b6ab45d3e78301afa29da947b26289802b45d7d3369c907c90dc77",
+      "sha256": "6472fea69e1c1bfd0f9b732e5c40f3f7bb20f37128f2852d28d6c78a1872909d",
       "size": 102
     },
     {
@@ -1411,8 +1417,8 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "220717a854d7076e06df2bf67ea70b5522e3dee4eeef8abbc7c81c8af7b362b1",
-      "size": 133
+      "sha256": "b42b6791e7ff2ff615b6c497f83724f73d754643a61e88bebfc265785e1c2013",
+      "size": 134
     },
     {
       "path": "checkpoint-process.json",
@@ -1486,7 +1492,7 @@
     },
     {
       "path": "next-uid.json",
-      "sha256": "8c874afaae3989a2639c0554b4889142806e1e05d122f975e030f44feaf143e3",
+      "sha256": "9287dd405e32fbb3d6263baf08d30747f99a9f0e95adbd7adaadac2106b75783",
       "size": 20
     },
     {
@@ -1528,6 +1534,11 @@
       "path": "restore-regression.log",
       "sha256": "c23ab618d10a0e50e102abf9ed072fc8081638ba268b167a479d69f23d5d66fb",
       "size": 3255
+    },
+    {
+      "path": "runs/formal-1m-720k-host-cc-20261112/session-window-debug--max--r2/identity.json",
+      "sha256": "edbc2f3dff06c0284a28344b525cba35a7cb8bdf09c560e38d032f4263f34331",
+      "size": 5968
     },
     {
       "path": "service-resource-snapshot.json",
