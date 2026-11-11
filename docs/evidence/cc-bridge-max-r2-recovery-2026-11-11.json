@@ -1,0 +1,43 @@
+{
+  "recorded_at": 1794411315.577293,
+  "request_id": "a415948433c2473c902a926b",
+  "status": "retry_in_progress",
+  "events": [
+    {
+      "ts": 1794411221.3597994,
+      "event": "upstream_retry",
+      "id": "a415948433c2473c902a926b",
+      "attempt": 1,
+      "sec": 328.397,
+      "reason": "upstream_stream_failure",
+      "retry": 1,
+      "next_attempt": 2,
+      "delay": 5.148,
+      "status": 502,
+      "counts": {
+        "thinking_chars": 34761,
+        "text_chars": 0,
+        "tool_calls": 0
+      },
+      "usage": {
+        "prompt_tokens": 106646,
+        "completion_tokens": 6925,
+        "total_tokens": 113571,
+        "prompt_tokens_details": {
+          "cached_tokens": 103296
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 6925
+        }
+      },
+      "sse_error_code": 503,
+      "stream_failure": null,
+      "output_deferred": true,
+      "thinking_delivered": true,
+      "error_sha256": "35b8509b1cfb41b65fedb54106ebde69717283a33cffea09635063cf4fe37738"
+    }
+  ],
+  "root_cause_claimed": false,
+  "administrative_stop_at_unix": 1794413157,
+  "classification": "HTTP 200 response with in-stream SSE error code 503; bridge classified status 502 for client transport and retried."
+}
