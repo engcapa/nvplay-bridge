@@ -1,6 +1,6 @@
 {
   "recorded_at": 1794400907.8512783,
-  "status": "validated_fix_pending_natural_boundary_deployment",
+  "status": "verified_fix_deployed_live_smoke_pending",
   "observed_task": "ks-solver-cpp--high--r1",
   "observed_http_statuses": [
     500,
@@ -132,10 +132,34 @@
     }
   },
   "stop_at": 1794413157.0,
-  "actual_evaluation_bridge_has_this_fix": false,
+  "actual_evaluation_bridge_has_this_fix": true,
   "deployment_gate": {
     "wait_for_current_rollout_smoke_natural_completion": true,
     "next_scoring_pauses_for_fix": true,
     "to_stage": "formal-1m-720k-host-body-read-20261111"
+  },
+  "previous_rollout_history": "transport-transition-history/bridge-refresh--1794402984203260796",
+  "validation_interruption_reason": "Verified HTTP error-body cancellation fix is ready; preserve failed validation before re-evaluation",
+  "cc_wall_clock_timeout_triggered": false,
+  "actual_deployment": {
+    "recorded_at": 1794403077.9246023,
+    "pid": 380319,
+    "source_head": "427504fe2cefbf7948776251187600249a29f4af",
+    "source_module_sha256": {
+      "nvplay_bridge.py": "40e502b1d99573b5f5b3bb4006c097c7f89af849a53ee2069381855bc6d752ab",
+      "browser_upstream.py": "8dd872e1fba62e0752efa5355e010d8e78fdfc4e3855e02c6f58a306a4fd9f1d",
+      "browser_events.py": "5e745cce57f3c0ac3f04d8193802c987c59b3bde00ed8a5c97668ba4de8bbdb3",
+      "stream_support.py": "8631dd909e24192413855c353285d4c0703f86082b3722ead1140a820c0a2d32",
+      "responses_api.py": "da451613bf0a1c4aa12ef03effc4d5ffe1ea330fb48006f9d09925233f9580c6",
+      "responses_support.py": "ed907b22106ff58923efa5431c20422e59bfdeb9a719b0766969522e444f033e"
+    },
+    "observed_patch_versions": {
+      "4": 3,
+      "3": 3,
+      "2": 3,
+      "1": 4,
+      "5": 3
+    },
+    "high_max_live_smoke_passed": false
   }
 }
