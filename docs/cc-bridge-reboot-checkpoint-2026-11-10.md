@@ -1,6 +1,6 @@
 # CC + bridge 评测重启检查点（2026-11-10）
 
-**2026-11-11 22:04 最新交接：修复版已恢复正式续评，累计完成 10/30。** 当前 `session-window-debug` high/r2 在本容器直接运行，阶段 `formal-1m-720k-host-body-read-clean-20261111`，剩余 20 个位置。新 high/max 烟测分别 20.182 / 64.175 秒，均无错误或重试；已完成的失败位置和未通过的部署验证全部保留。查看 [实际切换证据](evidence/cc-bridge-http-error-body-rollout-2026-11-11.json)、[诊断修复](evidence/cc-bridge-http-error-body-abort-2026-11-11.json) 和 [持续 checkpoint](evidence/cc-bridge-evening-continuation-2026-11-11.json)。7 小时截止仍为 **2026-11-12 00:05:57（北京时间）**。
+**2026-11-11 22:38 最新交接：累计完成 11/30。** 修复版 `formal-1m-720k-host-body-read-clean-20261111` 的 `session-window-debug` high/r2 在本容器直接运行并自然完成：原始验收 **7/7、产物 1 分、端到端成功**，58 个请求无错误、重试或取消；当前 max/r2 启动，剩余 19 个位置。历史失败及未通过的部署验证全部保留。查看 [独立验收证据](evidence/cc-bridge-host-formal-results-2026-11-11.json)、[实际切换](evidence/cc-bridge-http-error-body-rollout-2026-11-11.json) 和 [持续 checkpoint](evidence/cc-bridge-evening-continuation-2026-11-11.json)。7 小时截止仍为 **2026-11-12 00:05:57（北京时间）**。
 
 
 **2026-11-11 21:20 最新交接：累计完成 10/30。** CC 已改为本容器直接运行，后续不再使用 PRoot。KS high/r1 新结果为产物 0 分、客户端 API 400 退出，未超时；该失败与原 9 个完成位置全部保留，下一计分位置为 `session-window-debug` high/r2，剩余 20 个位置。真实长请求已正常完成 71152 输出 token（约 76.4 分钟），完整结果见 [本轮记录](cc-bridge-evening-continuation-2026-11-11.md)。

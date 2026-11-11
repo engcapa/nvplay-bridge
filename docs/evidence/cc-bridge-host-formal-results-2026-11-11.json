@@ -1,0 +1,123 @@
+{
+  "recorded_at": 1794407922.5881681,
+  "runtime": "path-native-host",
+  "model": "kimi-k3.1-pro[1m]",
+  "historical_completed_slots_preserved": 9,
+  "completed_local": 2,
+  "completed_total": 11,
+  "administrative_stop_at_unix": 1794413157,
+  "results_are_immutable": true,
+  "independent_artifact_review": {
+    "reviewed_at": 1794407876.4718344,
+    "attempts": [
+      {
+        "attempt": "runs/formal-1m-720k-host-body-read-clean-20261111/session-window-debug--high--r2",
+        "task": "session-window-debug",
+        "control": null,
+        "effort": "high",
+        "repeat": 2,
+        "artifact_score": 1,
+        "infrastructure_error": null,
+        "changed_original_files": [
+          "app/app/emitter.py",
+          "app/app/events.py",
+          "app/app/gc.py",
+          "app/app/merger.py",
+          "app/app/sessions.py"
+        ],
+        "added_files": [],
+        "removed_original_files": [],
+        "declared_read_only_files_unchanged": {
+          "app/app/types.py": true,
+          "app/app/DESIGN.md": true,
+          "app/app/__init__.py": true
+        },
+        "read_only_check_scope": "explicit session-window task constraints",
+        "artifact_errors_present": false,
+        "verifier": {
+          "test_count": 7,
+          "statuses": {
+            "passed": 7
+          },
+          "sha256": "8b7eb50ff26d8582c6ac08f474391cbee60c2226eb34023b1ac3a1693a65e682"
+        },
+        "client_terminal": {
+          "exit_code": 0,
+          "timed_out": false,
+          "subtype": "success",
+          "is_error": false,
+          "terminal_reason": "completed",
+          "api_error_status": null,
+          "prompt_too_long": false,
+          "reported_context_window_tokens": [
+            1000000
+          ]
+        },
+        "stage": "formal-1m-720k-host-body-read-clean-20261111",
+        "agent_duration_seconds": 2006.661,
+        "agent_wall_clock_timeout_seconds": null,
+        "end_to_end_success": true,
+        "bridge": {
+          "logical_requests": 58,
+          "upstream_attempts": 58,
+          "retries": 0,
+          "errors": 0,
+          "cancelled": 0,
+          "unfinished": 0
+        },
+        "evidence_sha256": {
+          "result.json": "31fc4b5288de29803914150b722f05e9f2716eb00ae73fdbdc46a50d20870b35",
+          "artifacts.json": "c4d43f811fd0d594021f8d3c9aad5b766e5af206066d717e4b24e2975446547d",
+          "request-protocol.json": "074d5a3018950996054530ec277bc8be5815a5f2731d3fbceabba12cc807985f"
+        }
+      },
+      {
+        "attempt": "runs/formal-1m-720k-host-cc-20261111-evening/ks-solver-cpp--high--r1",
+        "task": "ks-solver-cpp",
+        "control": null,
+        "effort": "high",
+        "repeat": 1,
+        "artifact_score": 0,
+        "infrastructure_error": null,
+        "changed_original_files": [],
+        "added_files": [],
+        "removed_original_files": [],
+        "declared_read_only_files_unchanged": {},
+        "read_only_check_scope": "not checked",
+        "artifact_errors_present": false,
+        "verifier": null,
+        "client_terminal": {
+          "exit_code": 1,
+          "timed_out": false,
+          "subtype": "success",
+          "is_error": true,
+          "terminal_reason": "api_error",
+          "api_error_status": 400,
+          "prompt_too_long": false,
+          "reported_context_window_tokens": [
+            1000000
+          ]
+        },
+        "stage": "formal-1m-720k-host-cc-20261111-evening",
+        "agent_duration_seconds": 6821.841,
+        "agent_wall_clock_timeout_seconds": null,
+        "end_to_end_success": false,
+        "bridge": {
+          "logical_requests": 8,
+          "upstream_attempts": 15,
+          "retries": 7,
+          "errors": 5,
+          "cancelled": 0,
+          "unfinished": 0
+        },
+        "evidence_sha256": {
+          "result.json": "7739302451de2396d3cb006a8ded06b0d068ca89561261820f8cd09012d6ebb8",
+          "artifacts.json": "a444662e54e2bb988c5e11909df332d6de7b58773d7036ad0e24dc75479e8032",
+          "request-protocol.json": "074d5a3018950996054530ec277bc8be5815a5f2731d3fbceabba12cc807985f"
+        }
+      }
+    ],
+    "scope": "saved copied-artifact hashes and original verifier results; not a semantic code review"
+  },
+  "scope": "Current host formal results and original verifier statistics; preserves all earlier stages and failures."
+}
