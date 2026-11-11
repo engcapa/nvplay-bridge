@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794356779.0054817,
+  "checkpoint_at": 1794356902.7021525,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-1m-20261111-0801",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -540,8 +540,8 @@
     "host_memory_limit_bytes": "30064771072"
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794356719.0450552,
-    "commit": "e1a2ec8f7bbff2a654f3fbebcca40b771b300c04",
+    "attempted_at": 1794356779.031998,
+    "commit": "9ed4a136f2436a7338de1cb284391833bf8f85d4",
     "pushed": true,
     "returncode": 0
   },
@@ -604,7 +604,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794356779.006752,
+    "generated_at": 1794356902.7051632,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
@@ -616,8 +616,7 @@
   "combined_plan_positions_completed": 7,
   "campaign": {
     "controller_alive": true,
-    "status": "control_validated",
-    "task": "ks-solver-cpp"
+    "status": "validating_live_tools"
   },
   "reboot_stop": {
     "stop_at": 1794380400.0,
@@ -688,8 +687,8 @@
     },
     {
       "path": "campaign-state.json",
-      "sha256": "82f9131c6460085dc16e00e6d6cf7c76aafccf3c8f59dee5937fe10ba9a07904",
-      "size": 3722
+      "sha256": "fb225ffe89e0877f987b39ddea99ae63f3579374b00262cf31fae7ecbb459c8c",
+      "size": 3698
     },
     {
       "path": "cdp-observer-process.json",
@@ -698,8 +697,8 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "9c729d8f39e96774dafb35b418106b0095d4330382ac5ebb8025c7c734245d9e",
-      "size": 134
+      "sha256": "a3d673c89882d86cbaf15204bd49d22f29379d0b0f9d73ca8ae2b4b633c10381",
+      "size": 133
     },
     {
       "path": "checkpoint-process.json",
@@ -783,8 +782,8 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "10fd1bc0cfac5b018b3a57ff09449aa3afbc13cd2f7c503b652c85d821f22e34",
-      "size": 802
+      "sha256": "241fc6536276afc68f0e562230907e6de8205a9c547345e8c56ffcd325202d6d",
+      "size": 800
     },
     {
       "path": "settings-formal-high.json",
@@ -880,6 +879,46 @@
       "archive": "verifier-root.tar.gz",
       "sha256": "30103a9b8114adcaba25bae7a769207fd0f061ecc7f464a497bf524050ea74e0",
       "bytes": 564524042,
+      "tar_compare_passed_before_reclaim": true,
+      "restore": "sudo tar -xpf verifier-root.tar.gz -C ."
+    },
+    {
+      "directory": "controls/ks-solver-cpp/baseline",
+      "archived_at": 1794356808.8649473,
+      "root": "agent-root",
+      "archive": "agent-root.tar.gz",
+      "sha256": "a1e53da64a6f3cc8e6e8ded208cafe1bde7768778295acd436246ac2ff367c85",
+      "bytes": 352992769,
+      "tar_compare_passed_before_reclaim": true,
+      "restore": "sudo tar -xpf agent-root.tar.gz -C ."
+    },
+    {
+      "directory": "controls/ks-solver-cpp/baseline",
+      "archived_at": 1794356843.3704941,
+      "root": "verifier-root",
+      "archive": "verifier-root.tar.gz",
+      "sha256": "c6977dddf6ebd13e7eda4fbaae1a628d5ce0d501b0d70f649aec79ae67c0a672",
+      "bytes": 607301890,
+      "tar_compare_passed_before_reclaim": true,
+      "restore": "sudo tar -xpf verifier-root.tar.gz -C ."
+    },
+    {
+      "directory": "controls/ks-solver-cpp/oracle",
+      "archived_at": 1794356867.4165976,
+      "root": "agent-root",
+      "archive": "agent-root.tar.gz",
+      "sha256": "f2d70b849ff1a33fade088a3ce76f1ab88bf09bca0d2982a090a4327b6dcb0e8",
+      "bytes": 353037964,
+      "tar_compare_passed_before_reclaim": true,
+      "restore": "sudo tar -xpf agent-root.tar.gz -C ."
+    },
+    {
+      "directory": "controls/ks-solver-cpp/oracle",
+      "archived_at": 1794356902.3102286,
+      "root": "verifier-root",
+      "archive": "verifier-root.tar.gz",
+      "sha256": "66ef96c358051896490fe97b4d6886a8f687cf6edd62bd172fa6ac5a25fcc472",
+      "bytes": 607982782,
       "tar_compare_passed_before_reclaim": true,
       "restore": "sudo tar -xpf verifier-root.tar.gz -C ."
     },
