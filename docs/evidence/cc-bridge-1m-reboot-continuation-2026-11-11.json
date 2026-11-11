@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794366723.6898913,
+  "checkpoint_at": 1794366744.543721,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-1m-20261111-0801",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -780,8 +780,8 @@
     "host_memory_limit_bytes": "30064771072"
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794366678.7996104,
-    "commit": "53283d906fb6d1320c5f44b4b44030ec2dc1603e",
+    "attempted_at": 1794366723.7523603,
+    "commit": "868bb17dc799c7f62c4636adb61ba2a8f80e6e17",
     "pushed": true,
     "returncode": 0
   },
@@ -1246,7 +1246,7 @@
     }
   ],
   "results": {
-    "generated_at": 1794366723.7062597,
+    "generated_at": 1794366744.564106,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-1m-720k-path-cc-2-1-322-20261111/28800/max": {
@@ -1363,7 +1363,7 @@
   "campaign": {
     "controller_alive": true,
     "status": "formal_running",
-    "task": "mvcc-lsm-compaction",
+    "task": "ks-solver-cpp",
     "repeat": 1
   },
   "reboot_stop": {
@@ -1392,7 +1392,7 @@
   },
   "bridge_activity": {
     "events_last_300s": {
-      "browser_progress": 31,
+      "browser_progress": 27,
       "browser_buffer": 2,
       "browser_pool_release": 2,
       "browser_done": 2,
@@ -1446,8 +1446,8 @@
     },
     {
       "path": "campaign-state.json",
-      "sha256": "f89a321a808ba7645d200df545c7d7cdc2ba3e3cf48fe14ab0452a368329eae9",
-      "size": 4981
+      "sha256": "55ab15bbade454fe13e43843e52b8d1db1ecfb391dc470dee78e4c9b934a6b11",
+      "size": 4931
     },
     {
       "path": "cc-upgrade-state.json",
@@ -1471,7 +1471,7 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "22d0a84c8603af77e214fdf9ef5c9320ab081251abc034ed4861d6c6bdb65cc0",
+      "sha256": "3a912ac26cc50ecdbb559a55933d23bf0ba0dbde3cd86f39966c25249ed578b2",
       "size": 134
     },
     {
@@ -1591,7 +1591,7 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "785ea3603f4e38151a5c2a26d5ed76aef0f7e3a4148a0d30ddbe2dbfa513266f",
+      "sha256": "041f03decbd7d2efd00c2351a57658919a78cabe4b7fbee498381f23ef11e56d",
       "size": 824
     },
     {
@@ -1850,6 +1850,16 @@
       "bytes": 530352020,
       "tar_compare_passed_before_reclaim": true,
       "restore": "sudo tar -xpf agent-root.tar.gz -C ."
+    },
+    {
+      "directory": "runs/formal-1m-720k-path-cc-2-1-322-20261111/mvcc-lsm-compaction--max--r1",
+      "archived_at": 1794366744.1637282,
+      "root": "verifier-root",
+      "archive": "verifier-root.tar.gz",
+      "sha256": "6c1a0fa2bf70275d8273a25ed3d8df867bd8d05eff531ad9a8d74b5c4e1c1672",
+      "bytes": 488874184,
+      "tar_compare_passed_before_reclaim": true,
+      "restore": "sudo tar -xpf verifier-root.tar.gz -C ."
     },
     {
       "directory": "smoke/high",
