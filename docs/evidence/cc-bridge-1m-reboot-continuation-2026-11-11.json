@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794380394.5568697,
+  "checkpoint_at": 1794380403.3425615,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-1m-20261111-0801",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -780,8 +780,8 @@
     "host_memory_limit_bytes": "30064771072"
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794380380.7290955,
-    "commit": "10f8c8f7bba6de4b01bafe88190d991288c45b9e",
+    "attempted_at": 1794380395.7529533,
+    "commit": "f84a153f7626241cd71c0612ba389c316435173a",
     "pushed": true,
     "returncode": 0
   },
@@ -1243,10 +1243,39 @@
         "cancelled": 1,
         "unfinished": 0
       }
+    },
+    {
+      "status": "administratively_interrupted",
+      "score": null,
+      "excluded_from_model_grades": true,
+      "recorded_at": 1794380403.2744546,
+      "requested_stop_at": 1794380400.0,
+      "reason": "user requested container reboot",
+      "task": "ks-solver-cpp",
+      "effort": "high",
+      "stage": "formal-1m-720k-path-cc-2-1-322-20261111",
+      "repeat": 1,
+      "original_attempt": "runs/formal-1m-720k-path-cc-2-1-322-20261111/ks-solver-cpp--high--r1",
+      "archive": "runs-interrupted/formal-1m-720k-path-cc-2-1-322-20261111/ks-solver-cpp--high--r1--1794380403274449088",
+      "progress_at_stop": {
+        "status": "agent_running",
+        "started_at": 1794366750.3032668,
+        "elapsed_seconds": 13650.0,
+        "tool_calls": 136,
+        "last_tool": "Edit"
+      },
+      "bridge": {
+        "logical_requests": 141,
+        "upstream_attempts": 141,
+        "errors": 6,
+        "retries": 0,
+        "cancelled": 1,
+        "unfinished": 0
+      }
     }
   ],
   "results": {
-    "generated_at": 1794380395.6545238,
+    "generated_at": 1794380403.3975246,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-1m-720k-path-cc-2-1-322-20261111/28800/max": {
@@ -1407,79 +1436,53 @@
         "source_head": "3166ea20e55cc782622e58c5456064512ced3e04"
       }
     ],
-    "pending": [
-      {
-        "attempt": "runs/formal-1m-720k-path-cc-2-1-322-20261111/ks-solver-cpp--high--r1",
-        "status": "agent_running",
-        "task": "ks-solver-cpp",
-        "effort": "high",
-        "started_at": 1794366750.3032668,
-        "elapsed_seconds": 13644.3,
-        "tool_calls": 136,
-        "last_tool": "Edit"
-      }
-    ]
+    "pending": []
   },
   "new_formal_attempts_planned": 23,
   "new_formal_attempts_completed": 2,
   "preserved_prior_attempts_completed": 7,
   "combined_plan_positions_completed": 9,
   "campaign": {
-    "controller_alive": true,
+    "controller_alive": false,
     "status": "formal_running",
     "task": "ks-solver-cpp",
     "repeat": 1
   },
   "reboot_stop": {
     "stop_at": 1794380400.0,
-    "armed": true
+    "armed": false
   },
-  "status": "formal_running",
+  "administrative_pause": {
+    "status": "paused_for_reboot",
+    "paused_at": 1794380403.3421092,
+    "requested_stop_at": 1794380400.0,
+    "completed": 2,
+    "interrupted_attempts": 1,
+    "reason": "user requested stop for container reboot"
+  },
+  "status": "formal_paused",
   "bridge_health": {
-    "status": "ok",
-    "model": "moonshotai/kimi-k3.1-pro",
-    "upstream_kind": "browser",
-    "history_reasoning": "preserve",
-    "browser_output_tokens": {
-      "maximum": 131072,
-      "fixed": 131072
-    },
-    "browser_timeouts": {
-      "total_seconds": 28800,
-      "first_byte_seconds": 3600.0,
-      "idle_seconds": 3600.0
-    },
-    "pool_states": {
-      "ready": 4,
-      "busy": 1
-    },
-    "recovering_tabs": []
+    "status": "unreachable",
+    "error_type": "URLError"
   },
   "bridge_activity": {
     "events_last_300s": {
-      "browser_progress": 30,
-      "browser_buffer": 6,
-      "browser_pool_release": 6,
+      "browser_progress": 28,
+      "browser_buffer": 7,
+      "browser_pool_release": 7,
       "browser_done": 6,
       "request": 6,
       "payload": 6,
       "browser_start": 6,
       "browser_tab": 6,
       "browser_first_data": 5,
-      "browser_first_content": 5
+      "browser_first_content": 5,
+      "browser_abort": 1,
+      "pool_recovery_start": 1,
+      "browser_cancelled": 1,
+      "pool_activation": 1
     },
-    "active": [
-      {
-        "id": "0fdd9565",
-        "retry_count": 0,
-        "phase": "browser_tab",
-        "attempt": 1,
-        "reasoning_effort": "high",
-        "tab_id": "kpool=4",
-        "age_seconds": 0.3,
-        "activity_age_seconds": 0.3
-      }
-    ],
+    "active": [],
     "recent_errors": [],
     "recent_upstream_errors": [],
     "recent_retries": []
@@ -1542,7 +1545,7 @@
     },
     {
       "path": "browser-supervisor-state.json",
-      "sha256": "d9bfdbe7bf67376dff5e175cda194280630843fc36a3ec35527389fc91db12ba",
+      "sha256": "b2ea96acdd5c43c1ea250269733e701ec31acecd6a16e213881d50b9825a790f",
       "size": 103
     },
     {
@@ -1582,7 +1585,7 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "ce4cee466c36602cd098c2b6250ad8252b46d3f1e7aa1eb03fbf034f1edb446d",
+      "sha256": "fd2921cce7c9703cb716d20d2594f0c40905cd20cec46d39c37ebcd6d1085499",
       "size": 134
     },
     {
@@ -1696,6 +1699,11 @@
       "size": 1082
     },
     {
+      "path": "pause-state.json",
+      "sha256": "38ab23a298e45ac951436d60c016a7f1e89fb2c4e6a32d6e849f62248d2d7043",
+      "size": 3519
+    },
+    {
       "path": "progress-report-policy.json",
       "sha256": "7a394591d20fbb41e0eee6fe22421ec541d1a035a925f68185b1f1a9dbc0fc8e",
       "size": 356
@@ -1724,16 +1732,6 @@
       "path": "resource-monitor-state.json",
       "sha256": "77b73defc6702e880cebfffb4871480c03a5022118f0910d561296e4d9ff6f4b",
       "size": 819
-    },
-    {
-      "path": "runs/formal-1m-720k-path-cc-2-1-322-20261111/ks-solver-cpp--high--r1/identity.json",
-      "sha256": "d3314aabf7178007f8d73a7db865d37dfddfff8edef2eb27635ec28ba57f6880",
-      "size": 4408
-    },
-    {
-      "path": "runs/formal-1m-720k-path-cc-2-1-322-20261111/ks-solver-cpp--high--r1/request-protocol.json",
-      "sha256": "b6c41cd7c66012cede5353658ac34183678afd7262c345312d77cfcdf7dfb0e5",
-      "size": 1719
     },
     {
       "path": "runs/formal-1m-720k-path-cc-2-1-322-20261111/ks-solver-cpp--max--r1/artifacts.json",
