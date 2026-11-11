@@ -1,6 +1,6 @@
 {
-  "recorded_at": 1794376947.5420947,
-  "status": "native_idle_override_validated_locally_waiting_natural_stage_boundary",
+  "recorded_at": 1794379089.151395,
+  "status": "native_idle_override_passed_local_and_real_max_smoke_waiting_formal_stage_boundary",
   "cc_version": "2.1.322",
   "cc_sha256": "bfb3703ad5380242328459bc62ada4bde8ae7ba57c6e1eeadb9c00e08874c478",
   "observed_max_nonstream_requests": [
@@ -453,7 +453,8 @@
     },
     "requires_fresh_smoke": true,
     "old_failed_position_will_not_be_overwritten": true,
-    "administrative_stop_at": 1794380400
+    "administrative_stop_at": 1794380400,
+    "supplemental_max_smoke_passed": true
   },
   "regression_followup": {
     "tests": 236,
@@ -461,5 +462,83 @@
     "seconds": 16.774,
     "log_sha256": "1ca8a212775bdbe6a8f4e66e1f1e0c4410b05d2b2abfaa5affe0937b4360cc14",
     "additional_check": "A partially written settings update cannot enable the idle override under an old frozen protocol; required API routing/timeout bootstrap keys remain mandatory."
+  },
+  "live_supplemental_max_smoke": {
+    "passed": true,
+    "formal_grades_unchanged": true,
+    "stage": "formal-1m-720k-path-cc-2-1-322-noidle-supplemental-smoke",
+    "uid": 20000,
+    "duration_seconds": 53.776,
+    "tool_calls": [
+      "Bash"
+    ],
+    "expected_sha256": "206c8769b99de0958e06cc146b4d7323ad9f08ff6308e42efc9c3f8300f9b21d",
+    "reported_context_windows": [
+      1000000
+    ],
+    "requests": [
+      {
+        "id": "124dd653",
+        "reasoning_effort": "max",
+        "max_tokens": 131072
+      },
+      {
+        "id": "7e9373f4",
+        "reasoning_effort": "max",
+        "max_tokens": 131072
+      }
+    ],
+    "errors": 0,
+    "cancelled": 0,
+    "retries": 0,
+    "unfinished": 0,
+    "process_exit_code": 0,
+    "bootstrap_environment_verified": {
+      "API_FORCE_IDLE_TIMEOUT": "0",
+      "API_TIMEOUT_MS": "29400000"
+    },
+    "main_plan_and_settings_unchanged": true,
+    "allocation_setup": {
+      "at": 1794378808.8428218,
+      "stage": "formal-1m-720k-path-cc-2-1-322-noidle-supplemental-smoke",
+      "reserved_uid": 20009,
+      "configuration_only": true,
+      "main_plan_unchanged": true,
+      "deadline_cleanup": "Parent stop timer recognizes transport-rollout-smoke/smoke and path-cc-live-smoke-process.json",
+      "actual_uid": 20000,
+      "allocator_note": "Independent validation allocator selected an inactive UID after scanning all live processes; reserved parent UID was not consumed by that allocator. Main formal UIDs were not reused.",
+      "active_uid_processes": []
+    },
+    "archive_status": "verified_and_expanded_root_reclaimed",
+    "fingerprints": [
+      {
+        "path": "logs/eval-cc-1m-20261111-0801/transport-rollout-smoke/evaluation-plan.json",
+        "size": 35674,
+        "sha256": "b6adad93b4c343b91b21df51513986052ee443c9e389c5b30e68017823b53bbd"
+      },
+      {
+        "path": "logs/eval-cc-1m-20261111-0801/transport-rollout-smoke/smoke-result.json",
+        "size": 6521,
+        "sha256": "2f28c9c5fc82abe1f4f65f77cddcaf7ff7d1ee12fbf767edaf2f4adddb01b26a"
+      },
+      {
+        "path": "logs/eval-cc-1m-20261111-0801/transport-rollout-smoke/smoke/max/agent-state.json",
+        "size": 1134,
+        "sha256": "25d29e075566c86abdd148f9e27f7e6717da43e5a7cf885de5ecb08a0fd4d065"
+      }
+    ],
+    "archive": {
+      "archived_at": 1794378960.3411708,
+      "root": "agent-root",
+      "archive": "agent-root.tar.gz",
+      "sha256": "743af478ad2fa9450c86a67ea06faba93be1d0cd35576c34c9c5e3e069f27bb6",
+      "bytes": 523853232,
+      "tar_compare_passed_before_reclaim": true,
+      "restore": "sudo tar -xpf agent-root.tar.gz -C ."
+    },
+    "independent_sha256sum": "206c8769b99de0958e06cc146b4d7323ad9f08ff6308e42efc9c3f8300f9b21d",
+    "answer_file_matches": true,
+    "archived_settings_idle_override": "0",
+    "limitation": "Real tool-loop integration smoke lasted 53.776 seconds; long waiting was separately verified with controlled local 430-second responses. This is supplemental validation and supplies no new scored formal result."
   }
 }
