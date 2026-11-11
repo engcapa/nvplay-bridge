@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794391978.648023,
+  "checkpoint_at": 1794391981.8485367,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261111-evening",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -983,8 +983,8 @@
     "fresh_controls_required": true
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794391923.3419528,
-    "commit": "64cb3c65fb6b8c3ee08458fa36e2746a351ea85f",
+    "attempted_at": 1794391978.76975,
+    "commit": "d38bd62fd695d823578a5e553b7dd8f476fe0013",
     "pushed": true,
     "returncode": 0
   },
@@ -1364,7 +1364,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794391978.650509,
+    "generated_at": 1794391981.8521655,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
@@ -1376,8 +1376,8 @@
   "combined_plan_positions_completed": 9,
   "campaign": {
     "controller_alive": true,
-    "status": "control_validated",
-    "task": "session-window-debug"
+    "status": "validating_controls",
+    "task": "embedding-drift-monitor"
   },
   "reboot_stop": {
     "stop_at": 1794413157.0,
@@ -1453,7 +1453,7 @@
     },
     {
       "path": "browser-supervisor-state.json",
-      "sha256": "2d3eff04b6fdaa8ac4e6fec2b2e63c480128ccc96dba5ff5056737018ea2fe05",
+      "sha256": "41ad66a53aa7cc9e5d7e9bfdec9cbe635b34f0f42e55f24aba48d8b1bf5e6c9c",
       "size": 102
     },
     {
@@ -1463,8 +1463,8 @@
     },
     {
       "path": "campaign-state.json",
-      "sha256": "58a15a3169fdf47729055f51f19d432c8371c0037bbfdedb19c7cc04a005bc53",
-      "size": 5999
+      "sha256": "c0aea68de8a280d726ef6b7f34b0190a54c5db2b3260adfd9e778a4a4842c11d",
+      "size": 6004
     },
     {
       "path": "cdp-observer-process.json",
@@ -1473,8 +1473,8 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "a247ef241aa104ed25490672855eaabbfc92fd069583c9cf0f77ed68656ae5de",
-      "size": 134
+      "sha256": "7c345f25cd59f6ad532624553ed37663a928d9194c2d25a8b1e0bb8aac00f276",
+      "size": 132
     },
     {
       "path": "checkpoint-process.json",
@@ -1730,6 +1730,16 @@
       "archive": "agent-root.tar.gz",
       "sha256": "7219d2098d5ffc9b3ba91eb87b2522a15677581dda40bf0fbaa2a0fe9a9a741a",
       "bytes": 4266819,
+      "tar_compare_passed_before_reclaim": true,
+      "restore": "sudo tar -xpf agent-root.tar.gz -C ."
+    },
+    {
+      "directory": "smoke/max",
+      "archived_at": 1794391979.0559297,
+      "root": "agent-root",
+      "archive": "agent-root.tar.gz",
+      "sha256": "49ac196f40d30295f92cecd9f6092bb6e4dfd2d4b93b4d016e9a87da652b33cc",
+      "bytes": 4267166,
       "tar_compare_passed_before_reclaim": true,
       "restore": "sudo tar -xpf agent-root.tar.gz -C ."
     }
