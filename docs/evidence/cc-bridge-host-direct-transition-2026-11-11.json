@@ -544,5 +544,38 @@
         "max_tokens": 131072
       }
     ]
+  },
+  "first_formal_request_completed": {
+    "event": "browser_done",
+    "ts": 1794394018.478821,
+    "id": "6ac963cb8cf54ea0a66e4cdf",
+    "sec": 609.17,
+    "counts": {
+      "thinking_chars": 1363,
+      "text_chars": 154,
+      "tool_calls": 1
+    },
+    "usage": {
+      "prompt_tokens": 4941,
+      "completion_tokens": 409,
+      "total_tokens": 5350,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 290
+      }
+    },
+    "attempt": 3,
+    "http_500_retries_before_success": 2
+  },
+  "repository_sync_during_run": {
+    "recorded_at": 1794394736.67998,
+    "merged_remote_bridge_change": "8b8f9b8",
+    "checkpoint_push_recovered": true,
+    "frozen_runner_hashes_unchanged": true,
+    "bridge_process_restarted": false,
+    "deployed_bridge_source_head": "73d9155d3365f0fe3f20263241ed00e35933cb78",
+    "scope": "Repository merge only; deployed evaluation bridge remains the frozen stage runtime."
   }
 }
