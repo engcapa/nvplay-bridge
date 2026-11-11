@@ -223,6 +223,10 @@ class BrowserPreparationError(BrowserError):
     """Preparation failed before arming/clicking; another tab may safely be tried."""
 
 
+class BrowserFetchError(BrowserError):
+    """The page's fetch rejected before receiving an HTTP response."""
+
+
 def _check(cancel: threading.Event, deadline: float) -> None:
     if cancel.is_set():
         raise BrowserCancelled("客户端已取消请求")
@@ -496,7 +500,9 @@ class BrowserUpstream:
                 if status and status != 200:
                     if status > 0:
                         raise self._http_error(quoted_id, state, cancel, deadline, trace)
-                    raise BrowserError(f"上游请求未建立: {data[:500] or state.get('error')}")
+                    detail = data[:500] or str(state.get("error") or "")
+                    error_type = BrowserFetchError if detail.startswith("TypeError:") else BrowserError
+                    raise error_type(f"上游请求未建立: {detail}")
                 if data:
                     if status != 200:
                         raise BrowserError("上游数据缺少成功响应状态")

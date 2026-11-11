@@ -129,6 +129,25 @@ class BrowserHTTPErrorTests(unittest.TestCase):
             list(tab.stream({}))
         self.assertNotIsInstance(caught.exception, bu.BrowserHTTPError)
 
+    def test_fetch_typeerror_before_headers_has_its_own_failure_type(self):
+        tab = HTTPErrorTab([{"status": -1, "data": "", "done": True,
+                             "error": "TypeError: Failed to fetch"}])
+        with self.assertRaises(bu.BrowserFetchError) as caught:
+            list(tab.stream({}))
+        self.assertNotIsInstance(caught.exception, bu.BrowserHTTPError)
+        self.assertEqual(tab.aborts, 1)
+        self.assertFalse(tab._lock.locked())
+
+    def test_abort_construction_and_response_read_errors_are_not_fetch_rejections(self):
+        for status, error in ((-1, "AbortError: signal is aborted"),
+                              (0, "TypeError: invalid Request"),
+                              (200, "TypeError: Failed to fetch")):
+            with self.subTest(status=status, error=error):
+                tab = HTTPErrorTab([{"status": status, "data": "", "done": True, "error": error}])
+                with self.assertRaises(bu.BrowserError) as caught:
+                    list(tab.stream({}))
+                self.assertNotIsInstance(caught.exception, bu.BrowserFetchError)
+
 
 class CDPRetryTests(unittest.IsolatedAsyncioTestCase):
     async def test_delayed_long_pool_timeout_body_reaches_retry_policy(self):

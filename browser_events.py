@@ -8,7 +8,7 @@ import threading
 import time
 from collections.abc import AsyncIterator, Callable
 
-from browser_upstream import BrowserCancelled, BrowserError, BrowserHTTPError, ERROR_BODY_CHARS
+from browser_upstream import BrowserCancelled, BrowserError, BrowserFetchError, BrowserHTTPError, ERROR_BODY_CHARS
 from stream_support import SSEDecoder
 
 BACKPRESSURE_TIMEOUT = 30.0
@@ -94,6 +94,8 @@ async def browser_events(browser, payload: dict, timeout: float, heartbeat: floa
                          "message": str(exc)[:ERROR_BODY_CHARS + 256]}
                 if isinstance(exc, BrowserHTTPError):
                     error["http_status"] = exc.status
+                if isinstance(exc, BrowserFetchError):
+                    error["fetch_failed"] = True
                 terminal_error.append(error)
         finally:
             try:

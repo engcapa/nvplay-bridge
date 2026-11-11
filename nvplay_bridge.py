@@ -95,6 +95,8 @@ BROWSER_POOL_TIMEOUT_RETRIES = max(0, int(os.getenv("BROWSER_POOL_TIMEOUT_RETRIE
 BROWSER_POOL_TIMEOUT_BACKOFF = max(0.0, float(os.getenv("BROWSER_POOL_TIMEOUT_BACKOFF", "5")))
 BROWSER_HTTP_5XX_RETRIES = max(0, int(os.getenv("BROWSER_HTTP_5XX_RETRIES", "1")))
 BROWSER_HTTP_5XX_BACKOFF = max(0.0, float(os.getenv("BROWSER_HTTP_5XX_BACKOFF", "2")))
+BROWSER_FETCH_RETRIES = max(0, int(os.getenv("BROWSER_FETCH_RETRIES", "1")))
+BROWSER_FETCH_BACKOFF = max(0.0, float(os.getenv("BROWSER_FETCH_BACKOFF", "2")))
 PLACEHOLDER_RETRY = int(os.getenv("PLACEHOLDER_RETRY", "1"))
 LOOP_BREAKER = int(os.getenv("LOOP_BREAKER", "0"))
 HISTORY_REASONING = os.getenv("HISTORY_REASONING", "preserve").strip().lower()
@@ -973,7 +975,7 @@ async def _browser_events_with_retry(payload: dict[str, Any], *, buffered: bool)
     started = time.monotonic()
     deadline = started + BROWSER_TIMEOUT
     current = payload
-    attempt = pool_retries = http_retries = 0
+    attempt = pool_retries = http_retries = fetch_retries = 0
     placeholder_retried = False
     while True:
         attempt += 1
@@ -1094,11 +1096,17 @@ async def _browser_events_with_retry(payload: dict[str, Any], *, buffered: bool)
 
         pool_timeout = _is_upstream_pool_timeout(failure)
         http_failure = failure.get("http_status") in (500, 502, 503, 504)
-        if pool_timeout or http_failure:
-            retries = pool_retries if pool_timeout else http_retries
-            limit = BROWSER_POOL_TIMEOUT_RETRIES if pool_timeout else BROWSER_HTTP_5XX_RETRIES
-            initial_backoff = BROWSER_POOL_TIMEOUT_BACKOFF if pool_timeout else BROWSER_HTTP_5XX_BACKOFF
-            policy = "nvidia_pool_acquire_timeout" if pool_timeout else "upstream_http_5xx"
+        fetch_failure = failure.get("fetch_failed") is True
+        if pool_timeout or http_failure or fetch_failure:
+            if pool_timeout:
+                retries, limit = pool_retries, BROWSER_POOL_TIMEOUT_RETRIES
+                initial_backoff, policy = BROWSER_POOL_TIMEOUT_BACKOFF, "nvidia_pool_acquire_timeout"
+            elif http_failure:
+                retries, limit = http_retries, BROWSER_HTTP_5XX_RETRIES
+                initial_backoff, policy = BROWSER_HTTP_5XX_BACKOFF, "upstream_http_5xx"
+            else:
+                retries, limit = fetch_retries, BROWSER_FETCH_RETRIES
+                initial_backoff, policy = BROWSER_FETCH_BACKOFF, "browser_fetch_failed"
             remaining = max(0, deadline - time.monotonic())
             backoff = min(30.0, initial_backoff * 2 ** min(retries, 6))
             delay = backoff + random.uniform(0, min(1.0, backoff * 0.2))
@@ -1108,8 +1116,10 @@ async def _browser_events_with_retry(payload: dict[str, Any], *, buffered: bool)
             if reason is None:
                 if pool_timeout:
                     pool_retries += 1
-                else:
+                elif http_failure:
                     http_retries += 1
+                else:
+                    fetch_retries += 1
                 log("upstream_retry", reason=policy, retry=retries + 1,
                     next_attempt=attempt + 1, delay=round(delay, 3), remaining=round(remaining, 3),
                     status=failure["status"], error=failure["message"], counts=counts, usage=usage)

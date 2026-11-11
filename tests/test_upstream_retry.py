@@ -15,7 +15,7 @@ os.environ.setdefault("UPSTREAM_KIND", "browser")
 
 import httpx
 import uvicorn
-from browser_upstream import BrowserError, BrowserHTTPError
+from browser_upstream import BrowserError, BrowserFetchError, BrowserHTTPError
 import nvplay_bridge as bridge
 
 
@@ -61,6 +61,7 @@ class RetrySettings:
         self.settings = patch.multiple(bridge, UPSTREAM_KIND="browser", BROWSER_TIMEOUT=3,
             BROWSER_POOL_TIMEOUT_RETRIES=2, BROWSER_POOL_TIMEOUT_BACKOFF=0.01,
             BROWSER_HTTP_5XX_RETRIES=1, BROWSER_HTTP_5XX_BACKOFF=0.01,
+            BROWSER_FETCH_RETRIES=1, BROWSER_FETCH_BACKOFF=0.01,
             BROWSER_HEARTBEAT_SEC=0.01, PLACEHOLDER_RETRY=1)
         self.settings.start()
         self.addCleanup(self.settings.stop)
@@ -149,6 +150,45 @@ class RetryPolicyTests(RetrySettings, unittest.IsolatedAsyncioTestCase):
                 self.assertEqual(len(browser.calls), 1)
                 self.assertEqual(output[-1]["type"], "error")
 
+    async def test_typed_fetch_rejection_retries_with_unchanged_payload_and_cleanup(self):
+        failure = BrowserFetchError("上游请求未建立: TypeError: Failed to fetch")
+        browser = ScriptBrowser([[failure], [frame({"content": "recovered"}, "stop")]])
+        payload = {"messages": [{"role": "user", "content": "hello"}], "max_tokens": 128000}
+        output = await self.collect(browser, payload=payload)
+        self.assertEqual(browser.calls, [payload, payload])
+        self.assertEqual(browser.closed, [0, 1])
+        self.assertEqual([event["text"] for event in output if event["type"] == "text"], ["recovered"])
+        self.assertEqual(self.logs("upstream_retry")[-1]["reason"], "browser_fetch_failed")
+        self.assertGreater(browser.timeouts[0], browser.timeouts[1])
+
+    async def test_fetch_retry_limit_disable_and_deadline_keep_original_failure(self):
+        message = "上游请求未建立: TypeError: Failed to fetch"
+        for limit in (0, 1, 2):
+            with self.subTest(limit=limit), patch.object(bridge, "BROWSER_FETCH_RETRIES", limit):
+                browser = ScriptBrowser([[BrowserFetchError(message)]])
+                output = await self.collect(browser)
+                self.assertEqual(len(browser.calls), limit + 1)
+                self.assertEqual(output[-1]["message"], message)
+                self.assertTrue(output[-1]["fetch_failed"])
+                self.assertEqual(self.logs("upstream_retry_skipped")[-1]["reason"], "retry_limit")
+        browser = ScriptBrowser([[BrowserFetchError(message)]])
+        with patch.multiple(bridge, BROWSER_TIMEOUT=0.05, BROWSER_FETCH_BACKOFF=0.1):
+            output = await self.collect(browser)
+        self.assertEqual(len(browser.calls), 1)
+        self.assertEqual(output[-1]["message"], message)
+        self.assertEqual(self.logs("upstream_retry_skipped")[-1]["reason"], "deadline")
+
+    async def test_fetch_retry_never_replays_delivered_thinking_text_or_tool(self):
+        for delta in ({"reasoning_content": "thinking"}, {"content": "partial"},
+                      {"tool_calls": [{"index": 0, "id": "a", "function": {"name": "read", "arguments": '{}'}}]}):
+            with self.subTest(delta=delta):
+                browser = ScriptBrowser([[frame(delta), BrowserFetchError("fetch rejected")],
+                                         [frame({"content": "WRONG"}, "stop")]])
+                output = await self.collect(browser)
+                self.assertEqual(len(browser.calls), 1)
+                self.assertEqual(output[-1]["message"], "fetch rejected")
+                self.assertEqual(self.logs("upstream_retry_skipped")[-1]["reason"], "content_committed")
+
     async def test_generic_retry_exhaustion_and_deadline_preserve_failure(self):
         browser = ScriptBrowser([[BrowserHTTPError(500, "original HTTP failure")]])
         output = await self.collect(browser)
@@ -173,14 +213,15 @@ class RetryPolicyTests(RetrySettings, unittest.IsolatedAsyncioTestCase):
                 self.assertEqual(output[-1]["message"], "server error")
                 self.assertEqual(self.logs("upstream_retry_skipped")[-1]["reason"], "content_committed")
 
-    async def test_generic_and_pool_timeout_retry_budgets_are_independent(self):
-        browser = ScriptBrowser([[BrowserHTTPError(500, "server error")], [pool_error()],
+    async def test_http_pool_timeout_and_fetch_retry_budgets_are_independent(self):
+        browser = ScriptBrowser([[BrowserHTTPError(500, "server error")],
+                                 [BrowserFetchError("fetch rejected")], [pool_error()],
                                  [frame({"content": "recovered"}, "stop")]])
         output = await self.collect(browser)
-        self.assertEqual(len(browser.calls), 3)
+        self.assertEqual(len(browser.calls), 4)
         self.assertEqual([event["text"] for event in output if event["type"] == "text"], ["recovered"])
         self.assertEqual([event["reason"] for event in self.logs("upstream_retry")],
-                         ["upstream_http_5xx", "nvidia_pool_acquire_timeout"])
+                         ["upstream_http_5xx", "browser_fetch_failed", "nvidia_pool_acquire_timeout"])
 
     async def test_thinking_text_and_tool_delivery_each_prevent_replay(self):
         for delta in ({"reasoning_content": "thinking"}, {"content": "partial"},
@@ -300,12 +341,13 @@ class HTTPRetryTests(RetrySettings, unittest.IsolatedAsyncioTestCase):
             ("/v1/messages", "event: ping", "event: message_stop", "event: message_start"),
             ("/v1/responses", ": ping", "event: response.completed", "event: response.created"),
         ):
-            for failure in (pool_error(), BrowserHTTPError(500, "Internal Server Error")):
+            for failure in (pool_error(), BrowserHTTPError(500, "Internal Server Error"),
+                            BrowserFetchError("上游请求未建立: TypeError: Failed to fetch")):
                 with self.subTest(endpoint=endpoint, failure=str(failure)):
                     browser = ScriptBrowser([[failure], [frame({"content": "RECOVERED"}, "stop")]])
                     async with httpx.AsyncClient(trust_env=False, timeout=3) as client:
                         with patch.multiple(bridge, _browser=browser, BROWSER_POOL_TIMEOUT_BACKOFF=0.2,
-                                            BROWSER_HTTP_5XX_BACKOFF=0.2):
+                                            BROWSER_HTTP_5XX_BACKOFF=0.2, BROWSER_FETCH_BACKOFF=0.2):
                             async with client.stream("POST", self.base + endpoint, json=self.request_body(endpoint)) as response:
                                 self.assertEqual(response.status_code, 200)
                                 lines, seen = response.aiter_lines(), []
@@ -355,15 +397,16 @@ class HTTPRetryTests(RetrySettings, unittest.IsolatedAsyncioTestCase):
 
     async def test_both_nonstream_protocols_recover_without_leaking_failed_attempt(self):
         for endpoint in ("/v1/messages", "/v1/responses"):
-            with self.subTest(endpoint=endpoint):
-                browser = ScriptBrowser([[pool_error()], [frame({"content": "JSON_OK"}, "stop")]])
-                async with httpx.AsyncClient(trust_env=False, timeout=3) as client:
-                    with patch.object(bridge, "_browser", browser):
-                        response = await client.post(self.base + endpoint, json=self.request_body(endpoint, stream=False))
-                self.assertEqual(response.status_code, 200, response.text)
-                self.assertIn("JSON_OK", response.text)
-                self.assertNotIn("Pool#acquire", response.text)
-                self.assertEqual(len(browser.calls), 2)
+            for failure in (pool_error(), BrowserFetchError("上游请求未建立: TypeError: Failed to fetch")):
+                with self.subTest(endpoint=endpoint, failure=str(failure)):
+                    browser = ScriptBrowser([[failure], [frame({"content": "JSON_OK"}, "stop")]])
+                    async with httpx.AsyncClient(trust_env=False, timeout=3) as client:
+                        with patch.object(bridge, "_browser", browser):
+                            response = await client.post(self.base + endpoint, json=self.request_body(endpoint, stream=False))
+                    self.assertEqual(response.status_code, 200, response.text)
+                    self.assertIn("JSON_OK", response.text)
+                    self.assertNotIn(str(failure), response.text)
+                    self.assertEqual(len(browser.calls), 2)
 
     async def test_retry_sleep_allows_other_requests_to_use_service(self):
         browser = ScriptBrowser([[pool_error()], [frame({"content": "OTHER_CLIENT"}, "stop")],
