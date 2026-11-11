@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794440437.4020503,
+  "checkpoint_at": 1794440440.9550822,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261112",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -854,8 +854,8 @@
     "isolation_boundary": "Real dedicated Unix UID and protected source directories; shared host filesystem, kernel and network"
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794440434.5736704,
-    "commit": "798d13925dc431defa528c485887499c1902a51a",
+    "attempted_at": 1794440437.4297228,
+    "commit": "8ec79b1437c94ae20bbcfb16cdbdb439d27d3aef",
     "pushed": true,
     "returncode": 0
   },
@@ -1254,7 +1254,7 @@
   "controls": {},
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794440437.4034784,
+    "generated_at": 1794440440.9565248,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
@@ -1267,7 +1267,7 @@
   "campaign": {
     "controller_alive": true,
     "status": "preparing",
-    "task": "mvcc-lsm-compaction"
+    "task": "ks-solver-cpp"
   },
   "status": "preparing_environment",
   "bridge_health": {
@@ -1353,8 +1353,8 @@
     },
     {
       "path": "browser-supervisor-state.json",
-      "sha256": "ac3f7c63c6e50e0102c9309891627cf055ea31d0b9e72034f30c99cf3b0ae0bf",
-      "size": 101
+      "sha256": "de8217df4cad098e4a1f85d28b1c2e4d17260fa28f38d46e8779167c3db9b4fa",
+      "size": 102
     },
     {
       "path": "campaign-launch-process.json",
@@ -1363,8 +1363,8 @@
     },
     {
       "path": "campaign-state.json",
-      "sha256": "de21f53132abe534a0e0a6bf548afd96d065749fee2473032003b670b3707891",
-      "size": 6526
+      "sha256": "364ab37c5aef986b5a5aa63c928d1a18a1816bc7f3a30b8c8399996d26fb7d3b",
+      "size": 6520
     },
     {
       "path": "cdp-observer-process.json",
@@ -1373,7 +1373,7 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "05011d830cc194e93e4c7c6f4703fa744f1ebe180c4c39fd4bc56526404577ac",
+      "sha256": "d95feac0dbdb7754db88e9ea96418d1653d8050ec15f0d930d2ceb544d957843",
       "size": 134
     },
     {
@@ -1443,8 +1443,8 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "071b1197c2ed912b36d0b030d3c0cadb9f8e11bc4b51bbaa6d1d9f8b7c5ee125",
-      "size": 716
+      "sha256": "ffea9baf7fde15c2c950043c0de4099c475c65ac5db1c523e75355eb8a8b1720",
+      "size": 799
     },
     {
       "path": "restore-fixed-regression.log",
