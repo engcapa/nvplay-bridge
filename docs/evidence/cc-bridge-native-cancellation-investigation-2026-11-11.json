@@ -1,0 +1,116 @@
+{
+  "recorded_at": 1794375180.9305782,
+  "status": "investigating_client_cancellations_no_live_configuration_change",
+  "cc_version": "2.1.322",
+  "cc_sha256": "bfb3703ad5380242328459bc62ada4bde8ae7ba57c6e1eeadb9c00e08874c478",
+  "observed_max_nonstream_requests": [
+    {
+      "id": "7c9d17c3",
+      "started_at": 1794373948.2630286,
+      "effort": "max",
+      "max_tokens": 131072,
+      "terminal": {
+        "ts": 1794374252.7456243,
+        "event": "browser_cancelled",
+        "id": "7c9d17c3",
+        "attempt": 1,
+        "sec": 304.483
+      }
+    },
+    {
+      "id": "68aaf890",
+      "started_at": 1794374271.5360532,
+      "effort": "max",
+      "max_tokens": 131072,
+      "terminal": {
+        "ts": 1794374631.9821608,
+        "event": "browser_cancelled",
+        "id": "68aaf890",
+        "attempt": 1,
+        "sec": 360.446
+      }
+    },
+    {
+      "id": "b052b321",
+      "started_at": 1794374665.813789,
+      "effort": "max",
+      "max_tokens": 131072,
+      "terminal": {
+        "ts": 1794375026.3281126,
+        "event": "browser_cancelled",
+        "id": "b052b321",
+        "attempt": 1,
+        "sec": 360.514
+      }
+    }
+  ],
+  "local_body_delay_probe": {
+    "identity": {
+      "probe_sha256": "205399a28bcbcc9b088ed4ccc7869898bbd69258e9ad3293d45149d37bb06ed6",
+      "pinned_cli_sha256": "bfb3703ad5380242328459bc62ada4bde8ae7ba57c6e1eeadb9c00e08874c478",
+      "node_version": null,
+      "delay_seconds": 310.0,
+      "nvidia_requests": 0,
+      "delay_phase": "body",
+      "native_idle_timeout_disabled": false,
+      "production_environment_supplied": true,
+      "native_cli_version": "2.1.322 (Claude Code)"
+    },
+    "result": {
+      "results": [
+        {
+          "case": "native-proot",
+          "process_environment_timeout": true,
+          "adapter": false,
+          "exit_code": 0,
+          "duration_seconds": 310.961,
+          "answer": "CONTROLLED_DELAYED_HEADERS_OK",
+          "is_error": false,
+          "success": true,
+          "request_counts": {
+            "stream": 1,
+            "nonstream": 1
+          },
+          "received_delayed_headers": true,
+          "closed_before_delayed_headers": false
+        }
+      ],
+      "nvidia_requests": 0
+    },
+    "fingerprints": [
+      {
+        "path": "logs/eval-cc-1m-20261111-0801/path-cc-body-idle-baseline/identity.json",
+        "sha256": "87dc593e5b87a2e174361cfba69d99c3eda0806a2aff63c1896b7ad36669adf0",
+        "size": 412
+      },
+      {
+        "path": "logs/eval-cc-1m-20261111-0801/path-cc-body-idle-baseline/result.json",
+        "sha256": "3158beaff7c6766c96da12a0838629fc28ccef054a7e892f4c2517cd19006c27",
+        "size": 474
+      },
+      {
+        "path": "logs/eval-cc-1m-20261111-0801/path-cc-body-idle-baseline/probe-source.py",
+        "sha256": "205399a28bcbcc9b088ed4ccc7869898bbd69258e9ad3293d45149d37bb06ed6",
+        "size": 17111
+      }
+    ],
+    "interpretation": "Received headers and one whitespace byte, then waited 310 seconds for JSON; completed without early peer closure. Historical result field names mention headers; identity.delay_phase=body is authoritative."
+  },
+  "binary_source_observation": {
+    "fallback_definition_offset": 296116259,
+    "fallback_timeout": "API_TIMEOUT_MS if positive, capped at 2147483647; otherwise 300000 (remote: 120000).",
+    "formal_bootstrap_api_timeout_ms": 29400000,
+    "limitations": "Read-only inspection of shipped CLI; no debug-file on existing formal sessions, so their effective internal timeout and underlying exception are unavailable."
+  },
+  "longer_headers_probe": {
+    "directory": "logs/eval-cc-1m-20261111-0801/path-cc-headers-430-production-env",
+    "delay_seconds": 430,
+    "status": "running",
+    "nvidia_requests": 0
+  },
+  "conclusions": [
+    "310-second local body delay passed with production request environment and native CLI/PRoot.",
+    "Observed cancellations are not explained by a universal 300-second CLI cutoff.",
+    "Do not apply speculative timeout changes to running formal attempts; all errors and cancellations remain recorded."
+  ]
+}
