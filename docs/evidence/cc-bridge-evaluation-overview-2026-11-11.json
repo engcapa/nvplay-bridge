@@ -1,6 +1,6 @@
 {
-  "recorded_at": 1794409593.2429812,
-  "as_of_beijing": "2026-11-11T23:06:33+08:00",
+  "recorded_at": 1794413360.7618299,
+  "as_of_beijing": "2026-11-12T00:05:57+08:00",
   "completed_benchmark_observations": 23,
   "early_observations": 12,
   "current_30_position_plan": {
@@ -38,9 +38,9 @@
     },
     {
       "file": "cc-bridge-evening-continuation-2026-11-11.json",
-      "sha256": "9b3b6a41dc4e0b92d61d3bc2e095b8cf21768bb62bab3ff5496236538c892230",
+      "sha256": "64e46426d9f41be1de564cc0ed82c37b02155310c4787e5906e4f71678473192",
       "completed_rows": 2,
-      "at": 1794409577.82886
+      "at": 1794413159.6555054
     }
   ],
   "group_counts": {
@@ -571,18 +571,7 @@
       "source_file": "cc-bridge-evening-continuation-2026-11-11.json"
     }
   ],
-  "current_pending": [
-    {
-      "attempt": "runs/formal-1m-720k-host-body-read-clean-20261111/session-window-debug--max--r2",
-      "status": "agent_running",
-      "task": "session-window-debug",
-      "effort": "max",
-      "started_at": 1794407879.5171292,
-      "elapsed_seconds": 1698.3,
-      "tool_calls": 42,
-      "last_tool": "Bash"
-    }
-  ],
+  "current_pending": [],
   "excluded_from_benchmark_grades": [
     "administrative interruptions",
     "missing terminal evidence after reboot",
@@ -616,5 +605,39 @@
     ],
     "independent_repeats_each": 3,
     "positions": 30
-  }
+  },
+  "status": "formal_paused",
+  "administrative_interruptions": [
+    {
+      "status": "administratively_interrupted",
+      "score": null,
+      "excluded_from_model_grades": true,
+      "recorded_at": 1794413159.6059587,
+      "requested_stop_at": 1794413157.0,
+      "reason": "user requested container reboot",
+      "task": "session-window-debug",
+      "effort": "max",
+      "stage": "formal-1m-720k-host-body-read-clean-20261111",
+      "repeat": 2,
+      "original_attempt": "runs/formal-1m-720k-host-body-read-clean-20261111/session-window-debug--max--r2",
+      "archive": "runs-interrupted/formal-1m-720k-host-body-read-clean-20261111/session-window-debug--max--r2--1794413159605954613",
+      "progress_at_stop": {
+        "status": "agent_running",
+        "started_at": 1794407879.5171292,
+        "elapsed_seconds": 5277.7,
+        "tool_calls": 56,
+        "last_tool": "Glob"
+      },
+      "bridge": {
+        "logical_requests": 54,
+        "upstream_attempts": 63,
+        "errors": 6,
+        "retries": 9,
+        "cancelled": 1,
+        "unfinished": 0
+      }
+    }
+  ],
+  "final_stop_evidence": "cc-bridge-evening-final-stop-2026-11-12.json",
+  "final_checkpoint_commit": "4374e89c608afedd689cfec49d41001e04037411"
 }

@@ -1,6 +1,10 @@
 # CC + bridge 评测重启检查点（2026-11-10）
 
-Terminal-Bench 4.0.0 五题、当前 30 个计划位置和累计 23 次基准观察的分阶段汇总，见 [基准评测概览（2026-11-11 23:05）](cc-bridge-evaluation-overview-2026-11-11.md)；当前计划为 11/30，后续状态以最新 checkpoint 为准。
+**2026-11-12 00:05:57 已按七小时约定停机，可以重启容器。** 累计完成 **11/30**，产物通过 7 次、端到端成功 6 次；所有旧阶段和失败保留。最终 checkpoint `4374e89` 已推送。`session-window-debug` max/r2 在截止时仍无客户端终态，运行 5277.7 秒、56 次工具调用，按行政中断记录、`score=null`；54 个逻辑请求、63 次上游尝试、6 次错误、9 次桥内重试，停机取消 1 个，无遗留请求。未对部分产物判分。
+
+已独立核对调度器、CC UID、自动 checkpoint、bridge、Brave、监督器和监控全部退出，8083/9225 关闭，`/app`、`/solution` 已清理；详细终态见 [停机核验](evidence/cc-bridge-evening-final-stop-2026-11-12.json)。下次明确恢复时，从剩余 19 个位置的 `session-window-debug` max/r2 开始，使用本容器直接运行的新会话，禁止恢复 PRoot、旧 PID、旧链接或本轮已过期截止。远端合并 `4949f60` 已推送并通过 286 项回归，但尚未实际部署；新服务须另记阶段并完成 high/max 真实烟测。停机前两次 HTTP 400 已完整读取错误正文，具体拒绝原因尚未确定，不能补称为上下文超限。
+
+Terminal-Bench 4.0.0 五题、当前 30 个计划位置和累计 23 次基准观察的分阶段汇总，见 [基准评测概览](cc-bridge-evaluation-overview-2026-11-11.md)；当前计划为 11/30，后续状态以最新 checkpoint 为准。
 
 **2026-11-11 22:38 最新交接：累计完成 11/30。** 修复版 `formal-1m-720k-host-body-read-clean-20261111` 的 `session-window-debug` high/r2 在本容器直接运行并自然完成：原始验收 **7/7、产物 1 分、端到端成功**，58 个请求无错误、重试或取消；当前 max/r2 启动，剩余 19 个位置。历史失败及未通过的部署验证全部保留。查看 [独立验收证据](evidence/cc-bridge-host-formal-results-2026-11-11.json)、[实际切换](evidence/cc-bridge-http-error-body-rollout-2026-11-11.json) 和 [持续 checkpoint](evidence/cc-bridge-evening-continuation-2026-11-11.json)。7 小时截止仍为 **2026-11-12 00:05:57（北京时间）**。
 

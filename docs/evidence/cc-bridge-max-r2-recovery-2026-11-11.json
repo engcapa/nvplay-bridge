@@ -186,5 +186,18 @@
   "logical_terminal_errors": 1,
   "cc_session_ended": false,
   "model_grade": null,
-  "excluded_from_model_grades_until_original_verifier": true
+  "excluded_from_model_grades_until_original_verifier": true,
+  "session_final_status": "administratively_interrupted_at_user_deadline",
+  "session_score": null,
+  "session_grade_excluded": true,
+  "client_terminal_result_present": false,
+  "session_final_bridge_totals": {
+    "logical_requests": 54,
+    "upstream_attempts": 63,
+    "errors": 6,
+    "retries": 9,
+    "cancelled": 1,
+    "unfinished": 0
+  },
+  "final_stop_evidence": "cc-bridge-evening-final-stop-2026-11-12.json"
 }

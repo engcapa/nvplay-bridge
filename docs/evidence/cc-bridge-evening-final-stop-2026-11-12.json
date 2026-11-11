@@ -1,0 +1,320 @@
+{
+  "verified_at": 1794413333.0243163,
+  "status": "formal_paused",
+  "administrative_stop_at_unix": 1794413157,
+  "service_stop_completed_at": 1794413159.654964,
+  "stop_result": {
+    "paused": true,
+    "completed_local": 2,
+    "interrupted": 1,
+    "final_checkpoint_pushed": true,
+    "checkpoint_commit": "4374e89c608afedd689cfec49d41001e04037411",
+    "paused_at": 1794413159.654964
+  },
+  "completed_total": 11,
+  "completed_local": 2,
+  "remaining_positions": 19,
+  "artifact_passes_current_plan": 7,
+  "end_to_end_successes_current_plan": 6,
+  "interrupted_positions": [
+    {
+      "status": "administratively_interrupted",
+      "score": null,
+      "excluded_from_model_grades": true,
+      "recorded_at": 1794413159.6059587,
+      "requested_stop_at": 1794413157.0,
+      "reason": "user requested container reboot",
+      "task": "session-window-debug",
+      "effort": "max",
+      "stage": "formal-1m-720k-host-body-read-clean-20261111",
+      "repeat": 2,
+      "original_attempt": "runs/formal-1m-720k-host-body-read-clean-20261111/session-window-debug--max--r2",
+      "archive": "runs-interrupted/formal-1m-720k-host-body-read-clean-20261111/session-window-debug--max--r2--1794413159605954613",
+      "progress_at_stop": {
+        "status": "agent_running",
+        "started_at": 1794407879.5171292,
+        "elapsed_seconds": 5277.7,
+        "tool_calls": 56,
+        "last_tool": "Glob"
+      },
+      "bridge": {
+        "logical_requests": 54,
+        "upstream_attempts": 63,
+        "errors": 6,
+        "retries": 9,
+        "cancelled": 1,
+        "unfinished": 0
+      }
+    }
+  ],
+  "interrupted_client_terminal_result_count": 0,
+  "shutdown": {
+    "checks_passed": true,
+    "processes": [
+      {
+        "record": "campaign-launch-process.json",
+        "recorded_identity": {
+          "pid": 462624,
+          "boot_id": "a5433646-d26c-4433-92b6-b498d40bdf91",
+          "start_ticks": "1921785"
+        },
+        "alive_identity_matches": false
+      },
+      {
+        "record": "transport-transition-process.json",
+        "recorded_identity": {
+          "pid": 457699,
+          "boot_id": "a5433646-d26c-4433-92b6-b498d40bdf91",
+          "start_ticks": "1907935"
+        },
+        "alive_identity_matches": false
+      },
+      {
+        "record": "reboot-stop-process.json",
+        "recorded_identity": {
+          "pid": 132891,
+          "boot_id": "a5433646-d26c-4433-92b6-b498d40bdf91",
+          "start_ticks": "514995"
+        },
+        "alive_identity_matches": false
+      },
+      {
+        "record": "browser-supervisor-process.json",
+        "recorded_identity": {
+          "pid": 30728,
+          "boot_id": "a5433646-d26c-4433-92b6-b498d40bdf91",
+          "start_ticks": "163240"
+        },
+        "alive_identity_matches": false
+      },
+      {
+        "record": "checkpoint-process.json",
+        "recorded_identity": {
+          "pid": 457981,
+          "boot_id": "a5433646-d26c-4433-92b6-b498d40bdf91",
+          "start_ticks": "1908602"
+        },
+        "alive_identity_matches": false
+      },
+      {
+        "record": "resource-monitor-process.json",
+        "recorded_identity": {
+          "pid": 30731,
+          "boot_id": "a5433646-d26c-4433-92b6-b498d40bdf91",
+          "start_ticks": "163242"
+        },
+        "alive_identity_matches": false
+      },
+      {
+        "record": "cdp-observer-process.json",
+        "recorded_identity": {
+          "pid": 36734,
+          "boot_id": "a5433646-d26c-4433-92b6-b498d40bdf91",
+          "start_ticks": "181071"
+        },
+        "alive_identity_matches": false
+      },
+      {
+        "record": "bridge-monitor-process.json",
+        "recorded_identity": {
+          "pid": 28188,
+          "boot_id": "a5433646-d26c-4433-92b6-b498d40bdf91",
+          "start_ticks": "155705"
+        },
+        "alive_identity_matches": false
+      },
+      {
+        "record": "bridge-runtime.json",
+        "recorded_identity": {
+          "pid": 457990,
+          "boot_id": "a5433646-d26c-4433-92b6-b498d40bdf91",
+          "start_ticks": "1908623"
+        },
+        "alive_identity_matches": false
+      },
+      {
+        "record": "brave-process.json",
+        "recorded_identity": {
+          "pid": 27929,
+          "boot_id": "a5433646-d26c-4433-92b6-b498d40bdf91",
+          "start_ticks": "155301"
+        },
+        "alive_identity_matches": false
+      }
+    ],
+    "agent_uid_processes": [],
+    "ports": {
+      "8083": {
+        "listening": false
+      },
+      "9225": {
+        "listening": false
+      }
+    },
+    "active_requests": 0,
+    "links": {
+      "/app": {
+        "exists": false,
+        "symlink": false
+      },
+      "/solution": {
+        "exists": false,
+        "symlink": false
+      }
+    }
+  },
+  "late_http_400_evidence": [
+    {
+      "ts": 1794413101.9724984,
+      "event": "browser_http_error",
+      "id": "7f4bd01050af41ff99d392f5",
+      "attempt": 1,
+      "sec": 81.979,
+      "status": 400,
+      "body_state": "complete",
+      "body_chars": 294
+    },
+    {
+      "ts": 1794413102.0287893,
+      "event": "browser_error",
+      "id": "7f4bd01050af41ff99d392f5",
+      "attempt": 1,
+      "sec": 82.036,
+      "status": 400,
+      "counts": {
+        "thinking_chars": 0,
+        "text_chars": 0,
+        "tool_calls": 0
+      },
+      "error_sha256": "56d7152b190f382ab69b0bab63b7d299acb5485d92fb1b9780bff0afcb181d22"
+    },
+    {
+      "ts": 1794413131.540109,
+      "event": "browser_http_error",
+      "id": "d55a6dfb053841ba8ba70a87",
+      "attempt": 1,
+      "sec": 29.486,
+      "status": 400,
+      "body_state": "complete",
+      "body_chars": 294
+    },
+    {
+      "ts": 1794413131.6347096,
+      "event": "browser_error",
+      "id": "d55a6dfb053841ba8ba70a87",
+      "attempt": 1,
+      "sec": 29.581,
+      "status": 400,
+      "counts": {
+        "thinking_chars": 0,
+        "text_chars": 0,
+        "tool_calls": 0
+      },
+      "error_sha256": "56d7152b190f382ab69b0bab63b7d299acb5485d92fb1b9780bff0afcb181d22"
+    }
+  ],
+  "http_400_cause": "Undetermined; bounded body capture completed and no context-limit claim is supported.",
+  "independent_completed_artifact_review": {
+    "reviewed_at": 1794413239.260813,
+    "attempts": [
+      {
+        "attempt": "runs/formal-1m-720k-host-body-read-clean-20261111/session-window-debug--high--r2",
+        "task": "session-window-debug",
+        "control": null,
+        "effort": "high",
+        "repeat": 2,
+        "artifact_score": 1,
+        "infrastructure_error": null,
+        "changed_original_files": [
+          "app/app/emitter.py",
+          "app/app/events.py",
+          "app/app/gc.py",
+          "app/app/merger.py",
+          "app/app/sessions.py"
+        ],
+        "added_files": [],
+        "removed_original_files": [],
+        "declared_read_only_files_unchanged": {
+          "app/app/types.py": true,
+          "app/app/DESIGN.md": true,
+          "app/app/__init__.py": true
+        },
+        "read_only_check_scope": "explicit session-window task constraints",
+        "artifact_errors_present": false,
+        "verifier": {
+          "test_count": 7,
+          "statuses": {
+            "passed": 7
+          },
+          "sha256": "8b7eb50ff26d8582c6ac08f474391cbee60c2226eb34023b1ac3a1693a65e682"
+        },
+        "client_terminal": {
+          "exit_code": 0,
+          "timed_out": false,
+          "subtype": "success",
+          "is_error": false,
+          "terminal_reason": "completed",
+          "api_error_status": null,
+          "prompt_too_long": false,
+          "reported_context_window_tokens": [
+            1000000
+          ]
+        }
+      },
+      {
+        "attempt": "runs/formal-1m-720k-host-cc-20261111-evening/ks-solver-cpp--high--r1",
+        "task": "ks-solver-cpp",
+        "control": null,
+        "effort": "high",
+        "repeat": 1,
+        "artifact_score": 0,
+        "infrastructure_error": null,
+        "changed_original_files": [],
+        "added_files": [],
+        "removed_original_files": [],
+        "declared_read_only_files_unchanged": {},
+        "read_only_check_scope": "not checked",
+        "artifact_errors_present": false,
+        "verifier": null,
+        "client_terminal": {
+          "exit_code": 1,
+          "timed_out": false,
+          "subtype": "success",
+          "is_error": true,
+          "terminal_reason": "api_error",
+          "api_error_status": 400,
+          "prompt_too_long": false,
+          "reported_context_window_tokens": [
+            1000000
+          ]
+        }
+      }
+    ],
+    "scope": "saved copied-artifact hashes and original verifier results; not a semantic code review"
+  },
+  "evidence_sha256": {
+    "pause-state.json": "12d9597b00b980353bca65b4618bc38ca04945486d8d52ba8aef05e8db29ad2c",
+    "reboot-stop-result.json": "67b3330e620d884f201b8ab4de51eda7f73fb2dda8a710f2ff0f2c85f95f5ee1",
+    "artifact-review-final.json": "ecbd2f53a30583ff6b8b49f794842292abc25d6acddf00ffba1d81afbc0f9aa3",
+    "bridge-debug.jsonl": "e86e9bb5460f9289d161c06750d9efba9def85b4615e4c74230700fdf58728f3",
+    "runs-interrupted/formal-1m-720k-host-body-read-clean-20261111/session-window-debug--max--r2--1794413159605954613/cc.jsonl": "3daa3af16aa233048c4c8f8a74214520cb181e39e5468a706eec2e3c6b3643c6"
+  },
+  "next_resume": {
+    "first_missing_position": {
+      "task": "session-window-debug",
+      "effort": "max",
+      "repeat": 2
+    },
+    "cc_runtime": "path-native-host",
+    "use_proot": false,
+    "model": "kimi-k3.1-pro[1m]",
+    "auto_compact_window_tokens": 720000,
+    "cc_max_output_environment": 128000,
+    "bridge_fixed_max_output_tokens": 131072,
+    "agent_wall_clock_timeout_seconds": null,
+    "API_FORCE_IDLE_TIMEOUT": "0",
+    "must_use_fresh_processes_and_new_deadline": true,
+    "completed_failures_preserved": true,
+    "pending_remote_changes_require_new_deployment_stage_and_smoke": true
+  }
+}
