@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794406649.3216138,
+  "checkpoint_at": 1794406662.5560944,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261111-evening",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -1257,8 +1257,8 @@
     "fresh_controls_required": true
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794406605.5157928,
-    "commit": "2df2e95711ba436e5b3c3bf3956873a5e992e2db",
+    "attempted_at": 1794406649.6791222,
+    "commit": "0afbab311f36c2cefaba48e4fd93f3e144487183",
     "pushed": true,
     "returncode": 0
   },
@@ -1702,7 +1702,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794406649.4925199,
+    "generated_at": 1794406662.7360058,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-1m-720k-host-cc-20261111-evening/28800/high": {
@@ -1817,9 +1817,9 @@
         "task": "session-window-debug",
         "effort": "high",
         "started_at": 1794405794.5199478,
-        "elapsed_seconds": 854.8,
-        "tool_calls": 25,
-        "last_tool": "Edit"
+        "elapsed_seconds": 868.1,
+        "tool_calls": 28,
+        "last_tool": "Bash"
       }
     ]
   },
@@ -1864,51 +1864,51 @@
   },
   "bridge_activity": {
     "events_last_300s": {
-      "browser_progress": 50,
-      "browser_buffer": 8,
-      "browser_pool_release": 8,
-      "browser_output_ready": 8,
-      "browser_first_content": 8,
-      "browser_done": 8,
-      "tool_call": 8,
-      "messages_done": 8,
-      "http_complete": 8,
-      "tool_result": 8,
-      "request": 8,
-      "payload": 8,
-      "browser_start": 8,
-      "browser_lease": 8,
-      "browser_tab": 8,
-      "browser_sent": 8,
-      "browser_first_data": 8,
-      "messages_first_block": 8
+      "browser_progress": 49,
+      "browser_buffer": 9,
+      "browser_pool_release": 9,
+      "browser_output_ready": 9,
+      "browser_first_content": 9,
+      "browser_done": 9,
+      "tool_call": 11,
+      "messages_done": 9,
+      "http_complete": 9,
+      "tool_result": 11,
+      "request": 9,
+      "payload": 9,
+      "browser_start": 9,
+      "browser_lease": 9,
+      "browser_tab": 9,
+      "browser_sent": 9,
+      "browser_first_data": 9,
+      "messages_first_block": 9
     },
     "active": [
       {
-        "id": "71c4c9b8849041e4b1df93d7",
+        "id": "a0e1b5a2daae4d10b64590e8",
         "retry_count": 0,
         "phase": "browser_progress",
         "attempt": 1,
         "reasoning_effort": "high",
-        "tab_id": "kpool=3",
+        "tab_id": "kpool=4",
         "counts": {
-          "thinking_chars": 23,
+          "thinking_chars": 173,
           "text_chars": 0,
           "tool_calls": 0
         },
         "usage": {
-          "prompt_tokens": 38833,
-          "completion_tokens": 6,
-          "total_tokens": 38839,
+          "prompt_tokens": 39475,
+          "completion_tokens": 43,
+          "total_tokens": 39518,
           "prompt_tokens_details": {
-            "cached_tokens": 38400
+            "cached_tokens": 38784
           },
           "completion_tokens_details": {
-            "reasoning_tokens": 6
+            "reasoning_tokens": 43
           }
         },
         "age_seconds": 7.3,
-        "activity_age_seconds": 2.2
+        "activity_age_seconds": 2.3
       }
     ],
     "recent_errors": [],
@@ -1968,7 +1968,7 @@
     },
     {
       "path": "browser-supervisor-state.json",
-      "sha256": "3783b51841a1ee465a0ed00fee2fafebe984b329733ea9b54c1df933f5a759a8",
+      "sha256": "f87bfa9bc15ac9ce1f571ab53613cc86774fecf65f3d8a82bef46f78f45e384a",
       "size": 102
     },
     {
@@ -1993,7 +1993,7 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "e2cabfa1cc5bd760db3d34798e20e524dda9f812dc4a22efa0377e09637df71c",
+      "sha256": "89aa4fe9c054fcee237374cea229c028790ef021989b55d331223d1fb6a97757",
       "size": 134
     },
     {
