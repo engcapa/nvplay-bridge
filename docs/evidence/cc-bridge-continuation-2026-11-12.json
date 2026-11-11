@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794440934.7468796,
+  "checkpoint_at": 1794441130.1886706,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261112",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -854,8 +854,8 @@
     "isolation_boundary": "Real dedicated Unix UID and protected source directories; shared host filesystem, kernel and network"
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794440912.9373322,
-    "commit": "2c7b8b6b9f92e2ea5db605b1a22b05a6bdcfdb22",
+    "attempted_at": 1794440934.7767782,
+    "commit": "800217e9c333e5f83df0d632a988bc4681fe6d1b",
     "pushed": true,
     "returncode": 0
   },
@@ -1274,6 +1274,17 @@
         "infrastructure_error": null
       }
     },
+    "mvcc-lsm-compaction": {
+      "valid": true,
+      "baseline": {
+        "score": 0,
+        "infrastructure_error": null
+      },
+      "oracle": {
+        "score": 1,
+        "infrastructure_error": null
+      }
+    },
     "session-window-debug": {
       "valid": true,
       "baseline": {
@@ -1288,7 +1299,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794440934.748498,
+    "generated_at": 1794441130.1903605,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
@@ -1300,7 +1311,7 @@
   "combined_plan_positions_completed": 11,
   "campaign": {
     "controller_alive": true,
-    "status": "validating_controls",
+    "status": "control_validated",
     "task": "mvcc-lsm-compaction"
   },
   "status": "validating_controls",
@@ -1368,7 +1379,7 @@
     },
     {
       "path": "browser-supervisor-state.json",
-      "sha256": "b167431943e6101c94c51fdd054d4c15255f31fb9854fbb6bfa0ebe5c313643e",
+      "sha256": "3156336768226c50e5dcbf22c2bea65837084c9fe7915b5293dd847828416fad",
       "size": 102
     },
     {
@@ -1378,8 +1389,8 @@
     },
     {
       "path": "campaign-state.json",
-      "sha256": "be80e03b3b4c972a679d62c15a6efcf912a3e1f5459747fc1f1367d845b512f8",
-      "size": 6536
+      "sha256": "be7614981dd2f23be1f1902213344587de5158847328fb2769a7f3f3b1b486b5",
+      "size": 6534
     },
     {
       "path": "cdp-observer-process.json",
@@ -1388,7 +1399,7 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "f297beb72c00e6a298f7654d6bb17b92eb74d1ee64d58fd7c3b6bd44ece90c79",
+      "sha256": "a511e587aad2b5d9621a35aec9079f402fafcdb820daee71b9500d3caf08f8f3",
       "size": 134
     },
     {
@@ -1410,6 +1421,11 @@
       "path": "controls/embedding-drift-monitor/result.json",
       "sha256": "a865b2c0ac339e51f6dc81291ff905ca1506d5312250a6263aa95affb6c2ff39",
       "size": 681
+    },
+    {
+      "path": "controls/mvcc-lsm-compaction/result.json",
+      "sha256": "01993ba9eae17d5dd0587bab5262b20c05b090842d3eb53ac991a0bcdbe93663",
+      "size": 683
     },
     {
       "path": "controls/session-window-debug/result.json",
@@ -1453,7 +1469,7 @@
     },
     {
       "path": "next-uid.json",
-      "sha256": "51a6ac0a599ce81d59ff0eb8d01445ec5db56cfee11296cbc605459404423413",
+      "sha256": "2d4acfea9c0ee7a8a6b1e68ddf7c74a36249b77dd7bb0aa481a8d5888d4a7f6d",
       "size": 20
     },
     {
@@ -1483,8 +1499,8 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "882e81ee2d05ad6a51418229f80180c754b195c7268a0171ab8fb925fade3900",
-      "size": 805
+      "sha256": "e026aa2bc147a6ca967a198181eced4087e63e014fed3933d2b45786525e3777",
+      "size": 808
     },
     {
       "path": "restore-fixed-regression.log",
@@ -1515,6 +1531,11 @@
       "path": "smoke-launch-process.json",
       "sha256": "38f84effe33b34df7bec8b38daff2a9e6698b7f821db84202becf275ff85f1e8",
       "size": 297
+    },
+    {
+      "path": "smoke-protocol-validation.json",
+      "sha256": "fc192498d2ef5794046cecd71913749efa8579b81cb80201492f9e2712539e41",
+      "size": 4208
     },
     {
       "path": "smoke-result.json",
