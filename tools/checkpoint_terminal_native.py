@@ -121,16 +121,22 @@ def collect(base: Path, health_url: str) -> dict:
             "status", "at", "current_agent_signalled") if key in transition}
     pause_path = base / "pause-state.json"
     pause = json.loads(pause_path.read_text()) if pause_path.is_file() else {}
+    stop_path = base / "reboot-stop-request.json"
+    if stop_path.is_file():
+        stop = json.loads(stop_path.read_text())
+        identity = stop.get("identity")
+        result["reboot_stop"] = {"stop_at": stop["stop_at"],
+            "armed": bool(not pause and identity and process_identity(identity["pid"]) == identity)}
     if pause:
         result["administrative_pause"] = {key: pause[key] for key in (
-            "status", "paused_at", "completed", "interrupted_attempts", "reason") if key in pause}
+            "status", "paused_at", "requested_stop_at", "completed", "interrupted_attempts", "reason") if key in pause}
     if report["pending"]:
         result["status"] = "formal_running"
     elif report["attempts"] and len(report["attempts"]) == expected:
         result["status"] = "formal_complete"
     elif result["campaign"]["controller_alive"] and result["campaign"].get("status") == "formal_running":
         result["status"] = "formal_running"
-    elif (report["attempts"] and pause.get("status") == "paused_for_reboot"
+    elif (pause.get("status") == "paused_for_reboot"
           and pause.get("completed") == len(report["attempts"])):
         result["status"] = "formal_paused"
     elif report["attempts"]:
@@ -173,7 +179,8 @@ def progress_key(data: dict) -> dict:
     report = data.get("results", {})
     activity = data.get("bridge_activity", {})
     return {**{key: data.get(key) for key in ("status", "protocol", "campaign", "controls", "bridge_runtime",
-                "interrupted_attempts_excluded_from_grades", "administrative_pause", "compressed_root_evidence")},
+                "interrupted_attempts_excluded_from_grades", "administrative_pause", "reboot_stop",
+                "compressed_root_evidence")},
             "transition": data.get("transport_transition", {}).get("status"),
             "attempts": report.get("attempts", []),
             "pending": [{k: row.get(k) for k in ("attempt", "status", "started_at", "tool_calls")}

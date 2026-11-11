@@ -1,0 +1,649 @@
+{
+  "schema_version": 2,
+  "checkpoint_at": 1794355662.9613051,
+  "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-1m-20261111-0801",
+  "raw_logs_survive_cleanup": false,
+  "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
+  "historical_completed_observations_preserved": 12,
+  "historical_administrative_interruptions_excluded": 2,
+  "external_proxy": "http://127.0.0.1:31128",
+  "local_bridge_and_cdp_direct": true,
+  "other_projects_in_scope": false,
+  "protocol": {
+    "source_commit": "452bf305c6daa62fc59061d22133a7cbc7c1572e",
+    "source_archive_sha256": "61530c06fc0069abc5917e386e888672e1a10950d40a061fa9c1daf52eb1935f",
+    "cc_version": "2.1.110",
+    "model": "moonshotai/kimi-k3.1-pro",
+    "efforts": [
+      "high",
+      "max"
+    ],
+    "pilot_tasks": [
+      "session-window-debug",
+      "embedding-drift-monitor",
+      "batched-eval-parity",
+      "mvcc-lsm-compaction",
+      "ks-solver-cpp"
+    ],
+    "formal_repeats": 3,
+    "formal_task_budget_seconds": 28800,
+    "formal_native_subset": {
+      "tasks": [
+        "session-window-debug",
+        "embedding-drift-monitor",
+        "batched-eval-parity",
+        "mvcc-lsm-compaction",
+        "ks-solver-cpp"
+      ],
+      "repeats_per_effort": 3,
+      "budget_seconds": 28800,
+      "frozen_at": 1794355626.4846745,
+      "selection_basis": "Same five tasks selected and validated by native environment feasibility; retain every task regardless of pilot success or failure.",
+      "full_66_status": "not executable with current validated native recipes and hardware; no GPU devices; full coverage remains incomplete",
+      "excluded_or_pending": {
+        "unstable_oracle_verifier": 1,
+        "gpu_hardware_unavailable": 3,
+        "native_recipes_pending": 57
+      },
+      "max_output_tokens": 131072,
+      "cc_output_environment_tokens": 128000,
+      "bridge_request_timeout_seconds": 28800,
+      "cc_api_timeout_ms": 29400000,
+      "stage": "formal-1m-720k-drain-v3-reboot-20261111",
+      "bridge_fixed_max_output_tokens": 131072,
+      "bridge_first_byte_timeout_seconds": 3600,
+      "bridge_idle_timeout_seconds": 3600,
+      "node_network_adapter": {
+        "tree_sha256": "2a6ca0d5c23145f875c4b65c50645c1480526f86e45d7b455542b597e504716f",
+        "files": 208,
+        "package": "undici@7.18.2",
+        "scope": "configured ANTHROPIC_BASE_URL origin only",
+        "timeout_source": "API_TIMEOUT_MS process environment before unmodified Node CC starts"
+      },
+      "agent_wall_clock_timeout_seconds": null,
+      "budget_seconds_is_reference_only": true,
+      "cc_model": "kimi-k3.1-pro[1m]",
+      "cc_model_context_window_tokens": 1000000,
+      "cc_auto_compact_window_tokens": 720000,
+      "automatic_compaction_enabled": true,
+      "schedule": [
+        {
+          "task": "mvcc-lsm-compaction",
+          "repeat": 1,
+          "effort": "max"
+        },
+        {
+          "task": "ks-solver-cpp",
+          "repeat": 1,
+          "effort": "high"
+        },
+        {
+          "task": "ks-solver-cpp",
+          "repeat": 1,
+          "effort": "max"
+        },
+        {
+          "task": "session-window-debug",
+          "repeat": 2,
+          "effort": "high"
+        },
+        {
+          "task": "session-window-debug",
+          "repeat": 2,
+          "effort": "max"
+        },
+        {
+          "task": "embedding-drift-monitor",
+          "repeat": 2,
+          "effort": "high"
+        },
+        {
+          "task": "embedding-drift-monitor",
+          "repeat": 2,
+          "effort": "max"
+        },
+        {
+          "task": "batched-eval-parity",
+          "repeat": 2,
+          "effort": "high"
+        },
+        {
+          "task": "batched-eval-parity",
+          "repeat": 2,
+          "effort": "max"
+        },
+        {
+          "task": "mvcc-lsm-compaction",
+          "repeat": 2,
+          "effort": "high"
+        },
+        {
+          "task": "mvcc-lsm-compaction",
+          "repeat": 2,
+          "effort": "max"
+        },
+        {
+          "task": "ks-solver-cpp",
+          "repeat": 2,
+          "effort": "high"
+        },
+        {
+          "task": "ks-solver-cpp",
+          "repeat": 2,
+          "effort": "max"
+        },
+        {
+          "task": "session-window-debug",
+          "repeat": 3,
+          "effort": "high"
+        },
+        {
+          "task": "session-window-debug",
+          "repeat": 3,
+          "effort": "max"
+        },
+        {
+          "task": "embedding-drift-monitor",
+          "repeat": 3,
+          "effort": "high"
+        },
+        {
+          "task": "embedding-drift-monitor",
+          "repeat": 3,
+          "effort": "max"
+        },
+        {
+          "task": "batched-eval-parity",
+          "repeat": 3,
+          "effort": "high"
+        },
+        {
+          "task": "batched-eval-parity",
+          "repeat": 3,
+          "effort": "max"
+        },
+        {
+          "task": "mvcc-lsm-compaction",
+          "repeat": 3,
+          "effort": "high"
+        },
+        {
+          "task": "mvcc-lsm-compaction",
+          "repeat": 3,
+          "effort": "max"
+        },
+        {
+          "task": "ks-solver-cpp",
+          "repeat": 3,
+          "effort": "high"
+        },
+        {
+          "task": "ks-solver-cpp",
+          "repeat": 3,
+          "effort": "max"
+        }
+      ]
+    },
+    "restart_relationship": {
+      "recorded_at": 1794355629.4169855,
+      "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
+      "historical_complete_observations_preserved": 12,
+      "historical_user_interruptions_excluded": 2,
+      "new_full_formal_attempts": 23,
+      "new_sessions_and_roots": true,
+      "no_scored_feedback": true,
+      "same_five_tasks_and_equal_effort_limits": true,
+      "original_plan_positions": 30,
+      "preserved_previous_completed": 7,
+      "context_stage_changed": false
+    },
+    "bridge_runtime_by_stage": {
+      "formal-1m-720k-drain-v3-reboot-20261111": {
+        "started_at": 1794355335.3456187,
+        "source_head": "3166ea20e55cc782622e58c5456064512ced3e04",
+        "source_module_sha256": {
+          "nvplay_bridge.py": "537f857a142c8d4391d02837bab2d2123b2fe802185f785d34696dde1287856f",
+          "browser_upstream.py": "44025b2a4b9b757c95537b4a4ecbdfb170755a8098274f5b9fc43ae4ab763517",
+          "browser_events.py": "9ca0a5b7d18edcde37bf19aef27ddf226b588f840f97b4b9df46fc08042daf29",
+          "stream_support.py": "f46b07b3cdf1e4cae0f409caf26c0a279bd57477f5259ee8bba045c14f95f602",
+          "responses_api.py": "da451613bf0a1c4aa12ef03effc4d5ffe1ea330fb48006f9d09925233f9580c6",
+          "responses_support.py": "ed907b22106ff58923efa5431c20422e59bfdeb9a719b0766969522e444f033e"
+        },
+        "configuration": {
+          "UPSTREAM_KIND": "browser",
+          "UPSTREAM_MODEL": "moonshotai/kimi-k3.1-pro",
+          "BROWSER_CDP_PORT": "9225",
+          "BROWSER_POOL_SIZE": "5",
+          "BROWSER_TIMEOUT": "28800",
+          "BROWSER_FIRST_BYTE_TIMEOUT": "3600",
+          "BROWSER_IDLE_TIMEOUT": "3600",
+          "BROWSER_MAX_TOKENS": "131072",
+          "BROWSER_FIXED_MAX_TOKENS": "131072",
+          "BROWSER_HTTP_5XX_RETRIES": "2",
+          "BROWSER_DEBUG_LOG": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-1m-20261111-0801/bridge-debug.jsonl"
+        },
+        "fixed_max_output_tokens": 131072,
+        "request_timeout_seconds": 28800,
+        "first_byte_timeout_seconds": 3600,
+        "idle_timeout_seconds": 3600,
+        "cdp_port": 9225,
+        "bridge_port": 8083,
+        "pid": 22152,
+        "health_at_start": {
+          "status": "ok",
+          "upstream_kind": "browser",
+          "upstream_url": "browser://cdp:9225",
+          "model": "moonshotai/kimi-k3.1-pro",
+          "cookie_present": false,
+          "captcha_present": false,
+          "tool_ids": "unique_per_invocation",
+          "loop_reminder_enabled": false,
+          "history_reasoning": "preserve",
+          "browser_output_tokens": {
+            "maximum": 131072,
+            "fixed": 131072
+          },
+          "browser_timeouts": {
+            "total_seconds": 28800,
+            "first_byte_seconds": 3600.0,
+            "idle_seconds": 3600.0
+          }
+        },
+        "boot_id": "cac08d61-c715-4c07-aaa6-acca085402b0",
+        "start_ticks": "77200"
+      }
+    },
+    "continuation": {
+      "source_checkpoint": "docs/evidence/cc-bridge-1m-2026-11-10.json",
+      "source_checkpoint_sha256": "037172079ecb842d9dcedfbaff86fa2173436fa563077b80295410ddff0ebcba",
+      "preserved_completed_attempts": 7,
+      "total_plan_positions": 30,
+      "preserved_positions": [
+        {
+          "task": "session-window-debug",
+          "repeat": 1,
+          "effort": "high"
+        },
+        {
+          "task": "session-window-debug",
+          "repeat": 1,
+          "effort": "max"
+        },
+        {
+          "task": "embedding-drift-monitor",
+          "repeat": 1,
+          "effort": "high"
+        },
+        {
+          "task": "embedding-drift-monitor",
+          "repeat": 1,
+          "effort": "max"
+        },
+        {
+          "task": "batched-eval-parity",
+          "repeat": 1,
+          "effort": "high"
+        },
+        {
+          "task": "batched-eval-parity",
+          "repeat": 1,
+          "effort": "max"
+        },
+        {
+          "task": "mvcc-lsm-compaction",
+          "repeat": 1,
+          "effort": "high"
+        }
+      ],
+      "context_policy_changed": false,
+      "prior_results_must_remain_in_original_stage": true,
+      "old_raw_evidence_available": false,
+      "unresolved_prior_pending": [],
+      "unresolved_pending_score": null,
+      "unresolved_pending_excluded_from_model_grades": true
+    }
+  },
+  "task_manifest_sha256": {
+    "session-window-debug": "1e1dad7887bd948d0ff50eece03f68a95bde807596f54c04bd552baeefedbe6e",
+    "embedding-drift-monitor": "6a6025f2496ea05c1e4f58d988f9b1a04b99d6d08f536b7cbf8e103447b2a848",
+    "batched-eval-parity": "04645f49da6dd60379da4868885fb8a41a295c3adbc269841101d16eb809946c",
+    "mvcc-lsm-compaction": "23f6088a3228486b9edc5695438c03637e0fc0c01e2c4d84b6fbfb4c6c03e79f",
+    "ks-solver-cpp": "b8bbc32eebe857adbb08af43dd21194216066039512216da3cc604c3f8603899"
+  },
+  "bridge_runtime": {
+    "started_at": 1794355335.3456187,
+    "source_head": "3166ea20e55cc782622e58c5456064512ced3e04",
+    "source_module_sha256": {
+      "nvplay_bridge.py": "537f857a142c8d4391d02837bab2d2123b2fe802185f785d34696dde1287856f",
+      "browser_upstream.py": "44025b2a4b9b757c95537b4a4ecbdfb170755a8098274f5b9fc43ae4ab763517",
+      "browser_events.py": "9ca0a5b7d18edcde37bf19aef27ddf226b588f840f97b4b9df46fc08042daf29",
+      "stream_support.py": "f46b07b3cdf1e4cae0f409caf26c0a279bd57477f5259ee8bba045c14f95f602",
+      "responses_api.py": "da451613bf0a1c4aa12ef03effc4d5ffe1ea330fb48006f9d09925233f9580c6",
+      "responses_support.py": "ed907b22106ff58923efa5431c20422e59bfdeb9a719b0766969522e444f033e"
+    },
+    "configuration": {
+      "UPSTREAM_KIND": "browser",
+      "UPSTREAM_MODEL": "moonshotai/kimi-k3.1-pro",
+      "BROWSER_CDP_PORT": "9225",
+      "BROWSER_POOL_SIZE": "5",
+      "BROWSER_TIMEOUT": "28800",
+      "BROWSER_FIRST_BYTE_TIMEOUT": "3600",
+      "BROWSER_IDLE_TIMEOUT": "3600",
+      "BROWSER_MAX_TOKENS": "131072",
+      "BROWSER_FIXED_MAX_TOKENS": "131072",
+      "BROWSER_HTTP_5XX_RETRIES": "2",
+      "BROWSER_DEBUG_LOG": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-1m-20261111-0801/bridge-debug.jsonl"
+    },
+    "fixed_max_output_tokens": 131072,
+    "request_timeout_seconds": 28800,
+    "first_byte_timeout_seconds": 3600,
+    "idle_timeout_seconds": 3600,
+    "cdp_port": 9225,
+    "bridge_port": 8083,
+    "pid": 22152,
+    "health_at_start": {
+      "status": "ok",
+      "upstream_kind": "browser",
+      "upstream_url": "browser://cdp:9225",
+      "model": "moonshotai/kimi-k3.1-pro",
+      "cookie_present": false,
+      "captcha_present": false,
+      "tool_ids": "unique_per_invocation",
+      "loop_reminder_enabled": false,
+      "history_reasoning": "preserve",
+      "browser_output_tokens": {
+        "maximum": 131072,
+        "fixed": 131072
+      },
+      "browser_timeouts": {
+        "total_seconds": 28800,
+        "first_byte_seconds": 3600.0,
+        "idle_seconds": 3600.0
+      }
+    },
+    "boot_id": "cac08d61-c715-4c07-aaa6-acca085402b0",
+    "start_ticks": "77200"
+  },
+  "downloads": {
+    "terminal-bench.tar.gz": {
+      "url": "https://api.github.com/repos/harbor-framework/terminal-bench/tarball/452bf305c6daa62fc59061d22133a7cbc7c1572e",
+      "sha256": "61530c06fc0069abc5917e386e888672e1a10950d40a061fa9c1daf52eb1935f",
+      "size": 454071321
+    },
+    "ubuntu-base.tar.gz": {
+      "url": "https://cdimage.ubuntu.com/ubuntu-base/releases/24.04.5/release/ubuntu-base-24.04.5-base-amd64.tar.gz",
+      "sha256": "e77b6f10c2590cef872b33ee9f635a0e3fd1f57fb074c0e52b5c7f56147a0c86",
+      "size": 30028293
+    },
+    "claude-code-2.1.110.tgz": {
+      "url": "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-2.1.110.tgz",
+      "sha256": "a9e68dbae2b27893bee13b019cff6417ac9db5947cbc209da1da86b895f76a58",
+      "size": 18646978
+    }
+  },
+  "wheels": {
+    "iniconfig-2.3.1-py3-none-any.whl": {
+      "sha256": "9121e2c1fdb355232495be3194c8dfe87ccc2d5dee45947b78e68f499790d7a7",
+      "size": 7552
+    },
+    "numpy-1.26.4-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl": {
+      "sha256": "666dbfb6ec68962c033a450943ded891bed2d54e6755e35e5835d63f4f6931d5",
+      "size": 18252005
+    },
+    "numpy-1.26.4-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl": {
+      "sha256": "675d61ffbfa78604709862923189bad94014bef562cc35cf61d3a07bba02a7ed",
+      "size": 17950613
+    },
+    "numpy-2.1.3-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl": {
+      "sha256": "2312b2aa89e1f43ecea6da6ea9a810d06aae08321609d8dc0d0eda6d946a541b",
+      "size": 16043185
+    },
+    "packaging-26.3-py3-none-any.whl": {
+      "sha256": "d7193f7c8e4e93f444fde0262bf90af30e16fa0ad0ad44cb553c87339b23cd1c",
+      "size": 129956
+    },
+    "pluggy-1.7.0-py3-none-any.whl": {
+      "sha256": "7dd7b0d8832ba3cb632c306926ded123429211b83641b35dc5c41ad2d34f9bec",
+      "size": 27082
+    },
+    "pygments-2.21.0-py3-none-any.whl": {
+      "sha256": "2363c69b61c4a97c838da3b130dcd6468f4848992b21a82f2a63ec34377137d9",
+      "size": 1250147
+    },
+    "pytest-9.1.1-py3-none-any.whl": {
+      "sha256": "37a86b45efb9a47a61a36449063e8e18d0cab3161329fc099eb21783169c4f0c",
+      "size": 386536
+    },
+    "pytest_json_ctrf-0.5.2-py3-none-any.whl": {
+      "sha256": "a427205bf624a1d85ae807aa20f30ddd194699a9621a13178f766179658d9607",
+      "size": 7397
+    },
+    "scipy-1.11.4-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl": {
+      "sha256": "ad669df80528aeca5f557712102538f4f37e503f0c5b9541655016dd0932ca79",
+      "size": 35777534
+    },
+    "scipy-1.14.1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl": {
+      "sha256": "8f9ea80f2e65bdaa0b7627fb00cbeb2daf163caa015e59b7516395fe3bd1e066",
+      "size": 40849331
+    }
+  },
+  "host_resources": {
+    "recorded_at": 1794355629.417897,
+    "cpu_affinity": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52,
+      53,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60,
+      61,
+      62,
+      63
+    ],
+    "docker_processes_started": 0,
+    "host_cpu_quota": "800000",
+    "host_cpu_period": "100000",
+    "host_memory_limit_bytes": "30064771072"
+  },
+  "controls": {},
+  "interrupted_attempts_excluded_from_grades": [],
+  "results": {
+    "generated_at": 1794355662.962247,
+    "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
+    "totals": {},
+    "attempts": [],
+    "pending": []
+  },
+  "new_formal_attempts_planned": 23,
+  "new_formal_attempts_completed": 0,
+  "preserved_prior_attempts_completed": 7,
+  "combined_plan_positions_completed": 7,
+  "campaign": {
+    "controller_alive": false
+  },
+  "reboot_stop": {
+    "stop_at": 1794380400.0,
+    "armed": true
+  },
+  "status": "preparing_environment",
+  "bridge_health": {
+    "status": "ok",
+    "model": "moonshotai/kimi-k3.1-pro",
+    "upstream_kind": "browser",
+    "history_reasoning": "preserve",
+    "browser_output_tokens": {
+      "maximum": 131072,
+      "fixed": 131072
+    },
+    "browser_timeouts": {
+      "total_seconds": 28800,
+      "first_byte_seconds": 3600.0,
+      "idle_seconds": 3600.0
+    },
+    "pool_states": {
+      "ready": 5
+    },
+    "recovering_tabs": []
+  },
+  "bridge_activity": {
+    "events_last_300s": {
+      "request": 1,
+      "browser_output_limit_override": 1,
+      "payload": 1,
+      "browser_start": 1,
+      "pool_recovery_start": 5,
+      "pool_activation": 6,
+      "pool_page_ready": 5,
+      "pool_ready": 5,
+      "browser_tab": 1,
+      "browser_first_data": 1,
+      "browser_progress": 1,
+      "browser_first_content": 1,
+      "browser_buffer": 1,
+      "browser_pool_release": 1,
+      "browser_done": 1
+    },
+    "active": [],
+    "recent_errors": [],
+    "recent_upstream_errors": [],
+    "recent_retries": []
+  },
+  "evidence_fingerprints": [
+    {
+      "path": "brave-process.json",
+      "sha256": "1d2f2def933b123e0cbeea4315f739e2c8e525e595da16cc46759bcb1d5ce5df",
+      "size": 765
+    },
+    {
+      "path": "bridge-monitor-process.json",
+      "sha256": "33aee9da45b73dba3402e777b7580890a8503d9a2cb02dd22b05c108bdb2c630",
+      "size": 425
+    },
+    {
+      "path": "bridge-readiness.json",
+      "sha256": "26d7928bd68ee7547b18e853030f1ca482695e3d2afeaf19667d40ee03ca7a42",
+      "size": 353
+    },
+    {
+      "path": "bridge-runtime.json",
+      "sha256": "78ae0aa638d0ca40546979f56670cc51a53f7aa70b392cb0623d7f259174e8a9",
+      "size": 2033
+    },
+    {
+      "path": "bridge-server-process.json",
+      "sha256": "b2b9161bb42ad86969cccf81f4a690356efe4ad972f8d58df3101ea39eb1937d",
+      "size": 231
+    },
+    {
+      "path": "download-manifest.json",
+      "sha256": "565e800fb5b901c8de31c2c835e870786d031edfa535950cc0cc88b97c3c8033",
+      "size": 747
+    },
+    {
+      "path": "evaluation-plan.json",
+      "sha256": "1fe498c825281b6c5ef733ff40d07f7e8bc817bd6fc6fb409b1e931957639228",
+      "size": 26002
+    },
+    {
+      "path": "host-resources.json",
+      "sha256": "aedb2b9fdb0f2cf45ed7290b85b8440c97717a456cee396f0f1d15deae062b48",
+      "size": 703
+    },
+    {
+      "path": "reboot-resume-regression.log",
+      "sha256": "2867271377ddbc4f5396563d1adba89ce9bcf83127d0c173244e21bace31d409",
+      "size": 3187
+    },
+    {
+      "path": "reboot-stop-process.json",
+      "sha256": "b98d709c6a9872a4ac32d91060f066eeda461f69ce47e6b8ffc4e371631a8dcd",
+      "size": 496
+    },
+    {
+      "path": "reboot-stop-request.json",
+      "sha256": "9066877f61d2d1c91e6982b5c2d46e3304eeecada027fa9c422e93e04b5c3b07",
+      "size": 233
+    },
+    {
+      "path": "resource-monitor-process.json",
+      "sha256": "17fca685acb0f29b4fdd5d7e680a0b259d7e9679a15444d6e8ecc4b8eae0e5a6",
+      "size": 332
+    },
+    {
+      "path": "resource-monitor-state.json",
+      "sha256": "d83bfc941316ab9cf5315feac9bcd7c9d22241cb835e9972dfa54f4adb8677eb",
+      "size": 715
+    },
+    {
+      "path": "settings-formal-high.json",
+      "sha256": "4bfc761d4156c5d60eba26398d70a536501cb5b36004e8b18577e1092dc1db93",
+      "size": 917
+    },
+    {
+      "path": "settings-formal-max.json",
+      "sha256": "7b34e2a3d91ddd7e3d1c74427809840198e8dc2ff3973827b6bb890653046b97",
+      "size": 916
+    },
+    {
+      "path": "wheel-manifest.json",
+      "sha256": "d06171c37e88dc2d81d6bced06b86d02157fd6716e61c5d04aeaad68b8fc1daa",
+      "size": 1809
+    }
+  ],
+  "compressed_root_evidence": []
+}

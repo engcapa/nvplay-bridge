@@ -166,7 +166,7 @@ def pause(base: Path, output: Path, deadline: float) -> dict:
     interrupted = [capture_incomplete(base, base / row["attempt"], row, deadline=deadline)
                    for row in report["pending"]]
     state = {"status": "paused_for_reboot", "paused_at": time.time(), "requested_stop_at": deadline,
-             "reason": "user requested stop within 30 minutes for container reboot",
+             "reason": "user requested stop for container reboot",
              "completed": len(report["attempts"]), "interrupted_attempts": len(interrupted),
              "interrupted_positions": interrupted, "signalled_attempt_pids": signalled,
              "stopped_services": stopped, "active_bridge_requests_before_shutdown": len(active)}

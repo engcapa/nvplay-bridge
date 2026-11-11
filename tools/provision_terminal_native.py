@@ -7,6 +7,7 @@ import hashlib
 import json
 import os
 from pathlib import Path
+import re
 import shlex
 import shutil
 import subprocess
@@ -226,9 +227,45 @@ def record_host_resources(base: Path):
     write_json(base / "host-resources.json", resources)
 
 
+def continue_schedule(formal: dict, checkpoint: Path) -> dict:
+    previous = json.loads(checkpoint.read_text())
+    protocol = previous["protocol"]
+    from eval_terminal_native import DEFAULT_PILOT
+
+    if (protocol["source_commit"] != "452bf305c6daa62fc59061d22133a7cbc7c1572e"
+            or protocol["cc_version"] != "2.1.110" or protocol["pilot_tasks"] != DEFAULT_PILOT):
+        raise ValueError("continuation checkpoint uses a different dataset, CLI or task set")
+    inherited = protocol.get("continuation", {})
+    inherited_positions = inherited.get("preserved_positions", [])
+    local_attempts = previous["results"]["attempts"]
+    key = lambda row: (row["task"], row["repeat"], row["effort"])
+    completed = {key(row) for row in (*inherited_positions, *local_attempts)}
+    all_slots = [{"task": task, "repeat": repeat, "effort": effort}
+                 for repeat in range(1, formal["repeats_per_effort"] + 1)
+                 for task in formal["tasks"] for effort in ("high", "max")]
+    if (inherited.get("preserved_completed_attempts", 0) != len(inherited_positions)
+            or inherited.get("total_plan_positions", len(all_slots)) != len(all_slots)
+            or previous.get("combined_plan_positions_completed", len(completed)) != len(completed)
+            or len(completed) != len(inherited_positions) + len(local_attempts)
+            or not completed.issubset({key(row) for row in all_slots})):
+        raise ValueError("invalid or duplicate completed positions in continuation checkpoint")
+    formal["schedule"] = [slot for slot in all_slots if key(slot) not in completed]
+    if not formal["schedule"]:
+        raise ValueError("there are no missing formal positions to continue")
+    return {"source_checkpoint": str(checkpoint), "source_checkpoint_sha256": digest(checkpoint),
+            "preserved_completed_attempts": len(completed), "total_plan_positions": len(all_slots),
+            "preserved_positions": [slot for slot in all_slots if key(slot) in completed],
+            "context_policy_changed": any(formal.get(k) != protocol.get("formal_native_subset", {}).get(k)
+                                          for k in ("cc_model", "cc_auto_compact_window_tokens",
+                                                    "automatic_compaction_enabled")),
+            "prior_results_must_remain_in_original_stage": True, "old_raw_evidence_available": False,
+            "unresolved_prior_pending": previous["results"].get("pending", []),
+            "unresolved_pending_score": None, "unresolved_pending_excluded_from_model_grades": True}
+
+
 def configure(base: Path, proxy: str, *, cc_model: str | None = None,
               compact_window: int | None = None, continuation_checkpoint: Path | None = None,
-              no_agent_timeout: bool = False):
+              no_agent_timeout: bool = False, stage: str | None = None):
     from copy import deepcopy
     from eval_terminal_native import DEFAULT_PILOT, NODE_NETWORK_DIRECTORY, initialize_plan, network_tree_identity
 
@@ -250,34 +287,11 @@ def configure(base: Path, proxy: str, *, cc_model: str | None = None,
         formal.update(stage="formal-1m-720k", cc_model=cc_model,
                       cc_model_context_window_tokens=1000000,
                       cc_auto_compact_window_tokens=compact_window, automatic_compaction_enabled=True)
-    continuation = None
-    if continuation_checkpoint:
-        previous = json.loads(continuation_checkpoint.read_text())
-        old = previous["protocol"]
-        if (old["source_commit"] != "452bf305c6daa62fc59061d22133a7cbc7c1572e"
-                or old["cc_version"] != "2.1.110" or old["pilot_tasks"] != DEFAULT_PILOT):
-            raise ValueError("continuation checkpoint uses a different dataset, CLI or task set")
-        completed = {(row["task"], row["repeat"], row["effort"])
-                     for row in previous["results"]["attempts"]}
-        all_slots = [{"task": task, "repeat": repeat, "effort": effort}
-                     for repeat in range(1, formal["repeats_per_effort"] + 1)
-                     for task in formal["tasks"] for effort in ("high", "max")]
-        if (len(completed) != len(previous["results"]["attempts"])
-                or not completed.issubset({(x["task"], x["repeat"], x["effort"]) for x in all_slots})):
-            raise ValueError("invalid or duplicate completed positions in continuation checkpoint")
-        formal["schedule"] = [slot for slot in all_slots
-                              if (slot["task"], slot["repeat"], slot["effort"]) not in completed]
-        if not formal["schedule"]:
-            raise ValueError("there are no missing formal positions to continue")
-        continuation = {"source_checkpoint": str(continuation_checkpoint),
-                        "source_checkpoint_sha256": digest(continuation_checkpoint),
-                        "preserved_completed_attempts": len(completed), "total_plan_positions": len(all_slots),
-                        "preserved_positions": [slot for slot in all_slots
-                                                if (slot["task"], slot["repeat"], slot["effort"]) in completed],
-                        "prior_results_must_remain_in_original_stage": True,
-                        "old_raw_evidence_available": False,
-                        "unresolved_prior_pending": previous["results"].get("pending", []),
-                        "unresolved_pending_score": None, "unresolved_pending_excluded_from_model_grades": True}
+    if stage is not None:
+        if not re.fullmatch(r"formal-[A-Za-z0-9_-]+", stage):
+            raise ValueError("a custom stage must start with formal- and contain only letters, digits, _ or -")
+        formal["stage"] = stage
+    continuation = continue_schedule(formal, continuation_checkpoint) if continuation_checkpoint else None
     installed = network_tree_identity(NODE_NETWORK_DIRECTORY)
     if installed != {key: formal["node_network_adapter"][key] for key in ("tree_sha256", "files")}:
         raise ValueError("Node network installation differs from the archived protocol")
@@ -308,7 +322,7 @@ def configure(base: Path, proxy: str, *, cc_model: str | None = None,
             new_full_formal_attempts=len(formal["schedule"]),
             original_plan_positions=continuation["total_plan_positions"],
             preserved_previous_completed=continuation["preserved_completed_attempts"],
-            context_stage_changed=bool(cc_model))
+            context_stage_changed=continuation["context_policy_changed"])
     for effort in ("high", "max"):
         settings = json.loads((repo / f"configs/settings-kimi{'-high' if effort == 'high' else ''}.json").read_text())
         settings["env"].update({"ANTHROPIC_BASE_URL": f'http://127.0.0.1:{runtime["bridge_port"]}',
@@ -338,6 +352,7 @@ def main():
     parser.add_argument("--cc-model")
     parser.add_argument("--auto-compact-window", type=int)
     parser.add_argument("--continue-checkpoint", type=Path)
+    parser.add_argument("--stage", help="use a distinct formal stage name for the restored deployment")
     parser.add_argument("--no-agent-timeout", action="store_true",
                         help="wait for CC to exit naturally; retain the old budget only as a protocol reference")
     args = parser.parse_args()
@@ -349,7 +364,8 @@ def main():
         wheels(base, args.proxy)
     elif args.action == "configure":
         configure(base, args.proxy, cc_model=args.cc_model, compact_window=args.auto_compact_window,
-                  continuation_checkpoint=args.continue_checkpoint, no_agent_timeout=args.no_agent_timeout)
+                  continuation_checkpoint=args.continue_checkpoint, no_agent_timeout=args.no_agent_timeout,
+                  stage=args.stage)
     elif args.action == "resources":
         record_host_resources(base)
     else:
