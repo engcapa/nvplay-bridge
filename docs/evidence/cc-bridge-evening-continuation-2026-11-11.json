@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794405739.5452142,
+  "checkpoint_at": 1794405742.7200456,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261111-evening",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -1257,8 +1257,8 @@
     "fresh_controls_required": true
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794405736.075616,
-    "commit": "6f50cfd413f9f119835c53246e2e9e27e4173d77",
+    "attempted_at": 1794405739.656237,
+    "commit": "c0cf3e92109c7f745924831e3a852ee3cab88fa4",
     "pushed": true,
     "returncode": 0
   },
@@ -1702,7 +1702,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794405739.5673199,
+    "generated_at": 1794405742.7322958,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-1m-720k-host-cc-20261111-evening/28800/high": {
@@ -1818,7 +1818,7 @@
   "combined_plan_positions_completed": 10,
   "campaign": {
     "controller_alive": true,
-    "status": "validating_controls",
+    "status": "control_validated",
     "task": "session-window-debug"
   },
   "transport_transition": {
@@ -1945,8 +1945,8 @@
     },
     {
       "path": "campaign-state.json",
-      "sha256": "cc956de85e730396158e6b8ac4b2065e1be789fad73d23d53ba58344e52a072f",
-      "size": 6562
+      "sha256": "3a5372d854648fc66ab6131c2ccbd6fd396acea6c303dc690007ea7ef413abed",
+      "size": 6560
     },
     {
       "path": "cdp-observer-process.json",
@@ -1955,7 +1955,7 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "ab8486747928807b537469a7e56a354fbabbaee17b133e1c2f1a978868f58347",
+      "sha256": "0ff5ffcfb64a14ca2fa0ef64f0cbfc5bf29b985a601370c9aba70244824b08a5",
       "size": 133
     },
     {
@@ -2175,8 +2175,8 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "0598f718ccd143aa7f533dee4c212aa94763de3091cd871ddef04117142d5797",
-      "size": 783
+      "sha256": "a82d8a9f4162388f37c990b82b579edabd9146cf0df16adefde8394818eb9ef1",
+      "size": 778
     },
     {
       "path": "rollout-validation-interruption.json",
