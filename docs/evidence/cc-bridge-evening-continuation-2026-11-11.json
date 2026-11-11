@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794407826.2067325,
+  "checkpoint_at": 1794407834.7934315,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261111-evening",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -1257,8 +1257,8 @@
     "fresh_controls_required": true
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794407811.463553,
-    "commit": "fc4c48c6ed746fa897583a140dd861f4c091a386",
+    "attempted_at": 1794407826.4028134,
+    "commit": "8b37f8df999783569eafa2c3d06e6d34428c3c47",
     "pushed": true,
     "returncode": 0
   },
@@ -1702,7 +1702,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794407826.2447152,
+    "generated_at": 1794407834.8241224,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-1m-720k-host-body-read-clean-20261111/28800/high": {
@@ -1950,7 +1950,6 @@
   },
   "bridge_activity": {
     "events_last_300s": {
-      "browser_progress": 40,
       "browser_buffer": 21,
       "browser_pool_release": 21,
       "browser_output_ready": 21,
@@ -1967,6 +1966,7 @@
       "browser_tab": 20,
       "browser_sent": 20,
       "browser_first_data": 20,
+      "browser_progress": 38,
       "messages_first_block": 20
     },
     "active": [],
@@ -2027,8 +2027,8 @@
     },
     {
       "path": "browser-supervisor-state.json",
-      "sha256": "1b269dd3af5ac22da751c9c085df798d58b57d0a50c94eb2e99b6bca66e3d0c3",
-      "size": 102
+      "sha256": "2a9943009619589bb6bf413654d04d19b134ebac26cbd8f3b584472b386fe3d7",
+      "size": 101
     },
     {
       "path": "campaign-error-before-transport-fix.json",
@@ -2052,8 +2052,8 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "ef7fd0f29dfccc5c90b1a28032da3732abee0c10978b767ccf3e4cb09f260fb6",
-      "size": 133
+      "sha256": "c08b62dc30b165f3d2edfc64d0dacf0121a745bff7513c9b87b5a4d163e769fc",
+      "size": 134
     },
     {
       "path": "checkpoint-process.json",
@@ -2596,6 +2596,16 @@
       "bytes": 486842993,
       "tar_compare_passed_before_reclaim": true,
       "restore": "sudo tar -xpf verifier-root.tar.gz -C ."
+    },
+    {
+      "directory": "runs/formal-1m-720k-host-body-read-clean-20261111/session-window-debug--high--r2",
+      "archived_at": 1794407830.262025,
+      "root": "agent-root",
+      "archive": "agent-root.tar.gz",
+      "sha256": "5b8dc596c685f5d25bd8ee2f0eb34f209abbf153eea710a9a712279bf5a35e3c",
+      "bytes": 4475652,
+      "tar_compare_passed_before_reclaim": true,
+      "restore": "sudo tar -xpf agent-root.tar.gz -C ."
     },
     {
       "directory": "runs/formal-1m-720k-host-cc-20261111-evening/ks-solver-cpp--high--r1",
