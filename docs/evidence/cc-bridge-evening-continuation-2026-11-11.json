@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794409117.613312,
+  "checkpoint_at": 1794409141.9107864,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261111-evening",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -1257,8 +1257,8 @@
     "fresh_controls_required": true
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794409104.1421676,
-    "commit": "533e95f5ade9b3a11569a2559187a8b6a26fd1a2",
+    "attempted_at": 1794409117.9511318,
+    "commit": "e9c78a66b9ce9cfd3cd8fa1cb5975099766da919",
     "pushed": true,
     "returncode": 0
   },
@@ -1702,7 +1702,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794409117.797765,
+    "generated_at": 1794409142.0817304,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-1m-720k-host-body-read-clean-20261111/28800/high": {
@@ -1915,8 +1915,8 @@
         "task": "session-window-debug",
         "effort": "max",
         "started_at": 1794407879.5171292,
-        "elapsed_seconds": 1238.1,
-        "tool_calls": 28,
+        "elapsed_seconds": 1262.4,
+        "tool_calls": 29,
         "last_tool": "Edit"
       }
     ]
@@ -1962,51 +1962,35 @@
   },
   "bridge_activity": {
     "events_last_300s": {
-      "browser_progress": 48,
-      "browser_buffer": 15,
-      "browser_pool_release": 15,
-      "browser_output_ready": 15,
-      "browser_first_content": 15,
-      "browser_done": 15,
-      "tool_call": 16,
-      "messages_done": 15,
-      "http_complete": 15,
-      "tool_result": 16,
-      "request": 15,
-      "payload": 15,
-      "browser_start": 15,
-      "browser_lease": 15,
-      "browser_tab": 15,
-      "browser_sent": 15,
+      "browser_progress": 47,
+      "browser_buffer": 16,
+      "browser_pool_release": 16,
+      "browser_output_ready": 16,
+      "browser_first_content": 16,
+      "browser_done": 16,
+      "tool_call": 17,
+      "messages_done": 16,
+      "http_complete": 16,
+      "tool_result": 17,
+      "request": 16,
+      "payload": 16,
+      "browser_start": 16,
+      "browser_lease": 16,
+      "browser_tab": 16,
+      "browser_sent": 16,
       "browser_first_data": 15,
       "messages_first_block": 15
     },
     "active": [
       {
-        "id": "e94f5a7b550241ae80220758",
+        "id": "c6cbb405fc644458b64c70ee",
         "retry_count": 0,
-        "phase": "browser_progress",
+        "phase": "browser_sent",
         "attempt": 1,
         "reasoning_effort": "max",
-        "tab_id": "kpool=3",
-        "counts": {
-          "thinking_chars": 0,
-          "text_chars": 0,
-          "tool_calls": 0
-        },
-        "usage": {
-          "prompt_tokens": 49158,
-          "completion_tokens": 1,
-          "total_tokens": 49159,
-          "prompt_tokens_details": {
-            "cached_tokens": 48896
-          },
-          "completion_tokens_details": {
-            "reasoning_tokens": 1
-          }
-        },
-        "age_seconds": 11.8,
-        "activity_age_seconds": 2.6
+        "tab_id": "kpool=4",
+        "age_seconds": 3.2,
+        "activity_age_seconds": 2.3
       }
     ],
     "recent_errors": [],
@@ -2071,8 +2055,8 @@
     },
     {
       "path": "browser-supervisor-state.json",
-      "sha256": "f60444ead2d360d9962587a45cf2aa765eebe1699010425862d0e5bae32d736c",
-      "size": 102
+      "sha256": "d0d32278bebd7006a506b3e80d57ef78791b0d9ae9e2eee4bd84676b386e2a9a",
+      "size": 101
     },
     {
       "path": "campaign-error-before-transport-fix.json",
@@ -2096,7 +2080,7 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "e15bfe95187bcab74315a5b19aba7784e187aa71cd62372199edead2d18d580b",
+      "sha256": "c4450a628ace6d72678950a9a416495d00392c11c7a941fe48e2285dff6a8852",
       "size": 134
     },
     {
@@ -2321,8 +2305,8 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "4e50171d4909feb0c29bfe680de5c67252e52c0c702a0320af83c086fa5191cf",
-      "size": 790
+      "sha256": "cf548fb953783dc7ec09894329fc458a7aa487a7c2189e678b3af7af30ccb9ea",
+      "size": 789
     },
     {
       "path": "rollout-validation-interruption.json",
