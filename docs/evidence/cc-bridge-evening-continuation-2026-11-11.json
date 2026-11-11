@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794390627.2778213,
+  "checkpoint_at": 1794390721.200071,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261111-evening",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -716,8 +716,8 @@
     "host_memory_limit_bytes": "34359738368"
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794390613.9304705,
-    "commit": "06818587d21d6a3121207f829afa4cf1a2602375",
+    "attempted_at": 1794390627.3919497,
+    "commit": "0bfb8b8374fa9333e87f510da09b8d15b0861512",
     "pushed": true,
     "returncode": 0
   },
@@ -1146,7 +1146,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794390627.2811806,
+    "generated_at": 1794390721.2030473,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
@@ -1223,7 +1223,7 @@
     },
     {
       "path": "browser-supervisor-state.json",
-      "sha256": "35f187f57b79e960b222a42676cfa76abd878cddd32f7e57edd590b455a56d10",
+      "sha256": "e7768b776e074e61fe2ba4061739ec5d75b6465696ff3a2d710275709b656472",
       "size": 101
     },
     {
@@ -1233,7 +1233,7 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "cf9805e9037b58c85579c179ae8ad40d93eab532894a2524e6b758f6d67e6a34",
+      "sha256": "eef22d74bf1cc925f6ade575a156a91cd222af89aad61138d719b1993187eb67",
       "size": 134
     },
     {
@@ -1363,8 +1363,8 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "0e6c01e435f21d14b4931ffafd9a6571ba925d8b43ce5f3eb6e3a44d896fee6d",
-      "size": 681
+      "sha256": "ccf25088189b2cc42da9847a68da4ece3db4d9fe68e09b268adc3694c07681cd",
+      "size": 680
     },
     {
       "path": "service-identity-regression.log",
@@ -1477,6 +1477,16 @@
       "bytes": 353003758,
       "tar_compare_passed_before_reclaim": true,
       "restore": "sudo tar -xpf agent-root.tar.gz -C ."
+    },
+    {
+      "directory": "controls/session-window-debug/oracle",
+      "archived_at": 1794390712.3159313,
+      "root": "verifier-root",
+      "archive": "verifier-root.tar.gz",
+      "sha256": "d466114cbfaefa5fb2a96c02e9fc17febd2c9df9c6dfe06ecb6496220906d7c4",
+      "bytes": 486842998,
+      "tar_compare_passed_before_reclaim": true,
+      "restore": "sudo tar -xpf verifier-root.tar.gz -C ."
     }
   ]
 }
