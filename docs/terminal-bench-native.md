@@ -2,12 +2,14 @@
 
 这套工具用于监督式实测，不是 Harbor 官方运行器，也不能产生 Artificial Analysis 官方智能指数。所有任务题面、参考解、隐藏测试、运行目录和会话日志都保存在 Git 忽略的 `logs/` 下。仓库只提交运行器、证据处理测试和不含题目内容的结果。
 
+2026-11-11 起按用户要求使用当前普通用户 PATH 中的 Claude Code，切换时为 **2.1.322**，具体见下文“当前 PATH 原生 CC”。2.1.110 仅保留为历史协议与基座的兼容组件，新的计分会话使用冻结的 PATH 原生可执行文件。
+
 ## 固定输入
 
 - Terminal-Bench `v4.0.0`，提交 `452bf305c6daa62fc59061d22133a7cbc7c1572e`。
 - GitHub API tarball 的 SHA256：`61530c06fc0069abc5917e386e888672e1a10950d40a061fa9c1daf52eb1935f`。
 - Ubuntu base `24.04.5` amd64 原生 rootfs，SHA256：`e77b6f10c2590cef872b33ee9f635a0e3fd1f57fb074c0e52b5c7f56147a0c86`。
-- 官方 npm 包 `@anthropic-ai/claude-code@2.1.110` 的 Node.js CLI。当前 CC 原生版本 2.1.321 的 Bun 路径检测需要 `/proc/self/fd`，不能在本机缺少 `/proc` 的 chroot 中工作。没有伪造 `/proc`。
+- 历史阶段使用官方 npm 包 `@anthropic-ai/claude-code@2.1.110` 的 Node.js CLI；新阶段冻结当前 PATH 原生 CLI 的版本、文件大小与 SHA256。原生 Bun 需要真实 `/proc/self/fd`，不能使用没有 `/proc` 的旧 chroot 启动方式。
 - Node.js `v24.13.0`；托管 CPython `3.11.18`、`3.12.16`、`3.13.18`。
 - 两档独立运行：`high`、`max`；实际下发值必须由 bridge 元数据日志复核。
 
@@ -25,6 +27,26 @@ exec /usr/local/bin/node /opt/claude-code-2.1.110/package/cli.js "$@"
 ```
 
 需要先在普通 UID 下完成一次实际 Bash/文件操作烟测；`claude --version` 成功不能证明工具调用可用。基座及每题安装日志应保存版本、包清单和文件摘要。托管 Python 的包安装只修改任务自己的副本，不修改 host Python。
+
+## 当前 PATH 原生 CC
+
+容器允许 chroot，但不允许 mount namespace 或挂载 proc。原生 CLI 通过 PRoot 5.5.0 转换路径并绑定真实 `/proc`；系统包 PRoot 5.1.0 的 statx 兼容性不足，不能使用。构建源固定为 `https://github.com/proot-me/proot.git` 的 `v5.5.0`、提交 `25dc6a3134891f98a79f57ce1c2c1b23ff15cad1`；通过 `git -c http.proxy=http://127.0.0.1:31128 clone --depth 1 --branch v5.5.0 …` 获取源码，安装 `libtalloc-dev` 后执行 `make -C <source>/src -j4`，将结果安装到 `/usr/local/libexec/nvplay-proot-5.5.0`。apt 的 http/https Acquire 代理均使用 `http://127.0.0.1:31128`。
+
+完成原有下载、基座、模板及计划恢复后，在启动 smoke/campaign 前冻结当前 CLI。`command -v` 必须由普通用户 shell 展开，以免选中 sudo 的不同 PATH：
+
+```sh
+sudo -n python3 tools/configure_terminal_native_path_cc.py \
+  --base logs/<run> --claude "$(command -v claude)" \
+  --proot /usr/local/libexec/nvplay-proot-5.5.0 \
+  --proot-source-commit 25dc6a3134891f98a79f57ce1c2c1b23ff15cad1 \
+  --stage formal-1m-720k-path-cc-<new-run>
+```
+
+该步骤拒绝运行中的控制器和未归档的在途任务，保留已完成位置及旧协议，建立独立的新阶段。基座中的旧 CLI 入口会在每个新 agent root 内指向 PATH 快照；新阶段不加载 Node 网络适配器。`API_TIMEOUT_MS=29400000` 保留，单个正式会话没有墙钟截止，启用压缩时同时传入 `--autocompact 720000`。完成版本切换后仍必须通过新的 high/max 真实工具 smoke，旧版 smoke 不能代替。
+
+每个任务在 `/var/tmp/nvplay-bridge-cc-<uid>-<random>/root` 建立独立文件系统，记录到 `runtime-root.json`。先用 `setpriv` 降为真实 UID 20000–29999，清空附加组并启用 `no-new-privs`，再启动 PRoot；host cwd 设在该任务 root 内。PRoot 仅负责路径转换，隔离依赖真实 UID 和目录权限：题库、隐藏测试、参考解、判分 root 和其它任务必须不可被该 UID 读取。本轮 `/home/zhyhang` 为 0750，独立 UID 的实际读取权限检查通过；真实 `/proc` 会暴露部分 host 元数据，因此不能声称与官方容器隔离等同。
+
+CC 自然结束或行政停止后，先确认其 UID 已无活进程，再将外部 root 移回标准 `agent-root`，交给原判分与校验归档流程。`stop_terminal_native_at.py` 同时识别外部 root 和真实 UID；替换停机工具后要按原绝对截止时间重启计时器。重启不能复用旧 PID、外部 root 或会话。
 
 ## 可提交的环境重建与持续检查点
 
@@ -113,7 +135,7 @@ Node fetch 的默认等响应头限制还会在约 301 秒先于 SDK 超时取�
 
 `usage` 保留原结果文件中终态事件的用量字段合计。`transport.observed_usage` 则从完整元数据中汇总每个逻辑请求最后一次收到的 usage，补上取消前只出现在进度事件中的用量，并以 `requests_with_partial_usage` 标记尚未成功结束的观测。无 usage 的请求另计为 `requests_without_observed_usage`；未返回的用量不估算。它们都不是计费账单，尤其不能把取消前的部分观测称为完整消耗。
 
-chroot 与上游隔离方式存在差异：共享 host 内核和网络，没有 `/proc`，没有每题强制内存/磁盘配额，Python 补丁版本及公共工具也可能不同。因此这些成绩只能标为原生适配子集成绩。上游官方方法使用不同 agent harness；不能将本结果直接放到 AA 榜单比较，也不能从五题判断两个 effort 的统计显著差异。
+原生适配与上游隔离方式存在差异：共享 host 内核和网络，旧 chroot 没有 `/proc`、新 PRoot 绑定真实 `/proc`，没有每题强制内存/磁盘配额，Python 补丁版本及公共工具也可能不同。因此这些成绩只能标为原生适配子集成绩。上游官方方法使用不同 agent harness；不能将本结果直接放到 AA 榜单比较，也不能从五题判断两个 effort 的统计显著差异。
 
 持续监控示例：
 

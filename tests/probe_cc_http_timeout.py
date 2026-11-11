@@ -18,6 +18,10 @@ import socket
 import subprocess
 import threading
 import time
+import sys
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tools"))
+from native_eval_support import kill_uid
 
 MARKER = "CONTROLLED_DELAYED_HEADERS_OK"
 
@@ -34,6 +38,9 @@ def main():
     parser.add_argument("--adapter", type=Path)
     parser.add_argument("--include-native", action="store_true")
     parser.add_argument("--adapter-only", action="store_true")
+    parser.add_argument("--native-root", type=Path, help="Isolated native PATH runtime; runs only this case")
+    parser.add_argument("--uid", type=int)
+    parser.add_argument("--proot", default="proot")
     parser.add_argument("--cases", nargs="+", choices=(
         "node-settings", "node-process-env", "node-adapter", "native-settings"))
     args = parser.parse_args()
@@ -53,6 +60,10 @@ def main():
         cases = [case for case in cases if case[0] in args.cases]
         if len(cases) != len(set(args.cases)):
             parser.error("requested case requires --adapter or --include-native")
+    if args.native_root:
+        if os.geteuid() != 0 or args.uid is None or not 20000 <= args.uid <= 29999:
+            parser.error("native PRoot probe needs sudo and a dedicated evaluation UID")
+        cases = [("native-proot", ["/opt/path-claude/claude"], True, False)]
     diagnostics = out / "observe-undici.cjs"
     diagnostics.write_text('''// Passive network diagnostics: no request headers or body are captured.
 'use strict';
@@ -98,6 +109,15 @@ require('node:diagnostics_channel').channel('undici:request:error').subscribe(({
                        "model": "kimi-k3.1-pro", "content": [{"type": "text", "text": MARKER}],
                        "stop_reason": "end_turn", "stop_sequence": None,
                        "usage": {"input_tokens": 64, "output_tokens": 8}}
+            if name == "native-proot" and sum(states[name].values()) == 2:
+                deadline = time.monotonic() + args.delay_seconds
+                while time.monotonic() < deadline:
+                    if select.select([self.connection], [], [], .2)[0]:
+                        if not self.connection.recv(1, socket.MSG_PEEK):
+                            record(case=name, event="peer_closed_before_headers", kind=kind, number=number)
+                            self.close_connection = True
+                            return
+                record(case=name, event="delay_completed", seconds=args.delay_seconds)
             if stream and number == 1:
                 data = (sse("message_start", {"type": "message_start", "message": {
                     **message, "content": [], "stop_reason": None}})
@@ -109,7 +129,7 @@ require('node:diagnostics_channel').channel('undici:request:error').subscribe(({
                         "message": "Controlled stream interruption"}})).encode()
                 self.respond(data, "text/event-stream")
             elif not stream:
-                if number == 1:
+                if number == 1 and name != "native-proot":
                     deadline = time.monotonic() + args.delay_seconds
                     while time.monotonic() < deadline:
                         if select.select([self.connection], [], [], .2)[0]:
@@ -174,6 +194,8 @@ require('node:diagnostics_channel').channel('undici:request:error').subscribe(({
             "CLAUDE_CODE_EXTRA_BODY": json.dumps({"max_tokens": 131072,
                 "output_config": {"effort": "low"}}), "DISABLE_AUTOUPDATER": "1",
             "DISABLE_AUTO_COMPACT": "1"}, "enabledPlugins": {}}
+        if args.native_root:
+            settings["env"]["CLAUDE_CONFIG_DIR"] = f"/home/agent/{out.name}"
         (folder / "settings.json").write_text(json.dumps(settings))
         (folder / "mcp.json").write_text('{"mcpServers":{}}')
         command = cli + ["-p", "Complete this controlled local transport fixture.",
@@ -182,15 +204,32 @@ require('node:diagnostics_channel').channel('undici:request:error').subscribe(({
             "--permission-mode", "bypassPermissions", "--disable-slash-commands", "--tools", "",
             "--model", "kimi-k3.1-pro", "--effort", "low", "--max-turns", "3",
             "--debug-file", str(folder / "debug.log")]
+        if args.native_root:
+            guest_config = args.native_root / "eval" / out.name
+            guest_config.mkdir(parents=True)
+            shutil.copy2(folder / "settings.json", guest_config / "settings.json")
+            shutil.copy2(folder / "mcp.json", guest_config / "mcp.json")
+            command[command.index("--settings") + 1] = f"/eval/{out.name}/settings.json"
+            command[command.index("--mcp-config") + 1] = f"/eval/{out.name}/mcp.json"
+            command[command.index("--debug-file") + 1] = f"/home/agent/{out.name}-debug.log"
+            command = ["setpriv", f"--reuid={args.uid}", f"--regid={args.uid}", "--clear-groups",
+                       "--no-new-privs", args.proot, "-r", str(args.native_root.resolve()), "-b", "/proc",
+                       "-w", "/app", "/usr/bin/env", "-i", "PATH=/usr/local/bin:/usr/bin:/bin",
+                       "HOME=/home/agent", "LANG=C.UTF-8", "API_TIMEOUT_MS=29400000",
+                       f"ANTHROPIC_BASE_URL=http://127.0.0.1:{server.server_port}/{name}", *command]
         started = time.time()
         with (folder / "cc.jsonl").open("w") as log:
-            child = subprocess.Popen(command, env=env, cwd=folder, stdout=log, stderr=subprocess.STDOUT)
+            child = subprocess.Popen(command, env=env, cwd=args.native_root or folder,
+                                     stdout=log, stderr=subprocess.STDOUT)
             (folder / "state.json").write_text(json.dumps({"pid": child.pid, "started_at": started}))
             try:
                 code = child.wait(timeout=args.delay_seconds + 120)
             except subprocess.TimeoutExpired:
                 child.kill()
                 code = child.wait()
+            finally:
+                if args.native_root:
+                    kill_uid(args.uid)
         result = None
         for line in (folder / "cc.jsonl").read_text().splitlines():
             try:
@@ -209,17 +248,21 @@ require('node:diagnostics_channel').channel('undici:request:error').subscribe(({
         row["received_delayed_headers"] = any(event["event"] == "delay_completed" for event in case_events)
         row["closed_before_delayed_headers"] = any(
             event["event"] == "peer_closed_before_headers" for event in case_events)
-        if adapter:
+        if adapter or args.native_root:
             row["success"] = (row["success"] and row["received_delayed_headers"]
-                and not row["closed_before_delayed_headers"] and states[name]["nonstream"] == 1)
+                and not row["closed_before_delayed_headers"]
+                and (args.native_root is not None or states[name]["nonstream"] == 1))
         (folder / "result.json").write_text(json.dumps(row, indent=2) + "\n")
         print(json.dumps(row), flush=True)
         return row
 
     identity = {"probe_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
         "pinned_cli_sha256": hashlib.sha256(args.pinned_cli.read_bytes()).hexdigest(),
-        "node_version": subprocess.check_output(pinned[:1] + ["--version"], text=True).strip(),
+        "node_version": (subprocess.check_output(pinned[:1] + ["--version"], text=True).strip()
+                         if not args.native_root else None),
         "delay_seconds": args.delay_seconds, "nvidia_requests": 0}
+    if args.native_root:
+        identity["native_cli_version"] = subprocess.check_output([str(args.pinned_cli), "--version"], text=True).strip()
     if args.adapter:
         identity["adapter_sha256"] = hashlib.sha256(args.adapter.read_bytes()).hexdigest()
     (out / "identity.json").write_text(json.dumps(identity, indent=2) + "\n")

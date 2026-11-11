@@ -62,6 +62,19 @@ class ContinuationTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "duplicate completed positions"):
             self.resume()
 
+    def test_native_path_checkpoint_continues_without_relabeling_earlier_results(self):
+        protocol = self.checkpoint["protocol"]
+        protocol.update(cc_version="2.1.322", formal_native_subset={"stage": "path-native"},
+                        cc_runtime_by_stage={"path-native": {"kind": "path-native-proot",
+                            "version": "2.1.322", "sha256": "a" * 64}})
+        continuation = self.resume()
+        self.assertEqual(continuation["source_cc_version"], "2.1.322")
+        self.assertEqual(continuation["preserved_completed_attempts"], 5)
+        self.assertEqual(len(self.formal["schedule"]), 25)
+        protocol["cc_runtime_by_stage"]["path-native"]["version"] = "mismatch"
+        with self.assertRaisesRegex(ValueError, "different dataset, CLI or task set"):
+            self.resume()
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -1,5 +1,7 @@
 # CC + bridge 评测重启检查点（2026-11-10）
 
+**2026-11-11 09:33 已按用户要求切换当前用户 PATH 的 Claude Code 2.1.322 并恢复正式评测。** 新阶段 `formal-1m-720k-path-cc-2-1-322-20261111`，仍从 `mvcc-lsm-compaction` max / r1 开始；旧版在途会话按客户端升级行政中断，未判分。2.1.322 的 high/max 真实工具 smoke 均通过。详见 [版本切换证据](evidence/cc-bridge-path-cc-2026-11-11.json) 与 [原生新版恢复方法](terminal-bench-native.md#当前-path-原生-cc)。当前停机截止仍为 **15:00 北京时间**，checkpoint 为“有实质进展或距最近一次保存 5 分钟”，提交后立即推送。
+
 **2026-11-11 08:01 再次恢复。** 保留已经完成的 7/30，从 `mvcc-lsm-compaction` max / r1 继续。用户要求约 7 小时后主动暂停，本轮已安排在 15:00（北京时间）停机并推送最终检查点。见 [本轮续评记录](cc-bridge-1m-continuation-2026-11-10.md) 和 [本轮检查点](evidence/cc-bridge-1m-reboot-continuation-2026-11-11.json)。
 
 **2026-11-10 23:53 已再次按用户指令恢复**，最新状态见 [1M 配置续评](cc-bridge-1m-continuation-2026-11-10.md)。旧运行目录已被容器清空，最后持久记录为 5 次完成、第三题 max 在途；保留原结果，缺失终态不补分。用户本次授权继续评测，并要求 checkpoint 提交后立即推送，已取代上轮“第三题后暂停”的运行边界。

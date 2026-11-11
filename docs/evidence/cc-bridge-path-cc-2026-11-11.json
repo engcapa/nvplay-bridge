@@ -1,6 +1,6 @@
 {
   "recorded_at": 1794360485.7245808,
-  "status": "live_smoke_passed_formal_restarting",
+  "status": "latest_path_cc_formal_running",
   "path_runtime": {
     "kind": "path-native-proot",
     "source_path": "/home/zhyhang/dev/node/bin/claude",
@@ -616,5 +616,232 @@
       "sha256": "27aa50797f4a9535895253e48bfba6fce0604c3676ceb7f8c014ae66a5fc0839",
       "size": 1082
     }
-  ]
+  ],
+  "updated_at": 1794361024.2965748,
+  "live_runtime_isolation": {
+    "readable_private_paths": [],
+    "real_uid": 20006,
+    "cwd": "/var/tmp/nvplay-bridge-cc-20006-tlbbctqy/root",
+    "process_cwds": [
+      {
+        "pid": 188202,
+        "cwd": "/var/tmp/nvplay-bridge-cc-20006-tlbbctqy/root"
+      },
+      {
+        "pid": 188203,
+        "cwd": "/var/tmp/nvplay-bridge-cc-20006-tlbbctqy/root"
+      },
+      {
+        "pid": 188204,
+        "cwd": "/var/tmp/nvplay-bridge-cc-20006-tlbbctqy/root"
+      }
+    ],
+    "unreadable_process_cwds": [],
+    "recorded_at": 1794360924.2356095,
+    "runtime_root": "/var/tmp/nvplay-bridge-cc-20006-tlbbctqy/root",
+    "live_uids_pids": [
+      188202,
+      188203,
+      188204
+    ],
+    "hidden_roots_absent": true,
+    "passed": true,
+    "scope": "live native formal process real UID, process cwd, private source/verifier access; PRoot is path translation, /proc is intentionally exposed"
+  },
+  "formal_start": {
+    "stage": "formal-1m-720k-path-cc-2-1-322-20261111",
+    "attempt": "runs/formal-1m-720k-path-cc-2-1-322-20261111/mvcc-lsm-compaction--max--r1",
+    "uid": 20006,
+    "actual_client_init": {
+      "claude_code_version": "2.1.322",
+      "model": "kimi-k3.1-pro[1m]",
+      "cwd": "/app",
+      "tools": [
+        "Bash",
+        "Edit",
+        "Glob",
+        "Grep",
+        "Read",
+        "Write"
+      ],
+      "permissionMode": "bypassPermissions"
+    },
+    "identity": {
+      "identity_version": 2,
+      "bridge_head": "3166ea20e55cc782622e58c5456064512ced3e04",
+      "tooling_repository_head": "ecd4bb700b900e1fe304d96e6610745d3d9a52f3",
+      "tooling_worktree_status": [
+        " M tools/stop_terminal_native_at.py"
+      ],
+      "runner_sha256": {
+        "eval_terminal_native.py": "06975240e3f1cf0f18ffa4f59e884cca5e172d5ea093d6326cf82fb2688c3e93",
+        "native_eval_support.py": "814406e0b5c825d087b1fb28b7eff68b707594e49b645276a7715a0ca285c3ae",
+        "native_path_cc.py": "5ac4dff8b3516e790ad0b6d296b1996d9659ce5c5556109288c7fd08c8c47d1f",
+        "timeout.cjs": "8a2f4200101482502082b68abeca68dfb1664016b4c4cc8b5f7f9b9877523f25",
+        "package.json": "18db56d8ef89e74797e4a90571469196e2dcb991188f967697cef08bc7165d49",
+        "package-lock.json": "0c749353801f077a529cf117ca9219b81ef73da39b9dafb0e7cbb8bd8147cc83",
+        "run_terminal_native_campaign.py": "c6678a7aaea10d6975941dfcf45f04acb17666b0abab69d9df72dcba9c319ba8",
+        "archive_terminal_native_roots.py": "fa868a60d2dce0a08ca7e20bf898445b45fe466443267482a05993fe42046db2",
+        "checkpoint_terminal_native.py": "a6ef062ed21594171cdbc84343c0d1385d567e6e5b17f6d5d51cbac1835eed9e"
+      },
+      "cc_version": "2.1.322",
+      "dataset_commit": "452bf305c6daa62fc59061d22133a7cbc7c1572e",
+      "bridge_runtime": {
+        "started_at": 1794355335.3456187,
+        "source_head": "3166ea20e55cc782622e58c5456064512ced3e04",
+        "source_module_sha256": {
+          "nvplay_bridge.py": "537f857a142c8d4391d02837bab2d2123b2fe802185f785d34696dde1287856f",
+          "browser_upstream.py": "44025b2a4b9b757c95537b4a4ecbdfb170755a8098274f5b9fc43ae4ab763517",
+          "browser_events.py": "9ca0a5b7d18edcde37bf19aef27ddf226b588f840f97b4b9df46fc08042daf29",
+          "stream_support.py": "f46b07b3cdf1e4cae0f409caf26c0a279bd57477f5259ee8bba045c14f95f602",
+          "responses_api.py": "da451613bf0a1c4aa12ef03effc4d5ffe1ea330fb48006f9d09925233f9580c6",
+          "responses_support.py": "ed907b22106ff58923efa5431c20422e59bfdeb9a719b0766969522e444f033e"
+        },
+        "configuration": {
+          "UPSTREAM_KIND": "browser",
+          "UPSTREAM_MODEL": "moonshotai/kimi-k3.1-pro",
+          "BROWSER_CDP_PORT": "9225",
+          "BROWSER_POOL_SIZE": "5",
+          "BROWSER_TIMEOUT": "28800",
+          "BROWSER_FIRST_BYTE_TIMEOUT": "3600",
+          "BROWSER_IDLE_TIMEOUT": "3600",
+          "BROWSER_MAX_TOKENS": "131072",
+          "BROWSER_FIXED_MAX_TOKENS": "131072",
+          "BROWSER_HTTP_5XX_RETRIES": "2",
+          "BROWSER_DEBUG_LOG": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-1m-20261111-0801/bridge-debug.jsonl"
+        },
+        "fixed_max_output_tokens": 131072,
+        "request_timeout_seconds": 28800,
+        "first_byte_timeout_seconds": 3600,
+        "idle_timeout_seconds": 3600,
+        "cdp_port": 9225,
+        "bridge_port": 8083,
+        "pid": 22152,
+        "health_at_start": {
+          "status": "ok",
+          "upstream_kind": "browser",
+          "upstream_url": "browser://cdp:9225",
+          "model": "moonshotai/kimi-k3.1-pro",
+          "cookie_present": false,
+          "captcha_present": false,
+          "tool_ids": "unique_per_invocation",
+          "loop_reminder_enabled": false,
+          "history_reasoning": "preserve",
+          "browser_output_tokens": {
+            "maximum": 131072,
+            "fixed": 131072
+          },
+          "browser_timeouts": {
+            "total_seconds": 28800,
+            "first_byte_seconds": 3600.0,
+            "idle_seconds": 3600.0
+          }
+        },
+        "boot_id": "cac08d61-c715-4c07-aaa6-acca085402b0",
+        "start_ticks": "77200"
+      },
+      "cc_runtime": {
+        "kind": "path-native-proot",
+        "source_path": "/home/zhyhang/dev/node/bin/claude",
+        "resolved_source": "/home/zhyhang/dev/node/lib/node_modules/@anthropic-ai/claude-code/bin/claude.exe",
+        "version": "2.1.322",
+        "sha256": "bfb3703ad5380242328459bc62ada4bde8ae7ba57c6e1eeadb9c00e08874c478",
+        "size": 341914128,
+        "snapshot_path": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-1m-20261111-0801/path-cc-runtime/claude",
+        "guest_cli": "/opt/path-claude/claude",
+        "proot_path": "/usr/local/libexec/nvplay-proot-5.5.0",
+        "proot_sha256": "80e9379be022ae9c44f0c44c8866fe86f813391d0b6d3d9a9af0650654c59af0",
+        "proot_version": "5.5.0",
+        "proot_source_commit": "25dc6a3134891f98a79f57ce1c2c1b23ff15cad1",
+        "real_proc_binding": true,
+        "real_dedicated_uid": true,
+        "no_new_privileges": true,
+        "host_cwd_inside_agent_root": true,
+        "isolation_boundary": "Real Unix UID and private source directory permissions; PRoot supplies path translation only"
+      }
+    },
+    "request_protocol": {
+      "settings_sha256": "6e2eae3469a250be5aed670d756ccff143f3203edc2bd838490b1cb8f7091a3c",
+      "cc_output_environment_tokens": "128000",
+      "extra_body": {
+        "max_tokens": 131072,
+        "output_config": {
+          "effort": "max"
+        }
+      },
+      "cc_api_timeout_ms": "29400000",
+      "cc_launch_configuration": {
+        "model": "kimi-k3.1-pro[1m]",
+        "automatic_compaction_enabled": true,
+        "auto_compact_window_tokens": 720000
+      },
+      "agent_budget_seconds": 28800,
+      "cc_network_adapter": null,
+      "agent_wall_clock_timeout_seconds": null,
+      "cc_runtime": {
+        "kind": "path-native-proot",
+        "source_path": "/home/zhyhang/dev/node/bin/claude",
+        "resolved_source": "/home/zhyhang/dev/node/lib/node_modules/@anthropic-ai/claude-code/bin/claude.exe",
+        "version": "2.1.322",
+        "sha256": "bfb3703ad5380242328459bc62ada4bde8ae7ba57c6e1eeadb9c00e08874c478",
+        "size": 341914128,
+        "snapshot_path": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-cc-1m-20261111-0801/path-cc-runtime/claude",
+        "guest_cli": "/opt/path-claude/claude",
+        "proot_path": "/usr/local/libexec/nvplay-proot-5.5.0",
+        "proot_sha256": "80e9379be022ae9c44f0c44c8866fe86f813391d0b6d3d9a9af0650654c59af0",
+        "proot_version": "5.5.0",
+        "proot_source_commit": "25dc6a3134891f98a79f57ce1c2c1b23ff15cad1",
+        "real_proc_binding": true,
+        "real_dedicated_uid": true,
+        "no_new_privileges": true,
+        "host_cwd_inside_agent_root": true,
+        "isolation_boundary": "Real Unix UID and private source directory permissions; PRoot supplies path translation only"
+      },
+      "cc_bootstrap": [
+        "/opt/path-claude/claude"
+      ],
+      "bootstrap_environment": {
+        "API_TIMEOUT_MS": "29400000",
+        "ANTHROPIC_BASE_URL": "http://127.0.0.1:8083"
+      }
+    },
+    "copied_binary_sha256": "bfb3703ad5380242328459bc62ada4bde8ae7ba57c6e1eeadb9c00e08874c478",
+    "frozen_runner_sources_unchanged": {
+      "eval_terminal_native.py": true,
+      "native_eval_support.py": true,
+      "native_path_cc.py": true,
+      "run_terminal_native_campaign.py": true,
+      "archive_terminal_native_roots.py": true,
+      "checkpoint_terminal_native.py": true
+    },
+    "progress": [
+      {
+        "attempt": "runs/formal-1m-720k-path-cc-2-1-322-20261111/mvcc-lsm-compaction--max--r1",
+        "status": "agent_running",
+        "task": "mvcc-lsm-compaction",
+        "effort": "max",
+        "started_at": 1794360810.819098,
+        "elapsed_seconds": 213.8,
+        "tool_calls": 17,
+        "last_tool": "Bash"
+      }
+    ]
+  },
+  "regression": {
+    "full_python_suite": {
+      "passed": true,
+      "tests": 225,
+      "seconds": 15.921
+    },
+    "additional_runtime_configuration_tests": {
+      "passed": true,
+      "tests": 3
+    }
+  },
+  "long_headers_probe": {
+    "status": "running",
+    "delay_seconds": 310,
+    "local_only": true,
+    "upstream_requests": 0
+  }
 }

@@ -232,8 +232,14 @@ def continue_schedule(formal: dict, checkpoint: Path) -> dict:
     protocol = previous["protocol"]
     from eval_terminal_native import DEFAULT_PILOT
 
+    prior_stage = protocol.get("formal_native_subset", {}).get("stage")
+    prior_runtime = protocol.get("cc_runtime_by_stage", {}).get(prior_stage, {})
+    known_cli = protocol["cc_version"] == "2.1.110" or (
+        prior_runtime.get("kind") == "path-native-proot"
+        and prior_runtime.get("version") == protocol["cc_version"]
+        and re.fullmatch(r"[0-9a-f]{64}", prior_runtime.get("sha256", "")) is not None)
     if (protocol["source_commit"] != "452bf305c6daa62fc59061d22133a7cbc7c1572e"
-            or protocol["cc_version"] != "2.1.110" or protocol["pilot_tasks"] != DEFAULT_PILOT):
+            or not known_cli or protocol["pilot_tasks"] != DEFAULT_PILOT):
         raise ValueError("continuation checkpoint uses a different dataset, CLI or task set")
     inherited = protocol.get("continuation", {})
     inherited_positions = inherited.get("preserved_positions", [])
@@ -253,6 +259,7 @@ def continue_schedule(formal: dict, checkpoint: Path) -> dict:
     if not formal["schedule"]:
         raise ValueError("there are no missing formal positions to continue")
     return {"source_checkpoint": str(checkpoint), "source_checkpoint_sha256": digest(checkpoint),
+            "source_cc_version": protocol["cc_version"],
             "preserved_completed_attempts": len(completed), "total_plan_positions": len(all_slots),
             "preserved_positions": [slot for slot in all_slots if key(slot) in completed],
             "context_policy_changed": any(formal.get(k) != protocol.get("formal_native_subset", {}).get(k)
