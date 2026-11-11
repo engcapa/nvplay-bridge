@@ -1,0 +1,25 @@
+{
+  "recorded_at": 1794408681.526832,
+  "requested_by_user": true,
+  "remote_commit": "c0b8d1c",
+  "merge_commit": "4949f60",
+  "merge_conflicts": false,
+  "regression": {
+    "command": "PYTHONPATH=. python3 -m unittest discover -s tests -p 'test_*.py'",
+    "tests": 286,
+    "passed": true,
+    "duration_seconds": 22.983,
+    "log_sha256": "53905914ee49063bc707a75ba98bf80373a895a49a98b532a60c65f770fb65ea"
+  },
+  "changed_frozen_runner_files": [],
+  "active_bridge_source_head": "e21bfd3096761cd5dbe2553bc0cc43ee4841442f",
+  "active_bridge_identity": {
+    "pid": 457990,
+    "boot_id": "a5433646-d26c-4433-92b6-b498d40bdf91",
+    "start_ticks": "1908623"
+  },
+  "active_attempt_interrupted": false,
+  "merged_bridge_changes_deployed": false,
+  "administrative_stop_at_unix": 1794413157,
+  "next_deployment_requires_new_stage_and_live_smoke": true
+}
