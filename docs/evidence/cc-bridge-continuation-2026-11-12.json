@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794447539.3784559,
+  "checkpoint_at": 1794447553.2394595,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261112",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -1107,8 +1107,8 @@
     "isolation_boundary": "Real dedicated Unix UID and protected source directories; shared host filesystem, kernel and network"
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794447434.8409545,
-    "commit": "52390758bb45bc0b7eb3449f9ab7c98b9d6b16f5",
+    "attempted_at": 1794447539.564229,
+    "commit": "39d0edf8352fc911bb11636390d7dadd5f8a5863",
     "pushed": true,
     "returncode": 0
   },
@@ -1550,7 +1550,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794447539.5111105,
+    "generated_at": 1794447553.3702385,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-1m-720k-host-cc-20261112/28800/max": {
@@ -1661,9 +1661,9 @@
         "task": "embedding-drift-monitor",
         "effort": "high",
         "started_at": 1794445209.5020125,
-        "elapsed_seconds": 2329.9,
-        "tool_calls": 78,
-        "last_tool": "Write"
+        "elapsed_seconds": 2343.8,
+        "tool_calls": 79,
+        "last_tool": "Bash"
       }
     ]
   },
@@ -1697,14 +1697,16 @@
       "idle_seconds": 3600.0
     },
     "pool_states": {
-      "ready": 4,
-      "busy": 1
+      "ready": 5
     },
     "recovering_tabs": []
   },
   "bridge_activity": {
     "events_last_300s": {
-      "browser_progress": 50,
+      "browser_sent": 10,
+      "browser_first_data": 10,
+      "messages_first_block": 10,
+      "browser_progress": 51,
       "browser_buffer": 10,
       "browser_pool_release": 10,
       "browser_output_ready": 10,
@@ -1713,44 +1715,14 @@
       "tool_call": 10,
       "messages_done": 10,
       "http_complete": 10,
-      "tool_result": 10,
-      "request": 10,
-      "payload": 10,
-      "browser_start": 10,
-      "browser_lease": 10,
-      "browser_tab": 10,
-      "browser_sent": 10,
-      "browser_first_data": 10,
-      "messages_first_block": 10
+      "tool_result": 9,
+      "request": 9,
+      "payload": 9,
+      "browser_start": 9,
+      "browser_lease": 9,
+      "browser_tab": 9
     },
-    "active": [
-      {
-        "id": "5d02dde3a0da481dbf283c4b",
-        "retry_count": 0,
-        "phase": "browser_progress",
-        "attempt": 1,
-        "reasoning_effort": "high",
-        "tab_id": "kpool=3",
-        "counts": {
-          "thinking_chars": 228,
-          "text_chars": 0,
-          "tool_calls": 0
-        },
-        "usage": {
-          "prompt_tokens": 94053,
-          "completion_tokens": 41,
-          "total_tokens": 94094,
-          "prompt_tokens_details": {
-            "cached_tokens": 89856
-          },
-          "completion_tokens_details": {
-            "reasoning_tokens": 41
-          }
-        },
-        "age_seconds": 7.6,
-        "activity_age_seconds": 2.5
-      }
-    ],
+    "active": [],
     "recent_errors": [],
     "recent_upstream_errors": [],
     "recent_retries": []
@@ -1808,7 +1780,7 @@
     },
     {
       "path": "browser-supervisor-state.json",
-      "sha256": "284b1620e48d671ccbf17438f6345045398eab157ddb582338a594475aea278f",
+      "sha256": "a73e8fb5e2d4307be28dc3cad8f56d8577d7c47b3567da838e0776d15b9005c9",
       "size": 102
     },
     {
@@ -1828,8 +1800,8 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "9623c172c5fa272a127c098d0a217fde4323e497fa8776a4156a81087a90ab27",
-      "size": 134
+      "sha256": "a6125b974ecf06ec3c6c9d24b7ae01d7be43bf317b37c2760f1583bc74c8ebe2",
+      "size": 133
     },
     {
       "path": "checkpoint-process.json",
@@ -1958,7 +1930,7 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "637d4a279ce5c95c99412ce682c60504046452980d1bf21c2d9378203901b307",
+      "sha256": "51265ba4e2449358dcf78c8c63f05c06832ec1261de82304813e85e78f32ba52",
       "size": 828
     },
     {
