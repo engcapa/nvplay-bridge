@@ -1182,7 +1182,7 @@ async def _browser_events_with_retry(payload: dict[str, Any], *, buffered: bool,
         fetch_failure = failure.get("fetch_failed") is True
         stream_failure = (failure.get("sse_error_code") in (500, 502, 503, 504)
                           or failure.get("stream_failure") in (
-                              "read", "first_byte_timeout", "idle_timeout", "missing_finish"))
+                              "read", "cdp_read", "first_byte_timeout", "idle_timeout", "missing_finish"))
         if pool_timeout or http_failure or fetch_failure or stream_failure:
             if pool_timeout:
                 retries, limit = pool_retries, BROWSER_POOL_TIMEOUT_RETRIES
@@ -1216,6 +1216,8 @@ async def _browser_events_with_retry(payload: dict[str, Any], *, buffered: bool,
                     status=failure["status"], error=failure["message"], counts=counts, usage=usage,
                     sse_error_code=failure.get("sse_error_code"),
                     stream_failure=failure.get("stream_failure"),
+                    cdp_error_type=failure.get("cdp_error_type"),
+                    cdp_phase=failure.get("cdp_phase"), cdp_method=failure.get("cdp_method"),
                     output_deferred=defer_output, thinking_delivered=thinking_delivered)
                 try:
                     async with aclosing(_browser_retry_pause(delay, deadline)) as pause:
@@ -1230,7 +1232,9 @@ async def _browser_events_with_retry(payload: dict[str, Any], *, buffered: bool,
         log("browser_error", error=failure["message"], status=failure["status"],
             committed=committed, counts=counts, usage=usage,
             output_deferred=defer_output, thinking_delivered=thinking_delivered,
-            sse_error_code=failure.get("sse_error_code"), stream_failure=failure.get("stream_failure"))
+            sse_error_code=failure.get("sse_error_code"), stream_failure=failure.get("stream_failure"),
+            cdp_error_type=failure.get("cdp_error_type"),
+            cdp_phase=failure.get("cdp_phase"), cdp_method=failure.get("cdp_method"))
         yield failure
         return
 

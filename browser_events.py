@@ -99,6 +99,10 @@ async def browser_events(browser, payload: dict, timeout: float, heartbeat: floa
                     error["fetch_failed"] = True
                 if isinstance(exc, BrowserStreamError):
                     error["stream_failure"] = exc.reason
+                    for key in ("cdp_error_type", "cdp_phase", "cdp_method"):
+                        value = getattr(exc, key, None)
+                        if value is not None:
+                            error[key] = value
                 terminal_error.append(error)
         finally:
             try:

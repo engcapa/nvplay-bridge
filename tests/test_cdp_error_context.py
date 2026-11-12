@@ -9,6 +9,25 @@ import websocket
 
 
 class CDPErrorContextTests(unittest.TestCase):
+    def test_send_timeout_identifies_command_and_is_not_replayed(self):
+        for pooled in (False, True):
+            with self.subTest(pooled=pooled):
+                error = websocket.WebSocketTimeoutException("send timed out")
+                ws = Mock()
+                ws.send.side_effect = error
+                with self.assertRaises(websocket.WebSocketTimeoutException) as caught:
+                    if pooled:
+                        browser.BrowserPool._call(ws, 1, "Page.navigate", {"url": "about:blank"})
+                    else:
+                        upstream = browser.BrowserUpstream()
+                        upstream.ws = ws
+                        upstream._call("Runtime.evaluate", {"expression": "42"})
+                self.assertIs(caught.exception, error)
+                self.assertEqual(error.cdp_phase, "send")
+                self.assertEqual(error.cdp_method, "Page.navigate" if pooled else "Runtime.evaluate")
+                self.assertEqual(ws.send.call_count, 1)
+                ws.recv.assert_not_called()
+
     def test_receive_timeout_preserves_exception_for_both_cdp_callers(self):
         for pooled in (False, True):
             with self.subTest(pooled=pooled):
