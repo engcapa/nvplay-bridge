@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794464263.8267546,
+  "checkpoint_at": 1794464474.281995,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261112",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -1107,8 +1107,8 @@
     "isolation_boundary": "Real dedicated Unix UID and protected source directories; shared host filesystem, kernel and network"
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794464203.818696,
-    "commit": "893335256d6d1f23898ef77fdc6e6a173cc4ab79",
+    "attempted_at": 1794464404.2743552,
+    "commit": "8b8ed3ca7799051687a720e740c4f29dd2553898",
     "pushed": false,
     "error_type": "TimeoutExpired"
   },
@@ -1550,7 +1550,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794464263.8807995,
+    "generated_at": 1794464474.3380349,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-1m-720k-host-cc-20261112/28800/max": {
@@ -1857,7 +1857,7 @@
         "task": "batched-eval-parity",
         "effort": "high",
         "started_at": 1794460205.9569986,
-        "elapsed_seconds": 4057.9,
+        "elapsed_seconds": 4268.4,
         "tool_calls": 0,
         "last_tool": null
       }
@@ -1893,81 +1893,124 @@
       "idle_seconds": 3600.0
     },
     "pool_states": {
-      "ready": 3,
+      "ready": 2,
       "recovering": 1,
+      "failed": 1,
       "busy": 1
     },
     "recovering_tabs": []
   },
   "bridge_activity": {
     "events_last_300s": {
-      "pool_recovery_start": 9,
-      "pool_recovery_error": 8
+      "pool_recovery_start": 15,
+      "pool_recovery_error": 14,
+      "browser_abort": 1,
+      "browser_buffer": 1,
+      "browser_pool_release": 1,
+      "upstream_retry": 1,
+      "browser_start": 1,
+      "browser_lease": 1,
+      "browser_tab": 1,
+      "browser_sent": 1
     },
     "active": [
       {
         "id": "bf688ec2048b437ea46f44ac",
-        "retry_count": 0,
-        "phase": "browser_sent",
-        "attempt": 1,
+        "retry_count": 1,
         "reasoning_effort": "high",
-        "tab_id": "kpool=4",
-        "age_seconds": 3447.5,
-        "activity_age_seconds": 3446.6
+        "last_retry": {
+          "reason": "upstream_stream_failure",
+          "status": 502,
+          "delay": 5.095
+        },
+        "phase": "browser_sent",
+        "attempt": 2,
+        "tab_id": "kpool=5",
+        "age_seconds": 3657.9,
+        "activity_age_seconds": 50.9
       }
     ],
     "recent_errors": [
       {
         "event": "pool_recovery_error",
-        "ts": 1794463988.7411914,
+        "ts": 1794464334.5881538,
         "error_type": "WebSocketTimeoutException",
         "error_sha256": "2e0b4a7d6c73428b79a9ddf24d347993ca885a29abc2c9add6ea2c13277c4622"
       },
       {
         "event": "pool_recovery_error",
-        "ts": 1794463993.7472324,
+        "ts": 1794464339.594431,
         "error_type": "WebSocketTimeoutException",
         "error_sha256": "2e0b4a7d6c73428b79a9ddf24d347993ca885a29abc2c9add6ea2c13277c4622"
       },
       {
         "event": "pool_recovery_error",
-        "ts": 1794464058.7841861,
+        "ts": 1794464404.6312034,
         "error_type": "WebSocketTimeoutException",
         "error_sha256": "2e0b4a7d6c73428b79a9ddf24d347993ca885a29abc2c9add6ea2c13277c4622"
       },
       {
         "event": "pool_recovery_error",
-        "ts": 1794464064.891192,
+        "ts": 1794464409.638199,
         "error_type": "WebSocketTimeoutException",
         "error_sha256": "2e0b4a7d6c73428b79a9ddf24d347993ca885a29abc2c9add6ea2c13277c4622"
       },
       {
         "event": "pool_recovery_error",
-        "ts": 1794464128.8417625,
+        "ts": 1794464422.2951977,
+        "error_type": "WebSocketTimeoutException",
+        "error_sha256": "2e0b4a7d6c73428b79a9ddf24d347993ca885a29abc2c9add6ea2c13277c4622"
+      },
+      {
+        "event": "pool_recovery_error",
+        "ts": 1794464427.3021724,
+        "error_type": "WebSocketTimeoutException",
+        "error_sha256": "2e0b4a7d6c73428b79a9ddf24d347993ca885a29abc2c9add6ea2c13277c4622"
+      },
+      {
+        "event": "pool_recovery_error",
+        "ts": 1794464437.3121722,
+        "error_type": "WebSocketTimeoutException",
+        "error_sha256": "2e0b4a7d6c73428b79a9ddf24d347993ca885a29abc2c9add6ea2c13277c4622"
+      },
+      {
+        "event": "pool_recovery_error",
+        "ts": 1794464442.3181272,
+        "error_type": "WebSocketTimeoutException",
+        "error_sha256": "2e0b4a7d6c73428b79a9ddf24d347993ca885a29abc2c9add6ea2c13277c4622"
+      },
+      {
+        "event": "pool_recovery_error",
+        "ts": 1794464457.3302386,
+        "error_type": "WebSocketTimeoutException",
+        "error_sha256": "2e0b4a7d6c73428b79a9ddf24d347993ca885a29abc2c9add6ea2c13277c4622"
+      },
+      {
+        "event": "pool_recovery_error",
+        "ts": 1794464462.6176517,
         "error_type": "BrowserError",
         "error_sha256": "e98472096d806d740018e0fc999fd5ca628c0f18acba879f280545e23f07250e"
-      },
-      {
-        "event": "pool_recovery_error",
-        "ts": 1794464129.4628117,
-        "error_type": "BrowserError",
-        "error_sha256": "e98472096d806d740018e0fc999fd5ca628c0f18acba879f280545e23f07250e"
-      },
-      {
-        "event": "pool_recovery_error",
-        "ts": 1794464194.5001884,
-        "error_type": "WebSocketTimeoutException",
-        "error_sha256": "2e0b4a7d6c73428b79a9ddf24d347993ca885a29abc2c9add6ea2c13277c4622"
-      },
-      {
-        "event": "pool_recovery_error",
-        "ts": 1794464199.5062075,
-        "error_type": "WebSocketTimeoutException",
-        "error_sha256": "2e0b4a7d6c73428b79a9ddf24d347993ca885a29abc2c9add6ea2c13277c4622"
       }
     ],
     "recent_upstream_errors": [],
-    "recent_retries": []
+    "recent_retries": [
+      {
+        "event": "upstream_retry",
+        "ts": 1794464417.3137205,
+        "id": "bf688ec2048b437ea46f44ac",
+        "attempt": 1,
+        "reasoning_effort": "high",
+        "status": 502,
+        "sec": 3600.945,
+        "counts": {
+          "thinking_chars": 0,
+          "text_chars": 0,
+          "tool_calls": 0
+        },
+        "usage": {},
+        "error_sha256": "a5329e32aadde2585d0ca7dbff5db473ce3ee4806769479fe4384cee11333067"
+      }
+    ]
   },
   "evidence_fingerprints": [
     {
@@ -2027,8 +2070,8 @@
     },
     {
       "path": "browser-supervisor-state.json",
-      "sha256": "e251a0c6e6a0a3989c44d931f4d8102a50395447977d92b7e6a4997436bf01ab",
-      "size": 102
+      "sha256": "9e826b2c75f6c258b166ef53c820368a582371d6935ca18d0b9fd05ac16fc990",
+      "size": 101
     },
     {
       "path": "campaign-launch-process.json",
@@ -2047,8 +2090,8 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "b522b9a8d36ea12d84eb95effe19c1e2ae21459c480f92ee2e65386a85dee58e",
-      "size": 149
+      "sha256": "728d4794df7ab59caccae6896f69271549aafdadb7a750197e4a37654fbaa7ac",
+      "size": 150
     },
     {
       "path": "checkpoint-process.json",
@@ -2187,7 +2230,7 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "c7ff4376062ecfad9cfa756e42020c2d8af53b697698af8052efdb47a005a079",
+      "sha256": "15a5716ef1452964008905b705349f9149f58c15dc95648443a50c699ee51928",
       "size": 822
     },
     {
