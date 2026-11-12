@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794446668.873177,
+  "checkpoint_at": 1794446681.9270077,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261112",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -1107,8 +1107,8 @@
     "isolation_boundary": "Real dedicated Unix UID and protected source directories; shared host filesystem, kernel and network"
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794446655.94861,
-    "commit": "7b12d95733d0d040107336dfc1641fb733e17f46",
+    "attempted_at": 1794446669.0022056,
+    "commit": "2dcc3fc164e4b76b0862e47197856c52efc6c652",
     "pushed": true,
     "returncode": 0
   },
@@ -1550,7 +1550,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794446668.9539464,
+    "generated_at": 1794446682.0066268,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-1m-720k-host-cc-20261112/28800/max": {
@@ -1661,7 +1661,7 @@
         "task": "embedding-drift-monitor",
         "effort": "high",
         "started_at": 1794445209.5020125,
-        "elapsed_seconds": 1459.4,
+        "elapsed_seconds": 1472.4,
         "tool_calls": 45,
         "last_tool": "Bash"
       }
@@ -1697,13 +1697,14 @@
       "idle_seconds": 3600.0
     },
     "pool_states": {
-      "ready": 5
+      "busy": 1,
+      "ready": 4
     },
     "recovering_tabs": []
   },
   "bridge_activity": {
     "events_last_300s": {
-      "browser_progress": 46,
+      "browser_progress": 45,
       "browser_buffer": 13,
       "browser_pool_release": 13,
       "browser_output_ready": 13,
@@ -1712,17 +1713,44 @@
       "tool_call": 15,
       "messages_done": 13,
       "http_complete": 13,
-      "tool_result": 14,
-      "request": 12,
-      "payload": 12,
-      "browser_start": 12,
-      "browser_lease": 12,
-      "browser_tab": 12,
-      "browser_sent": 12,
-      "browser_first_data": 12,
-      "messages_first_block": 12
+      "tool_result": 15,
+      "request": 13,
+      "payload": 13,
+      "browser_start": 13,
+      "browser_lease": 13,
+      "browser_tab": 13,
+      "browser_sent": 13,
+      "browser_first_data": 13,
+      "messages_first_block": 13
     },
-    "active": [],
+    "active": [
+      {
+        "id": "a943a67a3605414d8fdbc4ef",
+        "retry_count": 0,
+        "phase": "browser_progress",
+        "attempt": 1,
+        "reasoning_effort": "high",
+        "tab_id": "kpool=1",
+        "counts": {
+          "thinking_chars": 0,
+          "text_chars": 0,
+          "tool_calls": 0
+        },
+        "usage": {
+          "prompt_tokens": 58008,
+          "completion_tokens": 1,
+          "total_tokens": 58009,
+          "prompt_tokens_details": {
+            "cached_tokens": 57216
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 1
+          }
+        },
+        "age_seconds": 12.4,
+        "activity_age_seconds": 3.7
+      }
+    ],
     "recent_errors": [],
     "recent_upstream_errors": [],
     "recent_retries": []
@@ -1780,7 +1808,7 @@
     },
     {
       "path": "browser-supervisor-state.json",
-      "sha256": "07b810e865a1605054a256ca61b40f26aa7f006a84c94dd7495d87969784ac06",
+      "sha256": "6bfcda1ecf09c843b56c72248f7e81b0d6be223141414a513fc85f7a985306de",
       "size": 102
     },
     {
@@ -1800,8 +1828,8 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "43d0831b8f17eec4341ecf430bf323c054cad14c7d5df75ed6b5ef144b1bdbea",
-      "size": 132
+      "sha256": "4f00b1400d93f0504c10515e1daac8d742952236dfa5b1fac61d22cf9021f3bc",
+      "size": 134
     },
     {
       "path": "checkpoint-process.json",
@@ -1930,7 +1958,7 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "d9bb49cfea223f546a46883368891550ea3318931bd4fc7ad8d5f3c2bc5b4347",
+      "sha256": "4dfb24f943446e5fedb7ffc1360bbf692d6f1cf073b0dac99abf182f36eec7c0",
       "size": 827
     },
     {
