@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794445147.525282,
+  "checkpoint_at": 1794445150.3608658,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261112",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -1107,8 +1107,8 @@
     "isolation_boundary": "Real dedicated Unix UID and protected source directories; shared host filesystem, kernel and network"
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794445144.745337,
-    "commit": "25e1bb11167748688be93cd417e5b766fd27859d",
+    "attempted_at": 1794445147.585341,
+    "commit": "544b8cf0c80b6c314a9e7c1814036a040337a4b8",
     "pushed": true,
     "returncode": 0
   },
@@ -1550,7 +1550,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794445147.543659,
+    "generated_at": 1794445150.3703828,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-1m-720k-host-cc-20261112/28800/max": {
@@ -1663,7 +1663,7 @@
   "campaign": {
     "controller_alive": true,
     "status": "preparing",
-    "task": "mvcc-lsm-compaction"
+    "task": "ks-solver-cpp"
   },
   "transport_transition": {
     "status": "remaining_campaign_started",
@@ -1782,8 +1782,8 @@
     },
     {
       "path": "campaign-state.json",
-      "sha256": "db74b3cae6439aa3b36d6ca551662e09d1d09f0da3c372d7fee713c2c623709f",
-      "size": 6536
+      "sha256": "cf3f378f1e5f5eb954283a1036e5e0c18407977c2146ce2050110234857a95cd",
+      "size": 6530
     },
     {
       "path": "cdp-observer-process.json",
@@ -1792,7 +1792,7 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "bb889b62ce5276055df4fa2a472182f5ee2aac6e28cdff8ed712c20df0a68d27",
+      "sha256": "6c053af61add9515a67ee97bf2f1c87d11b54b8207bb5c41300f9c57549b1689",
       "size": 133
     },
     {
@@ -1922,8 +1922,8 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "7380cf1657de7969a3ca59f0c1520e2044ef311351f5398b0180347c30a2de98",
-      "size": 783
+      "sha256": "79a2e5269632e1d3a6128b0399ac36436ee1fa59eedfbe258fe1e52eea29f62a",
+      "size": 801
     },
     {
       "path": "restore-fixed-regression.log",
