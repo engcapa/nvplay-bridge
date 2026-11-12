@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794448155.438139,
+  "checkpoint_at": 1794448165.4398205,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261112",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -1107,8 +1107,8 @@
     "isolation_boundary": "Real dedicated Unix UID and protected source directories; shared host filesystem, kernel and network"
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794448151.7645175,
-    "commit": "1c14536b88b23c4f153235c0bd4b5c3e5c90591d",
+    "attempted_at": 1794448155.5189223,
+    "commit": "36c3019f13cd48d3479a83617c4dfb23b165873d",
     "pushed": true,
     "returncode": 0
   },
@@ -1550,7 +1550,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794448155.4581788,
+    "generated_at": 1794448165.4598806,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-1m-720k-host-cc-20261112/28800/max": {
@@ -1790,7 +1790,7 @@
   },
   "bridge_activity": {
     "events_last_300s": {
-      "browser_progress": 53,
+      "browser_progress": 52,
       "browser_buffer": 6,
       "browser_pool_release": 6,
       "browser_output_ready": 6,
@@ -1867,7 +1867,7 @@
     },
     {
       "path": "browser-supervisor-state.json",
-      "sha256": "4fe76e5f3b6f1b9800747e779187c6545d8acd1b17ab7d544a45a4f58c881fbf",
+      "sha256": "015f1d0b20f5b35d77821856a227ac7f901485375e542e1852485e6b8c174372",
       "size": 102
     },
     {
@@ -1887,7 +1887,7 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "5ceedf6a62e8b23868faef425362e009902ddcd7e6643035474914ac965d052b",
+      "sha256": "a638fc52a39f140e6c0a053abc4c3be8119f345a29e4f7588a9ca1f21c2432b9",
       "size": 134
     },
     {
@@ -2376,6 +2376,16 @@
       "bytes": 486834831,
       "tar_compare_passed_before_reclaim": true,
       "restore": "sudo tar -xpf verifier-root.tar.gz -C ."
+    },
+    {
+      "directory": "runs/formal-1m-720k-host-cdp-read-20261112/embedding-drift-monitor--high--r2",
+      "archived_at": 1794448163.7542639,
+      "root": "agent-root",
+      "archive": "agent-root.tar.gz",
+      "sha256": "90696c6031fba156ef8996be9080c2386aeb91ed68f8f007c01b581c8461f467",
+      "bytes": 77567877,
+      "tar_compare_passed_before_reclaim": true,
+      "restore": "sudo tar -xpf agent-root.tar.gz -C ."
     },
     {
       "directory": "smoke/high",
