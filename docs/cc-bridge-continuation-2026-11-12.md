@@ -31,3 +31,5 @@ CC 直接在当前容器以独立 UID 运行，冻结普通用户 PATH 的实际
 旧题评分及归档后，bridge 已在自然边界加载 `5bcc7cb` 的 CDP 恢复修复，部署模块摘要与独立验证源码逐项相同，冻结运行器和 CC 二进制保持原摘要。实际部署上的 high/max 真实 Bash 烟测分别用时 **20.297 / 22.670 秒**，共 4 个请求，逐条确认为固定 131072 输出和对应 effort，错误、重试、取消、遗留均为零，两档均报告 1M 窗口、720000 压缩配置及空会话超时。见 [切换证据](evidence/cc-bridge-cdp-rollout-2026-11-12.json) 与 [独立部署复核](evidence/cc-bridge-cdp-rollout-audit-2026-11-12.json)。
 
 新阶段 `formal-1m-720k-host-cdp-read-20261112` 已启动 `embedding-drift-monitor` high/r2；计划逐项保留已完成 12 个位置，并按原顺序续跑剩余 18 个。新 bridge、评测控制器及各项监控的启动身份核验通过，checkpoint 提交与推送正常。本轮继续等待长请求自然结束。
+
+跨重启成绩另存为 [完整继承汇总](evidence/cc-bridge-combined-results-2026-11-12.json)。生成命令为 `python3 tools/report_terminal_native_continuation.py --checkpoint docs/evidence/cc-bridge-continuation-2026-11-12.json --output docs/evidence/cc-bridge-combined-results-2026-11-12.json`。它逐级验证五份检查点的 SHA256、保留位置和计划覆盖，拒绝重复位置、替换旧失败或篡改上游检查点；pending 与行政中断不补分。当前 12 个位置中产物通过 8 个、端到端通过 7 个，各阶段仍分别列出；这些累计数字跨越多个 bridge、CLI 和上下文配置，仅作过程记录，不能作为单一当前配置的胜率。新增汇总器的 7 项专项回归通过。

@@ -1,0 +1,405 @@
+{
+  "generated_at": 1794447743.8758667,
+  "planned_positions": 30,
+  "remaining_positions": 18,
+  "totals": {
+    "completed_positions": 12,
+    "valid_grades": 12,
+    "artifact_passes": 8,
+    "end_to_end_passes": 7,
+    "infrastructure_errors": 0
+  },
+  "totals_by_stage_and_effort": {
+    "formal-128k-fixed/high": {
+      "completed_positions": 3,
+      "valid_grades": 3,
+      "artifact_passes": 3,
+      "end_to_end_passes": 2,
+      "infrastructure_errors": 0
+    },
+    "formal-128k-fixed/max": {
+      "completed_positions": 2,
+      "valid_grades": 2,
+      "artifact_passes": 1,
+      "end_to_end_passes": 1,
+      "infrastructure_errors": 0
+    },
+    "formal-1m-720k-drain-v3/high": {
+      "completed_positions": 1,
+      "valid_grades": 1,
+      "artifact_passes": 1,
+      "end_to_end_passes": 1,
+      "infrastructure_errors": 0
+    },
+    "formal-1m-720k-host-body-read-clean-20261111/high": {
+      "completed_positions": 1,
+      "valid_grades": 1,
+      "artifact_passes": 1,
+      "end_to_end_passes": 1,
+      "infrastructure_errors": 0
+    },
+    "formal-1m-720k-host-cc-20261111-evening/high": {
+      "completed_positions": 1,
+      "valid_grades": 1,
+      "artifact_passes": 0,
+      "end_to_end_passes": 0,
+      "infrastructure_errors": 0
+    },
+    "formal-1m-720k-host-cc-20261112/max": {
+      "completed_positions": 1,
+      "valid_grades": 1,
+      "artifact_passes": 1,
+      "end_to_end_passes": 1,
+      "infrastructure_errors": 0
+    },
+    "formal-1m-720k-path-cc-2-1-322-20261111/max": {
+      "completed_positions": 2,
+      "valid_grades": 2,
+      "artifact_passes": 1,
+      "end_to_end_passes": 1,
+      "infrastructure_errors": 0
+    },
+    "formal-1m-720k/max": {
+      "completed_positions": 1,
+      "valid_grades": 1,
+      "artifact_passes": 0,
+      "end_to_end_passes": 0,
+      "infrastructure_errors": 0
+    }
+  },
+  "checkpoint_chain": [
+    {
+      "checkpoint": "cc-bridge-resume-2026-11-10.json",
+      "sha256": "d6483c8c6491e89e11c7366e3837a4f2d9b5f54cd1a2d121a0382f03f9588f26",
+      "local_completed_positions": 5,
+      "combined_completed_positions": 5
+    },
+    {
+      "checkpoint": "cc-bridge-1m-2026-11-10.json",
+      "sha256": "037172079ecb842d9dcedfbaff86fa2173436fa563077b80295410ddff0ebcba",
+      "local_completed_positions": 2,
+      "combined_completed_positions": 7
+    },
+    {
+      "checkpoint": "cc-bridge-1m-reboot-continuation-2026-11-11.json",
+      "sha256": "9d6a47d7c878dedd27724d1a2b4438b7eaa0f96ea588b3c1e15cc84491dcc391",
+      "local_completed_positions": 2,
+      "combined_completed_positions": 9
+    },
+    {
+      "checkpoint": "cc-bridge-evening-continuation-2026-11-11.json",
+      "sha256": "64e46426d9f41be1de564cc0ed82c37b02155310c4787e5906e4f71678473192",
+      "local_completed_positions": 2,
+      "combined_completed_positions": 11
+    },
+    {
+      "checkpoint": "cc-bridge-continuation-2026-11-12.json",
+      "sha256": "93667cb22ef7c342ce28d2155dcc411ef72e5d20358110e2f400ca7fb9165451",
+      "local_completed_positions": 1,
+      "combined_completed_positions": 12
+    }
+  ],
+  "attempts": [
+    {
+      "task": "batched-eval-parity",
+      "stage": "formal-128k-fixed",
+      "effort": "high",
+      "repeat": 1,
+      "artifact_score": 1,
+      "end_to_end_success": false,
+      "agent_seconds": 6860.984,
+      "agent_timed_out": false,
+      "logical_requests": 71,
+      "upstream_attempts": 74,
+      "bridge_errors": 0,
+      "bridge_retries": 3,
+      "bridge_cancelled": 0,
+      "usage": {
+        "prompt_tokens": 7765068,
+        "completion_tokens": 131438,
+        "total_tokens": 7896506,
+        "cached_prompt_tokens": 7578496,
+        "reasoning_tokens": 112180
+      },
+      "source_head": "508a582197501490ff84c781f2bd40af187c2aa5",
+      "infrastructure_error_present": false,
+      "source_checkpoint": "cc-bridge-resume-2026-11-10.json"
+    },
+    {
+      "task": "embedding-drift-monitor",
+      "stage": "formal-128k-fixed",
+      "effort": "high",
+      "repeat": 1,
+      "artifact_score": 1,
+      "end_to_end_success": true,
+      "agent_seconds": 5165.842,
+      "agent_timed_out": false,
+      "logical_requests": 76,
+      "upstream_attempts": 76,
+      "bridge_errors": 0,
+      "bridge_retries": 0,
+      "bridge_cancelled": 0,
+      "usage": {
+        "prompt_tokens": 4713962,
+        "completion_tokens": 88815,
+        "total_tokens": 4802777,
+        "cached_prompt_tokens": 4570752,
+        "reasoning_tokens": 70791
+      },
+      "source_head": "508a582197501490ff84c781f2bd40af187c2aa5",
+      "infrastructure_error_present": false,
+      "source_checkpoint": "cc-bridge-resume-2026-11-10.json"
+    },
+    {
+      "task": "embedding-drift-monitor",
+      "stage": "formal-128k-fixed",
+      "effort": "max",
+      "repeat": 1,
+      "artifact_score": 1,
+      "end_to_end_success": true,
+      "agent_seconds": 5788.274,
+      "agent_timed_out": false,
+      "logical_requests": 76,
+      "upstream_attempts": 79,
+      "bridge_errors": 0,
+      "bridge_retries": 3,
+      "bridge_cancelled": 0,
+      "usage": {
+        "prompt_tokens": 5614911,
+        "completion_tokens": 96761,
+        "total_tokens": 5711672,
+        "cached_prompt_tokens": 5478144,
+        "reasoning_tokens": 82962
+      },
+      "source_head": "508a582197501490ff84c781f2bd40af187c2aa5",
+      "infrastructure_error_present": false,
+      "source_checkpoint": "cc-bridge-resume-2026-11-10.json"
+    },
+    {
+      "task": "session-window-debug",
+      "stage": "formal-128k-fixed",
+      "effort": "high",
+      "repeat": 1,
+      "artifact_score": 1,
+      "end_to_end_success": true,
+      "agent_seconds": 3787.56,
+      "agent_timed_out": false,
+      "logical_requests": 56,
+      "upstream_attempts": 60,
+      "bridge_errors": 0,
+      "bridge_retries": 4,
+      "bridge_cancelled": 0,
+      "usage": {
+        "prompt_tokens": 3333969,
+        "completion_tokens": 73982,
+        "total_tokens": 3407951,
+        "cached_prompt_tokens": 3234304,
+        "reasoning_tokens": 60017
+      },
+      "source_head": "508a582197501490ff84c781f2bd40af187c2aa5",
+      "infrastructure_error_present": false,
+      "source_checkpoint": "cc-bridge-resume-2026-11-10.json"
+    },
+    {
+      "task": "session-window-debug",
+      "stage": "formal-128k-fixed",
+      "effort": "max",
+      "repeat": 1,
+      "artifact_score": 0,
+      "end_to_end_success": false,
+      "agent_seconds": 4985.066,
+      "agent_timed_out": false,
+      "logical_requests": 80,
+      "upstream_attempts": 82,
+      "bridge_errors": 1,
+      "bridge_retries": 2,
+      "bridge_cancelled": 0,
+      "usage": {
+        "prompt_tokens": 6322559,
+        "completion_tokens": 101229,
+        "total_tokens": 6423788,
+        "cached_prompt_tokens": 6191616,
+        "reasoning_tokens": 90551
+      },
+      "source_head": "508a582197501490ff84c781f2bd40af187c2aa5",
+      "infrastructure_error_present": false,
+      "source_checkpoint": "cc-bridge-resume-2026-11-10.json"
+    },
+    {
+      "task": "batched-eval-parity",
+      "stage": "formal-1m-720k",
+      "effort": "max",
+      "repeat": 1,
+      "artifact_score": 0,
+      "end_to_end_success": false,
+      "agent_seconds": 6023.336,
+      "agent_timed_out": false,
+      "logical_requests": 13,
+      "upstream_attempts": 13,
+      "bridge_errors": 2,
+      "bridge_retries": 0,
+      "bridge_cancelled": 3,
+      "usage": {
+        "prompt_tokens": 383790,
+        "completion_tokens": 101139,
+        "total_tokens": 484929,
+        "cached_prompt_tokens": 299008,
+        "reasoning_tokens": 99359
+      },
+      "source_head": "fa6050911e5a8dba50b33784649d1cf23d97e1a9",
+      "infrastructure_error_present": false,
+      "source_checkpoint": "cc-bridge-1m-2026-11-10.json"
+    },
+    {
+      "task": "mvcc-lsm-compaction",
+      "stage": "formal-1m-720k-drain-v3",
+      "effort": "high",
+      "repeat": 1,
+      "artifact_score": 1,
+      "end_to_end_success": true,
+      "agent_seconds": 772.66,
+      "agent_timed_out": false,
+      "logical_requests": 11,
+      "upstream_attempts": 11,
+      "bridge_errors": 0,
+      "bridge_retries": 0,
+      "bridge_cancelled": 0,
+      "usage": {
+        "prompt_tokens": 216031,
+        "completion_tokens": 13467,
+        "total_tokens": 229498,
+        "cached_prompt_tokens": 171008,
+        "reasoning_tokens": 11118
+      },
+      "source_head": "e5ab0f70368a0c4cb0294f2dabc2f8e682cd9e09",
+      "infrastructure_error_present": false,
+      "source_checkpoint": "cc-bridge-1m-2026-11-10.json"
+    },
+    {
+      "task": "ks-solver-cpp",
+      "stage": "formal-1m-720k-path-cc-2-1-322-20261111",
+      "effort": "max",
+      "repeat": 1,
+      "artifact_score": 0,
+      "end_to_end_success": false,
+      "agent_seconds": 9072.253,
+      "agent_timed_out": false,
+      "logical_requests": 14,
+      "upstream_attempts": 14,
+      "bridge_errors": 6,
+      "bridge_retries": 0,
+      "bridge_cancelled": 5,
+      "usage": {
+        "prompt_tokens": 21629,
+        "completion_tokens": 167922,
+        "total_tokens": 189551,
+        "cached_prompt_tokens": 5376,
+        "reasoning_tokens": 167850
+      },
+      "source_head": "3166ea20e55cc782622e58c5456064512ced3e04",
+      "infrastructure_error_present": false,
+      "source_checkpoint": "cc-bridge-1m-reboot-continuation-2026-11-11.json"
+    },
+    {
+      "task": "mvcc-lsm-compaction",
+      "stage": "formal-1m-720k-path-cc-2-1-322-20261111",
+      "effort": "max",
+      "repeat": 1,
+      "artifact_score": 1,
+      "end_to_end_success": true,
+      "agent_seconds": 5788.821,
+      "agent_timed_out": false,
+      "logical_requests": 63,
+      "upstream_attempts": 63,
+      "bridge_errors": 1,
+      "bridge_retries": 0,
+      "bridge_cancelled": 0,
+      "usage": {
+        "prompt_tokens": 5510017,
+        "completion_tokens": 147230,
+        "total_tokens": 5657247,
+        "cached_prompt_tokens": 5301248,
+        "reasoning_tokens": 127984
+      },
+      "source_head": "3166ea20e55cc782622e58c5456064512ced3e04",
+      "infrastructure_error_present": false,
+      "source_checkpoint": "cc-bridge-1m-reboot-continuation-2026-11-11.json"
+    },
+    {
+      "task": "session-window-debug",
+      "stage": "formal-1m-720k-host-body-read-clean-20261111",
+      "effort": "high",
+      "repeat": 2,
+      "artifact_score": 1,
+      "end_to_end_success": true,
+      "agent_seconds": 2006.661,
+      "agent_timed_out": false,
+      "logical_requests": 58,
+      "upstream_attempts": 58,
+      "bridge_errors": 0,
+      "bridge_retries": 0,
+      "bridge_cancelled": 0,
+      "usage": {
+        "prompt_tokens": 3246685,
+        "completion_tokens": 64850,
+        "total_tokens": 3311535,
+        "cached_prompt_tokens": 3150336,
+        "reasoning_tokens": 52328
+      },
+      "source_head": "e21bfd3096761cd5dbe2553bc0cc43ee4841442f",
+      "infrastructure_error_present": false,
+      "source_checkpoint": "cc-bridge-evening-continuation-2026-11-11.json"
+    },
+    {
+      "task": "ks-solver-cpp",
+      "stage": "formal-1m-720k-host-cc-20261111-evening",
+      "effort": "high",
+      "repeat": 1,
+      "artifact_score": 0,
+      "end_to_end_success": false,
+      "agent_seconds": 6821.841,
+      "agent_timed_out": false,
+      "logical_requests": 8,
+      "upstream_attempts": 15,
+      "bridge_errors": 5,
+      "bridge_retries": 7,
+      "bridge_cancelled": 0,
+      "usage": {
+        "prompt_tokens": 16253,
+        "completion_tokens": 71613,
+        "total_tokens": 87866,
+        "cached_prompt_tokens": 0,
+        "reasoning_tokens": 71330
+      },
+      "source_head": "73d9155d3365f0fe3f20263241ed00e35933cb78",
+      "infrastructure_error_present": false,
+      "source_checkpoint": "cc-bridge-evening-continuation-2026-11-11.json"
+    },
+    {
+      "task": "session-window-debug",
+      "stage": "formal-1m-720k-host-cc-20261112",
+      "effort": "max",
+      "repeat": 2,
+      "artifact_score": 1,
+      "end_to_end_success": true,
+      "agent_seconds": 3686.067,
+      "agent_timed_out": false,
+      "logical_requests": 44,
+      "upstream_attempts": 44,
+      "bridge_errors": 0,
+      "bridge_retries": 0,
+      "bridge_cancelled": 0,
+      "usage": {
+        "prompt_tokens": 3017422,
+        "completion_tokens": 96868,
+        "total_tokens": 3114290,
+        "cached_prompt_tokens": 2860928,
+        "reasoning_tokens": 87350
+      },
+      "source_head": "ce7725d9ddbe6763af22e178d2da2ee6847d860c",
+      "infrastructure_error_present": false,
+      "source_checkpoint": "cc-bridge-continuation-2026-11-12.json"
+    }
+  ],
+  "scope": "Completed positions from the original hash-linked checkpoints; no best-rerun selection. Pending and administrative interruptions receive no grade. Stages retain their original client, bridge and context policies; combined counts are descriptive."
+}
