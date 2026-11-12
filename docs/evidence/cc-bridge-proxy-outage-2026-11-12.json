@@ -169,5 +169,80 @@
     "next_request_stream": false,
     "cause_status": "native CC idle/stream watchdog is being checked in a separate local fixture; not yet proven"
   },
-  "scope": "Transport outage observations; pending task receives no grade. No prompt, answer, token, header, or error body exported."
+  "scope": "Transport outage observations; pending task receives no grade. No prompt, answer, token, header, or error body exported.",
+  "followup_observations": [
+    {
+      "observed_at": 1794464591.59612,
+      "current_request_id": "bf688ec2048b437ea46f44ac",
+      "event_counts": {
+        "request": 1,
+        "browser_output_limit_override": 1,
+        "payload": 1,
+        "browser_start": 2,
+        "browser_lease": 2,
+        "browser_tab": 2,
+        "browser_sent": 2,
+        "browser_abort": 1,
+        "browser_buffer": 1,
+        "browser_pool_release": 1,
+        "upstream_retry": 1
+      },
+      "lifecycle_events": [
+        {
+          "event": "browser_start",
+          "ts": 1794460816.3687344,
+          "id": "bf688ec2048b437ea46f44ac",
+          "attempt": 1,
+          "sec": 0.0,
+          "max_tokens": 131072
+        },
+        {
+          "event": "browser_sent",
+          "ts": 1794460817.2243605,
+          "id": "bf688ec2048b437ea46f44ac",
+          "attempt": 1,
+          "sec": 0.856,
+          "tab_id": "kpool=4"
+        },
+        {
+          "event": "browser_abort",
+          "ts": 1794464417.2878304,
+          "id": "bf688ec2048b437ea46f44ac",
+          "attempt": 1,
+          "sec": 3600.919,
+          "confirmed": true,
+          "tab_id": "kpool=4"
+        },
+        {
+          "event": "upstream_retry",
+          "ts": 1794464417.3137205,
+          "id": "bf688ec2048b437ea46f44ac",
+          "attempt": 1,
+          "sec": 3600.945,
+          "reason": "upstream_stream_failure",
+          "status": 502,
+          "delay": 5.095,
+          "error_sha256": "a5329e32aadde2585d0ca7dbff5db473ce3ee4806769479fe4384cee11333067"
+        },
+        {
+          "event": "browser_start",
+          "ts": 1794464422.4086182,
+          "id": "bf688ec2048b437ea46f44ac",
+          "attempt": 2,
+          "sec": 3606.04,
+          "max_tokens": 131072
+        },
+        {
+          "event": "browser_sent",
+          "ts": 1794464423.4188664,
+          "id": "bf688ec2048b437ea46f44ac",
+          "attempt": 2,
+          "sec": 3607.05,
+          "tab_id": "kpool=5"
+        }
+      ],
+      "current_agent_signalled": false,
+      "phase": "bridge automatically retries after its unchanged 3600-second first-data budget; CC session remains running"
+    }
+  ]
 }
