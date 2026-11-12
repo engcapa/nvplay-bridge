@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794442842.343616,
+  "checkpoint_at": 1794442877.4955573,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261112",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -854,8 +854,8 @@
     "isolation_boundary": "Real dedicated Unix UID and protected source directories; shared host filesystem, kernel and network"
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794442830.771296,
-    "commit": "c5c09a13322d089cf937029fe2a02f83b0ef4e34",
+    "attempted_at": 1794442865.9223917,
+    "commit": "695503e5b822dd5907c50b4cb390c8da443da503",
     "pushed": false,
     "returncode": 1
   },
@@ -1310,7 +1310,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794442842.4691849,
+    "generated_at": 1794442877.6217287,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
@@ -1321,9 +1321,9 @@
         "task": "session-window-debug",
         "effort": "max",
         "started_at": 1794441338.0270572,
-        "elapsed_seconds": 1504.3,
-        "tool_calls": 27,
-        "last_tool": "Read"
+        "elapsed_seconds": 1539.5,
+        "tool_calls": 28,
+        "last_tool": "Write"
       }
     ]
   },
@@ -1353,42 +1353,42 @@
       "idle_seconds": 3600.0
     },
     "pool_states": {
-      "ready": 4,
-      "busy": 1
+      "busy": 1,
+      "ready": 4
     },
     "recovering_tabs": []
   },
   "bridge_activity": {
     "events_last_300s": {
-      "browser_progress": 42,
-      "browser_buffer": 7,
-      "browser_pool_release": 7,
-      "browser_output_ready": 7,
-      "browser_first_content": 7,
-      "browser_done": 7,
-      "tool_call": 9,
-      "messages_done": 7,
-      "http_complete": 7,
-      "tool_result": 9,
-      "request": 7,
-      "payload": 7,
-      "browser_start": 7,
-      "browser_lease": 7,
-      "browser_tab": 7,
-      "browser_sent": 7,
-      "browser_first_data": 6,
-      "messages_first_block": 6
+      "browser_progress": 40,
+      "browser_buffer": 8,
+      "browser_pool_release": 8,
+      "browser_output_ready": 8,
+      "browser_first_content": 8,
+      "browser_done": 8,
+      "tool_call": 10,
+      "messages_done": 8,
+      "http_complete": 8,
+      "tool_result": 10,
+      "request": 8,
+      "payload": 8,
+      "browser_start": 8,
+      "browser_lease": 8,
+      "browser_tab": 8,
+      "browser_sent": 8,
+      "browser_first_data": 7,
+      "messages_first_block": 7
     },
     "active": [
       {
-        "id": "80ee345ad6ab42d380791009",
+        "id": "11bad79392364f4683138456",
         "retry_count": 0,
         "phase": "browser_sent",
         "attempt": 1,
         "reasoning_effort": "max",
-        "tab_id": "kpool=5",
-        "age_seconds": 5.0,
-        "activity_age_seconds": 4.1
+        "tab_id": "kpool=1",
+        "age_seconds": 10.1,
+        "activity_age_seconds": 9.2
       }
     ],
     "recent_errors": [],
@@ -1433,7 +1433,7 @@
     },
     {
       "path": "browser-supervisor-state.json",
-      "sha256": "c2a5b43b7e6bdc85d800ac9ccd54502f56cf3668039463510288e86793490894",
+      "sha256": "15dc709ef7a01a1dc6ead88fe8e6b8b334f5e34e475128b0ff3885bfdeead61d",
       "size": 102
     },
     {
@@ -1453,8 +1453,8 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "2d924b0add6b000115b91db674995a42a5c7c1c4e2423cc9e5ad84785a0fe456",
-      "size": 134
+      "sha256": "a09d783dd346e02286d74ae3d7bca23fbe41e510de6a5c9634f5107000f650f0",
+      "size": 135
     },
     {
       "path": "checkpoint-process.json",
@@ -1563,8 +1563,8 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "283d577b0738976019e47d5344ad5de6e99130770d242367f0fa44711dc62673",
-      "size": 821
+      "sha256": "102faae6474a1fb7b20da1ceb57c28f38a41b7c2ea5711e8c810207a4149ddd0",
+      "size": 822
     },
     {
       "path": "restore-fixed-regression.log",
