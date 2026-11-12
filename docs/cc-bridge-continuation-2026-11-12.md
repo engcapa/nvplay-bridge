@@ -57,3 +57,5 @@ CC 直接在当前容器以独立 UID 运行，冻结普通用户 PATH 的实际
 候选修复在独立工作区 `/var/tmp/nvplay-bridge-stream-idle-20261112`、分支 `fix/cc-stream-idle-20261112` 完成，尚未部署。运行器会冻结并在启动前导出 `CLAUDE_STREAM_IDLE_TIMEOUT_MS`；配置工具将其设为现有 API 预算 29400000 毫秒，保留完全相同的 CLI、bridge、题目对照和已有成绩，创建独立阶段 `formal-1m-720k-host-stream-idle-20261112`。它拒绝活动控制器、未完成题目或请求，保留旧烟测，并记录多文件写入的恢复日志。当前候选完整回归 **313 项通过，21.325 秒**，详见 [候选修复验证](evidence/cc-bridge-stream-idle-source-validation-2026-11-12.json)。
 
 已经为当前阶段保存自然边界请求：当前 high/r2 自然完成并保留原始结果后，控制器不再排下一题；届时才应用修复、重新运行 high/max 两档真实工具烟测、记录新阶段并续跑剩余位置。没有为当前题新增停机时间。14:00 时指定代理仍不能 CONNECT，新增 checkpoint 已本地提交并自动重试推送；候选源码验证通过不等于外部链路恢复，也不替代实际部署烟测。
+
+`tools/advance_terminal_native_stream_idle.py` 已补齐自然边界后的自动流程：保存并归档原成绩、核对候选提交与验证摘要、拒绝覆盖本地源码改动、应用候选配置、等待指定代理恢复、执行新阶段真实工具烟测，再启动剩余计划。它不向 CC 发信号，也不重启 bridge 或浏览器；每次阶段变化独立提交脱敏证据。安装保护与代理边界的 4 项专项检查通过，和候选源码的 313 项完整回归分别记录。自动流程的当前状态见 [切换进度](evidence/cc-bridge-stream-idle-transition-2026-11-12.json)。

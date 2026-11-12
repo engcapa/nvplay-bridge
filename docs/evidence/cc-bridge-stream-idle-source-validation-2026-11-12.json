@@ -24,5 +24,15 @@
   "fresh_live_high_and_max_tool_smoke_required": true,
   "bridge_restart_required": false,
   "configuration_command": "python3 tools/configure_terminal_native_stream_idle.py --base logs/eval-1m-20261112 --stage formal-1m-720k-host-stream-idle-20261112",
-  "scope": "Candidate evaluator/configuration fix validated offline; current task retains its original evaluator and client configuration"
+  "scope": "Candidate evaluator/configuration fix validated offline; current task retains its original evaluator and client configuration",
+  "deferred_coordinator_validation": {
+    "tests": 4,
+    "seconds": 0.005,
+    "passed": true,
+    "source_sha256": {
+      "tools/advance_terminal_native_stream_idle.py": "2c53dcf96a0944a6620748adb6fda8e44749bfeded668d6ea21820e90b64dc46",
+      "tests/test_terminal_native_stream_idle_transition.py": "716da21bb2381f2e03974248bc1ba280de0bd8a2622b0737cc7b1e9b2e9ea18c"
+    },
+    "scope": "Focused installer protection and explicit proxy connectivity checks; not included in the 313-test candidate run"
+  }
 }
