@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794447184.448299,
+  "checkpoint_at": 1794447197.673922,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261112",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -1107,8 +1107,8 @@
     "isolation_boundary": "Real dedicated Unix UID and protected source directories; shared host filesystem, kernel and network"
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794447171.2222679,
-    "commit": "0ee82565d42bd560aa3fa39078c7a3fe7448bd85",
+    "attempted_at": 1794447184.59887,
+    "commit": "fc167501812cf485d417814e22ec0a240bda99db",
     "pushed": true,
     "returncode": 0
   },
@@ -1550,7 +1550,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794447184.5478716,
+    "generated_at": 1794447197.775815,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-1m-720k-host-cc-20261112/28800/max": {
@@ -1661,9 +1661,9 @@
         "task": "embedding-drift-monitor",
         "effort": "high",
         "started_at": 1794445209.5020125,
-        "elapsed_seconds": 1975.0,
-        "tool_calls": 67,
-        "last_tool": "Edit"
+        "elapsed_seconds": 1988.2,
+        "tool_calls": 68,
+        "last_tool": "Bash"
       }
     ]
   },
@@ -1704,7 +1704,9 @@
   },
   "bridge_activity": {
     "events_last_300s": {
-      "browser_progress": 50,
+      "browser_first_data": 14,
+      "browser_progress": 48,
+      "messages_first_block": 14,
       "browser_buffer": 13,
       "browser_pool_release": 13,
       "browser_output_ready": 13,
@@ -1719,36 +1721,34 @@
       "browser_start": 13,
       "browser_lease": 13,
       "browser_tab": 13,
-      "browser_sent": 13,
-      "browser_first_data": 13,
-      "messages_first_block": 13
+      "browser_sent": 13
     },
     "active": [
       {
-        "id": "bcef88d81f6c409bbebcf3f7",
+        "id": "361e1ba9b9f945a69245783f",
         "retry_count": 0,
         "phase": "browser_progress",
         "attempt": 1,
         "reasoning_effort": "high",
-        "tab_id": "kpool=2",
+        "tab_id": "kpool=3",
         "counts": {
-          "thinking_chars": 8,
-          "text_chars": 167,
+          "thinking_chars": 0,
+          "text_chars": 0,
           "tool_calls": 0
         },
         "usage": {
-          "prompt_tokens": 79718,
-          "completion_tokens": 111,
-          "total_tokens": 79829,
+          "prompt_tokens": 80069,
+          "completion_tokens": 1,
+          "total_tokens": 80070,
           "prompt_tokens_details": {
-            "cached_tokens": 79360
+            "cached_tokens": 79616
           },
           "completion_tokens_details": {
-            "reasoning_tokens": 9
+            "reasoning_tokens": 1
           }
         },
-        "age_seconds": 10.5,
-        "activity_age_seconds": 0.4
+        "age_seconds": 5.3,
+        "activity_age_seconds": 0.0
       }
     ],
     "recent_errors": [],
@@ -1808,8 +1808,8 @@
     },
     {
       "path": "browser-supervisor-state.json",
-      "sha256": "8949e4942da1069aae4de2736d3f23ac8da42706668a0c0c537a054cbc3d6036",
-      "size": 102
+      "sha256": "01c8a482d62dac6587471bf38353a5f9876cb1e4aae3fa6c57a62c59b437827a",
+      "size": 101
     },
     {
       "path": "campaign-launch-process.json",
@@ -1828,8 +1828,8 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "d0f9cf8a84d13faa5645186ed15d2d2bc4b86f29b1bdd12a83e9a4301bdb8242",
-      "size": 134
+      "sha256": "d0b524d87419c2a4d512c69efb360924d60c2258437d2bdafc4e5f79f2e2e7b6",
+      "size": 132
     },
     {
       "path": "checkpoint-process.json",
@@ -1958,8 +1958,8 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "2789fc3659c974d6853999f76960ac19635474b3b83bfeeb89b866beb11683ad",
-      "size": 827
+      "sha256": "7a5d3d19614d072837c14801b105cb9cbd4ddc1f60650b8ced9da08684859b5a",
+      "size": 828
     },
     {
       "path": "restore-fixed-regression.log",
