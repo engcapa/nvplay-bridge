@@ -1,0 +1,28 @@
+{
+  "validated_at": 1794463241.523096,
+  "passed": true,
+  "candidate_commit": "8034a631d495f3cc53a848dc724e8c7030e05911",
+  "candidate_branch": "fix/cc-stream-idle-20261112",
+  "candidate_worktree": "/var/tmp/nvplay-bridge-stream-idle-20261112",
+  "candidate_source_sha256": {
+    "tools/eval_terminal_native.py": "93b4b92da4b9274c7aeb3ba31dde8921b670c68f479e186502edb0d5c5faf0f9",
+    "tools/configure_terminal_native_stream_idle.py": "5f48027dfd01eeb2bebc830afabea32906ec38e8e98a43e836b03b8ce4f672c9",
+    "tests/test_terminal_native_settings.py": "4b948bc0c57146570e349295eb89318a48e38c47f2119c27e24963bc89f460a8",
+    "tests/test_terminal_native_stream_idle.py": "e9cc71dbd6ce8ed19e44bbc8aa83b2e82d28211f68185821785840062cd9450b"
+  },
+  "regression": {
+    "tests": 313,
+    "seconds": 21.325,
+    "exit_code": 0,
+    "output_sha256": "b0f4c4f90444324a6faa5b9cfee1b877723b8bef4b2b2d502eaa1fe3708eaa0e"
+  },
+  "controlled_local_native_probe": "docs/evidence/cc-bridge-stream-idle-control-2026-11-12.json",
+  "deployed": false,
+  "current_agent_signalled": false,
+  "next_stage": "formal-1m-720k-host-stream-idle-20261112",
+  "boundary_request_saved": true,
+  "fresh_live_high_and_max_tool_smoke_required": true,
+  "bridge_restart_required": false,
+  "configuration_command": "python3 tools/configure_terminal_native_stream_idle.py --base logs/eval-1m-20261112 --stage formal-1m-720k-host-stream-idle-20261112",
+  "scope": "Candidate evaluator/configuration fix validated offline; current task retains its original evaluator and client configuration"
+}

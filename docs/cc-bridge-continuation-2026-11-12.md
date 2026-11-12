@@ -51,3 +51,9 @@ CC 直接在当前容器以独立 UID 运行，冻结普通用户 PATH 的实际
 13:35 等待定位：high/r2 首个请求在 **610.051 秒**后出现客户端断连取消；CC 在同一会话立即改用非流式请求，bridge 仍按固定 131072 上限执行。配置中的 API 超时为 29400000 毫秒、会话墙钟超时为空，未向 CC 发信号。只读 CDP 检查发现页面状态 `armed=true`、`status=0`、无 fetch controller，独立 Network 观察器自本题启动后也未见预测请求，因此当前等待尚未进入模型推理。空闲池标签页同时有刷新恢复超时，不能只依据 `/health` 的顶层 `ok` 宣称外部链路健康。见 [代理故障观察](evidence/cc-bridge-proxy-outage-2026-11-12.json)。
 
 已启动独立 localhost 对照 `tests/probe_cc_stream_watchdog.py`：两个普通 UID 客户端使用相同固定 CC 二进制，返回 message_start 与定期 ping，660 秒后才发送正文；比较原环境与 `CLAUDE_STREAM_IDLE_TIMEOUT_MS=29400000`。探针不使用题目、浏览器或外部模型，不设 CC 墙钟截止，正式评测继续运行。结果出来前不把流监控超时判断为已确认原因，也不修改正在运行的客户端配置。
+
+13:46 对照完成并确认独立流监控超时：原配置 **600.403 秒**后触发 event idle timeout，原始流断开，再发起 `max_tokens=64000` 的非流式回退；延长 event idle 的配置 **660.368 秒**后在唯一一次原始流中收到延迟正文，无 idle/SDK 超时或回退。两组均正常退出、无墙钟干预，零外部请求、零模型调用，两个探针 UID 均无遗留进程。见 [原始配置与延长配置对照](evidence/cc-bridge-stream-idle-control-2026-11-12.json)。因此 `API_FORCE_IDLE_TIMEOUT=0` 只处理原生 fetch idle，不能代表 CC 的 event watchdog 也已放宽。
+
+候选修复在独立工作区 `/var/tmp/nvplay-bridge-stream-idle-20261112`、分支 `fix/cc-stream-idle-20261112` 完成，尚未部署。运行器会冻结并在启动前导出 `CLAUDE_STREAM_IDLE_TIMEOUT_MS`；配置工具将其设为现有 API 预算 29400000 毫秒，保留完全相同的 CLI、bridge、题目对照和已有成绩，创建独立阶段 `formal-1m-720k-host-stream-idle-20261112`。它拒绝活动控制器、未完成题目或请求，保留旧烟测，并记录多文件写入的恢复日志。当前候选完整回归 **313 项通过，21.325 秒**，详见 [候选修复验证](evidence/cc-bridge-stream-idle-source-validation-2026-11-12.json)。
+
+已经为当前阶段保存自然边界请求：当前 high/r2 自然完成并保留原始结果后，控制器不再排下一题；届时才应用修复、重新运行 high/max 两档真实工具烟测、记录新阶段并续跑剩余位置。没有为当前题新增停机时间。14:00 时指定代理仍不能 CONNECT，新增 checkpoint 已本地提交并自动重试推送；候选源码验证通过不等于外部链路恢复，也不替代实际部署烟测。

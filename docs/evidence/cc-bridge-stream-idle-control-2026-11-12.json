@@ -1,0 +1,63 @@
+{
+  "results": [
+    {
+      "case": "production",
+      "uid": 20016,
+      "exit_code": 0,
+      "seconds": 600.403,
+      "client_success": true,
+      "event_idle_ms": null,
+      "requests": [
+        {
+          "stream": true,
+          "max_tokens": 131072
+        },
+        {
+          "stream": false,
+          "max_tokens": 64000
+        }
+      ],
+      "idle_timeout_debug_present": true,
+      "byte_idle_timeout_debug_present": false,
+      "sdk_timeout_debug_present": false,
+      "stream_fallback_debug_present": true,
+      "delay_completed": false,
+      "peer_closed_before_content": true
+    },
+    {
+      "case": "extended",
+      "uid": 20017,
+      "exit_code": 0,
+      "seconds": 660.368,
+      "client_success": true,
+      "event_idle_ms": "29400000",
+      "requests": [
+        {
+          "stream": true,
+          "max_tokens": 131072
+        }
+      ],
+      "idle_timeout_debug_present": false,
+      "byte_idle_timeout_debug_present": false,
+      "sdk_timeout_debug_present": false,
+      "stream_fallback_debug_present": false,
+      "delay_completed": true,
+      "peer_closed_before_content": false
+    }
+  ],
+  "external_requests": 0,
+  "model_invocations": 0,
+  "verified_at": 1794462520.3598762,
+  "identity": {
+    "probe_sha256": "3cd8ccb6f7bb20154a090aeec6556fa05ce75b38aa75c2323e035b1aee3e86ac",
+    "cli_sha256": "bfb3703ad5380242328459bc62ada4bde8ae7ba57c6e1eeadb9c00e08874c478",
+    "delay_seconds": 660.0,
+    "extended_idle_ms": 29400000,
+    "external_requests": 0,
+    "model_invocations": 0,
+    "wall_clock_timeout_seconds": null
+  },
+  "formal_attempt_was_not_interrupted": true,
+  "diagnosis": "Native CC stream event idle watchdog is independent of API_TIMEOUT_MS and API_FORCE_IDLE_TIMEOUT; regular pings do not prevent the reproduced fallback",
+  "next_stage_requires_fresh_live_smoke": true
+}
