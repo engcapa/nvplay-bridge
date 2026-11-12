@@ -40,6 +40,10 @@ def observe(base: Path, checkpoint: Path | None, health_url: str, lookback: floa
                     "retry_count", "age_seconds", "activity_age_seconds", "counts") if key in row}
                    for row in bridge["active"]],
         "recent_errors": [event_summary(row) for row in bridge["recent_errors"]],
+        "cancelled_requests_in_lookback": bridge["events"].get("browser_cancelled", 0),
+        "client_errors_in_lookback": sum(bridge["events"].get(kind, 0)
+                                         for kind in ("messages_failed", "responses_failed")),
+        "recent_client_errors": [event_summary(row) for row in bridge["recent_client_errors"]],
         "upstream_errors_in_lookback": bridge["events"].get("browser_http_error", 0),
         "retries_in_lookback": bridge["events"].get("upstream_retry", 0),
         "preparation_retries_in_lookback": len(preparation),
