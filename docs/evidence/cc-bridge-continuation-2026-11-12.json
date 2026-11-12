@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794460194.1200528,
+  "checkpoint_at": 1794460198.8051488,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261112",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -1107,8 +1107,8 @@
     "isolation_boundary": "Real dedicated Unix UID and protected source directories; shared host filesystem, kernel and network"
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794460164.629355,
-    "commit": "ba882ef3838bfe90da3fc33d4f51292fb90a7c9b",
+    "attempted_at": 1794460194.2690585,
+    "commit": "af1eb8c2b568de2d5a6575b56fa21f9e0dfd7961",
     "pushed": true,
     "returncode": 0
   },
@@ -1550,7 +1550,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794460194.1750515,
+    "generated_at": 1794460198.8568354,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-1m-720k-host-cc-20261112/28800/max": {
@@ -1850,7 +1850,13 @@
         "source_head": "eb5abe1a66db4b01acc6391482010f374541d664"
       }
     ],
-    "pending": []
+    "pending": [
+      {
+        "attempt": "runs/formal-1m-720k-host-cdp-read-20261112/batched-eval-parity--high--r2",
+        "tool_calls": 0,
+        "last_tool": null
+      }
+    ]
   },
   "new_formal_attempts_planned": 19,
   "new_formal_attempts_completed": 3,
@@ -1888,7 +1894,7 @@
   },
   "bridge_activity": {
     "events_last_300s": {
-      "browser_progress": 28,
+      "browser_progress": 27,
       "browser_buffer": 5,
       "browser_pool_release": 5,
       "browser_output_ready": 5,
@@ -1985,8 +1991,8 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "4c7159bcf5e82a44a0ad9501bf27abec244ac661d33fec3d608e7dc3042be49d",
-      "size": 133
+      "sha256": "ac9f45145cc51aa84875c6db9a760803450a9cec2246e661eb70be3d44a0cf39",
+      "size": 134
     },
     {
       "path": "checkpoint-process.json",
@@ -2090,7 +2096,7 @@
     },
     {
       "path": "next-uid.json",
-      "sha256": "f5a012696a2b7f4b1f685b2d3e7954a931c10c1dcc7bb8b0a0479688e2e9ffa6",
+      "sha256": "a8329344c763938857f30cccd5468ff503f9b1037cdc0c006a9a181e8b26b2bf",
       "size": 20
     },
     {
@@ -2162,6 +2168,11 @@
       "path": "runs/formal-1m-720k-host-cc-20261112/session-window-debug--max--r2/result.json",
       "sha256": "42e12660e8973224a73b2155f2953e4667dd166bf2cdae8ae6746063e240403c",
       "size": 18228
+    },
+    {
+      "path": "runs/formal-1m-720k-host-cdp-read-20261112/batched-eval-parity--high--r2/identity.json",
+      "sha256": "b6cd7c5c1a268498c1947ea1288aab42c46fab45800e61b423a3c9c9a2a8a50a",
+      "size": 5970
     },
     {
       "path": "runs/formal-1m-720k-host-cdp-read-20261112/embedding-drift-monitor--high--r2/artifacts.json",
