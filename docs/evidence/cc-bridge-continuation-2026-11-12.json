@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794448087.3002136,
+  "checkpoint_at": 1794448151.5303807,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261112",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -1107,8 +1107,8 @@
     "isolation_boundary": "Real dedicated Unix UID and protected source directories; shared host filesystem, kernel and network"
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794448064.434241,
-    "commit": "bd29bd94d3dcf50353ccd186b7a86abd80cd4627",
+    "attempted_at": 1794448087.5247495,
+    "commit": "63fe26e0de945a13be498458d747cad329aefd70",
     "pushed": true,
     "returncode": 0
   },
@@ -1550,7 +1550,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794448087.4600215,
+    "generated_at": 1794448151.703259,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-1m-720k-host-cc-20261112/28800/max": {
@@ -1657,11 +1657,9 @@
     "pending": [
       {
         "attempt": "runs/formal-1m-720k-host-cdp-read-20261112/embedding-drift-monitor--high--r2",
-        "status": "agent_running",
+        "status": "grading",
         "task": "embedding-drift-monitor",
         "effort": "high",
-        "started_at": 1794445209.5020125,
-        "elapsed_seconds": 2877.8,
         "tool_calls": 90,
         "last_tool": "Bash"
       }
@@ -1697,22 +1695,21 @@
       "idle_seconds": 3600.0
     },
     "pool_states": {
-      "ready": 4,
-      "busy": 1
+      "ready": 5
     },
     "recovering_tabs": []
   },
   "bridge_activity": {
     "events_last_300s": {
-      "browser_progress": 55,
-      "browser_buffer": 5,
-      "browser_pool_release": 5,
-      "browser_output_ready": 5,
-      "browser_first_content": 5,
-      "browser_done": 5,
+      "browser_progress": 54,
+      "browser_buffer": 6,
+      "browser_pool_release": 6,
+      "browser_output_ready": 6,
+      "browser_first_content": 6,
+      "browser_done": 6,
       "tool_call": 5,
-      "messages_done": 5,
-      "http_complete": 5,
+      "messages_done": 6,
+      "http_complete": 6,
       "tool_result": 5,
       "request": 5,
       "payload": 5,
@@ -1720,21 +1717,10 @@
       "browser_lease": 5,
       "browser_tab": 5,
       "browser_sent": 5,
-      "browser_first_data": 4,
-      "messages_first_block": 4
+      "browser_first_data": 5,
+      "messages_first_block": 5
     },
-    "active": [
-      {
-        "id": "9daced13e72a46dc91e805e2",
-        "retry_count": 0,
-        "phase": "browser_sent",
-        "attempt": 1,
-        "reasoning_effort": "high",
-        "tab_id": "kpool=5",
-        "age_seconds": 4.8,
-        "activity_age_seconds": 3.7
-      }
-    ],
+    "active": [],
     "recent_errors": [],
     "recent_upstream_errors": [],
     "recent_retries": []
@@ -1792,7 +1778,7 @@
     },
     {
       "path": "browser-supervisor-state.json",
-      "sha256": "faa27d2490febf72a55da954c7931983c1c7a2cadbc6fb6eb11ba28828639287",
+      "sha256": "4fe76e5f3b6f1b9800747e779187c6545d8acd1b17ab7d544a45a4f58c881fbf",
       "size": 102
     },
     {
@@ -1812,8 +1798,8 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "3a08e87e7c0c658a54d39818ec12a754b0a5fd2a730960df5e716282dba830cc",
-      "size": 133
+      "sha256": "3286160655177f4568ae89331473b7ca2b5fe4320b63e1f4a1df317d76ae50dd",
+      "size": 134
     },
     {
       "path": "checkpoint-process.json",
@@ -1947,8 +1933,8 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "578be0737e468b154340e51a542148bb2952bf5c5a44e51da641ffd7498a53ae",
-      "size": 828
+      "sha256": "762f11d4a604729271aebf008d5058def90674d1a3cd9a006f0829cefef323a8",
+      "size": 827
     },
     {
       "path": "restore-fixed-regression.log",
@@ -1984,6 +1970,11 @@
       "path": "runs/formal-1m-720k-host-cc-20261112/session-window-debug--max--r2/result.json",
       "sha256": "42e12660e8973224a73b2155f2953e4667dd166bf2cdae8ae6746063e240403c",
       "size": 18228
+    },
+    {
+      "path": "runs/formal-1m-720k-host-cdp-read-20261112/embedding-drift-monitor--high--r2/artifacts.json",
+      "sha256": "e040d358703215a7f353fad54792b66b9a1c049ba477253be9bfba198be222fc",
+      "size": 1511
     },
     {
       "path": "runs/formal-1m-720k-host-cdp-read-20261112/embedding-drift-monitor--high--r2/identity.json",
