@@ -1,0 +1,115 @@
+{
+  "audited_at": 1794460951.3690815,
+  "attempt": "runs/formal-1m-720k-host-cdp-read-20261112/embedding-drift-monitor--max--r2",
+  "artifact_score": 1,
+  "end_to_end_success": true,
+  "agent_seconds": 11921.83,
+  "independent_review": {
+    "attempt": "runs/formal-1m-720k-host-cdp-read-20261112/embedding-drift-monitor--max--r2",
+    "task": "embedding-drift-monitor",
+    "control": null,
+    "effort": "max",
+    "repeat": 2,
+    "artifact_score": 1,
+    "infrastructure_error": null,
+    "changed_original_files": [
+      "app/drift_monitor/alert.py",
+      "app/drift_monitor/calibration.py",
+      "app/drift_monitor/distance.py",
+      "app/drift_monitor/monitor.py",
+      "app/drift_monitor/normalize.py",
+      "app/drift_monitor/statistical_tests.py",
+      "app/drift_monitor/windowing.py"
+    ],
+    "added_files": [],
+    "removed_original_files": [],
+    "declared_read_only_files_unchanged": {},
+    "read_only_check_scope": "not checked",
+    "artifact_errors_present": false,
+    "verifier": {
+      "test_count": 11,
+      "statuses": {
+        "passed": 11
+      },
+      "sha256": "0d977e642ae4a6b5f0d1b71af933179b96fc40b8b766f7d265c629e71c20b036"
+    },
+    "client_terminal": {
+      "exit_code": 0,
+      "timed_out": false,
+      "subtype": "success",
+      "is_error": false,
+      "terminal_reason": "completed",
+      "api_error_status": null,
+      "prompt_too_long": false,
+      "reported_context_window_tokens": [
+        1000000
+      ]
+    }
+  },
+  "logical_requests": 187,
+  "upstream_attempts": 187,
+  "completed_streams": 187,
+  "streams_with_final_usage": 187,
+  "finish_counts": {
+    "tool_calls": 185,
+    "length": 1,
+    "stop": 1
+  },
+  "streams_with_tool_calls": 185,
+  "streams_with_text_or_tools": 186,
+  "output_limit_streams": 1,
+  "reasoning_only_output_limit_streams": 1,
+  "reasoning_only_output_limit_ids": [
+    "763711a99ba2452aae9d0fd8"
+  ],
+  "bridge_errors": 0,
+  "bridge_retries": 0,
+  "bridge_cancelled": 0,
+  "bridge_unfinished": [],
+  "actual_efforts": [
+    "max"
+  ],
+  "max_output_tokens": [
+    131072
+  ],
+  "tool_delivery": {
+    "tool_calls": 239,
+    "tool_counts": {
+      "Glob": 6,
+      "Read": 39,
+      "Bash": 122,
+      "Write": 23,
+      "Edit": 49
+    },
+    "unique_call_ids": 239,
+    "duplicate_call_ids": 0,
+    "tool_results": 239,
+    "duplicate_result_ids": 0,
+    "results_without_known_calls": 0,
+    "outstanding_call_count": 0,
+    "exact_bridge_argument_hash_matches": 192,
+    "cc_edit_default_expansions": 47,
+    "missing_bridge_call_evidence": 0,
+    "unexplained_argument_hash_mismatches": 0,
+    "default_expansion_rule": "Only remove Edit replace_all=false after an original hash mismatch; require the remaining argument hash to match exactly"
+  },
+  "scope": "Final completed task audit; stream completion and useful model output counted separately; no task/model text exported",
+  "raw_source_fingerprints": {
+    "cc.jsonl": {
+      "sha256": "f377637e4c6a24a996242b9740a47f8b9beabb8055957176fc2c9d289f3f30c7",
+      "bytes": 53055557
+    },
+    "result.json": {
+      "sha256": "d4d5b38fb235d9fc1039fe07e3f769258ebffabe5e1fd832dc9332a1b69cb458",
+      "bytes": 67304
+    },
+    "grade.json": {
+      "sha256": "c9288e9354443d07367aeda7c870dd82f19020d9d639feb7aa8268ce14d6cacf",
+      "bytes": 251
+    },
+    "artifacts.json": {
+      "sha256": "2d0e9d585534951d7a71d2cd31826874030fe4e7c39a6f827c63f0fc479b6efa",
+      "bytes": 1511
+    }
+  }
+}

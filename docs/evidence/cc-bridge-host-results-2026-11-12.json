@@ -1,12 +1,12 @@
 {
-  "verified_at": 1794448466.7423115,
-  "combined_plan_positions_completed": 13,
+  "verified_at": 1794460724.3330355,
+  "combined_plan_positions_completed": 14,
   "planned_positions": 30,
   "preserved_prior_completed_positions": 11,
-  "local_completed_positions": 2,
-  "remaining_positions": 17,
+  "local_completed_positions": 3,
+  "remaining_positions": 16,
   "independent_artifact_review": {
-    "reviewed_at": 1794448466.4135294,
+    "reviewed_at": 1794460725.756062,
     "attempts": [
       {
         "attempt": "runs/formal-1m-720k-host-cc-20261112/session-window-debug--max--r2",
@@ -92,12 +92,54 @@
             1000000
           ]
         }
+      },
+      {
+        "attempt": "runs/formal-1m-720k-host-cdp-read-20261112/embedding-drift-monitor--max--r2",
+        "task": "embedding-drift-monitor",
+        "control": null,
+        "effort": "max",
+        "repeat": 2,
+        "artifact_score": 1,
+        "infrastructure_error": null,
+        "changed_original_files": [
+          "app/drift_monitor/alert.py",
+          "app/drift_monitor/calibration.py",
+          "app/drift_monitor/distance.py",
+          "app/drift_monitor/monitor.py",
+          "app/drift_monitor/normalize.py",
+          "app/drift_monitor/statistical_tests.py",
+          "app/drift_monitor/windowing.py"
+        ],
+        "added_files": [],
+        "removed_original_files": [],
+        "declared_read_only_files_unchanged": {},
+        "read_only_check_scope": "not checked",
+        "artifact_errors_present": false,
+        "verifier": {
+          "test_count": 11,
+          "statuses": {
+            "passed": 11
+          },
+          "sha256": "0d977e642ae4a6b5f0d1b71af933179b96fc40b8b766f7d265c629e71c20b036"
+        },
+        "client_terminal": {
+          "exit_code": 0,
+          "timed_out": false,
+          "subtype": "success",
+          "is_error": false,
+          "terminal_reason": "completed",
+          "api_error_status": null,
+          "prompt_too_long": false,
+          "reported_context_window_tokens": [
+            1000000
+          ]
+        }
       }
     ],
     "scope": "saved copied-artifact hashes and original verifier results; not a semantic code review"
   },
   "results": {
-    "generated_at": 1794448466.0149,
+    "generated_at": 1794460724.3303227,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-1m-720k-host-cc-20261112/28800/max": {
@@ -188,6 +230,51 @@
           "total_tokens": 4447747,
           "cached_prompt_tokens": 4249600,
           "reasoning_tokens": 57642
+        }
+      },
+      "formal-1m-720k-host-cdp-read-20261112/28800/max": {
+        "attempts": 1,
+        "valid_grades": 1,
+        "infrastructure_errors": 0,
+        "artifact_passes": 1,
+        "artifact_pass_at_1": 1.0,
+        "end_to_end_passes": 1,
+        "end_to_end_pass_rate": 1.0,
+        "agent_seconds": 11921.83,
+        "logical_requests": 187,
+        "bridge_errors": 0,
+        "bridge_errors_after_content": 0,
+        "bridge_errors_before_content": 0,
+        "bridge_retries": 0,
+        "http_failures_retried": 0,
+        "requests_recovered_after_retry": 0,
+        "cancelled_requests": 0,
+        "transport": {
+          "attempts_with_evidence": 1,
+          "max_output_tokens": [
+            131072
+          ],
+          "http_status_counts": {},
+          "timed_http_failures": 0,
+          "http_failed_attempt_seconds": 0,
+          "completed_requests": 187,
+          "observed_usage": {
+            "prompt_tokens": 27793690,
+            "completion_tokens": 320602,
+            "total_tokens": 28114292,
+            "cached_prompt_tokens": 27339008,
+            "reasoning_tokens": 283307
+          },
+          "requests_with_partial_usage": 0,
+          "requests_without_observed_usage": 0,
+          "longest_completed_request_seconds": 4035.775
+        },
+        "usage": {
+          "prompt_tokens": 27793690,
+          "completion_tokens": 320602,
+          "total_tokens": 28114292,
+          "cached_prompt_tokens": 27339008,
+          "reasoning_tokens": 283307
         }
       }
     },
@@ -297,18 +384,71 @@
           "reasoning_tokens": 57642
         },
         "source_head": "eb5abe1a66db4b01acc6391482010f374541d664"
+      },
+      {
+        "task": "embedding-drift-monitor",
+        "stage": "formal-1m-720k-host-cdp-read-20261112",
+        "effort": "max",
+        "repeat": 2,
+        "budget_seconds": 28800,
+        "agent_wall_clock_timeout_seconds": null,
+        "artifact_score": 1,
+        "infrastructure_error": null,
+        "end_to_end_success": true,
+        "agent_seconds": 11921.83,
+        "agent_timed_out": false,
+        "cc_subtype": "success",
+        "cc_turns": 241,
+        "logical_requests": 187,
+        "upstream_attempts": 187,
+        "bridge_errors": 0,
+        "bridge_errors_after_content": 0,
+        "bridge_errors_before_content": 0,
+        "bridge_retries": 0,
+        "http_failures_retried": 0,
+        "requests_recovered_after_retry": 0,
+        "bridge_cancelled": 0,
+        "bridge_unfinished": [],
+        "transport": {
+          "max_output_tokens": [
+            131072
+          ],
+          "http_status_counts": {},
+          "timed_http_failures": 0,
+          "http_failed_attempt_seconds": 0,
+          "completed_requests": 187,
+          "completed_request_seconds": 11644.711,
+          "longest_completed_request_seconds": 4035.775,
+          "observed_usage": {
+            "prompt_tokens": 27793690,
+            "completion_tokens": 320602,
+            "total_tokens": 28114292,
+            "cached_prompt_tokens": 27339008,
+            "reasoning_tokens": 283307
+          },
+          "requests_with_partial_usage": 0,
+          "requests_without_observed_usage": 0
+        },
+        "usage": {
+          "prompt_tokens": 27793690,
+          "completion_tokens": 320602,
+          "total_tokens": 28114292,
+          "cached_prompt_tokens": 27339008,
+          "reasoning_tokens": 283307
+        },
+        "source_head": "eb5abe1a66db4b01acc6391482010f374541d664"
       }
     ],
     "pending": [
       {
-        "attempt": "runs/formal-1m-720k-host-cdp-read-20261112/embedding-drift-monitor--max--r2",
+        "attempt": "runs/formal-1m-720k-host-cdp-read-20261112/batched-eval-parity--high--r2",
         "status": "agent_running",
-        "task": "embedding-drift-monitor",
-        "effort": "max",
-        "started_at": 1794448205.634562,
-        "elapsed_seconds": 260.4,
-        "tool_calls": 21,
-        "last_tool": "Bash"
+        "task": "batched-eval-parity",
+        "effort": "high",
+        "started_at": 1794460205.9569986,
+        "elapsed_seconds": 518.4,
+        "tool_calls": 0,
+        "last_tool": null
       }
     ]
   },
@@ -342,6 +482,19 @@
         "Grep": 2
       },
       "tool_calls": 90
+    },
+    {
+      "task": "embedding-drift-monitor",
+      "effort": "max",
+      "repeat": 2,
+      "tool_counts": {
+        "Glob": 6,
+        "Read": 39,
+        "Bash": 122,
+        "Write": 23,
+        "Edit": 49
+      },
+      "tool_calls": 239
     }
   ],
   "cdp_rollout_validated": true,

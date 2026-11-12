@@ -1,12 +1,12 @@
 {
-  "generated_at": 1794448466.7466614,
+  "generated_at": 1794460851.3424075,
   "planned_positions": 30,
-  "remaining_positions": 17,
+  "remaining_positions": 16,
   "totals": {
-    "completed_positions": 13,
-    "valid_grades": 13,
-    "artifact_passes": 9,
-    "end_to_end_passes": 8,
+    "completed_positions": 14,
+    "valid_grades": 14,
+    "artifact_passes": 10,
+    "end_to_end_passes": 9,
     "infrastructure_errors": 0
   },
   "totals_by_stage_and_effort": {
@@ -59,6 +59,13 @@
       "end_to_end_passes": 1,
       "infrastructure_errors": 0
     },
+    "formal-1m-720k-host-cdp-read-20261112/max": {
+      "completed_positions": 1,
+      "valid_grades": 1,
+      "artifact_passes": 1,
+      "end_to_end_passes": 1,
+      "infrastructure_errors": 0
+    },
     "formal-1m-720k-path-cc-2-1-322-20261111/max": {
       "completed_positions": 2,
       "valid_grades": 2,
@@ -101,9 +108,9 @@
     },
     {
       "checkpoint": "cc-bridge-continuation-2026-11-12.json",
-      "sha256": "980ecdc859c4a9615b9843a3def995eefcad1706a52c0ab9c704d6cc0f5fb0b7",
-      "local_completed_positions": 2,
-      "combined_completed_positions": 13
+      "sha256": "acd49f13b0ea741f6e8b04b567c364b7c0cc73d34c70472adff03cd3ef4c9a3f",
+      "local_completed_positions": 3,
+      "combined_completed_positions": 14
     }
   ],
   "attempts": [
@@ -427,6 +434,31 @@
         "total_tokens": 4447747,
         "cached_prompt_tokens": 4249600,
         "reasoning_tokens": 57642
+      },
+      "source_head": "eb5abe1a66db4b01acc6391482010f374541d664",
+      "infrastructure_error_present": false,
+      "source_checkpoint": "cc-bridge-continuation-2026-11-12.json"
+    },
+    {
+      "task": "embedding-drift-monitor",
+      "stage": "formal-1m-720k-host-cdp-read-20261112",
+      "effort": "max",
+      "repeat": 2,
+      "artifact_score": 1,
+      "end_to_end_success": true,
+      "agent_seconds": 11921.83,
+      "agent_timed_out": false,
+      "logical_requests": 187,
+      "upstream_attempts": 187,
+      "bridge_errors": 0,
+      "bridge_retries": 0,
+      "bridge_cancelled": 0,
+      "usage": {
+        "prompt_tokens": 27793690,
+        "completion_tokens": 320602,
+        "total_tokens": 28114292,
+        "cached_prompt_tokens": 27339008,
+        "reasoning_tokens": 283307
       },
       "source_head": "eb5abe1a66db4b01acc6391482010f374541d664",
       "infrastructure_error_present": false,
