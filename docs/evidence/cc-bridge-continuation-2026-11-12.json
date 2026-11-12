@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794447375.6507084,
+  "checkpoint_at": 1794447388.5915964,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261112",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -1107,8 +1107,8 @@
     "isolation_boundary": "Real dedicated Unix UID and protected source directories; shared host filesystem, kernel and network"
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794447362.2262669,
-    "commit": "539bda5bdaae418044d6d6e3658ed9193a5618f1",
+    "attempted_at": 1794447375.8181603,
+    "commit": "9cadecaf569b9710ae7c58bd8f2eb1c903ebf2da",
     "pushed": true,
     "returncode": 0
   },
@@ -1550,7 +1550,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794447375.7666056,
+    "generated_at": 1794447388.7074676,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-1m-720k-host-cc-20261112/28800/max": {
@@ -1661,9 +1661,9 @@
         "task": "embedding-drift-monitor",
         "effort": "high",
         "started_at": 1794445209.5020125,
-        "elapsed_seconds": 2166.2,
-        "tool_calls": 74,
-        "last_tool": "Read"
+        "elapsed_seconds": 2179.1,
+        "tool_calls": 76,
+        "last_tool": "Bash"
       }
     ]
   },
@@ -1697,60 +1697,32 @@
       "idle_seconds": 3600.0
     },
     "pool_states": {
-      "ready": 4,
-      "busy": 1
+      "ready": 5
     },
     "recovering_tabs": []
   },
   "bridge_activity": {
     "events_last_300s": {
-      "browser_progress": 50,
-      "browser_buffer": 13,
-      "browser_pool_release": 13,
-      "browser_output_ready": 13,
-      "browser_first_content": 13,
-      "browser_done": 13,
-      "tool_call": 17,
-      "messages_done": 13,
-      "http_complete": 13,
-      "tool_result": 17,
-      "request": 13,
-      "payload": 13,
-      "browser_start": 13,
-      "browser_lease": 13,
-      "browser_tab": 13,
-      "browser_sent": 13,
-      "browser_first_data": 13,
-      "messages_first_block": 13
+      "browser_progress": 49,
+      "browser_buffer": 15,
+      "browser_pool_release": 15,
+      "browser_output_ready": 15,
+      "browser_first_content": 15,
+      "browser_done": 15,
+      "tool_call": 19,
+      "messages_done": 15,
+      "http_complete": 15,
+      "tool_result": 18,
+      "request": 14,
+      "payload": 14,
+      "browser_start": 14,
+      "browser_lease": 14,
+      "browser_tab": 14,
+      "browser_sent": 14,
+      "browser_first_data": 14,
+      "messages_first_block": 14
     },
-    "active": [
-      {
-        "id": "d070c803deed490e9bc44216",
-        "retry_count": 0,
-        "phase": "browser_progress",
-        "attempt": 1,
-        "reasoning_effort": "high",
-        "tab_id": "kpool=4",
-        "counts": {
-          "thinking_chars": 211,
-          "text_chars": 0,
-          "tool_calls": 0
-        },
-        "usage": {
-          "prompt_tokens": 88023,
-          "completion_tokens": 46,
-          "total_tokens": 88069,
-          "prompt_tokens_details": {
-            "cached_tokens": 87168
-          },
-          "completion_tokens_details": {
-            "reasoning_tokens": 46
-          }
-        },
-        "age_seconds": 6.7,
-        "activity_age_seconds": 1.5
-      }
-    ],
+    "active": [],
     "recent_errors": [],
     "recent_upstream_errors": [],
     "recent_retries": []
@@ -1808,7 +1780,7 @@
     },
     {
       "path": "browser-supervisor-state.json",
-      "sha256": "de241d3f5396db2601f91c32a563951167fe6473a17dc89118931eeb69591018",
+      "sha256": "108079d16c209492ba1dbc107f58261c7aab3b47b989734cf2a46cc4370a0d0e",
       "size": 102
     },
     {
@@ -1828,7 +1800,7 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "5822e7a8b677868fde68a7dd85670fbbde702387f4a8c9cbdb105dea0fea1b74",
+      "sha256": "5534b81cbc2bc599d4a6c2c1cf8a5cc4ef06446e496122b55bfe3568d509381d",
       "size": 134
     },
     {
