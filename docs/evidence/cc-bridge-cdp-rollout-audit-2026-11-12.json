@@ -1,0 +1,136 @@
+{
+  "audited_at": 1794445388.5080943,
+  "passed": true,
+  "stage": "formal-1m-720k-host-cdp-read-20261112",
+  "bridge_runtime_identity": {
+    "pid": 203002,
+    "boot_id": "e9043059-238b-47bb-aaa4-c505e12e3876",
+    "start_ticks": "818081",
+    "source_head": "eb5abe1a66db4b01acc6391482010f374541d664",
+    "source_module_sha256": {
+      "nvplay_bridge.py": "922e6a991aa24ed241ba58ef0b18aab2b8f114a4f5300d7aba68756f4c0c60cc",
+      "browser_upstream.py": "86cfc27e2678d3a569d321328dca0f77f4e9c1c595fa3efa40fdada2385b621b",
+      "browser_events.py": "0c3f255dbbd7c317ea118f7d203511150c0a91f2d0cc580408032543004b8ec8",
+      "stream_support.py": "8631dd909e24192413855c353285d4c0703f86082b3722ead1140a820c0a2d32",
+      "responses_api.py": "da451613bf0a1c4aa12ef03effc4d5ffe1ea330fb48006f9d09925233f9580c6",
+      "responses_support.py": "ed907b22106ff58923efa5431c20422e59bfdeb9a719b0766969522e444f033e"
+    }
+  },
+  "checks": {
+    "deployed_modules_match_validated_source": true,
+    "deployed_modules_match_worktree": true,
+    "frozen_runner_files_unchanged": true,
+    "frozen_cc_runtime_retained": true,
+    "frozen_cc_version_retained": true,
+    "bridge_identity_matches": true,
+    "all_actual_smoke_requests_fixed_131072": true,
+    "all_smoke_successful_without_transport_failures": true,
+    "no_agent_wall_clock_deadline": true,
+    "original_local_score_keeps_previous_stage": true,
+    "remaining_plan_count": true,
+    "preserved_prior_positions": true
+  },
+  "smokes": [
+    {
+      "effort": "high",
+      "passed": true,
+      "process": {
+        "exit_code": 0,
+        "timed_out": false,
+        "timeout_seconds": null,
+        "started_at": 1794445079.2000237,
+        "finished_at": 1794445099.4975197,
+        "duration_seconds": 20.297
+      },
+      "tool_calls": [
+        "Bash"
+      ],
+      "logical_requests": 2,
+      "errors": 0,
+      "retries": 0,
+      "cancelled": 0,
+      "unfinished": [],
+      "launch_configuration": {
+        "model": "kimi-k3.1-pro[1m]",
+        "automatic_compaction_enabled": true,
+        "auto_compact_window_tokens": 720000
+      },
+      "reported_context_windows": [
+        1000000
+      ],
+      "runtime_matches_deployment": true
+    },
+    {
+      "effort": "max",
+      "passed": true,
+      "process": {
+        "exit_code": 0,
+        "timed_out": false,
+        "timeout_seconds": null,
+        "started_at": 1794445106.0637643,
+        "finished_at": 1794445128.7333872,
+        "duration_seconds": 22.67
+      },
+      "tool_calls": [
+        "Bash"
+      ],
+      "logical_requests": 2,
+      "errors": 0,
+      "retries": 0,
+      "cancelled": 0,
+      "unfinished": [],
+      "launch_configuration": {
+        "model": "kimi-k3.1-pro[1m]",
+        "automatic_compaction_enabled": true,
+        "auto_compact_window_tokens": 720000
+      },
+      "reported_context_windows": [
+        1000000
+      ],
+      "runtime_matches_deployment": true
+    }
+  ],
+  "actual_upstream_starts": [
+    {
+      "id": "9504204d6623484dae8a9d30",
+      "ts": 1794445079.6133056,
+      "max_tokens": 131072,
+      "reasoning_effort": "high"
+    },
+    {
+      "id": "611981a70bbe4e1685230777",
+      "ts": 1794445094.5064702,
+      "max_tokens": 131072,
+      "reasoning_effort": "high"
+    },
+    {
+      "id": "41efcb8c18df48e99d33764c",
+      "ts": 1794445106.4984398,
+      "max_tokens": 131072,
+      "reasoning_effort": "max"
+    },
+    {
+      "id": "85b67603baf64f13b63ff2f7",
+      "ts": 1794445120.4124331,
+      "max_tokens": 131072,
+      "reasoning_effort": "max"
+    }
+  ],
+  "frozen_runner_checks": {
+    "tools/eval_terminal_native.py": true,
+    "tools/native_eval_support.py": true,
+    "tools/native_path_cc.py": true,
+    "tools/native_host_cc.py": true,
+    "tools/cc_node_runtime/timeout.cjs": true,
+    "tools/cc_node_runtime/package.json": true,
+    "tools/cc_node_runtime/package-lock.json": true,
+    "tools/run_terminal_native_campaign.py": true,
+    "tools/archive_terminal_native_roots.py": true,
+    "tools/checkpoint_terminal_native.py": true
+  },
+  "preserved_prior_completed_positions": 11,
+  "preserved_local_completed_positions": 1,
+  "combined_positions_completed": 12,
+  "remaining_positions": 18,
+  "agent_interrupted_for_rollout": false
+}
