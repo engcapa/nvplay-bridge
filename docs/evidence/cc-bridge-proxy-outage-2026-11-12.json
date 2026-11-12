@@ -1,0 +1,173 @@
+{
+  "recorded_at": 1794461924.4066176,
+  "status": "ongoing",
+  "external_proxy": "http://127.0.0.1:31128",
+  "connect_probes": [
+    {
+      "host": "github.com",
+      "exit_code": 28,
+      "http_status": "000",
+      "connect_status": "000",
+      "seconds": 10.001461,
+      "error_sha256": "78c75ba5603d2c6173c6456a6db498c979c26b2ffb6b52dfe82b0aa2430ee951"
+    },
+    {
+      "host": "build.nvidia.com",
+      "exit_code": 28,
+      "http_status": "000",
+      "connect_status": "000",
+      "seconds": 10.0014,
+      "error_sha256": "78c75ba5603d2c6173c6456a6db498c979c26b2ffb6b52dfe82b0aa2430ee951"
+    }
+  ],
+  "git_http_version": "HTTP/1.1",
+  "checkpoint_sync": {
+    "attempted_at": 1794461818.5638316,
+    "commit": "68d7898d459286839daae2343be34c2b87cd1680",
+    "pushed": false,
+    "error_type": "TimeoutExpired"
+  },
+  "current_attempt": "batched-eval-parity--high--r2",
+  "current_attempt_started_at": 1794460205.9569986,
+  "bridge_lifecycle_events": [
+    {
+      "event": "browser_start",
+      "ts": 1794460206.3075256,
+      "id": "72e9bbb6c3aa43f598c71597",
+      "attempt": 1,
+      "sec": 0.0,
+      "max_tokens": 131072,
+      "reasoning_effort": "high"
+    },
+    {
+      "event": "browser_sent",
+      "ts": 1794460207.161703,
+      "id": "72e9bbb6c3aa43f598c71597",
+      "attempt": 1,
+      "sec": 0.854,
+      "tab_id": "kpool=3"
+    },
+    {
+      "event": "browser_abort",
+      "ts": 1794460816.3579817,
+      "id": "72e9bbb6c3aa43f598c71597",
+      "attempt": 1,
+      "sec": 610.05,
+      "tab_id": "kpool=3",
+      "confirmed": true
+    },
+    {
+      "event": "browser_cancelled",
+      "ts": 1794460816.3585887,
+      "id": "72e9bbb6c3aa43f598c71597",
+      "attempt": 1,
+      "sec": 610.051
+    },
+    {
+      "event": "browser_start",
+      "ts": 1794460816.3687344,
+      "id": "bf688ec2048b437ea46f44ac",
+      "attempt": 1,
+      "sec": 0.0,
+      "max_tokens": 131072,
+      "reasoning_effort": "high"
+    },
+    {
+      "event": "browser_sent",
+      "ts": 1794460817.2243605,
+      "id": "bf688ec2048b437ea46f44ac",
+      "attempt": 1,
+      "sec": 0.856,
+      "tab_id": "kpool=4"
+    }
+  ],
+  "prediction_transport_events_since_attempt_start": [],
+  "pool_recovery_error_count_since_attempt_start": 37,
+  "recent_pool_recovery_errors": [
+    {
+      "ts": 1794461636.570178,
+      "tab_id": "kpool=3",
+      "error_type": "WebSocketTimeoutException",
+      "cdp_phase": "receive",
+      "cdp_method": "Page.enable"
+    },
+    {
+      "ts": 1794461701.6091914,
+      "tab_id": "kpool=3",
+      "error_type": "WebSocketTimeoutException",
+      "cdp_phase": "receive",
+      "cdp_method": "Page.navigate"
+    },
+    {
+      "ts": 1794461706.9227922,
+      "tab_id": "kpool=3",
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null
+    },
+    {
+      "ts": 1794461770.5975575,
+      "tab_id": "kpool=3",
+      "error_type": "BrowserError",
+      "cdp_phase": null,
+      "cdp_method": null
+    },
+    {
+      "ts": 1794461775.6162024,
+      "tab_id": "kpool=3",
+      "error_type": "WebSocketTimeoutException",
+      "cdp_phase": "receive",
+      "cdp_method": "Page.navigate"
+    },
+    {
+      "ts": 1794461840.6541653,
+      "tab_id": "kpool=3",
+      "error_type": "WebSocketTimeoutException",
+      "cdp_phase": "receive",
+      "cdp_method": "Page.navigate"
+    },
+    {
+      "ts": 1794461845.6601741,
+      "tab_id": "kpool=3",
+      "error_type": "WebSocketTimeoutException",
+      "cdp_phase": "receive",
+      "cdp_method": "Page.enable"
+    },
+    {
+      "ts": 1794461910.6992204,
+      "tab_id": "kpool=3",
+      "error_type": "WebSocketTimeoutException",
+      "cdp_phase": "receive",
+      "cdp_method": "Page.navigate"
+    }
+  ],
+  "pool_states": {
+    "kpool=1": "ready",
+    "kpool=2": "ready",
+    "kpool=3": "failed",
+    "kpool=4": "busy",
+    "kpool=5": "ready"
+  },
+  "read_only_page_diagnostic": {
+    "observed_at": 1794461507.4663272,
+    "tab": "kpool=4",
+    "armed": true,
+    "status": 0,
+    "done": false,
+    "error_present": false,
+    "pending_bytes": 0,
+    "has_controller": false,
+    "interpretation": "page click occurred; prediction fetch has not reached the bridge wrapper"
+  },
+  "client_cancel_observation": {
+    "request_id": "72e9bbb6c3aa43f598c71597",
+    "seconds": 610.051,
+    "agent_signalled": false,
+    "agent_wall_clock_timeout_seconds": null,
+    "api_timeout_ms": 29400000,
+    "client_next_request_id": "bf688ec2048b437ea46f44ac",
+    "next_request_stream": false,
+    "cause_status": "native CC idle/stream watchdog is being checked in a separate local fixture; not yet proven"
+  },
+  "scope": "Transport outage observations; pending task receives no grade. No prompt, answer, token, header, or error body exported."
+}
