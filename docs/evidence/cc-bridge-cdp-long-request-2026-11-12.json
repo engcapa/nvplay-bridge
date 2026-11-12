@@ -1,0 +1,51 @@
+{
+  "recorded_at": 1794450301.9821632,
+  "stage": "formal-1m-720k-host-cdp-read-20261112",
+  "task": "embedding-drift-monitor",
+  "effort": "max",
+  "repeat": 2,
+  "task_still_running_no_grade_assigned": true,
+  "logical_request": "06784abf33e04930b131b431",
+  "upstream_attempts": 1,
+  "bridge_errors": 0,
+  "retries": 0,
+  "cancelled": 0,
+  "max_output_tokens": 131072,
+  "done": {
+    "ts": 1794450214.7030246,
+    "id": "06784abf33e04930b131b431",
+    "attempt": 1,
+    "sec": 750.368,
+    "counts": {
+      "thinking_chars": 98325,
+      "text_chars": 441,
+      "tool_calls": 1
+    },
+    "usage": {
+      "prompt_tokens": 53027,
+      "completion_tokens": 26434,
+      "total_tokens": 79461,
+      "prompt_tokens_details": {
+        "cached_tokens": 51456
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 26050
+      }
+    },
+    "finish": "tool_calls"
+  },
+  "bridge_runtime_identity": {
+    "pid": 203002,
+    "boot_id": "e9043059-238b-47bb-aaa4-c505e12e3876",
+    "start_ticks": "818081",
+    "source_head": "eb5abe1a66db4b01acc6391482010f374541d664",
+    "source_module_sha256": {
+      "nvplay_bridge.py": "922e6a991aa24ed241ba58ef0b18aab2b8f114a4f5300d7aba68756f4c0c60cc",
+      "browser_upstream.py": "86cfc27e2678d3a569d321328dca0f77f4e9c1c595fa3efa40fdada2385b621b",
+      "browser_events.py": "0c3f255dbbd7c317ea118f7d203511150c0a91f2d0cc580408032543004b8ec8",
+      "stream_support.py": "8631dd909e24192413855c353285d4c0703f86082b3722ead1140a820c0a2d32",
+      "responses_api.py": "da451613bf0a1c4aa12ef03effc4d5ffe1ea330fb48006f9d09925233f9580c6",
+      "responses_support.py": "ed907b22106ff58923efa5431c20422e59bfdeb9a719b0766969522e444f033e"
+    }
+  }
+}

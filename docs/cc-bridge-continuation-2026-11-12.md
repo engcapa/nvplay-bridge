@@ -35,3 +35,5 @@ CC 直接在当前容器以独立 UID 运行，冻结普通用户 PATH 的实际
 跨重启成绩另存为 [完整继承汇总](evidence/cc-bridge-combined-results-2026-11-12.json)。生成命令为 `python3 tools/report_terminal_native_continuation.py --checkpoint docs/evidence/cc-bridge-continuation-2026-11-12.json --output docs/evidence/cc-bridge-combined-results-2026-11-12.json`。它逐级验证五份检查点的 SHA256、保留位置和计划覆盖，拒绝重复位置、替换旧失败或篡改上游检查点；pending 与行政中断不补分。当前 13 个位置中产物通过 9 个、端到端通过 8 个，各阶段仍分别列出；这些累计数字跨越多个 bridge、CLI 和上下文配置，仅作过程记录，不能作为单一当前配置的胜率。新增汇总器的 7 项专项回归通过。
 
 09:52 独立复核确认 `embedding-drift-monitor` high/r2 原始验收 **11/11 通过**，产物复制无错误，客户端自然成功退出且无超时。运行 **2936.543 秒**、90 次工具调用、66 个逻辑请求；全部请求完成并获得最终 usage，最长请求 **428.800 秒**，固定输出上限均为 131072，无 bridge 错误、重试、取消或遗留。观察器补充取消及客户端转换/输出错误的窗口计数与脱敏记录，2 项专项回归确认请求离开 active 集合后仍能发现问题，错误正文仅保留摘要；新部署以来这两类事件实际均为零。max/r2 已自动按原顺序启动，继续监督。
+
+长请求监督补充：max/r2 中一次请求自然运行 **750.368 秒**后成功交付一次工具调用，上游最终报告输出 **26434 token**，其中推理 **26050 token**，固定输出上限 131072；只有一次尝试，没有错误、重试或取消。此次是请求完成证据，题目仍在运行，不提前计分。见 [长请求证据](evidence/cc-bridge-cdp-long-request-2026-11-12.json)。同期 bridge RSS 约 70 MiB、19 个文件描述符，容器无 OOM 或分配失败。
