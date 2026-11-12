@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794445027.0524104,
+  "checkpoint_at": 1794445040.1435566,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261112",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -854,8 +854,8 @@
     "isolation_boundary": "Real dedicated Unix UID and protected source directories; shared host filesystem, kernel and network"
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794444963.2836761,
-    "commit": "fc0ed86630c444a985710aebea7d7ace0385eba2",
+    "attempted_at": 1794445027.1386294,
+    "commit": "ce4d3c196fc5abffbf5851eee45eb11757463d2b",
     "pushed": true,
     "returncode": 0
   },
@@ -1310,7 +1310,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794445027.0737739,
+    "generated_at": 1794445040.1534612,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-1m-720k-host-cc-20261112/28800/max": {
@@ -1428,7 +1428,7 @@
   },
   "transport_transition": {
     "status": "waiting_for_natural_completion",
-    "at": 1794445022.2490711,
+    "at": 1794445037.2497249,
     "current_agent_signalled": false
   },
   "status": "formal_running",
@@ -1453,7 +1453,7 @@
   },
   "bridge_activity": {
     "events_last_300s": {
-      "browser_progress": 46,
+      "browser_progress": 43,
       "browser_buffer": 5,
       "browser_pool_release": 5,
       "browser_output_ready": 5,
@@ -1525,7 +1525,7 @@
     },
     {
       "path": "browser-supervisor-state.json",
-      "sha256": "6319008d2cc463580e7580c3a135379518d13241ca7507121d8e10fcf4e4d3df",
+      "sha256": "11cc18e66b2a8acab01de0b69daf00c624946b788d1ac1892f79768e7397d1ec",
       "size": 102
     },
     {
@@ -1545,7 +1545,7 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "914df698a29abdb258a6745279a395210585e452b918a0770d56237581f32965",
+      "sha256": "f502fb2c9cd81766ce1e9aacdfc0da868afc41cacd55fb38480c19bc1136b9a3",
       "size": 134
     },
     {
@@ -1675,8 +1675,8 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "28b2bf3d4d620da236fefbee264474d41240f28e834f3dc6d4eb79a50fa6558f",
-      "size": 824
+      "sha256": "12eed0e0d9e345ed99530affadf4d32f16f4fe2db7e799cb12d9342410a6963b",
+      "size": 823
     },
     {
       "path": "restore-fixed-regression.log",
@@ -1750,7 +1750,7 @@
     },
     {
       "path": "transport-transition-state.json",
-      "sha256": "463cfc1b7d7607627f101efeaab762f77bf63d88952ba58089f4eb3988c86d0c",
+      "sha256": "bb7cd41bfe94af77ee831243a8daf07e63fe4b143bf5121f7853fba58e265151",
       "size": 113
     },
     {
@@ -1969,6 +1969,16 @@
       "bytes": 486829709,
       "tar_compare_passed_before_reclaim": true,
       "restore": "sudo tar -xpf verifier-root.tar.gz -C ."
+    },
+    {
+      "directory": "runs/formal-1m-720k-host-cc-20261112/session-window-debug--max--r2",
+      "archived_at": 1794445030.618981,
+      "root": "agent-root",
+      "archive": "agent-root.tar.gz",
+      "sha256": "bc0677fe0fdf089293b1ff5c41aad00fe5810b83c21d4b860f6563574687b444",
+      "bytes": 4537550,
+      "tar_compare_passed_before_reclaim": true,
+      "restore": "sudo tar -xpf agent-root.tar.gz -C ."
     },
     {
       "directory": "smoke/high",
