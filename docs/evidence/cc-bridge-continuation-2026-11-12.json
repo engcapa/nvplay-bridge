@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794443204.2115283,
+  "checkpoint_at": 1794443222.2650392,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261112",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -854,8 +854,8 @@
     "isolation_boundary": "Real dedicated Unix UID and protected source directories; shared host filesystem, kernel and network"
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794443128.5055673,
-    "commit": "4c9ea7273fc55db3dce20beb4f801b6052641e28",
+    "attempted_at": 1794443204.4122138,
+    "commit": "0a49eef549354f42cd2fb97f68bfbeb16144cab8",
     "pushed": true,
     "returncode": 0
   },
@@ -1310,7 +1310,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794443204.3766978,
+    "generated_at": 1794443222.43464,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {},
     "attempts": [],
@@ -1321,7 +1321,7 @@
         "task": "session-window-debug",
         "effort": "max",
         "started_at": 1794441338.0270572,
-        "elapsed_seconds": 1866.2,
+        "elapsed_seconds": 1884.2,
         "tool_calls": 30,
         "last_tool": "Write"
       }
@@ -1336,6 +1336,11 @@
     "status": "formal_running",
     "task": "session-window-debug",
     "repeat": 2
+  },
+  "transport_transition": {
+    "status": "waiting_for_natural_completion",
+    "at": 1794443222.1737666,
+    "current_agent_signalled": false
   },
   "status": "formal_running",
   "bridge_health": {
@@ -1360,7 +1365,7 @@
   },
   "bridge_activity": {
     "events_last_300s": {
-      "browser_progress": 52,
+      "browser_progress": 51,
       "browser_buffer": 2,
       "browser_pool_release": 2,
       "browser_output_ready": 2,
@@ -1376,19 +1381,35 @@
       "browser_lease": 2,
       "browser_tab": 2,
       "browser_sent": 2,
-      "browser_first_data": 1,
-      "messages_first_block": 1
+      "browser_first_data": 2,
+      "messages_first_block": 2
     },
     "active": [
       {
         "id": "df5853b63a964b87aa090701",
         "retry_count": 0,
-        "phase": "browser_sent",
+        "phase": "browser_progress",
         "attempt": 1,
         "reasoning_effort": "max",
         "tab_id": "kpool=3",
-        "age_seconds": 5.9,
-        "activity_age_seconds": 5.0
+        "counts": {
+          "thinking_chars": 1208,
+          "text_chars": 0,
+          "tool_calls": 0
+        },
+        "usage": {
+          "prompt_tokens": 70380,
+          "completion_tokens": 258,
+          "total_tokens": 70638,
+          "prompt_tokens_details": {
+            "cached_tokens": 65536
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 258
+          }
+        },
+        "age_seconds": 23.9,
+        "activity_age_seconds": 4.7
       }
     ],
     "recent_errors": [],
@@ -1438,8 +1459,8 @@
     },
     {
       "path": "browser-supervisor-state.json",
-      "sha256": "5bf16dd4006d9a9a7b063eca612cc31c7e280c4a8fb5ee1b2f76f24166f4bb92",
-      "size": 101
+      "sha256": "406d080b6de39235f22e78d3b0b8733eaf2863f4571378be5b1396e82c76b498",
+      "size": 102
     },
     {
       "path": "campaign-launch-process.json",
@@ -1458,7 +1479,7 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "ea358915579d1fc46b60c69a3880aa528b2e85da595522645ada2105c8db8e32",
+      "sha256": "ee268c9c72fccc84cfac521e44e1f42f04d66051b9cb28996b0ed5d5e869fc64",
       "size": 134
     },
     {
@@ -1640,6 +1661,16 @@
       "path": "smoke-result.json",
       "sha256": "549ea09931e29ae0c71811d8baf32817512f0d93e2e37783268b616e50909d35",
       "size": 16975
+    },
+    {
+      "path": "transport-transition-process.json",
+      "sha256": "0094d4a1070a57238a794fb48ee0b5632d46d1ad2dbad878aa01f6091153bb92",
+      "size": 328
+    },
+    {
+      "path": "transport-transition-state.json",
+      "sha256": "2fba621508d4be19c06b8ecfb66f2a726548768c6625acbc78a76f53b23dd3a2",
+      "size": 113
     },
     {
       "path": "upstream-preflight-invalid-client-alias.json",
