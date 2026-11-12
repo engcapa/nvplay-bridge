@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794445187.6827111,
+  "checkpoint_at": 1794445190.6579354,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261112",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -1107,8 +1107,8 @@
     "isolation_boundary": "Real dedicated Unix UID and protected source directories; shared host filesystem, kernel and network"
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794445184.6823196,
-    "commit": "b88dab9ec70bef98341148edf6966eef145f6d6b",
+    "attempted_at": 1794445187.732839,
+    "commit": "db3b6bd0a700abe7aabe2d6aaa4cd2731be8b5c9",
     "pushed": true,
     "returncode": 0
   },
@@ -1550,7 +1550,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794445187.6924713,
+    "generated_at": 1794445190.667586,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-1m-720k-host-cc-20261112/28800/max": {
@@ -1662,8 +1662,7 @@
   "combined_plan_positions_completed": 12,
   "campaign": {
     "controller_alive": true,
-    "status": "control_validated",
-    "task": "ks-solver-cpp"
+    "status": "live_tools_validated"
   },
   "transport_transition": {
     "status": "remaining_campaign_started",
@@ -1782,8 +1781,8 @@
     },
     {
       "path": "campaign-state.json",
-      "sha256": "9455f59be2adc2ad4ae0e2a8a21d440d3957447708a49a951e64d40731ebae36",
-      "size": 6538
+      "sha256": "b32052213eb3f1c2428da4d6e7c115eca51293009d98b87bf9d9d27b56d59cd1",
+      "size": 6514
     },
     {
       "path": "cdp-observer-process.json",
@@ -1792,8 +1791,8 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "57625ef366403cfc269374cffb0137e288ba4d05d49eb860c422f15a702f004a",
-      "size": 134
+      "sha256": "20327f19d1519d38b7eb51c748e9527f18e2dc07c8f473315c6807c3b4ccab8b",
+      "size": 133
     },
     {
       "path": "checkpoint-process.json",
