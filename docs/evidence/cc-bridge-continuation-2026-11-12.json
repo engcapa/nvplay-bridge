@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794445156.0926235,
+  "checkpoint_at": 1794445159.4786701,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261112",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -1107,8 +1107,8 @@
     "isolation_boundary": "Real dedicated Unix UID and protected source directories; shared host filesystem, kernel and network"
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794445153.2673612,
-    "commit": "d0082ef7112cfabe7973fa52db73f84466913c3f",
+    "attempted_at": 1794445156.1511455,
+    "commit": "631745217a0aac4d970489a04cae7bcd09757b7e",
     "pushed": true,
     "returncode": 0
   },
@@ -1550,7 +1550,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794445156.1038272,
+    "generated_at": 1794445159.4882083,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-1m-720k-host-cc-20261112/28800/max": {
@@ -1662,8 +1662,8 @@
   "combined_plan_positions_completed": 12,
   "campaign": {
     "controller_alive": true,
-    "status": "control_validated",
-    "task": "session-window-debug"
+    "status": "validating_controls",
+    "task": "embedding-drift-monitor"
   },
   "transport_transition": {
     "status": "remaining_campaign_started",
@@ -1782,8 +1782,8 @@
     },
     {
       "path": "campaign-state.json",
-      "sha256": "973de29f8895cace6cbcff5e329a4f01d1d531d427d5428810e9051ef8673d38",
-      "size": 6545
+      "sha256": "c91e337bc72efefbf76800331c865109f2b1d76117eb40b1b50fb79ff0071279",
+      "size": 6550
     },
     {
       "path": "cdp-observer-process.json",
@@ -1792,7 +1792,7 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "d8f433af1d98c55f722c8494519fdbb92f688ad102a6ec62ef7dbcf5fdbd1cb9",
+      "sha256": "aba5e0183ae649489e4653bcd814b7a9a4fd11430007b88de161557935a99976",
       "size": 134
     },
     {
