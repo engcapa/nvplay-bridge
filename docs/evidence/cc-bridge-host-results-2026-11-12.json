@@ -1,0 +1,167 @@
+{
+  "verified_at": 1794445116.7400248,
+  "combined_plan_positions_completed": 12,
+  "planned_positions": 30,
+  "preserved_prior_completed_positions": 11,
+  "local_completed_positions": 1,
+  "remaining_positions": 18,
+  "independent_artifact_review": {
+    "reviewed_at": 1794445116.728194,
+    "attempts": [
+      {
+        "attempt": "runs/formal-1m-720k-host-cc-20261112/session-window-debug--max--r2",
+        "task": "session-window-debug",
+        "control": null,
+        "effort": "max",
+        "repeat": 2,
+        "artifact_score": 1,
+        "infrastructure_error": null,
+        "changed_original_files": [
+          "app/app/events.py",
+          "app/app/gc.py",
+          "app/app/merger.py",
+          "app/app/sessions.py"
+        ],
+        "added_files": [],
+        "removed_original_files": [],
+        "declared_read_only_files_unchanged": {
+          "app/app/types.py": true,
+          "app/app/DESIGN.md": true,
+          "app/app/__init__.py": true
+        },
+        "read_only_check_scope": "explicit session-window task constraints",
+        "artifact_errors_present": false,
+        "verifier": {
+          "test_count": 7,
+          "statuses": {
+            "passed": 7
+          },
+          "sha256": "8032b03b6096acad61c64427a19aee615465aa42bbd52d12fb0c80ef39239996"
+        },
+        "client_terminal": {
+          "exit_code": 0,
+          "timed_out": false,
+          "subtype": "success",
+          "is_error": false,
+          "terminal_reason": "completed",
+          "api_error_status": null,
+          "prompt_too_long": false,
+          "reported_context_window_tokens": [
+            1000000
+          ]
+        }
+      }
+    ],
+    "scope": "saved copied-artifact hashes and original verifier results; not a semantic code review"
+  },
+  "results": {
+    "generated_at": 1794445116.739438,
+    "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
+    "totals": {
+      "formal-1m-720k-host-cc-20261112/28800/max": {
+        "attempts": 1,
+        "valid_grades": 1,
+        "infrastructure_errors": 0,
+        "artifact_passes": 1,
+        "artifact_pass_at_1": 1.0,
+        "end_to_end_passes": 1,
+        "end_to_end_pass_rate": 1.0,
+        "agent_seconds": 3686.067,
+        "logical_requests": 44,
+        "bridge_errors": 0,
+        "bridge_errors_after_content": 0,
+        "bridge_errors_before_content": 0,
+        "bridge_retries": 0,
+        "http_failures_retried": 0,
+        "requests_recovered_after_retry": 0,
+        "cancelled_requests": 0,
+        "transport": {
+          "attempts_with_evidence": 1,
+          "max_output_tokens": [
+            131072
+          ],
+          "http_status_counts": {},
+          "timed_http_failures": 0,
+          "http_failed_attempt_seconds": 0,
+          "completed_requests": 44,
+          "observed_usage": {
+            "prompt_tokens": 3017422,
+            "completion_tokens": 96868,
+            "total_tokens": 3114290,
+            "cached_prompt_tokens": 2860928,
+            "reasoning_tokens": 87350
+          },
+          "requests_with_partial_usage": 0,
+          "requests_without_observed_usage": 0,
+          "longest_completed_request_seconds": 594.339
+        },
+        "usage": {
+          "prompt_tokens": 3017422,
+          "completion_tokens": 96868,
+          "total_tokens": 3114290,
+          "cached_prompt_tokens": 2860928,
+          "reasoning_tokens": 87350
+        }
+      }
+    },
+    "attempts": [
+      {
+        "task": "session-window-debug",
+        "stage": "formal-1m-720k-host-cc-20261112",
+        "effort": "max",
+        "repeat": 2,
+        "budget_seconds": 28800,
+        "agent_wall_clock_timeout_seconds": null,
+        "artifact_score": 1,
+        "infrastructure_error": null,
+        "end_to_end_success": true,
+        "agent_seconds": 3686.067,
+        "agent_timed_out": false,
+        "cc_subtype": "success",
+        "cc_turns": 56,
+        "logical_requests": 44,
+        "upstream_attempts": 44,
+        "bridge_errors": 0,
+        "bridge_errors_after_content": 0,
+        "bridge_errors_before_content": 0,
+        "bridge_retries": 0,
+        "http_failures_retried": 0,
+        "requests_recovered_after_retry": 0,
+        "bridge_cancelled": 0,
+        "bridge_unfinished": [],
+        "transport": {
+          "max_output_tokens": [
+            131072
+          ],
+          "http_status_counts": {},
+          "timed_http_failures": 0,
+          "http_failed_attempt_seconds": 0,
+          "completed_requests": 44,
+          "completed_request_seconds": 3680.882,
+          "longest_completed_request_seconds": 594.339,
+          "observed_usage": {
+            "prompt_tokens": 3017422,
+            "completion_tokens": 96868,
+            "total_tokens": 3114290,
+            "cached_prompt_tokens": 2860928,
+            "reasoning_tokens": 87350
+          },
+          "requests_with_partial_usage": 0,
+          "requests_without_observed_usage": 0
+        },
+        "usage": {
+          "prompt_tokens": 3017422,
+          "completion_tokens": 96868,
+          "total_tokens": 3114290,
+          "cached_prompt_tokens": 2860928,
+          "reasoning_tokens": 87350
+        },
+        "source_head": "ce7725d9ddbe6763af22e178d2da2ee6847d860c"
+      }
+    ],
+    "pending": []
+  },
+  "current_cc_was_not_interrupted": true,
+  "old_interrupted_max_r2_score_retained_as_null": true,
+  "next_stage_requires_deployed_smoke": true
+}
