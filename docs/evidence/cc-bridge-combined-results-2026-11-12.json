@@ -1,12 +1,12 @@
 {
-  "generated_at": 1794447743.8758667,
+  "generated_at": 1794448466.7466614,
   "planned_positions": 30,
-  "remaining_positions": 18,
+  "remaining_positions": 17,
   "totals": {
-    "completed_positions": 12,
-    "valid_grades": 12,
-    "artifact_passes": 8,
-    "end_to_end_passes": 7,
+    "completed_positions": 13,
+    "valid_grades": 13,
+    "artifact_passes": 9,
+    "end_to_end_passes": 8,
     "infrastructure_errors": 0
   },
   "totals_by_stage_and_effort": {
@@ -46,6 +46,13 @@
       "infrastructure_errors": 0
     },
     "formal-1m-720k-host-cc-20261112/max": {
+      "completed_positions": 1,
+      "valid_grades": 1,
+      "artifact_passes": 1,
+      "end_to_end_passes": 1,
+      "infrastructure_errors": 0
+    },
+    "formal-1m-720k-host-cdp-read-20261112/high": {
       "completed_positions": 1,
       "valid_grades": 1,
       "artifact_passes": 1,
@@ -94,9 +101,9 @@
     },
     {
       "checkpoint": "cc-bridge-continuation-2026-11-12.json",
-      "sha256": "93667cb22ef7c342ce28d2155dcc411ef72e5d20358110e2f400ca7fb9165451",
-      "local_completed_positions": 1,
-      "combined_completed_positions": 12
+      "sha256": "980ecdc859c4a9615b9843a3def995eefcad1706a52c0ab9c704d6cc0f5fb0b7",
+      "local_completed_positions": 2,
+      "combined_completed_positions": 13
     }
   ],
   "attempts": [
@@ -397,6 +404,31 @@
         "reasoning_tokens": 87350
       },
       "source_head": "ce7725d9ddbe6763af22e178d2da2ee6847d860c",
+      "infrastructure_error_present": false,
+      "source_checkpoint": "cc-bridge-continuation-2026-11-12.json"
+    },
+    {
+      "task": "embedding-drift-monitor",
+      "stage": "formal-1m-720k-host-cdp-read-20261112",
+      "effort": "high",
+      "repeat": 2,
+      "artifact_score": 1,
+      "end_to_end_success": true,
+      "agent_seconds": 2936.543,
+      "agent_timed_out": false,
+      "logical_requests": 66,
+      "upstream_attempts": 66,
+      "bridge_errors": 0,
+      "bridge_retries": 0,
+      "bridge_cancelled": 0,
+      "usage": {
+        "prompt_tokens": 4372268,
+        "completion_tokens": 75479,
+        "total_tokens": 4447747,
+        "cached_prompt_tokens": 4249600,
+        "reasoning_tokens": 57642
+      },
+      "source_head": "eb5abe1a66db4b01acc6391482010f374541d664",
       "infrastructure_error_present": false,
       "source_checkpoint": "cc-bridge-continuation-2026-11-12.json"
     }

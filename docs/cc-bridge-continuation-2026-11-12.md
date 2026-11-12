@@ -1,6 +1,6 @@
 # CC + bridge 续评（2026-11-12）
 
-本轮于北京时间 07:30 起恢复。已阅读提交历史与上轮最终检查点，保留原计划已完成的 11 个位置及各自原阶段，包括失败结果；从 `session-window-debug` max/r2 开始续跑。08:57 该题自然完成并通过验收，目前累计 **12/30**，剩余 **18** 个位置。上次 max/r2 因用户指定停机行政中断、得分为空，仍保留为空。
+本轮于北京时间 07:30 起恢复。已阅读提交历史与上轮最终检查点，保留原计划已完成的 11 个位置及各自原阶段，包括失败结果；从 `session-window-debug` max/r2 开始续跑。两题已自然完成并通过验收，目前累计 **13/30**，剩余 **17** 个位置，正在运行 `embedding-drift-monitor` max/r2。上次 max/r2 因用户指定停机行政中断、得分为空，仍保留为空。
 
 容器已经重启，原 `logs/` 不存在，旧原始会话和文件系统无法靠摘要恢复。本轮目录为 `logs/eval-1m-20261112/`，使用固定下载和校验重建环境，重新验证两档真实工具烟测与五题原始评分对照后才开始计分。持续检查点为 [本轮证据](evidence/cc-bridge-continuation-2026-11-12.json)，成绩继承自 [上轮检查点](evidence/cc-bridge-evening-continuation-2026-11-11.json)。
 
@@ -32,4 +32,6 @@ CC 直接在当前容器以独立 UID 运行，冻结普通用户 PATH 的实际
 
 新阶段 `formal-1m-720k-host-cdp-read-20261112` 已启动 `embedding-drift-monitor` high/r2；计划逐项保留已完成 12 个位置，并按原顺序续跑剩余 18 个。新 bridge、评测控制器及各项监控的启动身份核验通过，checkpoint 提交与推送正常。本轮继续等待长请求自然结束。
 
-跨重启成绩另存为 [完整继承汇总](evidence/cc-bridge-combined-results-2026-11-12.json)。生成命令为 `python3 tools/report_terminal_native_continuation.py --checkpoint docs/evidence/cc-bridge-continuation-2026-11-12.json --output docs/evidence/cc-bridge-combined-results-2026-11-12.json`。它逐级验证五份检查点的 SHA256、保留位置和计划覆盖，拒绝重复位置、替换旧失败或篡改上游检查点；pending 与行政中断不补分。当前 12 个位置中产物通过 8 个、端到端通过 7 个，各阶段仍分别列出；这些累计数字跨越多个 bridge、CLI 和上下文配置，仅作过程记录，不能作为单一当前配置的胜率。新增汇总器的 7 项专项回归通过。
+跨重启成绩另存为 [完整继承汇总](evidence/cc-bridge-combined-results-2026-11-12.json)。生成命令为 `python3 tools/report_terminal_native_continuation.py --checkpoint docs/evidence/cc-bridge-continuation-2026-11-12.json --output docs/evidence/cc-bridge-combined-results-2026-11-12.json`。它逐级验证五份检查点的 SHA256、保留位置和计划覆盖，拒绝重复位置、替换旧失败或篡改上游检查点；pending 与行政中断不补分。当前 13 个位置中产物通过 9 个、端到端通过 8 个，各阶段仍分别列出；这些累计数字跨越多个 bridge、CLI 和上下文配置，仅作过程记录，不能作为单一当前配置的胜率。新增汇总器的 7 项专项回归通过。
+
+09:52 独立复核确认 `embedding-drift-monitor` high/r2 原始验收 **11/11 通过**，产物复制无错误，客户端自然成功退出且无超时。运行 **2936.543 秒**、90 次工具调用、66 个逻辑请求；全部请求完成并获得最终 usage，最长请求 **428.800 秒**，固定输出上限均为 131072，无 bridge 错误、重试、取消或遗留。观察器补充取消及客户端转换/输出错误的窗口计数与脱敏记录，2 项专项回归确认请求离开 active 集合后仍能发现问题，错误正文仅保留摘要；新部署以来这两类事件实际均为零。max/r2 已自动按原顺序启动，继续监督。
