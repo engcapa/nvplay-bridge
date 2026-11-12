@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794445171.8455842,
+  "checkpoint_at": 1794445175.327521,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261112",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -1107,8 +1107,8 @@
     "isolation_boundary": "Real dedicated Unix UID and protected source directories; shared host filesystem, kernel and network"
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794445168.9686246,
-    "commit": "3ff189c001d8d9f4f1d5c7e9fbbc5badc13b4e2a",
+    "attempted_at": 1794445171.8960755,
+    "commit": "d2f799dc897cdd137b3fa75b2b45fd2fd6ade14a",
     "pushed": true,
     "returncode": 0
   },
@@ -1550,7 +1550,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794445171.8554962,
+    "generated_at": 1794445175.3372238,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-1m-720k-host-cc-20261112/28800/max": {
@@ -1662,8 +1662,8 @@
   "combined_plan_positions_completed": 12,
   "campaign": {
     "controller_alive": true,
-    "status": "control_validated",
-    "task": "batched-eval-parity"
+    "status": "validating_controls",
+    "task": "mvcc-lsm-compaction"
   },
   "transport_transition": {
     "status": "remaining_campaign_started",
@@ -1782,8 +1782,8 @@
     },
     {
       "path": "campaign-state.json",
-      "sha256": "0aa053135b21ce946645f2bef14e34d96ba2efb623846bc6fe6218c5853c9085",
-      "size": 6544
+      "sha256": "9143c6d1c304e429f820c6cbe78b3645bab3d9c892c7b9700ebcc1917753d685",
+      "size": 6546
     },
     {
       "path": "cdp-observer-process.json",
@@ -1792,7 +1792,7 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "ccee0b8e0abc1aa834da5c5649614ec3bbaa585cbbbcaeb6aabd26eb09cb7e26",
+      "sha256": "6b8639904cee538837eedfe57caf154579ae5320065f7f1aaf26c445771101d4",
       "size": 134
     },
     {
