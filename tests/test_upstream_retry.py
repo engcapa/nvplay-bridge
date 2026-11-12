@@ -290,7 +290,7 @@ class RetryPolicyTests(RetrySettings, unittest.IsolatedAsyncioTestCase):
                 self.assertEqual(retry["status"], 502)
 
     async def test_typed_stream_failures_retry_but_delivered_content_is_never_replayed(self):
-        for reason in ("read", "first_byte_timeout", "idle_timeout", "missing_finish"):
+        for reason in ("read", "cdp_read", "first_byte_timeout", "idle_timeout", "missing_finish"):
             for deferred in (False, True):
                 with self.subTest(reason=reason, deferred=deferred):
                     browser = ScriptBrowser([[frame({"content": "PARTIAL"}),

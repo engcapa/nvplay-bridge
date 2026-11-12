@@ -36,6 +36,7 @@ TAB_RECOVERY_BACKOFF = max(0.1, float(os.getenv("BROWSER_TAB_RECOVERY_BACKOFF", 
 TAB_REACTIVATE_INTERVAL = 3.0
 PAGE_BUFFER_BYTES = 4 * 1024 * 1024
 DRAIN_BYTES = 64 * 1024
+CDP_DRAIN_TIMEOUT = 15.0
 ERROR_BODY_TIMEOUT = 5.0
 ERROR_BODY_CHARS = 8192
 LOCAL_HTTP = urllib.request.build_opener(urllib.request.ProxyHandler({}))
@@ -277,6 +278,15 @@ def _read_cdp(ws, method: str):
         raise
 
 
+def _send_cdp(ws, mid: int, method: str, params: dict | None):
+    try:
+        ws.send(json.dumps({"id": mid, "method": method, "params": params or {}}))
+    except Exception as exc:
+        exc.cdp_phase = "send"
+        exc.cdp_method = method
+        raise
+
+
 class BrowserUpstream:
     def __init__(self, port: int = 9222, target_hint: str = DEFAULT_HINT) -> None:
         self.base = f"http://127.0.0.1:{port}"
@@ -315,7 +325,7 @@ class BrowserUpstream:
             self._connect()
         self.seq += 1
         mid = self.seq
-        self.ws.send(json.dumps({"id": mid, "method": method, "params": params or {}}))
+        _send_cdp(self.ws, mid, method, params)
         deadline = time.monotonic() + timeout
         while time.monotonic() < deadline:
             self.ws.settimeout(max(0.1, deadline - time.monotonic()))
@@ -519,7 +529,23 @@ class BrowserUpstream:
             last_data: float | None = None
             while True:
                 _check(cancel, deadline)
-                state = self._eval(f"window.__bridgeDrain({quoted_id},{DRAIN_BYTES})")
+                data_deadline = last_data + IDLE_TIMEOUT if last_data is not None else first_deadline
+                drain_timeout = max(0.001, min(CDP_DRAIN_TIMEOUT,
+                                              min(deadline, data_deadline) - time.monotonic()))
+                try:
+                    state = self._eval(f"window.__bridgeDrain({quoted_id},{DRAIN_BYTES})",
+                                       timeout=drain_timeout)
+                except (OSError, websocket.WebSocketException) as exc:
+                    _check(cancel, deadline)
+                    # A drain may have consumed bytes before its CDP reply was
+                    # lost. Refresh this tab and retry the whole uncommitted
+                    # response; never repeat the destructive drain in place.
+                    self.needs_refresh = True
+                    failure = BrowserStreamError(f"CDP 响应读取失败: {exc}", "cdp_read")
+                    failure.cdp_error_type = type(exc).__name__
+                    failure.cdp_phase = getattr(exc, "cdp_phase", None)
+                    failure.cdp_method = getattr(exc, "cdp_method", "Runtime.evaluate")
+                    raise failure from exc
                 self.peak_buffer_bytes = max(self.peak_buffer_bytes, state.get("peak", 0))
                 status = int(state.get("status") or 0)
                 data = state.get("data") or ""
@@ -567,7 +593,9 @@ class BrowserUpstream:
                 self.needs_refresh = True
                 self.close()
                 if trace:
-                    trace("browser_cleanup_error", tab_id=self.hint, error=str(exc))
+                    trace("browser_cleanup_error", tab_id=self.hint, error=str(exc),
+                          error_type=type(exc).__name__, cdp_phase=getattr(exc, "cdp_phase", None),
+                          cdp_method=getattr(exc, "cdp_method", None))
             if trace:
                 trace("browser_buffer", tab_id=self.hint, peak_bytes=self.peak_buffer_bytes)
 
@@ -640,7 +668,7 @@ class BrowserPool:
 
     @staticmethod
     def _call(ws, mid: int, method: str, params: dict | None = None, timeout: float = 5):
-        ws.send(json.dumps({"id": mid, "method": method, "params": params or {}}))
+        _send_cdp(ws, mid, method, params)
         deadline = time.monotonic() + timeout
         while time.monotonic() < deadline:
             ws.settimeout(max(0.01, deadline - time.monotonic()))
