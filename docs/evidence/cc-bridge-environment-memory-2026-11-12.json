@@ -1,0 +1,89 @@
+{
+  "recorded_at": 1794464242.2642877,
+  "processes": [
+    {
+      "role": "large_environment_process",
+      "identity": {
+        "pid": 2510,
+        "boot_id": "e9043059-238b-47bb-aaa4-c505e12e3876",
+        "start_ticks": "17840"
+      },
+      "status": {
+        "Name": "wssopen",
+        "State": "S (sleeping)",
+        "Uid": "0\t0\t0\t0",
+        "VmHWM": "20263132 kB",
+        "VmRSS": "20263132 kB",
+        "Threads": "17"
+      },
+      "open_descriptors": 12
+    },
+    {
+      "role": "configured_proxy_listener",
+      "identity": {
+        "pid": 2516,
+        "boot_id": "e9043059-238b-47bb-aaa4-c505e12e3876",
+        "start_ticks": "17843"
+      },
+      "status": {
+        "Name": "wssopen",
+        "State": "S (sleeping)",
+        "Uid": "0\t0\t0\t0",
+        "VmHWM": "97620 kB",
+        "VmRSS": "67768 kB",
+        "Threads": "10"
+      },
+      "open_descriptors": 45
+    },
+    {
+      "role": "bridge",
+      "identity": {
+        "pid": 203002,
+        "boot_id": "e9043059-238b-47bb-aaa4-c505e12e3876",
+        "start_ticks": "818081"
+      },
+      "status": {
+        "Name": "python3",
+        "State": "S (sleeping)",
+        "Uid": "1000\t1000\t1000\t1000",
+        "VmHWM": "85820 kB",
+        "VmRSS": "75824 kB",
+        "Threads": "7"
+      },
+      "open_descriptors": 18
+    },
+    {
+      "role": "current_cc",
+      "identity": {
+        "pid": 468715,
+        "boot_id": "e9043059-238b-47bb-aaa4-c505e12e3876",
+        "start_ticks": "2331596"
+      },
+      "status": {
+        "Name": "claude",
+        "State": "S (sleeping)",
+        "Uid": "20015\t20015\t20015\t20015",
+        "VmHWM": "182452 kB",
+        "VmRSS": "112788 kB",
+        "Threads": "6"
+      },
+      "open_descriptors": 13
+    }
+  ],
+  "container_resources": {
+    "sampled_at": 1794464229.8880942,
+    "memory_rss_bytes": 25220706304,
+    "memory_file_cache_bytes": 4638830592,
+    "memory_limit_bytes": 30064771072,
+    "memory_events": {
+      "oom_kill_disable": 0,
+      "under_oom": 0,
+      "oom_kill": 0
+    },
+    "memory_allocation_failures": 0,
+    "disk_free_bytes": 303287226368
+  },
+  "environment_processes_modified": false,
+  "cc_interrupted": false,
+  "scope": "Observed actual memory growth; no process arguments, credentials, task content or model text exported"
+}
