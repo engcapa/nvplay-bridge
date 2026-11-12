@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794462900.7527397,
+  "checkpoint_at": 1794463241.522681,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261112",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -1107,8 +1107,8 @@
     "isolation_boundary": "Real dedicated Unix UID and protected source directories; shared host filesystem, kernel and network"
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794462840.7454112,
-    "commit": "df21c6e29f455250531cff458e250d3a810698c2",
+    "attempted_at": 1794463181.477775,
+    "commit": "0ae6c4e9f3143c0d727f5dfb0dabacbacd721157",
     "pushed": false,
     "error_type": "TimeoutExpired"
   },
@@ -1550,7 +1550,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794462900.807446,
+    "generated_at": 1794463241.579616,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-1m-720k-host-cc-20261112/28800/max": {
@@ -1857,7 +1857,7 @@
         "task": "batched-eval-parity",
         "effort": "high",
         "started_at": 1794460205.9569986,
-        "elapsed_seconds": 2694.8,
+        "elapsed_seconds": 3035.6,
         "tool_calls": 0,
         "last_tool": null
       }
@@ -1912,68 +1912,68 @@
         "attempt": 1,
         "reasoning_effort": "high",
         "tab_id": "kpool=4",
-        "age_seconds": 2084.4,
-        "activity_age_seconds": 2083.5
+        "age_seconds": 2425.2,
+        "activity_age_seconds": 2424.3
       }
     ],
     "recent_errors": [
       {
         "event": "pool_recovery_error",
-        "ts": 1794462601.3691533,
+        "ts": 1794462943.4621634,
         "error_type": "WebSocketTimeoutException",
         "error_sha256": "2e0b4a7d6c73428b79a9ddf24d347993ca885a29abc2c9add6ea2c13277c4622"
       },
       {
         "event": "pool_recovery_error",
-        "ts": 1794462606.3751879,
+        "ts": 1794462948.4681854,
         "error_type": "WebSocketTimeoutException",
         "error_sha256": "2e0b4a7d6c73428b79a9ddf24d347993ca885a29abc2c9add6ea2c13277c4622"
       },
       {
         "event": "pool_recovery_error",
-        "ts": 1794462671.4121835,
+        "ts": 1794463013.5061874,
         "error_type": "WebSocketTimeoutException",
         "error_sha256": "2e0b4a7d6c73428b79a9ddf24d347993ca885a29abc2c9add6ea2c13277c4622"
       },
       {
         "event": "pool_recovery_error",
-        "ts": 1794462676.4182732,
+        "ts": 1794463018.5121982,
         "error_type": "WebSocketTimeoutException",
         "error_sha256": "2e0b4a7d6c73428b79a9ddf24d347993ca885a29abc2c9add6ea2c13277c4622"
       },
       {
         "event": "pool_recovery_error",
-        "ts": 1794462739.149051,
+        "ts": 1794463083.5501802,
+        "error_type": "WebSocketTimeoutException",
+        "error_sha256": "2e0b4a7d6c73428b79a9ddf24d347993ca885a29abc2c9add6ea2c13277c4622"
+      },
+      {
+        "event": "pool_recovery_error",
+        "ts": 1794463089.3821635,
         "error_type": "BrowserError",
         "error_sha256": "e98472096d806d740018e0fc999fd5ca628c0f18acba879f280545e23f07250e"
       },
       {
         "event": "pool_recovery_error",
-        "ts": 1794462744.1662571,
-        "error_type": "WebSocketTimeoutException",
-        "error_sha256": "2e0b4a7d6c73428b79a9ddf24d347993ca885a29abc2c9add6ea2c13277c4622"
-      },
-      {
-        "event": "pool_recovery_error",
-        "ts": 1794462807.6311042,
+        "ts": 1794463150.7050242,
         "error_type": "BrowserError",
         "error_sha256": "e98472096d806d740018e0fc999fd5ca628c0f18acba879f280545e23f07250e"
       },
       {
         "event": "pool_recovery_error",
-        "ts": 1794462808.3793206,
-        "error_type": "BrowserError",
-        "error_sha256": "e98472096d806d740018e0fc999fd5ca628c0f18acba879f280545e23f07250e"
-      },
-      {
-        "event": "pool_recovery_error",
-        "ts": 1794462873.4181828,
+        "ts": 1794463155.7221472,
         "error_type": "WebSocketTimeoutException",
         "error_sha256": "2e0b4a7d6c73428b79a9ddf24d347993ca885a29abc2c9add6ea2c13277c4622"
       },
       {
         "event": "pool_recovery_error",
-        "ts": 1794462878.4241796,
+        "ts": 1794463220.7601438,
+        "error_type": "WebSocketTimeoutException",
+        "error_sha256": "2e0b4a7d6c73428b79a9ddf24d347993ca885a29abc2c9add6ea2c13277c4622"
+      },
+      {
+        "event": "pool_recovery_error",
+        "ts": 1794463225.7671885,
         "error_type": "WebSocketTimeoutException",
         "error_sha256": "2e0b4a7d6c73428b79a9ddf24d347993ca885a29abc2c9add6ea2c13277c4622"
       }
@@ -2039,8 +2039,8 @@
     },
     {
       "path": "browser-supervisor-state.json",
-      "sha256": "328e7292e3e255fe2ec35a4e1ac6d076f20e8b89c891a6ab253b32f1ee066c2e",
-      "size": 102
+      "sha256": "97dfa360de9446fd16316bbad5094435868b7460aeee7bac2628b18967668012",
+      "size": 101
     },
     {
       "path": "campaign-launch-process.json",
@@ -2059,8 +2059,8 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "291d33c4915d20d0f7462c0d3ffdac5b1196fdb7b4f154803a070cdf39195b12",
-      "size": 150
+      "sha256": "21afc59c10295249a5ca3b3febb3e19b6be453f239c8cae506bc6afbee64c019",
+      "size": 149
     },
     {
       "path": "checkpoint-process.json",
@@ -2199,8 +2199,8 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "ed63e110abff289d0b8b3b3a0f8ec0698b23d91074e2a4276e5147d1b416aeb6",
-      "size": 822
+      "sha256": "5555d6201f249fad28bb87ca70634d06ee0fa47516b16435064d0980b99962fb",
+      "size": 825
     },
     {
       "path": "restore-fixed-regression.log",
@@ -2326,6 +2326,11 @@
       "path": "smoke-result.json",
       "sha256": "24edba71a42a4eeeefd09da4ec2ba74595ec9813d2ccae3c19f9d165a2abfdf4",
       "size": 16587
+    },
+    {
+      "path": "stream-idle-candidate-regression.log",
+      "sha256": "b0f4c4f90444324a6faa5b9cfee1b877723b8bef4b2b2d502eaa1fe3708eaa0e",
+      "size": 55536
     },
     {
       "path": "stream-watchdog-probe-process.json",
