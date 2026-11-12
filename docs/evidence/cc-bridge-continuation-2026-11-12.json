@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794448165.4398205,
+  "checkpoint_at": 1794448198.3519585,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261112",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -1107,8 +1107,8 @@
     "isolation_boundary": "Real dedicated Unix UID and protected source directories; shared host filesystem, kernel and network"
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794448155.5189223,
-    "commit": "36c3019f13cd48d3479a83617c4dfb23b165873d",
+    "attempted_at": 1794448165.5295398,
+    "commit": "75b410c9080847c7512d445355f2965a5720c8e4",
     "pushed": true,
     "returncode": 0
   },
@@ -1550,7 +1550,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794448165.4598806,
+    "generated_at": 1794448198.3712506,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-1m-720k-host-cc-20261112/28800/max": {
@@ -1752,7 +1752,13 @@
         "source_head": "eb5abe1a66db4b01acc6391482010f374541d664"
       }
     ],
-    "pending": []
+    "pending": [
+      {
+        "attempt": "runs/formal-1m-720k-host-cdp-read-20261112/embedding-drift-monitor--max--r2",
+        "tool_calls": 0,
+        "last_tool": null
+      }
+    ]
   },
   "new_formal_attempts_planned": 19,
   "new_formal_attempts_completed": 2,
@@ -1790,7 +1796,7 @@
   },
   "bridge_activity": {
     "events_last_300s": {
-      "browser_progress": 52,
+      "browser_progress": 45,
       "browser_buffer": 6,
       "browser_pool_release": 6,
       "browser_output_ready": 6,
@@ -1867,7 +1873,7 @@
     },
     {
       "path": "browser-supervisor-state.json",
-      "sha256": "015f1d0b20f5b35d77821856a227ac7f901485375e542e1852485e6b8c174372",
+      "sha256": "fae069f6b549709e0443e6dbc8e9a21bdbf129f9e93f123165bb59470b9fa644",
       "size": 102
     },
     {
@@ -1887,7 +1893,7 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "a638fc52a39f140e6c0a053abc4c3be8119f345a29e4f7588a9ca1f21c2432b9",
+      "sha256": "1b574d95654ca76f5fa1e036942b31e0c4dd98a93ff4c0fb549c827aab0425a3",
       "size": 134
     },
     {
@@ -1987,7 +1993,7 @@
     },
     {
       "path": "next-uid.json",
-      "sha256": "9fd9e1619051cd230b0415e8bf37ce9104cbeb52a5618d64fb7de156fe2e8a32",
+      "sha256": "f5a012696a2b7f4b1f685b2d3e7954a931c10c1dcc7bb8b0a0479688e2e9ffa6",
       "size": 20
     },
     {
@@ -2022,8 +2028,8 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "762f11d4a604729271aebf008d5058def90674d1a3cd9a006f0829cefef323a8",
-      "size": 827
+      "sha256": "3f1f9551614d2e0918cc561e3b84c39e5b12d84c5f8327dbb9505c37b099d002",
+      "size": 828
     },
     {
       "path": "restore-fixed-regression.log",
@@ -2084,6 +2090,11 @@
       "path": "runs/formal-1m-720k-host-cdp-read-20261112/embedding-drift-monitor--high--r2/result.json",
       "sha256": "5bbe72a47aab6419796aabae399d7a0895e53978dd7c2504e17df68dabebba4b",
       "size": 26192
+    },
+    {
+      "path": "runs/formal-1m-720k-host-cdp-read-20261112/embedding-drift-monitor--max--r2/identity.json",
+      "sha256": "b6cd7c5c1a268498c1947ea1288aab42c46fab45800e61b423a3c9c9a2a8a50a",
+      "size": 5970
     },
     {
       "path": "service-resource-snapshot.json",
@@ -2386,6 +2397,16 @@
       "bytes": 77567877,
       "tar_compare_passed_before_reclaim": true,
       "restore": "sudo tar -xpf agent-root.tar.gz -C ."
+    },
+    {
+      "directory": "runs/formal-1m-720k-host-cdp-read-20261112/embedding-drift-monitor--high--r2",
+      "archived_at": 1794448194.7504916,
+      "root": "verifier-root",
+      "archive": "verifier-root.tar.gz",
+      "sha256": "a2ead71b3a73a11f54bd4b115dd85e5698b90918013354d55e900ed82268a292",
+      "bytes": 564524529,
+      "tar_compare_passed_before_reclaim": true,
+      "restore": "sudo tar -xpf verifier-root.tar.gz -C ."
     },
     {
       "directory": "smoke/high",
