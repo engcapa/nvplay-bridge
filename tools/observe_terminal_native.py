@@ -60,6 +60,10 @@ def observe(base: Path, checkpoint: Path | None, health_url: str, lookback: floa
         result["resource_sample_age_seconds"] = round(now - resource["sampled_at"], 1)
     if checkpoint and checkpoint.is_file():
         result["checkpoint_age_seconds"] = round(now - read_json(checkpoint)["checkpoint_at"], 1)
+    sync = read_json(base / "checkpoint-git-sync.json")
+    if sync:
+        result["checkpoint_git_sync"] = {key: sync[key] for key in (
+            "attempted_at", "commit", "pushed", "returncode", "error_type") if key in sync}
     processes = {}
     for filename in ("campaign-state.json", "bridge-runtime.json", "brave-process.json",
                      "checkpoint-process.json", "bridge-monitor-process.json",
