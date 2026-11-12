@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794457487.777988,
+  "checkpoint_at": 1794457702.3746674,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261112",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -1107,8 +1107,8 @@
     "isolation_boundary": "Real dedicated Unix UID and protected source directories; shared host filesystem, kernel and network"
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794457188.8241765,
-    "commit": "ecb3828aa890294ff4eef8b4e0222cb68cc25ce4",
+    "attempted_at": 1794457488.9157646,
+    "commit": "cf259bcbf278322b75c97aebd8a28f5c7a66e955",
     "pushed": true,
     "returncode": 0
   },
@@ -1550,7 +1550,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794457488.8034084,
+    "generated_at": 1794457703.4028177,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-1m-720k-host-cc-20261112/28800/max": {
@@ -1759,7 +1759,7 @@
         "task": "embedding-drift-monitor",
         "effort": "max",
         "started_at": 1794448205.634562,
-        "elapsed_seconds": 9282.2,
+        "elapsed_seconds": 9496.8,
         "tool_calls": 189,
         "last_tool": "Bash"
       }
@@ -1802,34 +1802,31 @@
   },
   "bridge_activity": {
     "events_last_300s": {
-      "browser_progress": 56
+      "browser_progress": 56,
+      "browser_buffer": 1,
+      "browser_pool_release": 1,
+      "browser_output_ready": 1,
+      "browser_done": 1,
+      "messages_done": 1,
+      "http_complete": 1,
+      "tool_result": 4,
+      "request": 1,
+      "payload": 1,
+      "browser_start": 1,
+      "browser_lease": 1,
+      "browser_tab": 1,
+      "browser_sent": 1
     },
     "active": [
       {
-        "id": "763711a99ba2452aae9d0fd8",
+        "id": "7c80f38720174dacb5e09b88",
         "retry_count": 0,
-        "phase": "browser_progress",
+        "phase": "browser_sent",
         "attempt": 1,
         "reasoning_effort": "max",
-        "tab_id": "kpool=2",
-        "counts": {
-          "thinking_chars": 375721,
-          "text_chars": 0,
-          "tool_calls": 0
-        },
-        "usage": {
-          "prompt_tokens": 204491,
-          "completion_tokens": 125232,
-          "total_tokens": 329723,
-          "prompt_tokens_details": {
-            "cached_tokens": 199680
-          },
-          "completion_tokens_details": {
-            "reasoning_tokens": 125232
-          }
-        },
-        "age_seconds": 3825.4,
-        "activity_age_seconds": 4.1
+        "tab_id": "kpool=3",
+        "age_seconds": 4.2,
+        "activity_age_seconds": 3.3
       }
     ],
     "recent_errors": [],
@@ -1889,7 +1886,7 @@
     },
     {
       "path": "browser-supervisor-state.json",
-      "sha256": "8efde697bbafba7673a2db2682c519675abb8316c3335ca8227a0a79bef6e6aa",
+      "sha256": "7ccb9e32e785631cf589e2268a3d4173ac06243625242a3c80822fb80f7fca19",
       "size": 102
     },
     {
@@ -1909,7 +1906,7 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "877f3701b0de688bce72fcb2267a05e5f718e498ea5a2dedc46a891bc052a647",
+      "sha256": "a4fdda148ed2cdb4a1263a7eaaa999c18c84c844b0cd2448fefe776b822e0ed1",
       "size": 134
     },
     {
@@ -2049,7 +2046,7 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "fbf384041b810c063206804e8235f9ff9258d86539dfa1582651685db6ac507e",
+      "sha256": "93aeaa814743acb7c0f2795b7446d2a7ee65755e4ce4483c3d603dfb597bbb3f",
       "size": 827
     },
     {
