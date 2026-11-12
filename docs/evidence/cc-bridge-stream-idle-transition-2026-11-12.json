@@ -1,9 +1,10 @@
 {
-  "status": "prepared_waiting_for_coordinator_start",
-  "recorded_at": 1794463919.6468055,
+  "started_at": 1794464015.1528187,
   "current_agent_signalled": false,
   "bridge_restarted": false,
   "candidate_commit": "8034a631d495f3cc53a848dc724e8c7030e05911",
   "from_stage": "formal-1m-720k-host-cdp-read-20261112",
-  "to_stage": "formal-1m-720k-host-stream-idle-20261112"
+  "to_stage": "formal-1m-720k-host-stream-idle-20261112",
+  "status": "waiting_for_natural_completion",
+  "updated_at": 1794464015.1533222
 }
