@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794445059.894366,
+  "checkpoint_at": 1794445067.551335,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261112",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -854,8 +854,8 @@
     "isolation_boundary": "Real dedicated Unix UID and protected source directories; shared host filesystem, kernel and network"
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794445040.2123818,
-    "commit": "91fa600d4c60b990c6aceb89b59394d716644dae",
+    "attempted_at": 1794445059.9831703,
+    "commit": "47ee03ceafb86a22dda9ff7ac6d15b3972b5d1f8",
     "pushed": true,
     "returncode": 0
   },
@@ -1310,7 +1310,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794445059.9043508,
+    "generated_at": 1794445067.5604963,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-1m-720k-host-cc-20261112/28800/max": {
@@ -1421,7 +1421,7 @@
   "preserved_prior_attempts_completed": 11,
   "combined_plan_positions_completed": 12,
   "campaign": {
-    "controller_alive": true,
+    "controller_alive": false,
     "status": "waiting_for_bridge_restart"
   },
   "transport_transition": {
@@ -1451,7 +1451,7 @@
   },
   "bridge_activity": {
     "events_last_300s": {
-      "browser_progress": 39,
+      "browser_progress": 38,
       "browser_buffer": 5,
       "browser_pool_release": 5,
       "browser_output_ready": 5,
@@ -1523,7 +1523,7 @@
     },
     {
       "path": "browser-supervisor-state.json",
-      "sha256": "985c6a8a0103575e3f99748308fae416ed6d3d1cb5805e5fdbec9d0546cac7c1",
+      "sha256": "8c7c94b47ac3b1d5e32db44c6bf424a56c26633fd9e454453ac127410f971b82",
       "size": 102
     },
     {
@@ -1543,7 +1543,7 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "0c8eb20fabc5b1e1b4d6b2aec252cc68794cca97ecf6dc4d63acaa71dd16d2da",
+      "sha256": "e1c33deeee436f8fe351e3f9b40b478d371d1a2bc17bfb0f8e4ddc8c87252f03",
       "size": 134
     },
     {
@@ -1740,6 +1740,11 @@
       "path": "smoke-result.json",
       "sha256": "549ea09931e29ae0c71811d8baf32817512f0d93e2e37783268b616e50909d35",
       "size": 16975
+    },
+    {
+      "path": "transport-before-checkpoint.json",
+      "sha256": "1f17ebb33fcfa252be2b851a5adbf36bbe44cd3de06f90b2cb9834007a112409",
+      "size": 80553
     },
     {
       "path": "transport-transition-process.json",
