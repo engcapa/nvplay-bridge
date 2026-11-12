@@ -1,0 +1,484 @@
+{
+  "started_at": 1794445067.2720594,
+  "from_stage": "formal-1m-720k-host-cc-20261112",
+  "to_stage": "formal-1m-720k-host-cdp-read-20261112",
+  "agent_interrupted": false,
+  "preserved_completed_local_slots": [
+    {
+      "task": "session-window-debug",
+      "repeat": 2,
+      "effort": "max",
+      "stage": "formal-1m-720k-host-cc-20261112"
+    }
+  ],
+  "remaining_schedule": [
+    {
+      "task": "embedding-drift-monitor",
+      "repeat": 2,
+      "effort": "high"
+    },
+    {
+      "task": "embedding-drift-monitor",
+      "repeat": 2,
+      "effort": "max"
+    },
+    {
+      "task": "batched-eval-parity",
+      "repeat": 2,
+      "effort": "high"
+    },
+    {
+      "task": "batched-eval-parity",
+      "repeat": 2,
+      "effort": "max"
+    },
+    {
+      "task": "mvcc-lsm-compaction",
+      "repeat": 2,
+      "effort": "high"
+    },
+    {
+      "task": "mvcc-lsm-compaction",
+      "repeat": 2,
+      "effort": "max"
+    },
+    {
+      "task": "ks-solver-cpp",
+      "repeat": 2,
+      "effort": "high"
+    },
+    {
+      "task": "ks-solver-cpp",
+      "repeat": 2,
+      "effort": "max"
+    },
+    {
+      "task": "session-window-debug",
+      "repeat": 3,
+      "effort": "high"
+    },
+    {
+      "task": "session-window-debug",
+      "repeat": 3,
+      "effort": "max"
+    },
+    {
+      "task": "embedding-drift-monitor",
+      "repeat": 3,
+      "effort": "high"
+    },
+    {
+      "task": "embedding-drift-monitor",
+      "repeat": 3,
+      "effort": "max"
+    },
+    {
+      "task": "batched-eval-parity",
+      "repeat": 3,
+      "effort": "high"
+    },
+    {
+      "task": "batched-eval-parity",
+      "repeat": 3,
+      "effort": "max"
+    },
+    {
+      "task": "mvcc-lsm-compaction",
+      "repeat": 3,
+      "effort": "high"
+    },
+    {
+      "task": "mvcc-lsm-compaction",
+      "repeat": 3,
+      "effort": "max"
+    },
+    {
+      "task": "ks-solver-cpp",
+      "repeat": 3,
+      "effort": "high"
+    },
+    {
+      "task": "ks-solver-cpp",
+      "repeat": 3,
+      "effort": "max"
+    }
+  ],
+  "before_stage_results": {
+    "generated_at": 1794445067.2603705,
+    "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
+    "totals": {
+      "formal-1m-720k-host-cc-20261112/28800/max": {
+        "attempts": 1,
+        "valid_grades": 1,
+        "infrastructure_errors": 0,
+        "artifact_passes": 1,
+        "artifact_pass_at_1": 1.0,
+        "end_to_end_passes": 1,
+        "end_to_end_pass_rate": 1.0,
+        "agent_seconds": 3686.067,
+        "logical_requests": 44,
+        "bridge_errors": 0,
+        "bridge_errors_after_content": 0,
+        "bridge_errors_before_content": 0,
+        "bridge_retries": 0,
+        "http_failures_retried": 0,
+        "requests_recovered_after_retry": 0,
+        "cancelled_requests": 0,
+        "transport": {
+          "attempts_with_evidence": 1,
+          "max_output_tokens": [
+            131072
+          ],
+          "http_status_counts": {},
+          "timed_http_failures": 0,
+          "http_failed_attempt_seconds": 0,
+          "completed_requests": 44,
+          "observed_usage": {
+            "prompt_tokens": 3017422,
+            "completion_tokens": 96868,
+            "total_tokens": 3114290,
+            "cached_prompt_tokens": 2860928,
+            "reasoning_tokens": 87350
+          },
+          "requests_with_partial_usage": 0,
+          "requests_without_observed_usage": 0,
+          "longest_completed_request_seconds": 594.339
+        },
+        "usage": {
+          "prompt_tokens": 3017422,
+          "completion_tokens": 96868,
+          "total_tokens": 3114290,
+          "cached_prompt_tokens": 2860928,
+          "reasoning_tokens": 87350
+        }
+      }
+    },
+    "attempts": [
+      {
+        "task": "session-window-debug",
+        "stage": "formal-1m-720k-host-cc-20261112",
+        "effort": "max",
+        "repeat": 2,
+        "budget_seconds": 28800,
+        "agent_wall_clock_timeout_seconds": null,
+        "artifact_score": 1,
+        "infrastructure_error": null,
+        "end_to_end_success": true,
+        "agent_seconds": 3686.067,
+        "agent_timed_out": false,
+        "cc_subtype": "success",
+        "cc_turns": 56,
+        "logical_requests": 44,
+        "upstream_attempts": 44,
+        "bridge_errors": 0,
+        "bridge_errors_after_content": 0,
+        "bridge_errors_before_content": 0,
+        "bridge_retries": 0,
+        "http_failures_retried": 0,
+        "requests_recovered_after_retry": 0,
+        "bridge_cancelled": 0,
+        "bridge_unfinished": [],
+        "transport": {
+          "max_output_tokens": [
+            131072
+          ],
+          "http_status_counts": {},
+          "timed_http_failures": 0,
+          "http_failed_attempt_seconds": 0,
+          "completed_requests": 44,
+          "completed_request_seconds": 3680.882,
+          "longest_completed_request_seconds": 594.339,
+          "observed_usage": {
+            "prompt_tokens": 3017422,
+            "completion_tokens": 96868,
+            "total_tokens": 3114290,
+            "cached_prompt_tokens": 2860928,
+            "reasoning_tokens": 87350
+          },
+          "requests_with_partial_usage": 0,
+          "requests_without_observed_usage": 0
+        },
+        "usage": {
+          "prompt_tokens": 3017422,
+          "completion_tokens": 96868,
+          "total_tokens": 3114290,
+          "cached_prompt_tokens": 2860928,
+          "reasoning_tokens": 87350
+        },
+        "source_head": "ce7725d9ddbe6763af22e178d2da2ee6847d860c"
+      }
+    ],
+    "pending": []
+  },
+  "artifact_review": {
+    "reviewed_at": 1794445067.522526,
+    "attempts": [
+      {
+        "attempt": "runs/formal-1m-720k-host-cc-20261112/session-window-debug--max--r2",
+        "task": "session-window-debug",
+        "control": null,
+        "effort": "max",
+        "repeat": 2,
+        "artifact_score": 1,
+        "infrastructure_error": null,
+        "changed_original_files": [
+          "app/app/events.py",
+          "app/app/gc.py",
+          "app/app/merger.py",
+          "app/app/sessions.py"
+        ],
+        "added_files": [],
+        "removed_original_files": [],
+        "declared_read_only_files_unchanged": {
+          "app/app/types.py": true,
+          "app/app/DESIGN.md": true,
+          "app/app/__init__.py": true
+        },
+        "read_only_check_scope": "explicit session-window task constraints",
+        "artifact_errors_present": false,
+        "verifier": {
+          "test_count": 7,
+          "statuses": {
+            "passed": 7
+          },
+          "sha256": "8032b03b6096acad61c64427a19aee615465aa42bbd52d12fb0c80ef39239996"
+        },
+        "client_terminal": {
+          "exit_code": 0,
+          "timed_out": false,
+          "subtype": "success",
+          "is_error": false,
+          "terminal_reason": "completed",
+          "api_error_status": null,
+          "prompt_too_long": false,
+          "reported_context_window_tokens": [
+            1000000
+          ]
+        }
+      }
+    ],
+    "scope": "saved copied-artifact hashes and original verifier results; not a semantic code review"
+  },
+  "validated_candidate_runtime": {
+    "verified_at": 1794443221.9695766,
+    "passed": true,
+    "source_patch_commit": "5bcc7cb0f8e7588b91a16833b13ecfea88a290a1",
+    "source_merge_commit": "4c9ea7273fc55db3dce20beb4f801b6052641e28",
+    "source_module_sha256": {
+      "nvplay_bridge.py": "922e6a991aa24ed241ba58ef0b18aab2b8f114a4f5300d7aba68756f4c0c60cc",
+      "browser_upstream.py": "86cfc27e2678d3a569d321328dca0f77f4e9c1c595fa3efa40fdada2385b621b",
+      "browser_events.py": "0c3f255dbbd7c317ea118f7d203511150c0a91f2d0cc580408032543004b8ec8",
+      "stream_support.py": "8631dd909e24192413855c353285d4c0703f86082b3722ead1140a820c0a2d32",
+      "responses_api.py": "da451613bf0a1c4aa12ef03effc4d5ffe1ea330fb48006f9d09925233f9580c6",
+      "responses_support.py": "ed907b22106ff58923efa5431c20422e59bfdeb9a719b0766969522e444f033e"
+    },
+    "validation_scope": "Independent local regression and real isolated CDP probes; actual evaluation service awaits natural boundary and fresh live CC smoke",
+    "unit_tests": {
+      "passed": 296,
+      "seconds": 21.828
+    },
+    "real_local_cdp_probes": [
+      {
+        "scenario": "delayed",
+        "passed": true,
+        "requests": 1,
+        "tools_delivered": 1,
+        "seconds": 6.914
+      },
+      {
+        "scenario": "retry",
+        "passed": true,
+        "requests": 2,
+        "tools_delivered": 1,
+        "seconds": 2.315
+      }
+    ],
+    "current_bridge_runtime": {
+      "pid": 42167,
+      "boot_id": "e9043059-238b-47bb-aaa4-c505e12e3876",
+      "start_ticks": "292248",
+      "source_head": "ce7725d9ddbe6763af22e178d2da2ee6847d860c",
+      "source_module_sha256": {
+        "nvplay_bridge.py": "aa17c1389fe59f0ee3f69da0ef8d06578c699940472ad742a78aa3be8f9a090d",
+        "browser_upstream.py": "922a19176d73b0325710d54263873293dab044c6e2aae2c77da4764479a28322",
+        "browser_events.py": "5e745cce57f3c0ac3f04d8193802c987c59b3bde00ed8a5c97668ba4de8bbdb3",
+        "stream_support.py": "8631dd909e24192413855c353285d4c0703f86082b3722ead1140a820c0a2d32",
+        "responses_api.py": "da451613bf0a1c4aa12ef03effc4d5ffe1ea330fb48006f9d09925233f9580c6",
+        "responses_support.py": "ed907b22106ff58923efa5431c20422e59bfdeb9a719b0766969522e444f033e"
+      }
+    },
+    "current_cc_interrupted": false,
+    "pending_deployment_stage": "formal-1m-720k-host-cdp-read-20261112",
+    "git_merge": {
+      "merged_at": 1794443118.3517632,
+      "before_head": "0ca6c25c468441af8e042b69ce053a58861fa8e5",
+      "remote_head": "5bcc7cb0f8e7588b91a16833b13ecfea88a290a1",
+      "merged_head": "4c9ea7273fc55db3dce20beb4f801b6052641e28",
+      "frozen_runner_files_unchanged": true,
+      "runner_file_sha256": {
+        "tools/eval_terminal_native.py": "5e9efd956edec4c71d3e22f6f52a5c0e43947b352b175ecf4ecc77ee5d3abadc",
+        "tools/native_eval_support.py": "814406e0b5c825d087b1fb28b7eff68b707594e49b645276a7715a0ca285c3ae",
+        "tools/native_path_cc.py": "fc289d6bbc682157d31af32ba02469e3c62478ddc11245c284ad2c8b2396f6c8",
+        "tools/native_host_cc.py": "5edeaf9be4db9dbbb54c0b8b7d407b461699276ce6732ee45e2f1f3f62d8409c",
+        "tools/cc_node_runtime/timeout.cjs": "8a2f4200101482502082b68abeca68dfb1664016b4c4cc8b5f7f9b9877523f25",
+        "tools/cc_node_runtime/package.json": "18db56d8ef89e74797e4a90571469196e2dcb991188f967697cef08bc7165d49",
+        "tools/cc_node_runtime/package-lock.json": "0c749353801f077a529cf117ca9219b81ef73da39b9dafb0e7cbb8bd8147cc83",
+        "tools/run_terminal_native_campaign.py": "3b6faaeb9f8654d14ba16d6452e114413f1ec2d746aa797a29d950dd72dc8486",
+        "tools/archive_terminal_native_roots.py": "fa868a60d2dce0a08ca7e20bf898445b45fe466443267482a05993fe42046db2",
+        "tools/checkpoint_terminal_native.py": "f715424be3785d140f847f47ec1c0c7972d14727c0a1e8ad0f08190b7f0a2c2e"
+      },
+      "live_bridge_restarted": false,
+      "current_cc_signalled": false,
+      "current_stage": "formal-1m-720k-host-cc-20261112",
+      "next_deployment_requires_independent_validation_and_live_smoke": true
+    },
+    "evidence_fingerprints": {
+      "merged-cdp-recovery-regression.log": {
+        "sha256": "0624d2b6e3d6bba083e4989e79f1509d7ea6aaf5f7960bf7ad3f21bbfa29c8ab",
+        "size": 3263
+      },
+      "merged-cdp-recovery-probe-validation.log": {
+        "sha256": "982cf0632927f464ca1fac1c4005b5ba017c2a89fb32ee36fed254b06da5b128",
+        "size": 192
+      },
+      "remote-cdp-recovery-merge.json": {
+        "sha256": "56b4da58cd5dc7e1a7e298983f082b488b12db2c79091b185bbdf50d38d40006",
+        "size": 1566
+      }
+    }
+  },
+  "stopped_checkpoint": {
+    "record": "checkpoint-process.json",
+    "identity": {
+      "pid": 43401,
+      "boot_id": "e9043059-238b-47bb-aaa4-c505e12e3876",
+      "start_ticks": "294902"
+    },
+    "stopped_at": 1794445070.60712,
+    "signal": "SIGTERM"
+  },
+  "stopped_bridge": {
+    "record": "bridge-runtime.json",
+    "identity": {
+      "pid": 42167,
+      "boot_id": "e9043059-238b-47bb-aaa4-c505e12e3876",
+      "start_ticks": "292248"
+    },
+    "stopped_at": 1794445070.8086016,
+    "signal": "SIGTERM"
+  },
+  "actual_rollout_smoke": [
+    {
+      "effort": "high",
+      "passed": true,
+      "process": {
+        "exit_code": 0,
+        "timed_out": false,
+        "timeout_seconds": null,
+        "started_at": 1794445079.2000237,
+        "finished_at": 1794445099.4975197,
+        "duration_seconds": 20.297
+      },
+      "logical_requests": 2,
+      "errors": 0,
+      "retries": 0,
+      "unfinished": [],
+      "reported_context_windows": [
+        1000000
+      ]
+    },
+    {
+      "effort": "max",
+      "passed": true,
+      "process": {
+        "exit_code": 0,
+        "timed_out": false,
+        "timeout_seconds": null,
+        "started_at": 1794445106.0637643,
+        "finished_at": 1794445128.7333872,
+        "duration_seconds": 22.67
+      },
+      "logical_requests": 2,
+      "errors": 0,
+      "retries": 0,
+      "unfinished": [],
+      "reported_context_windows": [
+        1000000
+      ]
+    }
+  ],
+  "previous_smoke_archive": "smoke-history/formal-1m-720k-host-cc-20261112--1794445129343889851",
+  "status": "validated_rollout_starting_remaining_slots",
+  "runtime": {
+    "started_at": 1794445070.8106859,
+    "source_head": "eb5abe1a66db4b01acc6391482010f374541d664",
+    "source_module_sha256": {
+      "nvplay_bridge.py": "922e6a991aa24ed241ba58ef0b18aab2b8f114a4f5300d7aba68756f4c0c60cc",
+      "browser_upstream.py": "86cfc27e2678d3a569d321328dca0f77f4e9c1c595fa3efa40fdada2385b621b",
+      "browser_events.py": "0c3f255dbbd7c317ea118f7d203511150c0a91f2d0cc580408032543004b8ec8",
+      "stream_support.py": "8631dd909e24192413855c353285d4c0703f86082b3722ead1140a820c0a2d32",
+      "responses_api.py": "da451613bf0a1c4aa12ef03effc4d5ffe1ea330fb48006f9d09925233f9580c6",
+      "responses_support.py": "ed907b22106ff58923efa5431c20422e59bfdeb9a719b0766969522e444f033e"
+    },
+    "configuration": {
+      "UPSTREAM_KIND": "browser",
+      "UPSTREAM_MODEL": "moonshotai/kimi-k3.1-pro",
+      "BROWSER_CDP_PORT": "9225",
+      "BROWSER_POOL_SIZE": "5",
+      "BROWSER_TIMEOUT": "28800",
+      "BROWSER_FIRST_BYTE_TIMEOUT": "3600",
+      "BROWSER_IDLE_TIMEOUT": "3600",
+      "BROWSER_MAX_TOKENS": "131072",
+      "BROWSER_FIXED_MAX_TOKENS": "131072",
+      "BROWSER_HTTP_5XX_RETRIES": "2",
+      "BROWSER_DEBUG_LOG": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261112/bridge-debug.jsonl"
+    },
+    "fixed_max_output_tokens": 131072,
+    "request_timeout_seconds": 28800,
+    "first_byte_timeout_seconds": 3600,
+    "idle_timeout_seconds": 3600,
+    "cdp_port": 9225,
+    "bridge_port": 8083,
+    "pid": 203002,
+    "boot_id": "e9043059-238b-47bb-aaa4-c505e12e3876",
+    "start_ticks": "818081",
+    "health_at_start": {
+      "status": "ok",
+      "instance_id": "9aa4d1f88336",
+      "pid": 203002,
+      "uptime_seconds": 0.517,
+      "upstream_kind": "browser",
+      "upstream_url": "browser://cdp:9225",
+      "model": "moonshotai/kimi-k3.1-pro",
+      "cookie_present": false,
+      "captcha_present": false,
+      "tool_ids": "unique_per_invocation",
+      "loop_reminder_enabled": false,
+      "history_reasoning": "preserve",
+      "browser_output_tokens": {
+        "maximum": 131072,
+        "fixed": 131072
+      },
+      "browser_timeouts": {
+        "total_seconds": 28800,
+        "first_byte_seconds": 3600.0,
+        "idle_seconds": 3600.0
+      },
+      "browser_messages_delivery": {
+        "thinking": "live",
+        "defer_output": true,
+        "stream_retries": 2
+      },
+      "browser_retry_policy": {
+        "http_5xx_retries": 2,
+        "http_5xx_initial_backoff_seconds": 5.0,
+        "stream_retries": 2,
+        "stream_initial_backoff_seconds": 5.0,
+        "backoff_cap_seconds": 30,
+        "jitter_max_seconds": 1,
+        "failed_pool_tabs": "refresh_before_reuse"
+      }
+    }
+  },
+  "completed_at": 1794445129.345419
+}
