@@ -27,6 +27,8 @@ def observe(base: Path, checkpoint: Path | None, health_url: str, lookback: floa
     bridge = snapshot(records, now=now, since=now - lookback)
     preparation = [row for row in records if row.get("event") == "browser_prepare_retry"
                    and row.get("ts", 0) >= now - lookback]
+    output_limits = [row for row in records if row.get("event") == "browser_done"
+                     and row.get("finish") == "length" and row.get("ts", 0) >= now - lookback]
     campaign = read_json(base / "campaign-state.json")
     resource = read_json(base / "resource-monitor-state.json")
     result = {
@@ -44,6 +46,13 @@ def observe(base: Path, checkpoint: Path | None, health_url: str, lookback: floa
         "client_errors_in_lookback": sum(bridge["events"].get(kind, 0)
                                          for kind in ("messages_failed", "responses_failed")),
         "recent_client_errors": [event_summary(row) for row in bridge["recent_client_errors"]],
+        "output_limit_requests_in_lookback": len(output_limits),
+        "reasoning_only_output_limits_in_lookback": sum(
+            bool(row.get("counts", {}).get("thinking_chars"))
+            and not row.get("counts", {}).get("text_chars")
+            and not row.get("counts", {}).get("tool_calls") for row in output_limits),
+        "recent_output_limits": [{**event_summary(row), "finish": row["finish"]}
+                                 for row in output_limits[-10:]],
         "upstream_errors_in_lookback": bridge["events"].get("browser_http_error", 0),
         "retries_in_lookback": bridge["events"].get("upstream_retry", 0),
         "preparation_retries_in_lookback": len(preparation),

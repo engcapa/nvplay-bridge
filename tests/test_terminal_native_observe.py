@@ -46,6 +46,27 @@ class ObserveTests(unittest.TestCase):
         self.assertIn("error_sha256", result["recent_client_errors"][0])
         self.assertNotIn("private body", json.dumps(result))
 
+    def test_reasoning_only_output_limit_is_visible_without_transport_error(self):
+        result = self.observe([
+            {"event": "browser_done", "id": "expired", "ts": 1, "finish": "length"},
+            {"event": "browser_start", "id": "reasoning", "ts": 91},
+            {"event": "browser_done", "id": "reasoning", "ts": 92, "finish": "length",
+             "counts": {"thinking_chars": 100, "text_chars": 0, "tool_calls": 0},
+             "usage": {"completion_tokens": 131072}},
+            {"event": "browser_start", "id": "tool", "ts": 93},
+            {"event": "browser_done", "id": "tool", "ts": 94, "finish": "length",
+             "counts": {"thinking_chars": 10, "text_chars": 0, "tool_calls": 1}},
+            {"event": "browser_done", "id": "normal", "ts": 95, "finish": "stop",
+             "counts": {"thinking_chars": 10, "text_chars": 1, "tool_calls": 0}},
+        ])
+        self.assertEqual(result["active"], [])
+        self.assertEqual(result["recent_errors"], [])
+        self.assertEqual(result["output_limit_requests_in_lookback"], 2)
+        self.assertEqual(result["reasoning_only_output_limits_in_lookback"], 1)
+        self.assertEqual([row["id"] for row in result["recent_output_limits"]], ["reasoning", "tool"])
+        self.assertEqual(result["recent_output_limits"][0]["usage"]["completion_tokens"], 131072)
+        self.assertEqual(result["recent_output_limits"][0]["finish"], "length")
+
 
 if __name__ == "__main__":
     unittest.main()
