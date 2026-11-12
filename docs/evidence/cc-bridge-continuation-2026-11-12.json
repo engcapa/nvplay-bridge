@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "checkpoint_at": 1794445040.1435566,
+  "checkpoint_at": 1794445059.894366,
   "run_directory": "/home/zhyhang/code/person/nvplay-bridge/logs/eval-1m-20261112",
   "raw_logs_survive_cleanup": false,
   "historical_archive": "docs/evidence/cc-bridge-native-2026-11-10.json",
@@ -854,8 +854,8 @@
     "isolation_boundary": "Real dedicated Unix UID and protected source directories; shared host filesystem, kernel and network"
   },
   "previous_checkpoint_git_sync": {
-    "attempted_at": 1794445027.1386294,
-    "commit": "ce4d3c196fc5abffbf5851eee45eb11757463d2b",
+    "attempted_at": 1794445040.2123818,
+    "commit": "91fa600d4c60b990c6aceb89b59394d716644dae",
     "pushed": true,
     "returncode": 0
   },
@@ -1310,7 +1310,7 @@
   },
   "interrupted_attempts_excluded_from_grades": [],
   "results": {
-    "generated_at": 1794445040.1534612,
+    "generated_at": 1794445059.9043508,
     "label": "CC + Kimi + bridge native adaptation; not AA Intelligence Index",
     "totals": {
       "formal-1m-720k-host-cc-20261112/28800/max": {
@@ -1422,16 +1422,14 @@
   "combined_plan_positions_completed": 12,
   "campaign": {
     "controller_alive": true,
-    "status": "formal_running",
-    "task": "session-window-debug",
-    "repeat": 2
+    "status": "waiting_for_bridge_restart"
   },
   "transport_transition": {
     "status": "waiting_for_natural_completion",
-    "at": 1794445037.2497249,
+    "at": 1794445052.2502959,
     "current_agent_signalled": false
   },
-  "status": "formal_running",
+  "status": "formal_incomplete",
   "bridge_health": {
     "status": "ok",
     "model": "moonshotai/kimi-k3.1-pro",
@@ -1453,7 +1451,7 @@
   },
   "bridge_activity": {
     "events_last_300s": {
-      "browser_progress": 43,
+      "browser_progress": 39,
       "browser_buffer": 5,
       "browser_pool_release": 5,
       "browser_output_ready": 5,
@@ -1525,7 +1523,7 @@
     },
     {
       "path": "browser-supervisor-state.json",
-      "sha256": "11cc18e66b2a8acab01de0b69daf00c624946b788d1ac1892f79768e7397d1ec",
+      "sha256": "985c6a8a0103575e3f99748308fae416ed6d3d1cb5805e5fdbec9d0546cac7c1",
       "size": 102
     },
     {
@@ -1535,8 +1533,8 @@
     },
     {
       "path": "campaign-state.json",
-      "sha256": "2befc3c06b11dc33dd62799b4b02241cdd5f0c6a932054af8d81c7fe43a3450f",
-      "size": 6590
+      "sha256": "a45b43458e4461ae491ba5607e491a9eedfd81498ccbe953e0d4cdf92d345671",
+      "size": 6509
     },
     {
       "path": "cdp-observer-process.json",
@@ -1545,7 +1543,7 @@
     },
     {
       "path": "checkpoint-git-sync.json",
-      "sha256": "f502fb2c9cd81766ce1e9aacdfc0da868afc41cacd55fb38480c19bc1136b9a3",
+      "sha256": "0c8eb20fabc5b1e1b4d6b2aec252cc68794cca97ecf6dc4d63acaa71dd16d2da",
       "size": 134
     },
     {
@@ -1675,8 +1673,8 @@
     },
     {
       "path": "resource-monitor-state.json",
-      "sha256": "12eed0e0d9e345ed99530affadf4d32f16f4fe2db7e799cb12d9342410a6963b",
-      "size": 823
+      "sha256": "f56b2a1ccac3827b9bbb944d39d298df22285ac78d6b340b968c4b3b5d12f385",
+      "size": 824
     },
     {
       "path": "restore-fixed-regression.log",
@@ -1750,7 +1748,7 @@
     },
     {
       "path": "transport-transition-state.json",
-      "sha256": "bb7cd41bfe94af77ee831243a8daf07e63fe4b143bf5121f7853fba58e265151",
+      "sha256": "50032c8ee5f0c41c256207048908aed28d74d9938175b2f7bc0998dad76b73d5",
       "size": 113
     },
     {
@@ -1979,6 +1977,16 @@
       "bytes": 4537550,
       "tar_compare_passed_before_reclaim": true,
       "restore": "sudo tar -xpf agent-root.tar.gz -C ."
+    },
+    {
+      "directory": "runs/formal-1m-720k-host-cc-20261112/session-window-debug--max--r2",
+      "archived_at": 1794445059.4575977,
+      "root": "verifier-root",
+      "archive": "verifier-root.tar.gz",
+      "sha256": "e4b445c5d20508a47d13fb2fe18ec4a10197014c8da728099f64faf470569690",
+      "bytes": 486834831,
+      "tar_compare_passed_before_reclaim": true,
+      "restore": "sudo tar -xpf verifier-root.tar.gz -C ."
     },
     {
       "directory": "smoke/high",
