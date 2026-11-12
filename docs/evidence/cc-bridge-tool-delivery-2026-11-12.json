@@ -1,0 +1,17 @@
+{
+  "audited_at": 1794453813.5708852,
+  "attempt": "runs/formal-1m-720k-host-cdp-read-20261112/embedding-drift-monitor--max--r2",
+  "scope": "Tool calls visible in a snapshot of the still-running CC session; no task grade assigned",
+  "tool_calls": 189,
+  "unique_tool_ids": 189,
+  "duplicate_call_ids": 0,
+  "result_count": 189,
+  "duplicate_result_ids": 0,
+  "results_without_known_calls": 0,
+  "outstanding_call_count": 0,
+  "exact_bridge_argument_hash_matches": 144,
+  "cc_edit_default_expansions": 45,
+  "default_expansion_rule": "Only when the original hash differs: remove Edit replace_all=false and require every remaining argument to match the bridge SHA256 exactly",
+  "unexplained_argument_hash_mismatches": 0,
+  "all_observed_arguments_accounted_for": true
+}
